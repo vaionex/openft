@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply h-full;
+  }
+
+  body {
+    @apply h-full antialiased font-base bg-white text-gray-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply antialiased font-bold;
+  }
+
+  p {
+    @apply text-gray-500;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg;
+  }
+}
+
+@layer components {
+}
