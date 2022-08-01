@@ -49,13 +49,13 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden md:flex md:items-center md:space-x-6">
-            <NextLink href="#">
+            <NextLink href="/login">
               <a className="text-base font-medium hover:text-gradient-primary-hover">
-                Start free trial
+                Login
               </a>
             </NextLink>
-            <NextLink href="#">
-              <a className="btn-primary">Create account</a>
+            <NextLink href="register">
+              <a className="btn-primary">Sign up</a>
             </NextLink>
           </div>
         </nav>
