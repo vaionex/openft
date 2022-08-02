@@ -8,7 +8,6 @@ module.exports = {
       fontFamily: {
         base: ['Inter', 'sans-serif'],
       },
-
       screens: {
         xs: '475px',
         lgx: '1200px',
@@ -22,9 +21,7 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
     plugin(function ({ addUtilities, addComponents }) {
-      const utilities = {
-
-      }
+      const utilities = {}
 
       addUtilities(utilities)
     }),
