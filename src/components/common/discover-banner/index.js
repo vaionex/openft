@@ -1,8 +1,9 @@
+import Breadcrumb from '@/components/ui/breadcrumb'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import PropTypes from 'prop-types'
 
-const DiscoverBanner = ({ type }) => {
+const DiscoverBanner = ({ action }) => {
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 ">
       <div className="relative overflow-hidden shadow-xl rounded-2xl ">
@@ -19,20 +20,32 @@ const DiscoverBanner = ({ type }) => {
           <h3 className="text-4xl font-extrabold tracking-tight text-white">
             Discover brand new NFTs
           </h3>
-          <p className="my-5 text-xl text-blue-100 ">
+          <p className="mt-5 text-xl text-blue-100 ">
             Discover over 4,000+ NFTs already minted on Openft.
           </p>
-          <div className="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
-            <NextLink href="#">
-              <a className="bg-white border border-gray-200 hover:bg-opacity-10 btn-primary bg-opacity-20">
-                Discover
-              </a>
-            </NextLink>
-          </div>
+          {action === 'default' && null}
+          {action === 'button' && (
+            <div className="mt-5 space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
+              <NextLink href="#">
+                <a className="bg-white border border-gray-200 hover:bg-opacity-10 btn-primary bg-opacity-20">
+                  Discover
+                </a>
+              </NextLink>
+            </div>
+          )}
+          {action === 'breadcrumb' && <Breadcrumb className="mt-10" />}
         </div>
       </div>
     </div>
   )
+}
+
+DiscoverBanner.defaultProps = {
+  action: 'default',
+}
+
+DiscoverBanner.propTypes = {
+  action: PropTypes.oneOf(['default', 'button', 'breadcrumb']).isRequired,
 }
 
 export default DiscoverBanner

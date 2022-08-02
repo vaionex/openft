@@ -44,14 +44,14 @@ const CtaMidSection = () => {
             </div>
           </div>
           <div className="px-4 my-16 lg:my-0">
-            <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[640px] lg:max-w-[576px] sm:px-6 lg:px-0 rounded-3xl">
+            <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[496px] lg:max-w-[576px] sm:px-6 lg:px-0">
               <Image
                 src="/images/home-cta.png"
-                className="w-full h-full"
+                className="w-full h-full "
                 alt="openft hero image"
                 layout="fill"
                 quality={100}
-                objectFit="cover"
+                objectFit="contain"
               />
             </div>
           </div>
