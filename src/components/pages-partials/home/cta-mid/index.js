@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 
 const CtaMidSection = () => {
   return (
-    <div className="pt-10 sm:pt-16 lg:pt-16 lg:pb-24 lg:overflow-hidden ">
+    <div className="lg:pt-16 lg:pb-24 lg:overflow-hidden">
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-50">
@@ -21,7 +21,7 @@ const CtaMidSection = () => {
                 and unlockable content.
               </p>
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
-                <div className="mt-3 rounded-md sm:mt-0">
+                <div className="my-3 rounded-md sm:my-0">
                   <a
                     href="#"
                     className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
@@ -43,14 +43,15 @@ const CtaMidSection = () => {
               </div>
             </div>
           </div>
-          <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
-            <div className="max-w-md px-4 mx-auto overflow-hidden sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0 rounded-3xl">
+          <div className="px-4 my-16 lg:my-0">
+            <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[640px] lg:max-w-[576px] sm:px-6 lg:px-0 rounded-3xl">
               <Image
                 src="/images/home-cta.png"
+                className="w-full h-full"
                 alt="openft hero image"
-                width="576"
-                height="640"
-                layout="responsive"
+                layout="fill"
+                quality={100}
+                objectFit="cover"
               />
             </div>
           </div>

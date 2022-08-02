@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply h-full antialiased font-base bg-white text-gray-900;
+    @apply h-full antialiased text-gray-900 bg-white font-base;
   }
 
   h1,
@@ -25,7 +25,7 @@
   }
 
   .btn-primary {
-    @apply bg-blue-600 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg;
+    @apply inline-flex px-4 py-3 font-bold text-white bg-blue-600 rounded-lg hover:opacity-90;
   }
 }
 

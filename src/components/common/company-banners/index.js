@@ -4,7 +4,7 @@ const CompanyBanners = ({ companies, w, className }) => {
   return (
     <div
       className={twMerge(
-        'flex items-center justify-around lg:justify-between flex-wrap gap-2  w-full',
+        'flex items-center justify-around lg:justify-between flex-wrap gap-2 w-full',
         className,
       )}
     >

@@ -10,7 +10,7 @@ const HeroSection = () => {
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-50">
-            <div className="lg:py-24">
+            <div className="lg:py-16">
               <NextLink href="#">
                 <a className="inline-flex items-center p-1 pr-2 text-blue-700 rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
                   <span className="px-3 py-0.5 bg-white text-blue-700 text-xs font-medium leading-5 uppercase tracking-wide rounded-full">
@@ -34,7 +34,7 @@ const HeroSection = () => {
                 their framework.
               </p>
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
-                <div className="mt-3 rounded-md sm:mt-0">
+                <div className="my-3 rounded-md sm:my-0">
                   <a
                     href="#"
                     className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
@@ -47,27 +47,29 @@ const HeroSection = () => {
                   </a>
                 </div>
                 <div className="rounded-md">
-                  <a
-                    href="#"
-                    className={twMerge(
-                      'btn-primary',
-                      'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
-                    )}
-                  >
-                    Sign up
-                  </a>
+                  <NextLink href="/register">
+                    <a
+                      className={twMerge(
+                        'btn-primary',
+                        'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
+                      )}
+                    >
+                      Sign up
+                    </a>
+                  </NextLink>
                 </div>
               </div>
             </div>
           </div>
-          <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
-            <div className="max-w-md px-4 mx-auto overflow-hidden sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0 rounded-3xl">
+          <div className="px-4 mt-16 mb-8 sm:my-16 lg:my-0">
+            <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[640px] lg:max-w-[576px] sm:px-6 lg:px-0 rounded-3xl">
               <Image
                 src="/images/home-hero.png"
+                className="w-full h-full"
                 alt="openft hero image"
-                width="576"
-                height="640"
-                layout="responsive"
+                layout="fill"
+                quality={100}
+                objectFit="cover"
               />
             </div>
           </div>

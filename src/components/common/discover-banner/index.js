@@ -24,7 +24,7 @@ const DiscoverBanner = ({ type }) => {
           </p>
           <div className="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
             <NextLink href="#">
-              <a className="flex items-center justify-center px-4 py-3 text-base font-medium text-white bg-white border border-gray-200 rounded-md shadow-sm bg-opacity-20 hover:bg-opacity-70 sm:px-8">
+              <a className="bg-white border border-gray-200 hover:bg-opacity-10 btn-primary bg-opacity-20">
                 Discover
               </a>
             </NextLink>
