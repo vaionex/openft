@@ -2,11 +2,11 @@ import { HeartIcon, ShareIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 
-const CarouselCard = ({ data }) => {
+const ProductCard = ({ data }) => {
   return (
     <div
       key={data.id}
-      className="relative border border-gray-200 sm:mr-5 group rounded-xl "
+      className="relative border border-gray-200 rounded-xl w-full"
     >
       <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-80 aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-80 lg:aspect-none">
         <img
@@ -47,8 +47,8 @@ const CarouselCard = ({ data }) => {
   )
 }
 
-CarouselCard.propTypes = {
+ProductCard.propTypes = {
   data: PropTypes.object.isRequired,
 }
 
-export default CarouselCard
+export default ProductCard
