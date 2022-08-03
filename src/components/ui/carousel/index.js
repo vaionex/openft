@@ -72,7 +72,7 @@ PrevArrow.propTypes = {
 
 const Carousel = ({ data }) => {
   const cardsToShow = {
-    desktop: 3.75,
+    desktop: 3.5,
     bigTablet: 2.96,
     tablet: 1.97,
     mobile: 1,
@@ -108,7 +108,7 @@ const Carousel = ({ data }) => {
   }
 
   return (
-    <span className="relative overflow-hidden">
+    <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
         {data.map((item) => (
           <CarouselCard key={item.id} data={item} />
