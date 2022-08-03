@@ -67,7 +67,7 @@ const products = [
 
 const CollectionsSection = () => {
   return (
-    <div className="relative px-4 mx-auto md:pb-20 3xlg:pb-[740px] max-w-7xl lg:mt-24 sm:px-6 lg:px-8">
+    <div className="relative px-4 mx-auto pb-14 md:pb-20 3xlg:pb-[840px] max-w-7xl lg:mt-24 sm:px-6 lg:px-8">
       <div className="sm:text-center lg:text-left">
         <h2 className="mt-4 text-4xl tracking-[-2%] sm:mt-5">
           Hot collections
@@ -76,7 +76,7 @@ const CollectionsSection = () => {
           Best selling collection selected by exchangers.
         </p>
       </div>
-      <div className="top-0 right-8 lg:absolute sm:flex sm:gap-3 sm:justify-center lg:justify-start">
+      <div className="top-0 mt-10 right-8 lg:mt-0 lg:absolute sm:flex sm:gap-3 sm:justify-center lg:justify-start">
         <div className="my-3 rounded-md sm:my-0">
           <NextLink href="#">
             <a className="flex items-center justify-center w-full px-5 py-3 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md hover:bg-gray-50 md:text-lg">

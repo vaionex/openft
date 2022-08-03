@@ -12,7 +12,7 @@ const CtaMidSection = () => {
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-50">
             <div className="lg:py-24">
-              <h2 className="mt-4 text-4xl tracking-[-2%] sm:mt-5 sm:text-6xl lg:mt-6 xl:text-5xl xl:leading-tight">
+              <h2 className="mt-4 text-4xl tracking-[-2%] sm:mt-5 lg:mt-6 sm:text-5xl xl:leading-tight">
                 Create your own next-gen NFTs instantly.
               </h2>
               <p className="text-base mt-6 sm:text-xl lg:max-w-[30rem] lg:text-lg xl:text-xl">

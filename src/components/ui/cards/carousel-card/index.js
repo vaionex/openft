@@ -1,6 +1,7 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import CardLikeButton from '../../card-like-button'
 
 const CarouselCard = ({ data }) => {
   return (
@@ -8,16 +9,15 @@ const CarouselCard = ({ data }) => {
       key={data.id}
       className="relative border border-gray-200 sm:mr-5 group rounded-xl"
     >
-      <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-80 aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-80 lg:aspect-none">
+      <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-[28.75rem] aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-[28.75rem] lg:aspect-none">
         <img
           src={data.imageSrc}
           alt={data.imageAlt}
           className="object-cover object-center w-full h-full lg:w-full lg:h-full"
         />
+        <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
         <div className="absolute inset-x-0 bottom-0 z-50 flex items-end justify-end p-4 overflow-hidden rounded-lg">
-          <div className="inline-flex items-center justify-center bg-white border border-white rounded-md cursor-pointer hover:bg-opacity-40 bg-opacity-60 w-11 h-11">
-            <HeartIcon className="w-5 h-5 text-white " aria-hidden="true" />
-          </div>
+          <CardLikeButton />
         </div>
       </div>
       <div className="px-4 py-5">
