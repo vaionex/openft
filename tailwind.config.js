@@ -15,7 +15,7 @@ module.exports = {
     },
   },
   corePlugins: {
-    aspectRatio: false,
+    // aspectRatio: false,
   },
   plugins: [
     require('@tailwindcss/forms'),

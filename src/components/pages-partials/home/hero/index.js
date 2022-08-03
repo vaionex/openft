@@ -70,6 +70,7 @@ const HeroSection = () => {
                 layout="fill"
                 quality={100}
                 objectFit="cover"
+                priority={true}
               />
             </div>
           </div>

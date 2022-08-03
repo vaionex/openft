@@ -1,4 +1,4 @@
-import DiscoverBanner from '@/components/common/discover-banner'
+import DiscoverBanner from '@/components/shared/discover-banner'
 import React from 'react'
 
 const BannerSection = () => {

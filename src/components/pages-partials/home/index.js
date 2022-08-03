@@ -1,5 +1,6 @@
 import SharedLayout from '@/components/layout/shared-layout'
 import BannerSection from './banner'
+import CollectionsSection from './collections'
 import CompaniesSection from './compaines'
 import CtaMidSection from './cta-mid'
 import HeroSection from './hero'
@@ -10,6 +11,7 @@ const HomePageMain = () => {
       <HeroSection />
       <CompaniesSection />
       <CtaMidSection />
+      <CollectionsSection />
       <BannerSection />
     </SharedLayout>
   )

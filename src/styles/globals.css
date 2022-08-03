@@ -30,4 +30,7 @@
 }
 
 @layer components {
+  .carousel-main .slick-list .slick-track {
+    @apply flex gap-8;
+  }
 }

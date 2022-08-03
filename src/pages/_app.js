@@ -1,10 +1,12 @@
-import '@/styles/globals.css'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import store from '@/redux/store'
-import CurrentUser from '@/components/common/current-user'
 import AuthComponent from '@/components/auth'
+import CurrentUser from '@/components/common/current-user'
 import { AnimatePresence } from 'framer-motion'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
+import '@/styles/globals.css'
 
 function App({ Component, pageProps }) {
   return (

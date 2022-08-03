@@ -1,5 +1,5 @@
-import CompanyBanners from '@/components/common/company-banners'
 import { Relysia, Stastoken, Vainoex } from '@/components/common/svgs'
+import CompanyBanners from '@/components/shared/company-banners'
 import React from 'react'
 
 const companies = [
