@@ -76,7 +76,7 @@ const CollectionsSection = () => {
           Best selling collection selected by exchangers.
         </p>
       </div>
-      <div className="top-0 mt-10 right-8 lg:absolute sm:flex sm:gap-3 sm:justify-center lg:justify-start">
+      <div className="top-0 right-8 lg:absolute sm:flex sm:gap-3 sm:justify-center lg:justify-start">
         <div className="my-3 rounded-md sm:my-0">
           <NextLink href="#">
             <a className="flex items-center justify-center w-full px-5 py-3 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md hover:bg-gray-50 md:text-lg">
@@ -92,7 +92,7 @@ const CollectionsSection = () => {
           </NextLink>
         </div>
       </div>
-      <div className="3xlg:absolute py-12 mx-auto lg:py-20 max-w-7xl 3xlg:max-w-[1364px]">
+      <div className="3xlg:absolute py-12 mx-auto lg:py-20 max-w-7xl 3xlg:max-w-[1364px] ">
         <Carousel data={products} />
       </div>
     </div>
