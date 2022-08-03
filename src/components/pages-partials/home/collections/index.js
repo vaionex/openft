@@ -6,53 +6,62 @@ const products = [
     id: 1,
     name: 'Basic Tee',
     href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+    imageSrc: '/images/mock-carousel/Image.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
+    priceType: 'BSV 1',
     color: 'Black',
   },
   {
     id: 2,
     name: 'Basic Tee',
     href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-02.jpg',
+    imageSrc: '/images/mock-carousel/Image_1.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
+    priceType: 'BSV 1',
     color: 'Black',
   },
   {
     id: 3,
     name: 'Basic Tee',
     href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-03.jpg',
+    imageSrc: '/images/mock-carousel/Image_2.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
+    priceType: 'BSV 1',
     color: 'Black',
   },
   {
     id: 4,
     name: 'Basic Tee',
     href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-04.jpg',
+    imageSrc: '/images/mock-carousel/Image_3.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
+    priceType: 'BSV 1',
     color: 'Black',
   },
   {
     id: 5,
     name: 'Basic Tee',
     href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+    imageSrc: '/images/mock-carousel/Image_2.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
+    priceType: 'BSV 1',
     color: 'Black',
   },
-  // More products...
+  {
+    id: 6,
+    name: 'Basic Tee',
+    href: '#',
+    imageSrc: '/images/mock-carousel/Image_1.png',
+    imageAlt: "Front of men's Basic Tee in black.",
+    price: '$35',
+    priceType: 'BSV 1',
+    color: 'Black',
+  },
 ]
 
 const CollectionsSection = () => {
