@@ -5,12 +5,13 @@ import Slider from 'react-slick'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid'
 import CarouselCard from '../cards/carousel-card'
 import styles from './index.module.css'
+import { twMerge } from 'tailwind-merge'
 
-const caruselHzSettings = {
+const mainSettings = {
   dots: false,
   infinite: false,
-  speed: 400,
-  slidesToScroll: 1,
+  speed: 500,
+  slidesToScroll: 2,
   arrows: true,
   swipeToSlide: true,
   draggable: true,
@@ -20,10 +21,12 @@ function NextArrow({ currentSlide, slideCount, cardsToShow, ...props }) {
   return (
     <button
       {...props}
-      className={cn(styles.arrow, styles.arrowNext, {
-        'text-color-solid-4': currentSlide !== slideCount - cardsToShow,
-        [styles.arrowDisabled]: currentSlide === slideCount - cardsToShow,
-      })}
+      className={twMerge(
+        'absolute inline-flex items-center justify-center left-0 border border-gray-200 rounded-full -bottom-20 w-14 h-14 translate-x-[100px]',
+        currentSlide !== slideCount - cardsToShow &&
+          'text-blue-600 border-blue-200',
+        currentSlide === slideCount - cardsToShow && 'text-gray-400 ',
+      )}
       aria-hidden="true"
       aria-disabled={currentSlide === slideCount - cardsToShow ? true : false}
       type="button"
@@ -48,10 +51,11 @@ function PrevArrow({ currentSlide, slideCount, ...props }) {
   return (
     <button
       {...props}
-      className={cn(styles.arrow, styles.arrowPrev, {
-        'text-color-solid-4': currentSlide !== 0,
-        [styles.arrowDisabled]: currentSlide === 0,
-      })}
+      className={twMerge(
+        'absolute inline-flex items-center justify-center left-0 border border-gray-200 rounded-full -bottom-20 w-14 h-14 translate-x-[30px]',
+        currentSlide !== 0 && 'text-blue-600 border-blue-200',
+        currentSlide === 0 && 'text-gray-400 ',
+      )}
       aria-hidden="true"
       aria-disabled={currentSlide === 0 ? true : false}
       type="button"
@@ -68,17 +72,25 @@ PrevArrow.propTypes = {
 
 const Carousel = ({ data }) => {
   const cardsToShow = {
-    desktop: 4,
-    tablet: 1.5,
+    desktop: 3.75,
+    bigTablet: 2.96,
+    tablet: 1.97,
     mobile: 1,
   }
 
   const settings = {
-    ...caruselHzSettings,
+    ...mainSettings,
     slidesToShow: cardsToShow.desktop,
     nextArrow: <NextArrow cardsToShow={cardsToShow.desktop} />,
     prevArrow: <PrevArrow />,
     responsive: [
+      {
+        breakpoint: 1366,
+        settings: {
+          slidesToShow: cardsToShow.bigTablet,
+          nextArrow: <NextArrow cardsToShow={cardsToShow.bigTablet} />,
+        },
+      },
       {
         breakpoint: 1024,
         settings: {
@@ -87,7 +99,7 @@ const Carousel = ({ data }) => {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 640,
         settings: {
           slidesToShow: cardsToShow.mobile,
         },
@@ -96,7 +108,7 @@ const Carousel = ({ data }) => {
   }
 
   return (
-    <span className="relative carousel-main">
+    <span className="relative overflow-hidden">
       <Slider {...settings}>
         {data.map((item) => (
           <CarouselCard key={item.id} data={item} />

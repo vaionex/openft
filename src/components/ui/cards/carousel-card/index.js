@@ -6,7 +6,7 @@ const CarouselCard = ({ data }) => {
   return (
     <div
       key={data.id}
-      className="relative border border-gray-200 group rounded-xl"
+      className="relative border border-gray-200 sm:mr-5 group rounded-xl"
     >
       <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-80 aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-80 lg:aspect-none">
         <img
@@ -14,10 +14,10 @@ const CarouselCard = ({ data }) => {
           alt={data.imageAlt}
           className="object-cover object-center w-full h-full lg:w-full lg:h-full"
         />
-      </div>
-      <div className="absolute inset-x-0 z-50 flex items-end justify-end p-4 overflow-hidden rounded-lg top-60">
-        <div className="inline-flex items-center justify-center bg-white border border-white rounded-md cursor-pointer hover:bg-opacity-40 bg-opacity-60 w-11 h-11">
-          <HeartIcon className="w-5 h-5 text-white " aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 z-50 flex items-end justify-end p-4 overflow-hidden rounded-lg">
+          <div className="inline-flex items-center justify-center bg-white border border-white rounded-md cursor-pointer hover:bg-opacity-40 bg-opacity-60 w-11 h-11">
+            <HeartIcon className="w-5 h-5 text-white " aria-hidden="true" />
+          </div>
         </div>
       </div>
       <div className="px-4 py-5">

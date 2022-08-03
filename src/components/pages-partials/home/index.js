@@ -10,8 +10,8 @@ const HomePageMain = () => {
     <SharedLayout title="Home">
       <HeroSection />
       <CompaniesSection />
-      <CtaMidSection />
       <CollectionsSection />
+      <CtaMidSection />
       <BannerSection />
     </SharedLayout>
   )

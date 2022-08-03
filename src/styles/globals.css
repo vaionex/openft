@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply h-full antialiased text-gray-900 bg-white font-base;
+    @apply h-full overflow-x-hidden antialiased text-gray-900 bg-white font-base;
   }
 
   h1,
@@ -27,10 +27,26 @@
   .btn-primary {
     @apply inline-flex px-4 py-3 font-bold text-white bg-blue-600 rounded-lg hover:opacity-90;
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-blue-600;
+  }
 }
 
 @layer components {
-  .carousel-main .slick-list .slick-track {
+  /* .carousel-main .slick-list .slick-track {
     @apply flex gap-8;
-  }
+  } */
 }

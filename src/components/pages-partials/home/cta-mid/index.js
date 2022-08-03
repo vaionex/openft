@@ -22,23 +22,23 @@ const CtaMidSection = () => {
               </p>
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
                 <div className="my-3 rounded-md sm:my-0">
-                  <a
-                    href="#"
-                    className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
-                  >
-                    Learn More
-                  </a>
+                  <NextLink href="#">
+                    <a className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                      Learn More
+                    </a>
+                  </NextLink>
                 </div>
                 <div className="rounded-md">
-                  <a
-                    href="#"
-                    className={twMerge(
-                      'btn-primary',
-                      'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
-                    )}
-                  >
-                    Sign up
-                  </a>
+                  <NextLink href="/register">
+                    <a
+                      className={twMerge(
+                        'btn-primary',
+                        'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
+                      )}
+                    >
+                      Sign up
+                    </a>
+                  </NextLink>
                 </div>
               </div>
             </div>
