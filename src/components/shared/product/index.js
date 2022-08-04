@@ -1,5 +1,5 @@
+import { ON_AUCTION } from '@/utils/constants'
 import { HeartIcon, ShareIcon } from '@heroicons/react/outline'
-import Image from 'next/image'
 import PropTypes from 'prop-types'
 
 const ProductCard = ({ data }) => {
@@ -23,20 +23,20 @@ const ProductCard = ({ data }) => {
       <div className="px-4 py-5">
         <div className="flex justify-end">
           <p className="text-xl font-medium text-gray-900">
-            {data.price} {data.priceType}
+            ${data.price} {data.priceType}
           </p>
         </div>
         <div className="my-6">
           <h3 className="text-sm text-gray-700">
             <a href={data.href} className="text-blue-600">
-              {data.name}
+              {data.owner}
             </a>
           </h3>
-          <p className="mt-1 text-lg text-gray-900">{data.color}</p>
+          <p className="mt-1 text-lg text-gray-900">{data.name}</p>
         </div>
         <div className="flex gap-1.5">
           <button className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal">
-            Buy now
+            {data.sellingType === ON_AUCTION ? 'Place Bid' : 'Buy now'}
           </button>
           <button className="p-3.5 rounded-md border border-gray-200">
             <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" />

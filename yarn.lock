@@ -4696,6 +4696,11 @@ svgo@^2.8.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
+sweetpagination@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/sweetpagination/-/sweetpagination-1.0.15.tgz#956582796e6fe1c757965274308d43f180ea4a3c"
+  integrity sha512-9r/3av9ENkwWdHgnVe+L1muQLV1BOuNTUXcl4SGyHXvzKIm5ngB+Po98zMMrqL8zgKd33rh+8MaElpGbaPwBRw==
+
 tailwind-merge@^1.4.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-1.5.1.tgz#fb7d6b724aef702b11fd01fddf1be1d8aeab3d7a"
