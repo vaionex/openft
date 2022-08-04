@@ -1,3 +1,4 @@
+import Pagination from '@/components/shared/pagination'
 import ProductsList from '@/components/shared/products-list'
 import Searchbar from '@/components/shared/searchbar'
 import React from 'react'
@@ -77,6 +78,7 @@ const ProductsListingSection = () => {
         </div>
         <div className="md:w-2/3 lg:w-3/4">
           <ProductsList products={products} />
+          <Pagination />
         </div>
       </div>
     </div>
