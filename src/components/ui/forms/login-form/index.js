@@ -148,9 +148,9 @@ function LoginForm() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:flex lg:items-end lg:justify-center relative w-0 flex-[3] ">
+      <div className="hidden lg:flex px-3 pt-14 lg:items-end lg:justify-center relative w-0 flex-[3] ">
         {/* image wrapper for now */}
-        <div className="inline-block w-[70%] h-[90%] rounded-3xl bg-slate-200"></div>
+        <div className="inline-block w-[70%] h-full rounded-3xl bg-slate-200"></div>
       </div>
     </div>
   )
