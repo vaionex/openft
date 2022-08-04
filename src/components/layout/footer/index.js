@@ -9,7 +9,11 @@ const navigation = [
   { name: 'Privacy', href: '#' },
 ]
 
-const Footer = () => {
+const Footer = ({ page }) => {
+  if (page === 'login' || page === 'register') {
+    return <footer className="px-8 pb-8 bg-white">© 2022 Vaionex</footer>
+  }
+
   return (
     <footer className="bg-white">
       <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:flex md:items-center md:justify-between lg:px-8">

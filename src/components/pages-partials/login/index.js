@@ -1,11 +1,12 @@
 import LoginForm from '@/components/ui/forms/login-form'
 import SharedLayout from '@/components/layout/shared-layout'
+import LoginRegisterLayout from '@/components/layout/login-register-layout'
 
 const Login = () => {
   return (
-    <SharedLayout title="Login">
+    <LoginRegisterLayout title="Login">
       <LoginForm />
-    </SharedLayout>
+    </LoginRegisterLayout>
   )
 }
 
