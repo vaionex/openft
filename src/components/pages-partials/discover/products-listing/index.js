@@ -275,6 +275,7 @@ const ProductsListingSection = () => {
   }
 
   useEffect(() => {
+    setCurrentPage(0)
     handleApplyFilters()
   }, [productSellingType])
 

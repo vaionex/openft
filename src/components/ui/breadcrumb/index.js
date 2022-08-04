@@ -15,7 +15,6 @@ const Breadcrumb = ({ className }) => {
 
   useEffect(() => {
     const routes = router.asPath.split('?')[0].split('/')
-    console.log('routes', routes)
     const tempPages = routes.map((path, index) => {
       if (path) {
         return {
