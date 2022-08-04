@@ -6,11 +6,11 @@ import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { firebaseLoginWithGoogle } from '@/firebase/utils'
-import { FormInput } from '@/components/ui/forms'
 import Alert from '@/components/ui/alert'
 import apiConfig from '@/config/relysiaApi'
 import { createwallet } from '@/services/relysia-queries'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
+import { FormInput } from '../../inputs'
 
 const inputAttributes = [
   {
@@ -75,14 +75,14 @@ function RegisterForm() {
   }
 
   return (
-    <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="flex flex-col justify-center min-h-full py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
-          className="h-12 w-auto mx-auto sm:h-10"
+          className="w-auto h-12 mx-auto sm:h-10"
           src="https://i.ibb.co/4jWbzz7/vbsLogo.png"
           alt="vaionex-logo"
         />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
           Register
         </h2>
       </div>
@@ -92,7 +92,7 @@ function RegisterForm() {
         )}
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {inputAttributes.map((inputAttribute) => (
               <FormInput
@@ -108,11 +108,11 @@ function RegisterForm() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 />
                 <label
                   htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
+                  className="block ml-2 text-sm text-gray-900"
                 >
                   Remember me
                 </label>
@@ -149,17 +149,17 @@ function RegisterForm() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
+                <span className="px-2 text-gray-500 bg-white">
                   Or continue with
                 </span>
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3 mt-6">
               <div>
                 <a
                   href="#"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                   onClick={() => handleGoogleAuth()}
                 >
                   <span className="sr-only">Sign in with Google</span>
@@ -179,7 +179,7 @@ function RegisterForm() {
               <div>
                 <a
                   href="#"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                 >
                   <span className="sr-only">Sign in with Twitter</span>
                   <svg
@@ -196,7 +196,7 @@ function RegisterForm() {
               <div>
                 <a
                   href="#"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                 >
                   <span className="sr-only">Sign in with GitHub</span>
                   <svg

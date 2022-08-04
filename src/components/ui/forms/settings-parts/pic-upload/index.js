@@ -4,7 +4,7 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-export const Avatar = ({
+export const AvatarUpload = ({
   size,
   avatarPathSetter,
   tempAvatarSetter,
@@ -40,8 +40,8 @@ export const Avatar = ({
 
   return (
     <div>
-      <div className="p-2 flex justify-center">
-        <div className="mb-8 rounded-full overflow-hidden w-14 h-14 ring ring-blue-400 ring-offset-base-100 ring-offset-2">
+      <div className="flex justify-center p-2">
+        <div className="mb-8 overflow-hidden rounded-full w-14 h-14 ring ring-blue-400 ring-offset-base-100 ring-offset-2">
           <Image
             src={
               tempAvatar ??
@@ -65,7 +65,7 @@ export const Avatar = ({
           {uploading ? 'Uploading' : 'Upload Picture'}
         </label>
         <input
-          className="hidden absolute"
+          className="absolute hidden"
           type="file"
           id="single"
           accept="image/*"
@@ -77,11 +77,11 @@ export const Avatar = ({
   )
 }
 
-Avatar.propTypes = {
+AvatarUpload.propTypes = {
   size: PropTypes.number,
   avatarPathSetter: PropTypes.func,
   tempAvatarSetter: PropTypes.func,
   tempAvatar: PropTypes.string,
 }
 
-export default Avatar
+export default AvatarUpload

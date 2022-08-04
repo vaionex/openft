@@ -9,7 +9,7 @@ import {
   firebaseUpdateProfilDetails,
 } from '@/firebase/utils'
 
-export default function Settings() {
+export default function SettingsForm() {
   const router = useRouter()
   const [tempAvatarUrl, setTempAvatarUrl] = useState(null)
   const [avatarPath, setAvatarPath] = useState(null)
