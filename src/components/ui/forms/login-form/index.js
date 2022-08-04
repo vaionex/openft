@@ -107,7 +107,7 @@ function LoginForm() {
                         htmlFor="login-remember"
                         className="ml-1 text-sm cursor-pointer"
                       >
-                        Remember me
+                        Remember for 30 days
                       </label>
                     </div>
 
@@ -148,9 +148,9 @@ function LoginForm() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:flex px-3 pt-14 lg:items-end lg:justify-center relative w-0 flex-[3] ">
+      <div className="hidden lg:flex px-8 pt-14 lg:items-end lg:justify-center relative w-0 flex-[3] ">
         {/* image wrapper for now */}
-        <div className="inline-block w-[70%] h-full rounded-3xl bg-slate-200"></div>
+        <div className="inline-block w-full h-full max-w-2xl rounded-3xl bg-slate-200"></div>
       </div>
     </div>
   )
