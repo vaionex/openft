@@ -1,9 +1,9 @@
 import { Logo } from '@/components/common/svgs'
 
 const navigation = [
-  { name: 'Home', href: '#' },
-  { name: 'Discover', href: '#' },
-  { name: 'Contribute', href: '#' },
+  { name: 'Home', href: '/' },
+  { name: 'Discover', href: '/discover' },
+  { name: 'Contribute', href: '/contribute' },
   { name: 'FAQ', href: '#' },
   { name: 'Contact', href: '#' },
   { name: 'Privacy', href: '#' },

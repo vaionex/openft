@@ -1,9 +1,8 @@
+import ContributeMain from '@/components/pages-partials/contribute'
 import React from 'react'
 
-const index = () => {
-  return (
-    <div>index</div>
-  )
+const ContributePage = () => {
+  return <ContributeMain />
 }
 
-export default index
+export default ContributePage

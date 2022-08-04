@@ -8,7 +8,7 @@ import { Logo } from '@/components/common/svgs'
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
-  { name: 'Contribute', href: '#' },
+  { name: 'Contribute', href: '/contribute' },
 ]
 
 const Header = () => {

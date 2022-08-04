@@ -18,7 +18,7 @@ const Breadcrumb = ({ className }) => {
     const tempPages = routes.map((path, index) => {
       if (path) {
         return {
-          name: path,
+          name: path.charAt(0).toUpperCase() + path.slice(1),
           href: '/' + path,
           current: index === routes.length - 1 ? true : false,
         }
