@@ -13,11 +13,11 @@ const HeroSection = () => {
             <div className="lg:py-16">
               <NextLink href="#">
                 <a className="inline-flex items-center p-1 pr-2 text-blue-700 rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
-                  <span className="px-3 py-0.5 bg-white text-blue-700 text-xs font-medium leading-5 uppercase tracking-wide rounded-full">
-                    What’s new?
+                  <span className="px-3 py-0.5 bg-white text-blue-700 font-medium leading-5 tracking-wide rounded-full">
+                    It&apos;s free!
                   </span>
                   <span className="ml-4 text-sm font-medium">
-                    Instantly mint music NFT
+                    Mint and sell NFTs
                   </span>
                   <ArrowRightIcon
                     className="w-4 h-4 ml-1 text-blue-700"
