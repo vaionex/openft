@@ -35,14 +35,14 @@ const FilterSection = ({
           <input
             type="text"
             id="simple-search"
-            class="border rounded-lg border-gray-300 text-gray-500 text-sm rounded-lgblock w-full p-2.5"
+            className="border rounded-lg border-gray-300 text-gray-500 text-sm rounded-lgblock w-full p-2.5"
             placeholder="Min price"
             ref={minPrice}
           />
           <input
             type="text"
             id="simple-search"
-            class="border rounded-lg border-gray-300 text-gray-500 text-sm rounded-lgblock w-full p-2.5"
+            className="border rounded-lg border-gray-300 text-gray-500 text-sm rounded-lgblock w-full p-2.5"
             placeholder="Max price"
             ref={maxPrice}
           />
@@ -50,13 +50,13 @@ const FilterSection = ({
       </div>
       <div className="flex gap-4">
         <button
-          class="border rounded-lg border-gray-300 text-gray-500 text-sm rounded-lgblock p-2.5 w-1/3"
+          className="border rounded-lg border-gray-300 text-gray-500 text-sm rounded-lgblock p-2.5 w-1/3"
           onClick={clearFilter}
         >
           Clear
         </button>
         <button
-          class="border rounded-lg bg-blue-600 text-white text-sm rounded-lgblock p-2.5 w-2/3"
+          className="border rounded-lg bg-blue-600 text-white text-sm rounded-lgblock p-2.5 w-2/3"
           onClick={handleApplyFilters}
         >
           Apply filter
