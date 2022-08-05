@@ -17,7 +17,7 @@ const UserSettingsMain = () => {
   return (
     <UserSettingsLayout>
       <ProfileHeaderCard profile={profile} />
-      <form className="space-y-8 divide-y divide-gray-200">
+      <form className="mt-12 space-y-8 divide-y divide-gray-200">
         <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
           <SettingsFormInput
             label="Username"
@@ -34,7 +34,7 @@ const UserSettingsMain = () => {
             placeholder="Instagram username"
           />
 
-          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5">
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-b sm:border-gray-200 sm:pb-5">
             <label
               htmlFor="photo"
               className="block text-sm font-medium text-gray-700"
@@ -51,7 +51,7 @@ const UserSettingsMain = () => {
             </div>
           </div>
 
-          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-b sm:border-gray-200 sm:pb-5">
             <label
               htmlFor="about"
               className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -71,6 +71,7 @@ const UserSettingsMain = () => {
             label="Job title"
             id="job-title"
             placeholder="e.g. UI Artist"
+            className="border-none"
             additionalCheckbox={
               <Checkbox
                 id="show-job-title"
