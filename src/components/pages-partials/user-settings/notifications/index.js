@@ -1,12 +1,12 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import React from 'react'
 
-const UserSettingsSecuritySection = () => {
+const UserSettingsNotificationSection = () => {
   return (
     <UserSettingsLayout>
-      <div>UserSettingsSecuritySection</div>
+      <div>UserSettingsNotificationSection</div>
     </UserSettingsLayout>
   )
 }
 
-export default UserSettingsSecuritySection
+export default UserSettingsNotificationSection

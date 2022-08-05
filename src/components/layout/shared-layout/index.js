@@ -5,15 +5,23 @@ import Header from '../header'
 import { twMerge } from 'tailwind-merge'
 import { motion } from 'framer-motion'
 import pageTransitionVariants from '@/animations/page-transition'
+import { useRouter } from 'next/router'
 
 const SharedLayout = ({ children, title, className }) => {
+  const { pathname } = useRouter()
+
+  console.log(pathname)
+  const runPageTransition = () => {
+    return !pathname.includes('user-settings') && pageTransitionVariants
+  }
+
   return (
     <>
       <Head>
         <title>Openft | {title}</title>
       </Head>
       <motion.div
-        variants={pageTransitionVariants}
+        variants={runPageTransition()}
         initial="hidden"
         animate="visible"
         exit="exit"
