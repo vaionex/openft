@@ -16,15 +16,14 @@ const links = [
 
 const UserSettingsSidebar = () => {
   const { pathname } = useRouter()
+
   console.log(pathname)
   return (
     <aside className="py-6 lg:pr-12 lg:col-span-2">
       <nav className="space-y-1">
         {links.map((item) => (
           <NextLink
-            href={{
-              pathname: item.href,
-            }}
+            href={item.href}
             scroll={false}
             shallow={true}
             key={`${item.name}-${Math.random() * 100}`}
@@ -33,7 +32,7 @@ const UserSettingsSidebar = () => {
               key={item.name}
               href={item.href}
               className={twMerge(
-                pathname.includes(item.href)
+                pathname === item.href
                   ? 'bg-blue-50 border-blue-500 text-blue-700 hover:bg-blue-50 hover:text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700',
                 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium',

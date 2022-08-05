@@ -27,7 +27,9 @@ const SharedLayout = ({ children, title, className }) => {
         exit="exit"
       >
         <Header />
-        <main className={twMerge('min-h-[600px]', className)}>{children}</main>
+        <main className={twMerge('min-h-[calc(100vh-(6rem+8rem))]', className)}>
+          {children}
+        </main>
         <Footer />
       </motion.div>
     </>
