@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import { Avatar } from '../../avatars'
 
 const ProfileHeaderCard = ({ profile }) => {
   return (
@@ -14,17 +15,9 @@ const ProfileHeaderCard = ({ profile }) => {
       </div>
       <div className=" sm:px-6 lg:px-8">
         <div className="-mt-12 sm:-mt-10 sm:flex sm:items-end sm:space-x-5">
-          <div className="relative w-24 h-24 overflow-hidden rounded-full ring-4 ring-white sm:h-32 sm:w-32">
-            <Image
-              src={profile.avatar}
-              className=""
-              layout="fill"
-              alt={profile.name}
-              objectFit="cover"
-            />
-          </div>
+          <Avatar user={profile} className="w-24 h-24 sm:w-32 sm:h-32 " />
           <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-            <div className="flex-1 min-w-0 sm:hidden md:block">
+            <div className="flex-1 min-w-0 mb-6 sm:mb-0 sm:hidden md:block">
               <h2 className="mb-1 text-2xl font-medium text-gray-900 truncate">
                 {profile.name}
               </h2>
@@ -41,7 +34,7 @@ const ProfileHeaderCard = ({ profile }) => {
           </div>
         </div>
         <div className="flex-1 hidden min-w-0 mt-6 sm:block md:hidden">
-          <h2 className="text-2xl font-bold text-gray-900 truncate">
+          <h2 className="text-2xl font-medium text-gray-900 truncate">
             {profile.name}
           </h2>
           <h3 className="font-normal text-gray-500">{profile.title}</h3>

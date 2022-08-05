@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { getAuth } from 'firebase/auth'
 
-import Avatar from '../settings-parts/pic-upload'
+import Avatar from '../settings-parts/image-upload'
 import {
   firebaseUpdateProfilePicture,
   firebaseUpdateProfilDetails,
