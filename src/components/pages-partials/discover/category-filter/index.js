@@ -84,7 +84,7 @@ export default function CategoryFilter() {
   }
 
   return (
-    <div className="bg-white">
+    <div>
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -135,12 +135,28 @@ export default function CategoryFilter() {
                     <h3 className="sr-only">Categories</h3>
                     <div className="flex flex-col space-y-2">
                       <div className="rounded-md">
-                        <button className="flex items-center justify-center w-full px-5 py-3 text-base font-medium text-white border border-transparent rounded-md btn-primary 0 md:text-lg">
+                        <button
+                          value={'buy-now'}
+                          onClick={(e) => statusHandle(e)}
+                          className={`flex items-center justify-center border ${
+                            currentStatus === 'buy-now'
+                              ? 'btn-primary text-white border-transparent'
+                              : 'text-gray-600 border-gray-200 hover:bg-gray-50'
+                          } w-full px-5 py-3 text-base font-medium rounded-md md:text-lg`}
+                        >
                           Buy now
                         </button>
                       </div>
                       <div className="rounded-md">
-                        <button className="btn-primary text-white flex items-center justify-center w-full px-5 py-3 text-base font-medium border border-transparent rounded-md 0 md:text-lg">
+                        <button
+                          value={'on-auction'}
+                          onClick={(e) => statusHandle(e)}
+                          className={`flex items-center justify-center ${
+                            currentStatus === 'on-auction'
+                              ? 'btn-primary text-white border border-transparent '
+                              : 'text-gray-600 border border-gray-200 hover:bg-gray-50'
+                          } w-full px-5 py-3 text-base font-medium rounded-md md:text-lg`}
+                        >
                           On auction
                         </button>
                       </div>
@@ -155,7 +171,7 @@ export default function CategoryFilter() {
                           type="text"
                           name="price-first"
                           id="price-first"
-                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                           placeholder="Any price"
                         />
                       </div>
@@ -167,14 +183,14 @@ export default function CategoryFilter() {
                           type="text"
                           name="price-second"
                           id="price-second"
-                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                           placeholder="Any price"
                         />
                       </div>
                     </div>
                     <div className="mt-4 grid grid-cols-6 gap-4">
                       <button
-                        className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 rounded-md md:text-lg`}
+                        className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 hover:bg-gray-50 rounded-md md:text-lg`}
                       >
                         Clear
                       </button>
@@ -210,7 +226,7 @@ export default function CategoryFilter() {
                     type="search"
                     name="search"
                     id="search"
-                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                    className="focus:ring-blue-600 focus:border-blue-600 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                     placeholder="Search"
                   />
                 </div>
@@ -221,7 +237,7 @@ export default function CategoryFilter() {
             </div>
 
             <div className="col-span-3 flex justify-end items-center">
-              <button className="p-2.5 md:p-1.5 flex space-x-2 justify-center items-center rounded-md border border-gray-200">
+              <button className="p-2.5 md:p-1.5 flex space-x-2 justify-center items-center rounded-md border border-gray-200 hover:bg-gray-50">
                 <MoreFilterIcon className="w-5 h-5" aria-hidden="true" />
                 <span className="hidden md:block">More filters</span>
               </button>
@@ -283,7 +299,7 @@ export default function CategoryFilter() {
                       type="text"
                       name="price-first"
                       id="price-first"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="Any price"
                     />
                   </div>
@@ -295,14 +311,14 @@ export default function CategoryFilter() {
                       type="text"
                       name="price-second"
                       id="price-second"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="Any price"
                     />
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-6 gap-4">
                   <button
-                    className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 rounded-md md:text-lg`}
+                    className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 hover:bg-gray-50 rounded-md md:text-lg`}
                   >
                     Clear
                   </button>
