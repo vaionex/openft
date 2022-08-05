@@ -10,6 +10,7 @@ const SettingsFormInput = ({
   addon,
   variant,
   id,
+  additionalCheckbox,
   ...props
 }) => {
   return (
@@ -30,7 +31,7 @@ const SettingsFormInput = ({
       </label>
       <div className="mt-1 sm:mt-0 sm:col-span-2">
         {variant === 'add-on' && addon && (
-          <div className="flex max-w-lg rounded-md shadow-sm">
+          <div className="flex rounded-md shadow-sm">
             <>
               <span className="inline-flex items-center px-3 text-gray-500 border border-r-0 border-gray-200 rounded-l-md bg-gray-50 sm:text-sm">
                 {addon}
@@ -49,7 +50,7 @@ const SettingsFormInput = ({
         )}
 
         {variant === 'default' && (
-          <div className="flex max-w-lg rounded-md shadow-sm">
+          <div className="flex rounded-md shadow-sm">
             <input
               id={id}
               type={inputType}
@@ -61,6 +62,8 @@ const SettingsFormInput = ({
             />
           </div>
         )}
+
+        {additionalCheckbox && additionalCheckbox}
       </div>
     </div>
   )

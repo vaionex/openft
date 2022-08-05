@@ -7,6 +7,7 @@ import { EyeIcon, EyeOffIcon, MenuIcon } from '@heroicons/react/outline'
 import { Logo } from '@/components/common/svgs'
 import { GoogleIcon } from '@/components/common/icons'
 import authSelector from '@/redux/selectors/auth'
+import Checkbox from '../../checkbox'
 
 function LoginForm() {
   const dispatch = useDispatch()
@@ -97,19 +98,7 @@ function LoginForm() {
                   </div>
 
                   <div className="flex items-center justify-between gap-2">
-                    <div>
-                      <input
-                        type="checkbox"
-                        className="rounded-[4px] border border-gray-300"
-                        id="login-remember"
-                      />
-                      <label
-                        htmlFor="login-remember"
-                        className="ml-1 text-sm cursor-pointer"
-                      >
-                        Remember for 30 days
-                      </label>
-                    </div>
+                    <Checkbox id="remember-me" text="Remember for 30 days" />
 
                     <div className="text-sm">
                       <NextLink href="/forgot-password">
