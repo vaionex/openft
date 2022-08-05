@@ -3,9 +3,9 @@ import BannerSection from './banner'
 import CategoryFilter from './category-filter'
 import Cta from './cta'
 
-const HomePageMain = () => {
+const DiscoverPageMain = () => {
   return (
-    <SharedLayout title="Home">
+    <SharedLayout title="Discover">
       <BannerSection />
       <CategoryFilter />
       <Cta />
@@ -13,4 +13,4 @@ const HomePageMain = () => {
   )
 }
 
-export default HomePageMain
+export default DiscoverPageMain
