@@ -28,7 +28,7 @@ const Header = () => {
                 </a>
               </NextLink>
               <div className="flex items-center -mr-2 md:hidden">
-                <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-gray-900 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-white">
+                <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-blue-50">
                   <span className="sr-only">Open main menu</span>
                   <MenuIcon className="w-6 h-6" aria-hidden="true" />
                 </Popover.Button>
