@@ -3,6 +3,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { Logo } from '@/components/common/svgs'
 import NextLink from 'next/link'
+import ActiveLink from '@/components/common/active-link'
 
 const MobileNav = ({ navItems }) => {
   return (
@@ -19,13 +20,13 @@ const MobileNav = ({ navItems }) => {
         focus
         className="absolute inset-x-0 top-0 p-2 transition origin-top transform md:hidden"
       >
-        <div className="overflow-hidden rounded-lg shadow-md bg-body ring-1 ring-black ring-opacity-5">
+        <div className="overflow-hidden bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="flex items-center justify-between px-5 pt-4">
             <div>
               <Logo />
             </div>
             <div className="-mr-2">
-              <Popover.Button className="px-2 btn-dark">
+              <Popover.Button className="p-2 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-blue-50">
                 <span className="sr-only">Close menu</span>
                 <XIcon className="w-6 h-6" aria-hidden="true" />
               </Popover.Button>
@@ -34,25 +35,23 @@ const MobileNav = ({ navItems }) => {
           <div className="pt-5 pb-6">
             <div className="px-2 space-y-1">
               {navItems.map((item) => (
-                <a
+                <ActiveLink
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:bg-gray-900"
+                  activeClassName=" text-blue-600 font-semibold"
                 >
-                  {item.name}
-                </a>
+                  <a className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:bg-gray-900">
+                    {item.name}
+                  </a>
+                </ActiveLink>
               ))}
             </div>
-            <div className="px-5 mt-6">
-              <NextLink href="#">
-                <a className="w-full btn-dark">Start free trial</a>
-              </NextLink>
-            </div>
+
             <div className="px-5 mt-6">
               <p className="text-base font-medium text-center text-gray-500">
-                Existing customer?{' '}
-                <NextLink href="#">
-                  <a className="text-primary hover:underline">Login</a>
+                Do you have an account?{' '}
+                <NextLink href="/login">
+                  <a className="text-blue-700 hover:underline">Login</a>
                 </NextLink>
               </p>
             </div>

@@ -1,4 +1,5 @@
 import { Logo } from '@/components/common/svgs'
+import NextLink from 'next/link'
 
 const navigation = [
   { name: 'Home', href: '#' },
@@ -20,15 +21,13 @@ const Footer = ({ page }) => {
         <div className="flex justify-center md:order-1">
           <Logo />
         </div>
-        <div className="flex justify-center space-x-6 md:order-2">
+        <div className="flex flex-wrap justify-center mt-8 space-x-6 md:mt-0 md:order-2">
           {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-gray-500 hover:text-gray-600"
-            >
-              <span className="">{item.name}</span>
-            </a>
+            <NextLink href={item.href} key={item.name}>
+              <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                <span className="">{item.name}</span>
+              </a>
+            </NextLink>
           ))}
         </div>
         <div className="mt-8 md:mt-0 md:order-3">
