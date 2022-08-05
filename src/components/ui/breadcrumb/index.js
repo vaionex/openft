@@ -9,7 +9,7 @@ const pages = [
   { name: 'Project Nero', href: '#', current: true },
 ]
 
-const Breadcrumb = ({ className }) => {
+const Breadcrumb = ({ className, pages }) => {
   const router = useRouter()
 
   // LATER
@@ -30,18 +30,21 @@ const Breadcrumb = ({ className }) => {
           <li key={page.name}>
             <div className="flex items-center">
               <svg
-                className="flex-shrink-0 w-5 h-5 text-gray-300"
                 xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
+                className="h-5 w-5"
                 viewBox="0 0 20 20"
-                aria-hidden="true"
+                fill="#fff"
               >
-                <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
               </svg>
               <NextLink href={page.href}>
                 <a
                   href={page.href}
-                  className="ml-4 text-sm font-medium text-gray-300 hover:text-gray-700"
+                  className="ml-4 text-sm font-medium text-gray-300 hover:text-gray-400"
                   aria-current={page.current ? 'page' : undefined}
                 >
                   {page.name}

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import NextLink from 'next/link'
 import PropTypes from 'prop-types'
 
-const DiscoverBanner = ({ action }) => {
+const DiscoverBanner = ({ action, pages }) => {
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 ">
       <div className="relative overflow-hidden shadow-xl rounded-2xl ">
@@ -33,7 +33,9 @@ const DiscoverBanner = ({ action }) => {
               </NextLink>
             </div>
           )}
-          {action === 'breadcrumb' && <Breadcrumb className="mt-10" />}
+          {action === 'breadcrumb' && (
+            <Breadcrumb pages={pages} className="mt-10" />
+          )}
         </div>
       </div>
     </div>
