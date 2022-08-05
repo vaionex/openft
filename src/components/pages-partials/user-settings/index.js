@@ -3,6 +3,7 @@ import ProfileHeaderCard from '@/components/ui/cards/profile-header-card'
 import Checkbox from '@/components/ui/checkbox'
 import { AvatarUpload } from '@/components/ui/forms'
 import { SettingsFormInput } from '@/components/ui/inputs'
+import TextEditor from '@/components/ui/text-editor'
 
 const profile = {
   name: 'Olivia John',
@@ -47,6 +48,22 @@ const UserSettingsMain = () => {
               <div className="flex items-center">
                 <AvatarUpload size={64} tempAvatar={profile.avatar} />
               </div>
+            </div>
+          </div>
+
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <label
+              htmlFor="about"
+              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+            >
+              Your bio
+              <span className="block font-normal text-gray-500">
+                Write a short introduction.
+              </span>
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <TextEditor onChange={() => {}} />
+              <p className="mt-2 text-sm text-gray-500">400 characters left</p>
             </div>
           </div>
 

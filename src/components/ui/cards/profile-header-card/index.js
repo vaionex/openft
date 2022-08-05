@@ -24,10 +24,10 @@ const ProfileHeaderCard = ({ profile }) => {
               <h3 className="font-normal text-gray-500">{profile.title}</h3>
             </div>
             <div className="flex flex-col space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
-              <button type="button" className="btn-secondary">
+              <button type="button" className="btn-secondary py-2.5">
                 Cancel
               </button>
-              <button type="button" className="btn-primary">
+              <button type="button" className="btn-primary py-2.5">
                 Save
               </button>
             </div>
