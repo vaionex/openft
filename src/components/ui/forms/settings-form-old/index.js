@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { getAuth } from 'firebase/auth'
 
-import Avatar from '../settings-parts/image-upload'
+import AvatarUpload from '../settings-parts/avatar-upload'
 import {
   firebaseUpdateProfilePicture,
   firebaseUpdateProfilDetails,
@@ -41,7 +41,7 @@ export default function SettingsForm() {
     const updateData = {
       user: authUser.currentUser,
       file: avatarPath?.file,
-      filePath: `avatars/${auth.user.uid}/${avatarPath?.filePath}`,
+      filePath: `avatars/${auth?.user?.uid}/${avatarPath?.filePath}`,
     }
     const returnFromUpdate = await firebaseUpdateProfilePicture({
       ...updateData,
@@ -105,7 +105,7 @@ export default function SettingsForm() {
       }
     }
     if (formData.email.length > 0) {
-      if (formData.email === auth.user.email) {
+      if (formData.email === auth?.user?.email) {
         setPopup(() => ({
           message:
             'Be sure to enter an email that is different from your current email address',
@@ -132,7 +132,7 @@ export default function SettingsForm() {
       password: newPassword,
       username: newUsername,
       email: newEmail,
-      photoURL: auth.user.photoURL,
+      photoURL: auth?.user?.photoURL,
     }).then(() => {
       setPopup(() => ({
         message: 'The changes were successful',
@@ -171,7 +171,7 @@ export default function SettingsForm() {
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                   <div className="flex items-center justify-center sm:justify-start">
-                    <Avatar
+                    <AvatarUpload
                       size={70}
                       tempAvatarSetter={setTempAvatarUrl}
                       avatarPathSetter={setAvatarPath}
@@ -242,7 +242,7 @@ export default function SettingsForm() {
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                   <input
                     type="text"
-                    placeholder={auth.user.name}
+                    placeholder={auth?.user?.name}
                     name="username"
                     id="username"
                     onChange={handleChange}
@@ -262,7 +262,7 @@ export default function SettingsForm() {
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                   <input
                     type="email"
-                    placeholder={auth.user.email}
+                    placeholder={auth?.user?.email}
                     name="email"
                     id="email"
                     onChange={handleChange}

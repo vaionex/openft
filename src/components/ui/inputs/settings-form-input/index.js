@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 const SettingsFormInput = ({
   label,
+  subLabel,
   inputType,
   className,
   inputClassName,
@@ -23,11 +24,15 @@ const SettingsFormInput = ({
       <label
         htmlFor={id}
         className={twMerge(
-          'block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2',
+          'block text-sm font-medium text-gray-700 sm:mt-px',
+          !subLabel && 'sm:pt-2',
           labelClassName,
         )}
       >
         {label}
+        {subLabel && (
+          <span className="block font-normal text-gray-500">{subLabel}</span>
+        )}
       </label>
       <div className="mt-1 sm:mt-0 sm:col-span-2">
         {variant === 'add-on' && addon && (

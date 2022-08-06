@@ -19,7 +19,7 @@ const UserSettingsSidebar = () => {
 
   console.log(pathname)
   return (
-    <aside className="py-6 lg:pr-12 lg:col-span-2">
+    <aside className="py-6 lg:py-8 lg:pr-12 lg:col-span-2">
       <nav className="space-y-1">
         {links.map((item) => (
           <NextLink
