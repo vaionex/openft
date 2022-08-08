@@ -7,6 +7,7 @@ import { AnimatePresence } from 'framer-motion'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import 'react-circular-progressbar/dist/styles.css'
 import '@/styles/globals.css'
 
 function App({ Component, pageProps }) {

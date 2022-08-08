@@ -1,4 +1,8 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import {
+  QuestionMarkCircleIcon,
+  SortAscendingIcon,
+  UsersIcon,
+} from '@heroicons/react/outline'
 import ReactTooltip from 'react-tooltip'
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
@@ -78,7 +82,7 @@ InputMain.Input = function InputMainInput({
 }) {
   return (
     <div className={className}>
-      {variant === 'add-on' && addon && (
+      {variant === 'add-on' && !!addon && (
         <div className="flex mt-1 rounded-md shadow-sm sm:mt-0">
           <span className="inline-flex items-center px-3 text-gray-500 border border-r-0 border-gray-200 rounded-l-md bg-gray-50 sm:text-sm">
             {addon}
@@ -92,6 +96,28 @@ InputMain.Input = function InputMainInput({
             )}
             {...props}
           />
+        </div>
+      )}
+
+      {variant === 'add-on-reverse' && !!addon && (
+        <div className="flex mt-1 rounded-md shadow-sm">
+          <div className="relative flex items-stretch flex-grow focus-within:z-10">
+            <input
+              id={id}
+              type={inputType}
+              className={twMerge(
+                'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
+                inputClassName,
+              )}
+              {...props}
+            />
+          </div>
+          <button
+            type="button"
+            className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            {addon}
+          </button>
         </div>
       )}
 
@@ -144,7 +170,7 @@ InputMain.Input.propTypes = {
   inputType: PropTypes.string,
   variant: PropTypes.string,
   id: PropTypes.string.isRequired,
-  addon: PropTypes.string,
+  addon: PropTypes.string || PropTypes.node,
   additionalCheckbox: PropTypes.node,
   className: PropTypes.string,
   inputClassName: PropTypes.string,

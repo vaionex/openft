@@ -57,4 +57,13 @@
   .carousel-main .slick-slider {
     @apply shadow-inner;
   }
+
+  .custom-progress-circular svg {
+    .CircularProgressbar-trail {
+      @apply stroke-blue-50;
+    }
+    .CircularProgressbar-path {
+      @apply stroke-blue-500;
+    }
+  }
 }
