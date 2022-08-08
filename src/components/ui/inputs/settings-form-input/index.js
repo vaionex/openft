@@ -1,5 +1,7 @@
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
+import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import ReactTooltip from 'react-tooltip'
 
 const SettingsFormInput = ({
   label,
@@ -12,8 +14,10 @@ const SettingsFormInput = ({
   variant,
   id,
   additionalCheckbox,
+  tooltipText,
   ...props
 }) => {
+  console.log(!!tooltipText)
   return (
     <div
       className={twMerge(
@@ -21,19 +25,21 @@ const SettingsFormInput = ({
         className,
       )}
     >
-      <label
-        htmlFor={id}
-        className={twMerge(
-          'block text-sm font-medium text-gray-700 sm:mt-px',
-          !subLabel && 'sm:pt-2',
-          labelClassName,
-        )}
-      >
-        {label}
-        {subLabel && (
-          <span className="block font-normal text-gray-500">{subLabel}</span>
-        )}
-      </label>
+      {label && (
+        <label
+          htmlFor={id}
+          className={twMerge(
+            'block text-sm font-medium text-gray-700 sm:mt-px',
+            !subLabel && 'sm:pt-2',
+            labelClassName,
+          )}
+        >
+          {label}
+          {subLabel && (
+            <span className="block font-normal text-gray-500">{subLabel}</span>
+          )}
+        </label>
+      )}
       <div className="mt-1 sm:mt-0 sm:col-span-2">
         {variant === 'add-on' && addon && (
           <div className="flex rounded-md shadow-sm">
@@ -55,16 +61,28 @@ const SettingsFormInput = ({
         )}
 
         {variant === 'default' && (
-          <div className="flex rounded-md shadow-sm">
+          <div className="relative flex rounded-md shadow-sm">
             <input
               id={id}
               type={inputType}
               className={twMerge(
-                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200 rounded-md',
+                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200  rounded-md',
                 inputClassName,
               )}
               {...props}
             />
+            {tooltipText && (
+              <div
+                data-tip={tooltipText ? tooltipText : ''}
+                className="absolute inset-y-0 right-0 z-50 inline-flex items-center pr-3 cursor-pointer group"
+              >
+                <QuestionMarkCircleIcon
+                  className="w-4 h-4 text-gray-400"
+                  aria-hidden="true"
+                />
+                <ReactTooltip />
+              </div>
+            )}
           </div>
         )}
 

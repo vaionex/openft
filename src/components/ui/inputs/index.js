@@ -1,5 +1,5 @@
 import FormInput from './form-input'
+import InputMain from './input-main'
 import SearchInput from './search-input'
-import SettingsFormInput from './settings-form-input'
 
-export { FormInput, SearchInput, SettingsFormInput }
+export { FormInput, SearchInput, InputMain }

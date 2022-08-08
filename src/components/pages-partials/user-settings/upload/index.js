@@ -1,10 +1,10 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
-import SettingsUploadForm from '@/components/ui/forms/settings-upload-form'
+import { UploadForm } from '@/components/ui/forms'
 
 const UserSettingsUploadSection = () => {
   return (
     <UserSettingsLayout>
-      <SettingsUploadForm />
+      <UploadForm />
     </UserSettingsLayout>
   )
 }
