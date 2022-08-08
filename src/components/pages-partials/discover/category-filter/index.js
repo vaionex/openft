@@ -15,7 +15,7 @@ const products = [
   {
     id: 1,
     name: 'Basic Tee',
-    href: '#',
+    href: '1',
     imageSrc: '/images/mock-carousel/Image.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
@@ -25,7 +25,7 @@ const products = [
   {
     id: 2,
     name: 'Basic Tee',
-    href: '#',
+    href: '2',
     imageSrc: '/images/mock-carousel/Image_1.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
@@ -35,7 +35,7 @@ const products = [
   {
     id: 3,
     name: 'Basic Tee',
-    href: '#',
+    href: '3',
     imageSrc: '/images/mock-carousel/Image_2.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
@@ -45,7 +45,7 @@ const products = [
   {
     id: 4,
     name: 'Basic Tee',
-    href: '#',
+    href: '3',
     imageSrc: '/images/mock-carousel/Image_3.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
@@ -55,7 +55,7 @@ const products = [
   {
     id: 5,
     name: 'Basic Tee',
-    href: '#',
+    href: '4',
     imageSrc: '/images/mock-carousel/Image_2.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',
@@ -65,7 +65,7 @@ const products = [
   {
     id: 6,
     name: 'Basic Tee',
-    href: '#',
+    href: '5',
     imageSrc: '/images/mock-carousel/Image_1.png',
     imageAlt: "Front of men's Basic Tee in black.",
     price: '$35',

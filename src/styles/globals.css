@@ -28,6 +28,21 @@
     @apply inline-flex items-center justify-center px-4 py-3 font-bold text-white bg-blue-600 rounded-lg hover:opacity-90;
   }
 
+  .pale-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(249, 250, 251, 0) 0%,
+      #f9fafb 100%
+    );
+  }
+  .pale-gradient-left {
+    background: linear-gradient(270deg, rgba(249, 250, 251, 0) 80%, white 100%);
+  }
+
+  .pale-gradient-bottom {
+    background: linear-gradient(180deg, rgba(249, 250, 251, 0) 80%, white 100%);
+  }
+
   /* width */
   ::-webkit-scrollbar {
     width: 6px;
