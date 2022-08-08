@@ -1,5 +1,5 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
-import ActivityList from '@/components/ui/activity-list'
+import ActivityList from '@/components/ui/lists/activity-list'
 import { SecurityForm } from '@/components/ui/forms'
 import React from 'react'
 
@@ -32,8 +32,8 @@ const UserSettingsSecuritySection = () => {
   return (
     <UserSettingsLayout>
       <div>
-        <div className="md:grid md:grid-cols-5 md:gap-24">
-          <div className="mt-5 md:mt-0 md:col-span-3">
+        <div className="md:grid md:grid-cols-9 md:gap-24 ">
+          <div className="mt-5 md:mt-0 md:col-span-5">
             <div className="sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Password
@@ -45,7 +45,7 @@ const UserSettingsSecuritySection = () => {
 
             <SecurityForm />
           </div>
-          <div className="md:col-span-2">
+          <div className="md:col-span-4">
             <div className="sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Where you’re logged in

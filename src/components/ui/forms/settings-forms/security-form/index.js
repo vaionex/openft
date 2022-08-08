@@ -3,7 +3,7 @@ import { InputMain } from '@/components/ui/inputs'
 const SecurityForm = () => {
   return (
     <form className="space-y-8 divide-y divide-gray-200">
-      <div className="mt-6 sm:mt-5">
+      <div className="py-6 border-b border-b-gray-200">
         <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="Your password" htmlFor="password" />
           <InputMain.Input
@@ -58,15 +58,14 @@ const SecurityForm = () => {
             in a safe place.
           </span>
         </InputMain>
-
-        <div className="flex justify-end gap-3 border-none">
-          <button type="button" className="btn-secondary py-2.5">
-            Cancel
-          </button>
-          <button type="button" className="btn-primary py-2.5">
-            Update password
-          </button>
-        </div>
+      </div>
+      <div className="flex justify-end gap-3 border-none">
+        <button type="button" className="btn-secondary py-2.5">
+          Cancel
+        </button>
+        <button type="button" className="btn-primary py-2.5">
+          Update password
+        </button>
       </div>
     </form>
   )

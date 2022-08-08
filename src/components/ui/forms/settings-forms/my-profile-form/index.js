@@ -62,6 +62,7 @@ const MyProfileForm = ({ profile }) => {
                 id="show-job-title"
                 text="Show my job title in my profile"
                 className="mt-4"
+                labelClassName="font-normal"
               />
             }
           />

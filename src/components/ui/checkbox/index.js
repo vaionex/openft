@@ -1,14 +1,25 @@
-import React from 'react'
 import { twMerge } from 'tailwind-merge'
+import PropTypes from 'prop-types'
 
-const Checkbox = ({ id, text, className, ...props }) => {
+const Checkbox = ({
+  id,
+  text,
+  subtext,
+  className,
+  checkboxClassName,
+  labelClassName,
+  ...props
+}) => {
   return (
     <div className={twMerge('relative flex items-start', className)}>
       <div className="flex items-center h-5 ">
         <input
           id={id}
           type="checkbox"
-          className="w-4 h-4 text-white rounded cursor-pointer checked:bg-center checked:border-blue-500 checked:bg-checkbox-icon checked:bg-auto focus:ring-blue-300 focus:ring-1"
+          className={twMerge(
+            'w-4 h-4 text-white rounded cursor-pointer checked:bg-center checked:border-blue-500 checked:bg-checkbox-icon checked:bg-auto focus:ring-blue-300 focus:ring-1',
+            checkboxClassName,
+          )}
           {...props}
         />
       </div>
@@ -16,13 +27,26 @@ const Checkbox = ({ id, text, className, ...props }) => {
       {text && (
         <label
           htmlFor={id}
-          className="ml-2 text-sm text-gray-700 cursor-pointer"
+          className={twMerge(
+            'ml-3 text-sm text-gray-700 cursor-pointer font-medium',
+            labelClassName,
+          )}
         >
           {text}
+          {subtext && <p className="font-normal text-gray-500">{subtext}</p>}
         </label>
       )}
     </div>
   )
+}
+
+Checkbox.propTypes = {
+  id: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  subtext: PropTypes.string,
+  className: PropTypes.string,
+  checkboxClassName: PropTypes.string,
+  labelClassName: PropTypes.string,
 }
 
 export default Checkbox
