@@ -3,11 +3,13 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import CardLikeButton from '../../card-like-button'
 
-const CarouselCard = ({ data }) => {
+const CarouselCard = ({ data, mr = false }) => {
   return (
     <div
       key={data.id}
-      className="relative border border-gray-200 sm:mr-5 group rounded-xl"
+      className={`relative border border-gray-200 group rounded-xl ${
+        mr ? 'sm:mr-5' : ''
+      }`}
     >
       <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-[28.75rem] aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-[28.75rem] lg:aspect-none">
         <img
@@ -28,7 +30,7 @@ const CarouselCard = ({ data }) => {
         </div>
         <div className="my-6">
           <h3 className="text-sm text-gray-700">
-            <a href={data.href} className="text-blue-600">
+            <a href={`/discover/${data.href}`} className="text-blue-600">
               {data.name}
             </a>
           </h3>

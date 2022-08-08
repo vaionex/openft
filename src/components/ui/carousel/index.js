@@ -111,7 +111,7 @@ const Carousel = ({ data }) => {
     <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
         {data.map((item) => (
-          <CarouselCard key={item.id} data={item} />
+          <CarouselCard key={item.id} mr data={item} />
         ))}
       </Slider>
     </span>

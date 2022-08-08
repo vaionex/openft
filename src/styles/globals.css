@@ -32,6 +32,21 @@
     @apply inline-flex items-center justify-center px-4 py-3 font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50;
   }
 
+  .pale-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(249, 250, 251, 0) 0%,
+      #f9fafb 100%
+    );
+  }
+  .pale-gradient-left {
+    background: linear-gradient(270deg, rgba(249, 250, 251, 0) 80%, white 100%);
+  }
+
+  .pale-gradient-bottom {
+    background: linear-gradient(180deg, rgba(249, 250, 251, 0) 80%, white 100%);
+  }
+
   /* width */
   ::-webkit-scrollbar {
     width: 6px;

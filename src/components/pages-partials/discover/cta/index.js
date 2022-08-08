@@ -1,7 +1,7 @@
 import NftsInstantly from '@/components/shared/nfts-instantly'
 
-const CtaMidSection = () => {
+const Cta = () => {
   return <NftsInstantly />
 }
 
-export default CtaMidSection
+export default Cta
