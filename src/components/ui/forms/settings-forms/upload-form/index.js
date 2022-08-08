@@ -5,36 +5,9 @@ import ImageUpload from '../../settings-parts/image-upload'
 import DropdownSelect from '@/components/ui/dropdown-select'
 
 const UploadForm = () => {
-  const showPreview = (e) => {
-    e.preventDefault()
-    console.log('show preview')
-  }
-
   return (
-    <form className="space-y-8 divide-y divide-gray-200 ">
+    <form className="space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-b sm:border-gray-200 sm:pb-5">
-          <label
-            htmlFor="photo"
-            className="block text-lg font-medium text-gray-700"
-          >
-            Upload Artwork
-            <span className="block text-sm font-normal text-gray-500">
-              This will be displayed on your profile.
-            </span>
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <div className="flex items-center justify-end">
-              <button onClick={showPreview} className="btn-secondary">
-                Preview
-                <span className="ml-2">
-                  <EyeIcon width={20} height={20} />
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-
         <InputMain>
           <InputMain.Label
             label="Upload artwork file"
