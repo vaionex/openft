@@ -40,7 +40,7 @@ InputMain.Label = function InputMainLabel({
           <div
             data-tip
             data-for={htmlFor}
-            className="absolute inset-y-0 z-50 inline-flex items-center pl-5 cursor-pointer -right-6 group"
+            className="absolute inset-y-0 z-10 inline-flex items-center pl-5 cursor-pointer -right-6 group"
           >
             <QuestionMarkCircleIcon
               className="w-4 h-4 text-gray-400"
@@ -110,7 +110,7 @@ InputMain.Input = function InputMainInput({
             <div
               data-tip
               data-for={id}
-              className="absolute inset-y-0 right-0 z-50 inline-flex items-center pr-3 cursor-pointer group"
+              className="absolute inset-y-0 right-0 z-10 inline-flex items-center pr-3 cursor-pointer group"
             >
               <QuestionMarkCircleIcon
                 className="w-4 h-4 text-gray-400"

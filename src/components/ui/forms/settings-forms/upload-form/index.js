@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { EyeIcon } from '@heroicons/react/outline'
 import { InputMain } from '../../../inputs'
 import ImageUpload from '../../settings-parts/image-upload'
+import DropdownSelect from '@/components/ui/dropdown-select'
 
 const UploadForm = () => {
   const showPreview = (e) => {
@@ -101,7 +102,7 @@ const UploadForm = () => {
             htmlFor="collections"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <select
+            {/* <select
               id="collections"
               name="collections"
               className="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -110,7 +111,8 @@ const UploadForm = () => {
               <option>Awesome Boxes</option>
               <option>Awesome Boxes 2</option>
               <option>Awesome Boxes 3</option>
-            </select>
+            </select> */}
+            <DropdownSelect add />
             <p className="mt-2 text-sm text-gray-500">
               You can also create new collections from here.
             </p>
