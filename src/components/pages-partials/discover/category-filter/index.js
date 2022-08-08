@@ -133,34 +133,7 @@ export default function CategoryFilter() {
                   {/* Filters */}
                   <form className="mt-4 px-2">
                     <h3 className="sr-only">Categories</h3>
-                    <div className="flex flex-col space-y-2">
-                      <div className="rounded-md">
-                        <button
-                          value={'buy-now'}
-                          onClick={(e) => statusHandle(e)}
-                          className={`flex items-center justify-center border ${
-                            currentStatus === 'buy-now'
-                              ? 'btn-primary text-white border-transparent'
-                              : 'text-gray-600 border-gray-200 hover:bg-gray-50'
-                          } w-full px-5 py-3 text-base font-medium rounded-md md:text-lg`}
-                        >
-                          Buy now
-                        </button>
-                      </div>
-                      <div className="rounded-md">
-                        <button
-                          value={'on-auction'}
-                          onClick={(e) => statusHandle(e)}
-                          className={`flex items-center justify-center ${
-                            currentStatus === 'on-auction'
-                              ? 'btn-primary text-white border border-transparent '
-                              : 'text-gray-600 border border-gray-200 hover:bg-gray-50'
-                          } w-full px-5 py-3 text-base font-medium rounded-md md:text-lg`}
-                        >
-                          On auction
-                        </button>
-                      </div>
-                    </div>
+
                     <h3 className="mt-5">Price (BSV)</h3>
                     <div className="mt-4 grid grid-cols-2 gap-4">
                       <div>
@@ -172,7 +145,7 @@ export default function CategoryFilter() {
                           name="price-first"
                           id="price-first"
                           className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
-                          placeholder="Any price"
+                          placeholder="$ Min price"
                         />
                       </div>
                       <div>
@@ -184,7 +157,7 @@ export default function CategoryFilter() {
                           name="price-second"
                           id="price-second"
                           className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
-                          placeholder="Any price"
+                          placeholder="$ Max price"
                         />
                       </div>
                     </div>
@@ -207,7 +180,7 @@ export default function CategoryFilter() {
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative z-10 grid grid-cols-12 gap-4 pt-24 pb-6 ">
-            <div className="flex space-x-2 w-full col-span-9">
+            <div className="flex space-x-2 w-full col-span-10 sm:col-span-11 lg:col-span-12">
               <div className="w-full">
                 <label
                   htmlFor="search"
@@ -236,11 +209,7 @@ export default function CategoryFilter() {
               </button>
             </div>
 
-            <div className="col-span-3 flex justify-end items-center">
-              <button className="p-2.5 md:p-1.5 flex space-x-2 justify-center items-center rounded-md border border-gray-200 hover:bg-gray-50">
-                <MoreFilterIcon className="w-5 h-5" aria-hidden="true" />
-                <span className="hidden md:block">More filters</span>
-              </button>
+            <div className="col-span-2 sm:col-span-1 flex justify-end items-center">
               <button
                 type="button"
                 className="p-2  text-gray-400 hover:text-gray-500 lg:hidden"
@@ -261,35 +230,7 @@ export default function CategoryFilter() {
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                <div className="flex flex-col py-2 px-2 border border-gray-200 bg-blue-500/5 rounded-md">
-                  <div className="rounded-md">
-                    <button
-                      value={'buy-now'}
-                      onClick={(e) => statusHandle(e)}
-                      className={`flex items-center justify-start ${
-                        currentStatus === 'buy-now'
-                          ? 'btn-primary text-white'
-                          : 'text-gray-600'
-                      } w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg`}
-                    >
-                      Buy now
-                    </button>
-                  </div>
-                  <div className="rounded-md">
-                    <button
-                      value={'on-auction'}
-                      onClick={(e) => statusHandle(e)}
-                      className={`flex items-center justify-start ${
-                        currentStatus === 'on-auction'
-                          ? 'btn-primary text-white'
-                          : 'text-gray-600'
-                      } w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg`}
-                    >
-                      On auction
-                    </button>
-                  </div>
-                </div>
-                <h3 className="mt-5">Price (BSV)</h3>
+                <h3>Price (BSV)</h3>
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="price-first" className="sr-only">
@@ -300,7 +241,7 @@ export default function CategoryFilter() {
                       name="price-first"
                       id="price-first"
                       className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Any price"
+                      placeholder="$ Min Price"
                     />
                   </div>
                   <div>
@@ -312,7 +253,7 @@ export default function CategoryFilter() {
                       name="price-second"
                       id="price-second"
                       className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Any price"
+                      placeholder="$ Max price"
                     />
                   </div>
                 </div>
