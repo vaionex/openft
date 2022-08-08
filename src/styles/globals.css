@@ -47,6 +47,10 @@
   ::-webkit-scrollbar-thumb {
     @apply bg-blue-600;
   }
+
+  .react-tooltip h5 {
+    @apply mb-2 font-bold;
+  }
 }
 
 @layer components {

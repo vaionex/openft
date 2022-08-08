@@ -20,7 +20,8 @@ InputMain.Label = function InputMainLabel({
   label,
   className,
   htmlFor,
-  subLabel,
+  sublabel,
+  tooltip,
 }) {
   if (!label) return null
 
@@ -28,14 +29,37 @@ InputMain.Label = function InputMainLabel({
     <label
       htmlFor={htmlFor}
       className={twMerge(
-        'block text-sm font-medium text-gray-700 sm:mt-px',
-        !subLabel && 'sm:pt-2',
+        ' block text-sm font-medium text-gray-700 sm:mt-px',
+        !sublabel && 'sm:pt-2',
         className,
       )}
     >
-      {label}
-      {subLabel && (
-        <span className="block font-normal text-gray-500">{subLabel}</span>
+      <span className="relative inline-block">
+        {label}
+        {!!tooltip && (
+          <div
+            data-tip
+            data-for={htmlFor}
+            className="absolute inset-y-0 z-50 inline-flex items-center pl-5 cursor-pointer -right-6 group"
+          >
+            <QuestionMarkCircleIcon
+              className="w-4 h-4 text-gray-400"
+              aria-hidden="true"
+            />
+            <ReactTooltip
+              className="react-tooltip !text-sm !max-w-xs !rounded !text-white !bg-gray-900"
+              id={htmlFor}
+            >
+              <div>
+                {tooltip.title && <h5>{tooltip.title}</h5>}
+                {tooltip.text}
+              </div>
+            </ReactTooltip>
+          </div>
+        )}
+      </span>
+      {sublabel && (
+        <span className="block font-normal text-gray-500">{sublabel}</span>
       )}
     </label>
   )
@@ -49,7 +73,7 @@ InputMain.Input = function InputMainInput({
   inputType,
   className,
   inputClassName,
-  tooltipText,
+  tooltip,
   ...props
 }) {
   return (
@@ -82,16 +106,25 @@ InputMain.Input = function InputMainInput({
             )}
             {...props}
           />
-          {!!tooltipText && (
+          {!!tooltip && (
             <div
-              data-tip={tooltipText ? tooltipText : ''}
+              data-tip
+              data-for={id}
               className="absolute inset-y-0 right-0 z-50 inline-flex items-center pr-3 cursor-pointer group"
             >
               <QuestionMarkCircleIcon
                 className="w-4 h-4 text-gray-400"
                 aria-hidden="true"
               />
-              <ReactTooltip />
+              <ReactTooltip
+                className="react-tooltip !text-sm !max-w-xs !pt-3 !rounded !text-white !bg-gray-900"
+                id={id}
+              >
+                <div>
+                  {tooltip.title && <h5>{tooltip.title}</h5>}
+                  {tooltip.text}
+                </div>
+              </ReactTooltip>
             </div>
           )}
         </div>
@@ -110,6 +143,15 @@ InputMain.Input.defaultProps = {
 InputMain.Input.propTypes = {
   inputType: PropTypes.string,
   variant: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  addon: PropTypes.string,
+  additionalCheckbox: PropTypes.node,
+  className: PropTypes.string,
+  inputClassName: PropTypes.string,
+  tooltip: PropTypes.shape({
+    title: PropTypes.string,
+    text: PropTypes.string,
+  }),
 }
 
 export default InputMain

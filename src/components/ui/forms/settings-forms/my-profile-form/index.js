@@ -33,7 +33,7 @@ const MyProfileForm = ({ profile }) => {
         <InputMain>
           <InputMain.Label
             label="Your Photo"
-            subLabel="This will be displayed on your profile."
+            sublabel="This will be displayed on your profile."
           />
           <div className="sm:col-span-2">
             <AvatarUpload size={64} tempAvatar={profile.avatar} />
@@ -43,7 +43,7 @@ const MyProfileForm = ({ profile }) => {
         <InputMain>
           <InputMain.Label
             label="Your Bio"
-            subLabel="Write a short introduction."
+            sublabel="Write a short introduction."
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
             <TextEditor onChange={() => {}} />

@@ -37,7 +37,7 @@ const UploadForm = () => {
         <InputMain>
           <InputMain.Label
             label="Upload artwork file"
-            subLabel="This will be your NFT"
+            sublabel="This will be your NFT"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
             <ImageUpload />
@@ -50,7 +50,7 @@ const UploadForm = () => {
             id="artwork-name"
             placeholder="e.g. My artwork"
             className="sm:col-span-2"
-            subLabel="This will be displayed on your artwork."
+            sublabel="This will be displayed on your artwork."
             onChange={() => {}}
           />
         </InputMain>
@@ -58,7 +58,7 @@ const UploadForm = () => {
         <InputMain>
           <InputMain.Label
             label="Description"
-            subLabel="A quick snapshot of your artwork."
+            sublabel="A quick snapshot of your artwork."
             htmlFor="description"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -77,8 +77,12 @@ const UploadForm = () => {
         <InputMain>
           <InputMain.Label
             label="External link"
-            subLabel="Additional links about your artwork."
+            sublabel="Additional links about your artwork."
             htmlFor="external-link"
+            tooltip={{
+              title: 'External link',
+              text: "Openft will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details.",
+            }}
           />
           <InputMain.Input
             id="external-link"
@@ -93,7 +97,7 @@ const UploadForm = () => {
         <InputMain>
           <InputMain.Label
             label="Collections"
-            subLabel="This is the collection where your item will appear."
+            sublabel="This is the collection where your item will appear."
             htmlFor="collections"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -116,7 +120,7 @@ const UploadForm = () => {
         <InputMain>
           <InputMain.Label
             label="Starting price"
-            subLabel="This is the collection where your item will appear."
+            sublabel="This is the collection where your item will appear."
             htmlFor="starting-price"
           />
           <InputMain.Input
@@ -131,13 +135,16 @@ const UploadForm = () => {
             id="bsv"
             placeholder="1 BSV"
             onChange={() => {}}
+            tooltip={{
+              text: 'This conversion is based on coinmarketcap.',
+            }}
           />
         </InputMain>
 
         <InputMain>
           <InputMain.Label
             label="Supply"
-            subLabel="The number of copies minted artwork."
+            sublabel="The number of copies minted artwork."
             htmlFor="supply"
           />
           <InputMain.Input
@@ -146,6 +153,10 @@ const UploadForm = () => {
             placeholder="e.g. 10"
             onChange={() => {}}
             className="sm:col-span-2"
+            tooltip={{
+              title: 'Supply',
+              text: 'Presently we only provide 1 supply for each NFT to preserve the originality of each NFT.',
+            }}
           />
         </InputMain>
 
