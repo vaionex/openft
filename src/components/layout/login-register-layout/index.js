@@ -18,7 +18,7 @@ const LoginRegisterLayout = ({ children, title, className }) => {
         exit="exit"
       >
         <main className={twMerge('min-h-[600px]', className)}>{children}</main>
-        <Footer page="login" />
+        {title === 'Login' && <Footer page="login" />}
       </motion.div>
     </>
   )
