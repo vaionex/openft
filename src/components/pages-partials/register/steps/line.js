@@ -4,7 +4,7 @@ import NextLink from 'next/link'
 
 export default function LineSteps({ list }) {
   return (
-    <nav aria-label="Progress">
+    <nav className="px-4 sm:px-0" aria-label="Progress">
       <ol role="list" className=" max-w-md mx-auto flex space-y-0 space-x-8">
         {list.map((step) => (
           <li key={step.name} className="flex-1">
