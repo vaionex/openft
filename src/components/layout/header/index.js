@@ -1,15 +1,22 @@
 import NextLink from 'next/link'
 import { Popover } from '@headlessui/react'
-import { MenuIcon } from '@heroicons/react/outline'
+import { BellIcon, CogIcon, MenuIcon } from '@heroicons/react/outline'
 import MobileNav from '../mobile/nav'
 import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
+import DropdownUser from '@/components/ui/dropdown-user'
+import { UploadBoxIcon, UploadIcon } from '@/components/common/icons'
 
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
   { name: 'Contribute', href: '#' },
 ]
+
+const user = {
+  name: 'John Doe',
+  avatar: '/images/test/test-user-image.webp',
+}
 
 const Header = () => {
   return (
@@ -48,6 +55,8 @@ const Header = () => {
               ))}
             </div>
           </div>
+
+          {/* for NOT logged in user */}
           <div className="hidden md:flex md:items-center md:space-x-6">
             <NextLink href="/login">
               <a className="text-base font-medium hover:text-gradient-primary-hover">
@@ -58,6 +67,38 @@ const Header = () => {
               <a className="btn-primary">Sign up</a>
             </NextLink>
           </div>
+
+          {/* for logged in user */}
+          {/* <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
+            <li>
+              <button className="btn-secondary">
+                <UploadBoxIcon className="w-6 h-6 mr-2" aria-hidden="true" />
+                Upload
+              </button>
+            </li>
+            <li>
+              <ul className="flex items-center gap-1">
+                <li className="inline-flex">
+                  <NextLink href="/user-settings">
+                    <a className="inline-block p-3 text-base font-medium bg-gray-50 hover:text-gradient-primary-hover">
+                      <CogIcon className="w-6 h-6" aria-hidden="true" />
+                    </a>
+                  </NextLink>
+                </li>
+                <li className="inline-flex">
+                  <NextLink href="/user-settings">
+                    <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">
+                      <BellIcon className="w-6 h-6" aria-hidden="true" />
+                    </a>
+                  </NextLink>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <DropdownUser user={user} />
+            </li>
+          </ul> */}
         </nav>
       </div>
 
