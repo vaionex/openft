@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FormInput } from '@/components/ui/forms'
+import { FormInput } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
 import { KeyIcon } from '@heroicons/react/outline'
@@ -47,7 +47,7 @@ function ChoosePassword() {
   }
 
   return (
-    <div className="h-full py-12 px-4 sm:px-6 lg:px-8 flex flex-col">
+    <div className="h-full py-12 sm:px-6 lg:px-8 flex flex-col">
       <Steps stepsType={'box'} />
       <div className="flex-1 flex flex-col justify-center item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">

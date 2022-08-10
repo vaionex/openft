@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FormInput } from '@/components/ui/forms'
+import { FormInput } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
 import { UserCircleIcon } from '@/components/common/icons'

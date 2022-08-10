@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FormInput } from '@/components/ui/forms'
 import Alert from '@/components/ui/alert'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
 import { CameraIcon } from '@heroicons/react/outline'
@@ -64,8 +63,8 @@ function UploadPhoto() {
                 >
                   Cover photo
                 </label>
-                <div className="mt-1 sm:mt-0 sm:col-span-3">
-                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="mt-1 sm:mt-0 col-span-3">
+                  <div className="sm:max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                     <div className="space-y-1 text-center">
                       <svg
                         className="mx-auto h-12 w-12 text-gray-400"
@@ -111,8 +110,8 @@ function UploadPhoto() {
                 >
                   Cover photo
                 </label>
-                <div className="mt-1 sm:mt-0 sm:col-span-3">
-                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="mt-1 sm:mt-0 col-span-3">
+                  <div className="sm:max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                     <div className="space-y-1 text-center">
                       <svg
                         className="mx-auto h-12 w-12 text-gray-400"
