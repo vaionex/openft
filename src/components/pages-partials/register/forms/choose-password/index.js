@@ -47,9 +47,9 @@ function ChoosePassword() {
   }
 
   return (
-    <div className="h-full py-12 px-4 sm:px-6 lg:px-8 flex flex-col">
+    <div className="h-full py-12 sm:px-6 lg:px-8 flex flex-col">
       <Steps stepsType={'box'} />
-      <div className="flex flex-col justify-center flex-1 item-center">
+      <div className="mt-5 sm:mt-0 flex flex-col justify-center flex-1 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <KeyIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
