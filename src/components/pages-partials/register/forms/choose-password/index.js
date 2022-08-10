@@ -47,15 +47,15 @@ function ChoosePassword() {
   }
 
   return (
-    <div className="h-full py-12 sm:px-6 lg:px-8 flex flex-col">
+    <div className="h-full py-12 px-4 sm:px-6 lg:px-8 flex flex-col">
       <Steps stepsType={'box'} />
-      <div className="flex-1 flex flex-col justify-center item-center">
+      <div className="flex flex-col justify-center flex-1 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <KeyIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
             Choose a password
           </h2>
-          <p className="text-center mt-4">Must be at least 8 characters.</p>
+          <p className="mt-4 text-center">Must be at least 8 characters.</p>
         </div>
         <div className="flex justify-center pt-2">
           {auth.errorMessage && (
@@ -63,7 +63,7 @@ function ChoosePassword() {
           )}
         </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-2 px-4 sm:rounded-lg sm:px-10">
+          <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {inputAttributes.map((inputAttribute) => (
                 <FormInput
@@ -92,7 +92,7 @@ function ChoosePassword() {
           </div>
         </div>
       </div>
-      <div className="pt-10 sm:pt-0 flex flex-col justify-end">
+      <div className="flex flex-col justify-end pt-10 sm:pt-0">
         <Steps stepsType={'line'} />
       </div>
     </div>

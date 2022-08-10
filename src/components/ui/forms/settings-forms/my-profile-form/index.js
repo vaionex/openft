@@ -8,7 +8,7 @@ const MyProfileForm = ({ profile }) => {
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label label="Username" htmlFor="username" />
           <InputMain.Input
             id="username"
@@ -19,7 +19,7 @@ const MyProfileForm = ({ profile }) => {
           />
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label label="Instagram" htmlFor="user-instagram" />
           <InputMain.Input
             id="user-instagram"
@@ -30,7 +30,7 @@ const MyProfileForm = ({ profile }) => {
           />
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Your Photo"
             sublabel="This will be displayed on your profile."
@@ -40,7 +40,7 @@ const MyProfileForm = ({ profile }) => {
           </div>
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Your Bio"
             sublabel="Write a short introduction."
@@ -51,7 +51,7 @@ const MyProfileForm = ({ profile }) => {
           </div>
         </InputMain>
 
-        <InputMain className="border-none">
+        <InputMain className="border-none sm:grid-cols-3">
           <InputMain.Label label="Job title" htmlFor="job-title" />
           <InputMain.Input
             id="job-title"

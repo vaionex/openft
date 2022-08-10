@@ -5,10 +5,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { FormInput, InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
 import { CameraIcon } from '@heroicons/react/outline'
 import Steps from '../../steps/stepsContainer'
+import ImageUpload from '@/components/ui/forms/settings-parts/image-upload'
 
 function UploadPhoto() {
   const dispatch = useDispatch()
@@ -35,15 +37,15 @@ function UploadPhoto() {
   }
 
   return (
-    <div className="h-full py-12 sm:px-6 lg:px-8 flex flex-col">
+    <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
       <Steps stepsType={'box'} />
-      <div className="flex-1 flex flex-col justify-center item-center">
+      <div className="flex flex-col justify-center flex-1 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <CameraIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
             Upload your photo
           </h2>
-          <p className="text-center mt-4">
+          <p className="mt-4 text-center">
             Beautify your profile, it also will
             <br /> be visible to the public
           </p>
@@ -54,102 +56,11 @@ function UploadPhoto() {
           )}
         </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-2 px-4 sm:rounded-lg sm:px-10">
+          <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-3 gap-4 items-start sm:pt-5">
-                <label
-                  htmlFor="cover-photo"
-                  className="sr-only text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Cover photo
-                </label>
-                <div className="mt-1 sm:mt-0 col-span-3">
-                  <div className="sm:max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                    <div className="space-y-1 text-center">
-                      <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 48 48"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      <div className="flex text-sm text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        >
-                          <span>Upload a file</span>
-                          <input
-                            id="file-upload"
-                            name="file-upload"
-                            type="file"
-                            className="sr-only"
-                          />
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ImageUpload text="Cover Photo" subinfo="Max. size 4MB" />
 
-              <div className="grid grid-cols-3 gap-4 items-start sm:pt-5">
-                <label
-                  htmlFor="cover-photo"
-                  className="sr-only text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Cover photo
-                </label>
-                <div className="mt-1 sm:mt-0 col-span-3">
-                  <div className="sm:max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                    <div className="space-y-1 text-center">
-                      <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 48 48"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      <div className="flex text-sm text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        >
-                          <span>Upload a file</span>
-                          <input
-                            id="file-upload"
-                            name="file-upload"
-                            type="file"
-                            className="sr-only"
-                          />
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <ImageUpload text="Cover Photo" subinfo="Max 400x400" />
               <div>
                 <button
                   disabled={auth.isPending ? true : false}

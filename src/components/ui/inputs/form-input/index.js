@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 const FormInput = ({
   label,
   className,
-  visibility,
+  visibility = true,
   labelClassName,
   ...props
 }) => {
@@ -13,9 +13,11 @@ const FormInput = ({
     <div>
       <label
         htmlFor={id}
-        className={`${
-          visibility ? 'block' : 'sr-only'
-        } text-sm font-medium text-gray-700`}
+        className={twMerge(
+          'block text-sm font-medium text-gray-700',
+          visibility ? 'block' : 'sr-only',
+          labelClassName,
+        )}
       >
         {label}
       </label>
