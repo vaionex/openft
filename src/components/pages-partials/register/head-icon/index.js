@@ -2,7 +2,7 @@ import React from 'react'
 import NextLink from 'next/link'
 import { RegisterLogo } from '@/components/common/svgs'
 
-const Logo = () => {
+const HeadIcon = () => {
   return (
     <>
       <NextLink href="/">
@@ -15,4 +15,4 @@ const Logo = () => {
   )
 }
 
-export default Logo
+export default HeadIcon

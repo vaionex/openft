@@ -5,11 +5,11 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FormInput } from '@/components/ui/forms'
 import Alert from '@/components/ui/alert'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
 import { UserCircleIcon } from '@/components/common/icons'
 import Steps from '../../steps/stepsContainer'
+import { FormInput } from '@/components/ui/inputs'
 
 const inputAttributes = [
   {
@@ -58,15 +58,15 @@ function YourDetails() {
   }
 
   return (
-    <div className="h-full py-12 sm:px-6 lg:px-8 flex flex-col">
+    <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
       <Steps stepsType={'box'} />
-      <div className="flex-1 flex flex-col justify-center item-center">
+      <div className="flex flex-col justify-center flex-1 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <UserCircleIcon className="w-auto rounded-full mx-auto h-14" />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <UserCircleIcon className="w-auto mx-auto rounded-full h-14" />
+          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
             Your details
           </h2>
-          <p className="text-center mt-4">
+          <p className="mt-4 text-center">
             Will be displayed on your profile and <br /> visible to the public
           </p>
         </div>
@@ -76,7 +76,7 @@ function YourDetails() {
           )}
         </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-2 px-4 sm:rounded-lg sm:px-10">
+          <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {inputAttributes.map((inputAttribute) => (
                 <FormInput

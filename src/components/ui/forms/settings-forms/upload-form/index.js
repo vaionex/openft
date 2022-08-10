@@ -8,17 +8,17 @@ const UploadForm = () => {
   return (
     <form className="space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Upload artwork file"
             sublabel="This will be your NFT"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <ImageUpload />
+            <ImageUpload subinfo="Dimension: 1:1. Max size: 100 MB" />
           </div>
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label label="Artwork name" htmlFor="artwork-name" />
           <InputMain.Input
             id="artwork-name"
@@ -29,7 +29,7 @@ const UploadForm = () => {
           />
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Description"
             sublabel="A quick snapshot of your artwork."
@@ -48,7 +48,7 @@ const UploadForm = () => {
           </div>
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="External link"
             sublabel="Additional links about your artwork."
@@ -68,7 +68,7 @@ const UploadForm = () => {
           />
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Collections"
             sublabel="This is the collection where your item will appear."
@@ -82,7 +82,7 @@ const UploadForm = () => {
           </div>
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Starting price"
             sublabel="This is the collection where your item will appear."
@@ -106,7 +106,7 @@ const UploadForm = () => {
           />
         </InputMain>
 
-        <InputMain>
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Supply"
             sublabel="The number of copies minted artwork."
