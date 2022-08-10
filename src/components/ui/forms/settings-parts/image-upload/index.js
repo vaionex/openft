@@ -1,7 +1,7 @@
 import { UploadIcon } from '@/components/common/icons'
-import React from 'react'
+import PropTypes from 'prop-types'
 
-const ImageUpload = () => {
+const ImageUpload = ({ text, subinfo }) => {
   return (
     <div className="mt-1 sm:mt-0 sm:col-span-2">
       <div className="flex justify-center w-full px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -14,7 +14,7 @@ const ImageUpload = () => {
               htmlFor="file-upload"
               className="relative font-medium text-blue-600 bg-white rounded-md cursor-pointer hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
             >
-              <span>Click to upload</span>
+              <span>{text}</span>
               <input
                 id="file-upload"
                 name="file-upload"
@@ -27,13 +27,21 @@ const ImageUpload = () => {
           <p className="text-xs text-gray-500">
             File types supported: JPG, PNG, GIF, SVG, MP4, WEBM.
           </p>
-          <p className="text-xs text-gray-500">
-            Dimension: 1:1. Max size: 100 MB
-          </p>
+          {subinfo && <p className="text-xs text-gray-500">{subinfo}</p>}
         </div>
       </div>
     </div>
   )
+}
+
+ImageUpload.defaultProps = {
+  text: 'Click to upload',
+  subinfo: null,
+}
+
+ImageUpload.propTypes = {
+  text: PropTypes.string,
+  subinfo: PropTypes.node,
 }
 
 export default ImageUpload

@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 
-const FormInput = ({ label, className, labelClassName, ...props }) => {
+const FormInput = ({
+  label,
+  className,
+  visibility = true,
+  labelClassName,
+  ...props
+}) => {
   const { id } = props
   return (
     <div>
@@ -9,6 +15,7 @@ const FormInput = ({ label, className, labelClassName, ...props }) => {
         htmlFor={id}
         className={twMerge(
           'block text-sm font-medium text-gray-700',
+          visibility ? 'block' : 'sr-only',
           labelClassName,
         )}
       >
@@ -30,6 +37,7 @@ const FormInput = ({ label, className, labelClassName, ...props }) => {
 FormInput.propTypes = {
   label: PropTypes.string,
   id: PropTypes.string,
+  visibility: PropTypes.bool,
   className: PropTypes.string,
   labelClassName: PropTypes.string,
 }

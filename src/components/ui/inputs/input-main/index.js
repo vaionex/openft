@@ -11,7 +11,7 @@ const InputMain = ({ className, children }) => {
   return (
     <div
       className={twMerge(
-        'sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-b sm:border-gray-200 sm:pb-5',
+        'sm:grid sm:gap-4 sm:items-start sm:border-b sm:border-gray-200 sm:pb-5',
         className,
       )}
     >
