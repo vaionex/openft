@@ -10,7 +10,7 @@ import { UploadBoxIcon, UploadIcon } from '@/components/common/icons'
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
-  { name: 'Contribute', href: '#' },
+  { name: 'Contribute', href: '/contribute' },
 ]
 
 const user = {
