@@ -23,7 +23,8 @@ const CarouselCard = ({ data, mr = false }) => {
         </div>
       </div>
       <div className="px-4 py-5">
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center">
+          <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
           <p className="text-xl font-medium text-gray-900">
             {data.price} {data.priceType}
           </p>
