@@ -6,66 +6,27 @@ import { GoogleIcon } from '@/components/common/icons'
 import Image from 'next/image'
 import LoginCarousel from '@/components/ui/carousels/login-carousel'
 
-const products = [
+const testimonials = [
   {
     id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: '/images/mock-carousel/Image.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
+    text: 'Openft is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
+    name: 'Jordan A',
+    title: 'CEO, Coincombat',
+    location: 'Canada, United States',
   },
   {
     id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: '/images/mock-carousel/Image_1.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
+    text: 'Openft is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
+    name: 'Jordan A',
+    title: 'CEO, Coincombat',
+    location: 'Canada, United States',
   },
   {
     id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: '/images/mock-carousel/Image_2.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 4,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: '/images/mock-carousel/Image_3.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 5,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: '/images/mock-carousel/Image_2.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 6,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: '/images/mock-carousel/Image_1.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
+    text: 'Openft is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
+    name: 'Jordan A',
+    title: 'CEO, Coincombat',
+    location: 'Canada, United States',
   },
 ]
 
@@ -115,8 +76,7 @@ const Login = () => {
           </div>
         </div>
         <div className="hidden lg:flex px-8 pt-14 lg:items-end lg:justify-center relative w-0 flex-[3] ">
-          {/* image wrapper for now */}
-          <div className="relative inline-block w-full h-full max-w-2xl overflow-hidden rounded-3xl ">
+          <div className="relative flex items-end w-full h-full max-w-2xl p-10 overflow-hidden rounded-3xl ">
             <Image
               src="/images/login-bg.png"
               className="absolute inset-0 z-0 "
@@ -125,9 +85,8 @@ const Login = () => {
               quality={100}
               objectFit="cover"
             />
+            <LoginCarousel data={testimonials} />
           </div>
-
-          {/* <LoginCarousel data={products} /> */}
         </div>
       </div>
     </LoginRegisterLayout>

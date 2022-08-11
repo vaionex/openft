@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import Slider from 'react-slick'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid'
-import ProductsCarouselCard from '../../cards/products-carousel-card'
 import { twMerge } from 'tailwind-merge'
+import { ProductsCarouselCard } from '../../cards'
 
 const mainSettings = {
   dots: false,
