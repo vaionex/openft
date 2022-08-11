@@ -1,4 +1,4 @@
-import ProfileHeaderCard from '@/components/ui/cards'
+import { ProductsCarouselCard } from '@/components/ui/cards'
 
 const products = [
   {
@@ -103,7 +103,7 @@ export default function MoreNft() {
           <div className="h-full">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
               {products.map((item) => (
-                <ProfileHeaderCard key={item.id} data={item} />
+                <ProductsCarouselCard key={item.id} data={item} />
               ))}
             </div>
           </div>

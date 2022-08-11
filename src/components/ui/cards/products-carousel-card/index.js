@@ -18,7 +18,7 @@ const ProductsCarouselCard = ({ data, mr }) => {
           src={data.imageSrc}
           alt={data.imageAlt}
           layout="fill"
-          className="absolute inset-0 object-cover object-center w-full h-full lg:w-full lg:h-full"
+          className="absolute inset-0 object-cover object-center w-full h-full"
         />
         <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
         <div className="absolute inset-x-0 bottom-0 z-50 flex items-end justify-end p-4 overflow-hidden rounded-lg">

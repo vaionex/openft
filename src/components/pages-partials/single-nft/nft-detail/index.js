@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import { Tab } from '@headlessui/react'
-import { ProfileHeaderCard } from '@/components/ui/cards'
+import { ProductsCarouselCard } from '@/components/ui/cards'
 
 const product = {
   name: 'Little ghost',
@@ -67,16 +67,16 @@ function classNames(...classes) {
 export default function NftDetail() {
   return (
     <div className="bg-white">
-      <div className="px-4 py-16 mx-auto sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="px-4 py-8 mx-auto mb-12 lg:mb-0 lg:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         {/* Product */}
-        <div className="lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
+        <div className="lg:grid lg:grid-rows-1 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-10 ">
           {/* Product image */}
-          <div className="max-w-lg mx-auto lg:row-end-1 lg:col-span-4">
-            <ProfileHeaderCard data={nftData} />
+          <div className="lg:row-end-1 lg:col-span-5">
+            <ProductsCarouselCard data={nftData} />
           </div>
 
           {/* Product details */}
-          <div className="max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-3">
+          <div className="max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
             <div className="flex flex-col">
               <div>
                 <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-500">

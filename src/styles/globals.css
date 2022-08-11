@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply h-full overflow-x-hidden antialiased text-gray-900 bg-white font-base;
+    @apply h-full overflow-x-hidden overflow-y-scroll antialiased text-gray-900 bg-white font-base;
   }
 
   h1,
