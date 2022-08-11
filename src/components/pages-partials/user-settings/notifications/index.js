@@ -2,6 +2,7 @@ import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { NotificationsForm, SecurityForm } from '@/components/ui/forms'
 import React from 'react'
 import NotificationList from '@/components/ui/lists/notification-list'
+import DropdownMinimal from '@/components/ui/dropdown-minimal'
 
 const items = [
   {
@@ -24,6 +25,12 @@ const items = [
   },
 ]
 
+const dropdownItems = [
+  { id: 1, name: 'Item 1', href: '#' },
+  { id: 2, name: 'Item 2', href: '#' },
+  { id: 3, name: 'Item 3', href: '#' },
+]
+
 const UserSettingsNotificationSection = () => {
   return (
     <UserSettingsLayout>
@@ -42,12 +49,15 @@ const UserSettingsNotificationSection = () => {
             <NotificationsForm />
           </div>
           <div className="md:col-span-4">
-            <div className="sm:border-b sm:border-gray-200 sm:pb-5">
+            <div className="relative sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Recent notification
                 <span className="block text-sm font-normal text-gray-500">
                   Latest notification from marketplace.
                 </span>
+              </span>
+              <span className="absolute top-0 right-0">
+                <DropdownMinimal items={dropdownItems} />
               </span>
             </div>
             <NotificationList items={items} />

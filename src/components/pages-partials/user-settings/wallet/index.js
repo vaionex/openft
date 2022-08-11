@@ -2,18 +2,14 @@ import { CopyDIcon } from '@/components/common/icons'
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { InputMain } from '@/components/ui/inputs'
 import ProgressCircular from '@/components/ui/progress-circular'
-import {
-  ArrowSmUpIcon,
-  ClipboardCopyIcon,
-  SortAscendingIcon,
-} from '@heroicons/react/outline'
+import { ArrowSmUpIcon } from '@heroicons/react/outline'
 
 const UserSettingsWalletSection = () => {
   return (
     <UserSettingsLayout>
       <div>
-        <div className="md:grid md:grid-cols-3 ">
-          <div className="mt-5 md:mt-0 md:col-span-2">
+        <div className="md:grid lg:grid-cols-3 ">
+          <div className="mt-5 lg:mt-0 md:col-span-2">
             <div className="sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Wallet
@@ -25,27 +21,27 @@ const UserSettingsWalletSection = () => {
             </div>
 
             <div>
-              <div className="flex w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg">
+              <div className="relative flex flex-col items-center w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg lg:items-stretch md:flex-row">
                 <ProgressCircular value={40} />
 
                 <div className="flex flex-col justify-between flex-1">
                   <div className="font-medium">Wallet</div>
                   <div>
-                    <p className="mb-2 text-sm text-gray-500">
+                    <p className="mb-2 text-sm text-gray-500 ">
                       Current balance
                     </p>
-                    <span className="text-lg font-bold text-gray-900 sm:text-3xl">
+                    <span className="text-2xl font-bold text-gray-900 truncate sm:text-3xl">
                       $40,206.20
                     </span>
                   </div>
                 </div>
-                <div className="relative flex items-end justify-end flex-1">
-                  <ArrowSmUpIcon
-                    width={24}
-                    height={24}
-                    className="absolute top-0 right-0 text-gray-500 transform rotate-45 cursor-pointer"
-                  />
-                  <span className="text-sm text-amber-400 bg-amber-50 truncate font-medium p-y1 px-2.5 rounded-full">
+                <ArrowSmUpIcon
+                  width={24}
+                  height={24}
+                  className="absolute text-gray-500 transform rotate-45 cursor-pointer top-2 right-2"
+                />
+                <div className="flex items-end justify-center flex-1 md:relative md:justify-end">
+                  <span className="text-xs text-amber-400 bg-amber-50 truncate font-medium p-y1 px-2.5 rounded-full">
                     749,1335941866964 BSV
                   </span>
                 </div>
