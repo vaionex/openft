@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
 const SharedLayout = ({ children, title, className }) => {
   const { pathname } = useRouter()
 
-  console.log(pathname)
   const runPageTransition = () => {
     return !pathname.includes('user-settings') && pageTransitionVariants
   }

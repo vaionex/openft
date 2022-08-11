@@ -17,7 +17,6 @@ const links = [
 const UserSettingsSidebar = () => {
   const { pathname } = useRouter()
 
-  console.log(pathname)
   return (
     <aside className="py-6 lg:py-8 lg:pr-12 lg:col-span-2">
       <nav className="space-y-1">
