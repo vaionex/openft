@@ -1,6 +1,5 @@
-import Carousel from '@/components/ui/carousel'
+import { ProductsCarousel } from '@/components/ui/carousels'
 import NextLink from 'next/link'
-import { twMerge } from 'tailwind-merge'
 
 const products = [
   {
@@ -93,7 +92,7 @@ const CollectionsSection = () => {
         </div>
       </div>
       <div className="3xlg:absolute py-12 mx-auto lg:py-20 max-w-7xl 3xlg:max-w-[1364px] ">
-        <Carousel data={products} />
+        <ProductsCarousel data={products} />
       </div>
     </div>
   )

@@ -1,11 +1,8 @@
-import cn from 'classnames'
 import PropTypes from 'prop-types'
 import Slider from 'react-slick'
-
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid'
-import CarouselCard from '../cards/carousel-card'
-import styles from './index.module.css'
 import { twMerge } from 'tailwind-merge'
+import { ProductsCarouselCard } from '../../cards'
 
 const mainSettings = {
   dots: false,
@@ -70,7 +67,7 @@ PrevArrow.propTypes = {
   slideCount: PropTypes.number,
 }
 
-const Carousel = ({ data }) => {
+const ProductsCarousel = ({ data }) => {
   const cardsToShow = {
     desktop: 3.5,
     bigTablet: 2.96,
@@ -111,15 +108,15 @@ const Carousel = ({ data }) => {
     <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
         {data.map((item) => (
-          <CarouselCard key={item.id} mr data={item} />
+          <ProductsCarouselCard key={item.id} mr data={item} />
         ))}
       </Slider>
     </span>
   )
 }
 
-Carousel.propTypes = {
+ProductsCarousel.propTypes = {
   data: PropTypes.array.isRequired,
 }
 
-export default Carousel
+export default ProductsCarousel

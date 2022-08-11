@@ -1,5 +1,5 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
-import ProfileHeaderCard from '@/components/ui/cards/profile-header-card'
+import { ProfileHeaderCard } from '@/components/ui/cards'
 import { MyProfileForm } from '@/components/ui/forms'
 
 const profile = {

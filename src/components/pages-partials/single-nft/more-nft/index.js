@@ -1,4 +1,4 @@
-import CarouselCard from '@/components/ui/cards/carousel-card'
+import ProfileHeaderCard from '@/components/ui/cards'
 
 const products = [
   {
@@ -95,21 +95,21 @@ const products = [
 
 export default function MoreNft() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
       <section aria-labelledby="products-heading" className="pt-6 pb-24">
         {/* Product grid */}
         <div className="lg:col-span-3">
           {/* Replace with your content */}
           <div className="h-full">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
               {products.map((item) => (
-                <CarouselCard key={item.id} data={item} />
+                <ProfileHeaderCard key={item.id} data={item} />
               ))}
             </div>
           </div>
           {/* /End replace */}
         </div>
-        <div className="mt-14 flex justify-center items-center rounded-md">
+        <div className="flex items-center justify-center rounded-md mt-14">
           <button className="max-w-[200px] flex items-center justify-center w-full text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 py-2 md:text-lg md:px-3">
             Discover More
           </button>

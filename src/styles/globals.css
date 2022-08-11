@@ -81,4 +81,18 @@
       @apply stroke-blue-500;
     }
   }
+
+  .bg-login-carousel-card {
+    @apply relative px-6 py-8 text-white bg-black border border-transparent border-solid shadow-2xl bg-opacity-60 backdrop-blur-lg rounded-xl content-none before:absolute before:top-0 before:inset-0 before:-z-10;
+    background-clip: padding-box;
+    &:before {
+      border-radius: inherit;
+      background: linear-gradient(
+        0deg,
+        rgba(28, 56, 115, 0.1) 20%,
+        rgba(28, 56, 115, 0.5) 100%
+      );
+      margin: -1px;
+    }
+  }
 }

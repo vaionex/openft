@@ -26,7 +26,12 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
     plugin(function ({ addUtilities, addComponents }) {
-      const utilities = {}
+      const utilities = {
+        '.border-gray-gradient': {
+          borderImage:
+            'linear-gradient(to bottom, #3F4C71, rgba(255,255,255, 0)) 1 stretch',
+        },
+      }
 
       addUtilities(utilities)
     }),
