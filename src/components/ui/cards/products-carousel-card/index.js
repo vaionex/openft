@@ -1,21 +1,24 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import { twMerge } from 'tailwind-merge'
 import CardLikeButton from '../../card-like-button'
 
-const CarouselCard = ({ data, mr = false }) => {
+const ProductsCarouselCard = ({ data, mr }) => {
   return (
     <div
       key={data.id}
-      className={`relative border border-gray-200 group rounded-xl ${
-        mr ? 'sm:mr-5' : ''
-      }`}
+      className={twMerge(
+        'relative border border-gray-200 group rounded-xl',
+        mr ? 'sm:mr-5' : '',
+      )}
     >
       <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-[28.75rem] aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-[28.75rem] lg:aspect-none">
-        <img
+        <Image
           src={data.imageSrc}
           alt={data.imageAlt}
-          className="object-cover object-center w-full h-full lg:w-full lg:h-full"
+          layout="fill"
+          className="absolute inset-0 object-cover object-center w-full h-full lg:w-full lg:h-full"
         />
         <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
         <div className="absolute inset-x-0 bottom-0 z-50 flex items-end justify-end p-4 overflow-hidden rounded-lg">
@@ -23,7 +26,7 @@ const CarouselCard = ({ data, mr = false }) => {
         </div>
       </div>
       <div className="px-4 py-5">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
           <p className="text-xl font-medium text-gray-900">
             {data.price} {data.priceType}
@@ -50,8 +53,14 @@ const CarouselCard = ({ data, mr = false }) => {
   )
 }
 
-CarouselCard.propTypes = {
-  data: PropTypes.object.isRequired,
+ProductsCarouselCard.defaultProps = {
+  data: {},
+  mr: false,
 }
 
-export default CarouselCard
+ProductsCarouselCard.propTypes = {
+  data: PropTypes.object.isRequired,
+  mr: PropTypes.bool,
+}
+
+export default ProductsCarouselCard

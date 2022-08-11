@@ -1,12 +1,11 @@
-import React from 'react'
-import CarouselCard from '@/components/ui/cards/carousel-card'
+import { ProductsCarouselCard } from '@/components/ui/cards'
 import Pagination from './pagination'
 
 const FilteredContents = ({ products }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       {products.map((item) => (
-        <CarouselCard key={item.id} data={item} />
+        <ProductsCarouselCard key={item.id} data={item} />
       ))}
       <Pagination />
     </div>

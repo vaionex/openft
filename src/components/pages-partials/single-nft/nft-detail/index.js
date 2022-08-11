@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import { Tab } from '@headlessui/react'
-import CarouselCard from '@/components/ui/cards/carousel-card'
+import { ProfileHeaderCard } from '@/components/ui/cards'
 
 const product = {
   name: 'Little ghost',
@@ -67,12 +67,12 @@ function classNames(...classes) {
 export default function NftDetail() {
   return (
     <div className="bg-white">
-      <div className="mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="px-4 py-16 mx-auto sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         {/* Product */}
         <div className="lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           {/* Product image */}
-          <div className="lg:row-end-1 lg:col-span-4 max-w-lg mx-auto">
-            <CarouselCard data={nftData} />
+          <div className="max-w-lg mx-auto lg:row-end-1 lg:col-span-4">
+            <ProfileHeaderCard data={nftData} />
           </div>
 
           {/* Product details */}
@@ -84,13 +84,13 @@ export default function NftDetail() {
                   Verified
                 </span>
               </div>
-              <div className="mt-3 flex items-center space-x-4 py-3">
+              <div className="flex items-center py-3 mt-3 space-x-4">
                 <img
                   src={'/images/mini-vaionex.webp'}
                   alt="vaionex-mini-icon"
                   className="w-8 h-8 bg-gray-100 rounded-full"
                 />
-                <span className="font-medium text-lg text-blue-600">
+                <span className="text-lg font-medium text-blue-600">
                   Vaionex Art
                 </span>
               </div>
@@ -105,11 +105,11 @@ export default function NftDetail() {
               </div>
             </div>
 
-            <p className="text-gray-500 mt-6">{product.description}</p>
+            <p className="mt-6 text-gray-500">{product.description}</p>
             <div className="mt-3">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
-                  <Tab.List className="-mb-px flex space-x-8">
+                  <Tab.List className="flex -mb-px space-x-8">
                     <Tab
                       className={({ selected }) =>
                         classNames(
@@ -140,7 +140,7 @@ export default function NftDetail() {
                   <Tab.Panel className="">
                     <h3 className="sr-only">Transactions Information</h3>
 
-                    <dl className="flex flex-col mt-7 font-medium text-sm break-all text-gray-500">
+                    <dl className="flex flex-col text-sm font-medium text-gray-500 break-all mt-7">
                       <dt className="text-gray-700">
                         {transactionData.contract.name}
                       </dt>
@@ -174,29 +174,29 @@ export default function NftDetail() {
                     <div className="overflow-scroll h-[300px] max-h-[300px]">
                       {purchaseData.map((data, idx) => (
                         <div
-                          className="flex items-center space-x-2 mt-4"
+                          className="flex items-center mt-4 space-x-2"
                           key={idx}
                         >
                           <div>
                             <img
                               src={'/images/mini-vaionex.webp'}
                               alt="vaionex-mini-icon"
-                              className="w-9 h-9 bg-gray-100 rounded-full"
+                              className="bg-gray-100 rounded-full w-9 h-9"
                             />
                           </div>
                           <div>
-                            <div className=" font-medium text-gray-900">
+                            <div className="font-medium text-gray-900 ">
                               {data.title}
                             </div>
                             <div>
                               <div className="flex items-center space-x-2">
-                                <p className="text-blue-700 font-medium">
+                                <p className="font-medium text-blue-700">
                                   {data.buyer}
                                 </p>
                                 <img
                                   src={'/images/chain.webp'}
                                   alt="vaionex-mini-icon"
-                                  className="object-cover w-1- h-5 bg-gray-100 rounded-full"
+                                  className="object-cover h-5 bg-gray-100 rounded-full w-1-"
                                 />
                               </div>
                             </div>
