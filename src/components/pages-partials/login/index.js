@@ -82,8 +82,9 @@ const Login = () => {
               className="absolute inset-0 z-0 "
               alt="Login image"
               layout="fill"
-              quality={100}
+              quality={90}
               objectFit="cover"
+              priority={true}
             />
             <LoginCarousel data={testimonials} />
           </div>
