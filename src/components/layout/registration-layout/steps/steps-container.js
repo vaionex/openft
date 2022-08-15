@@ -8,28 +8,28 @@ import CircleSteps from './circle'
 
 const steps = [
   {
-    id: '01',
+    id: 1,
     name: 'Your details',
     description: 'Please provide your name and email',
     href: '/register',
-    status: 'complete',
-  },
-  {
-    id: '02',
-    name: 'Choose a password',
-    description: 'Choose a secure password',
-    href: '/register/choose-password',
     status: 'current',
   },
   {
-    id: '03',
+    id: 2,
+    name: 'Choose a password',
+    description: 'Choose a secure password',
+    href: '/register/choose-password',
+    status: 'upcoming',
+  },
+  {
+    id: 3,
     name: 'Upload your photo',
     description: 'Beautify your profile',
     href: '/register/upload-photo',
     status: 'upcoming',
   },
   {
-    id: '04',
+    id: 4,
     name: 'Add your socials',
     description: 'Let people know more about you',
     href: '/register/add-socials',
@@ -45,36 +45,34 @@ const paths = {
 }
 
 const StepsContainer = ({ stepsType }) => {
-  const [lineStepList, setLineStepList] = useState(steps)
-  const [circleStepList, setCircleStepList] = useState(steps)
+  const [stepList, setStepList] = useState(steps)
+  const [stepCount, setStepCount] = useState(1)
   const router = useRouter()
-  const formName = router.pathname.split('/')[2] ?? 'register'
-
-  const createSteps = (steps) => {
-    return steps.reduce((prev, current) => {
-      if (current.href === paths[formName]) {
-        return [...prev, { ...current, status: 'current' }]
-      } else {
-        return [...prev, { ...current, status: 'upcoming' }]
-      }
-    }, [])
-  }
 
   useEffect(() => {
-    if (!paths[formName]) {
-      router.replace('/')
-    } else {
-      const newLineSteps = createSteps(lineStepList)
-      const newCircleSteps = createSteps(circleStepList)
+    const step = steps.find((step) => step.href === router.pathname)
+    setStepCount(step.id)
+  }, [router.pathname])
 
-      setCircleStepList(newCircleSteps)
-      setLineStepList(newLineSteps)
-    }
-  }, [formName])
+  useEffect(() => {
+    const newCircleStepList = steps.map((step) => {
+      return {
+        ...step,
+        status:
+          step.id === stepCount
+            ? 'current'
+            : step.id < stepCount
+            ? 'complete'
+            : 'upcoming',
+      }
+    })
 
-  if (stepsType === 'line') return <LineSteps list={lineStepList} />
-  if (stepsType === 'box') return <BoxSteps list={circleStepList} />
-  if (stepsType === 'circle') return <CircleSteps list={circleStepList} />
+    setStepList(newCircleStepList)
+  }, [stepCount])
+
+  if (stepsType === 'line') return <LineSteps list={stepList} />
+  if (stepsType === 'box') return <BoxSteps list={stepList} />
+  if (stepsType === 'circle') return <CircleSteps list={stepList} />
 }
 
 export default StepsContainer

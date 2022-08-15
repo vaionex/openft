@@ -1,8 +1,4 @@
-import {
-  QuestionMarkCircleIcon,
-  SortAscendingIcon,
-  UsersIcon,
-} from '@heroicons/react/outline'
+import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import ReactTooltip from 'react-tooltip'
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'

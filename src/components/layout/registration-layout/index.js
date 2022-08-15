@@ -27,18 +27,18 @@ const RegistrationLayout = ({ children }) => {
                     <RegisterLogo />
                   </a>
                 </NextLink>
-                <StepsContainer stepsType="box" />
+                <StepsContainer stepsType="circle" />
               </div>
             </div>
           </div>
 
           <div className="col-span-12 md:col-span-8">
             <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
-              <StepsContainer stepsType={'box'} />
+              <StepsContainer stepsType="box" />
               {children}
 
               <div className="flex flex-col justify-end pt-10 sm:pt-0">
-                <StepsContainer stepsType={'line'} />
+                <StepsContainer stepsType="line" />
               </div>
             </div>
           </div>

@@ -13,22 +13,25 @@ import RegistrationLayout from '@/components/layout/registration-layout'
 
 const inputAttributes = [
   {
+    id: 'instagram',
     type: 'text',
-    addOn: 'http://instagram.com/',
+    addon: 'http://instagram.com/',
     placeholder: 'name',
     name: 'instagram',
     label: 'Instagram',
   },
   {
+    id: 'facebook',
     type: 'text',
-    addOn: 'http://facebook.com/',
+    addon: 'http://facebook.com/',
     placeholder: 'name',
     name: 'facebook',
     label: 'Facebook',
   },
   {
+    id: 'website',
     type: 'text',
-    addOn: 'http://',
+    addon: 'http://',
     placeholder: 'yourwebsite.com',
     name: 'website',
     label: 'Website',
@@ -80,7 +83,7 @@ function RegistrationAddSocials() {
                 <InputMain key={inputAttribute.name}>
                   <InputMain.Input
                     variant="add-on"
-                    addon={inputAttribute.addOn}
+                    addon={inputAttribute.addon}
                     className="sm:col-span-2"
                     value={formData[inputAttribute.name]}
                     {...inputAttribute}
