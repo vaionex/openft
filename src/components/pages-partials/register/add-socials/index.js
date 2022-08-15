@@ -9,7 +9,7 @@ import { InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
 import { UsersIcon } from '@/components/common/icons'
-import Steps from '../../steps/stepsContainer'
+import RegistrationLayout from '@/components/layout/registration-layout'
 
 const inputAttributes = [
   {
@@ -35,7 +35,7 @@ const inputAttributes = [
   },
 ]
 
-function AddSocials() {
+function RegistrationAddSocials() {
   const dispatch = useDispatch()
   const router = useRouter()
   const auth = useSelector((state) => state.auth)
@@ -56,9 +56,8 @@ function AddSocials() {
   }
 
   return (
-    <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
-      <Steps stepsType={'box'} />
-      <div className="mt-5 sm:mt-0 flex flex-col justify-center flex-1 item-center">
+    <RegistrationLayout>
+      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <UsersIcon className="w-auto mx-auto rounded-full h-14" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
@@ -78,13 +77,6 @@ function AddSocials() {
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {inputAttributes.map((inputAttribute) => (
-                // <AddOnInput
-                //   key={inputAttribute.name}
-                //   {...inputAttribute}
-                //   addOn={inputAttribute.addOn}
-                //   value={formData[inputAttribute.name]}
-                //   onChange={handleChange}
-                // />
                 <InputMain key={inputAttribute.name}>
                   <InputMain.Input
                     variant="add-on"
@@ -113,11 +105,8 @@ function AddSocials() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-end pt-10 sm:pt-0">
-        <Steps stepsType={'line'} />
-      </div>
-    </div>
+    </RegistrationLayout>
   )
 }
 
-export default AddSocials
+export default RegistrationAddSocials

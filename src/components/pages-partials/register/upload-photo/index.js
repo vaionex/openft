@@ -4,36 +4,20 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { FormInput } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
-import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
-import { KeyIcon } from '@heroicons/react/outline'
-import Steps from '../../steps/stepsContainer'
+import { setAuthenticated, register } from '@/redux/slices/auth'
+import { CameraIcon } from '@heroicons/react/outline'
+import ImageUpload from '@/components/ui/forms/settings-parts/image-upload'
+import RegistrationLayout from '@/components/layout/registration-layout'
 
-const inputAttributes = [
-  {
-    type: 'password',
-    placeholder: 'Choose a password',
-    name: 'choose-password',
-    label: 'Choose a password',
-  },
-  {
-    type: 'password',
-    placeholder: 'Confirm password',
-    name: 'confirm-password',
-    label: 'Confirm password',
-  },
-]
-
-function ChoosePassword() {
+const RegistrationUploadPhoto = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const auth = useSelector((state) => state.auth)
 
   const [formData, setFormData] = useState({
+    email: '',
     password: '',
-    'confim-password': '',
   })
 
   const handleChange = (e) => {
@@ -43,19 +27,25 @@ function ChoosePassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(e)
+    const user = await dispatch(register(formData)).unwrap()
+    if (user && !user?.error) {
+      dispatch(setAuthenticated())
+      router.replace('/')
+    }
   }
 
   return (
-    <div className="h-full py-12 sm:px-6 lg:px-8 flex flex-col">
-      <Steps stepsType={'box'} />
-      <div className="mt-5 sm:mt-0 flex flex-col justify-center flex-1 item-center">
+    <RegistrationLayout>
+      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <KeyIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
+          <CameraIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Choose a password
+            Upload your photo
           </h2>
-          <p className="mt-4 text-center">Must be at least 8 characters.</p>
+          <p className="mt-4 text-center">
+            Beautify your profile, it also will
+            <br /> be visible to the public
+          </p>
         </div>
         <div className="flex justify-center pt-2">
           {auth.errorMessage && (
@@ -65,16 +55,9 @@ function ChoosePassword() {
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {inputAttributes.map((inputAttribute) => (
-                <FormInput
-                  key={inputAttribute.name}
-                  visibility={false}
-                  {...inputAttribute}
-                  value={formData[inputAttribute.name]}
-                  onChange={handleChange}
-                />
-              ))}
+              <ImageUpload text="Cover Photo" subinfo="Max. size 4MB" />
 
+              <ImageUpload text="Cover Photo" subinfo="Max 400x400" />
               <div>
                 <button
                   disabled={auth.isPending ? true : false}
@@ -92,11 +75,8 @@ function ChoosePassword() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-end pt-10 sm:pt-0">
-        <Steps stepsType={'line'} />
-      </div>
-    </div>
+    </RegistrationLayout>
   )
 }
 
-export default ChoosePassword
+export default RegistrationUploadPhoto

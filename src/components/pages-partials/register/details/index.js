@@ -1,25 +1,46 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable @next/next/no-img-element */
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FormInput, InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
-import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
-import { CameraIcon } from '@heroicons/react/outline'
-import Steps from '../../steps/stepsContainer'
-import ImageUpload from '@/components/ui/forms/settings-parts/image-upload'
+import { setAuthenticated, register } from '@/redux/slices/auth'
+import { UserCircleIcon } from '@/components/common/icons'
+import { FormInput } from '@/components/ui/inputs'
+import RegistrationLayout from '@/components/layout/registration-layout'
 
-function UploadPhoto() {
+const inputAttributes = [
+  {
+    type: 'text',
+    placeholder: 'Name',
+    name: 'name',
+    label: 'name',
+  },
+  {
+    type: 'text',
+    placeholder: 'Username',
+    name: 'username',
+    label: 'User name',
+  },
+  {
+    type: 'text',
+    placeholder: 'Role, e.g. Illustrator',
+    name: 'role',
+    label: 'Role',
+  },
+]
+
+function RegistrationDetails() {
   const dispatch = useDispatch()
   const router = useRouter()
   const auth = useSelector((state) => state.auth)
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    name: '',
+    username: '',
+    role: '',
   })
 
   const handleChange = (e) => {
@@ -37,17 +58,15 @@ function UploadPhoto() {
   }
 
   return (
-    <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
-      <Steps stepsType={'box'} />
-      <div className="mt-5 sm:mt-0 flex flex-col justify-center flex-1 item-center">
+    <RegistrationLayout>
+      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <CameraIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
+          <UserCircleIcon className="w-auto mx-auto rounded-full h-14" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Upload your photo
+            Your details
           </h2>
           <p className="mt-4 text-center">
-            Beautify your profile, it also will
-            <br /> be visible to the public
+            Will be displayed on your profile and <br /> visible to the public
           </p>
         </div>
         <div className="flex justify-center pt-2">
@@ -58,9 +77,16 @@ function UploadPhoto() {
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <ImageUpload text="Cover Photo" subinfo="Max. size 4MB" />
+              {inputAttributes.map((inputAttribute) => (
+                <FormInput
+                  key={inputAttribute.name}
+                  visibility={false}
+                  {...inputAttribute}
+                  value={formData[inputAttribute.name]}
+                  onChange={handleChange}
+                />
+              ))}
 
-              <ImageUpload text="Cover Photo" subinfo="Max 400x400" />
               <div>
                 <button
                   disabled={auth.isPending ? true : false}
@@ -78,11 +104,8 @@ function UploadPhoto() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-end pt-10 sm:pt-0">
-        <Steps stepsType={'line'} />
-      </div>
-    </div>
+    </RegistrationLayout>
   )
 }
 
-export default UploadPhoto
+export default RegistrationDetails

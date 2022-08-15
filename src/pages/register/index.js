@@ -1,5 +1,7 @@
-import RegisterMain from '@/components/pages-partials/register'
+import RegistrationDetails from '@/components/pages-partials/register/details'
 
-export default function RegisterPage() {
-  return <RegisterMain />
+const RegisterationPage = () => {
+  return <RegistrationDetails />
 }
+
+export default RegisterationPage

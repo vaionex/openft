@@ -5,42 +5,34 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Alert from '@/components/ui/alert'
-import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
-import { UserCircleIcon } from '@/components/common/icons'
-import Steps from '../../steps/stepsContainer'
 import { FormInput } from '@/components/ui/inputs'
+import Alert from '@/components/ui/alert'
+import { KeyIcon } from '@heroicons/react/outline'
+import RegistrationLayout from '@/components/layout/registration-layout'
 
 const inputAttributes = [
   {
-    type: 'text',
-    placeholder: 'Name',
-    name: 'name',
-    label: 'name',
+    type: 'password',
+    placeholder: 'Choose a password',
+    name: 'choose-password',
+    label: 'Choose a password',
   },
   {
-    type: 'text',
-    placeholder: 'Username',
-    name: 'username',
-    label: 'User name',
-  },
-  {
-    type: 'text',
-    placeholder: 'Role, e.g. Illustrator',
-    name: 'role',
-    label: 'Role',
+    type: 'password',
+    placeholder: 'Confirm password',
+    name: 'confirm-password',
+    label: 'Confirm password',
   },
 ]
 
-function YourDetails() {
+function RegistrationChoosePassword() {
   const dispatch = useDispatch()
   const router = useRouter()
   const auth = useSelector((state) => state.auth)
 
   const [formData, setFormData] = useState({
-    name: '',
-    username: '',
-    role: '',
+    password: '',
+    'confim-password': '',
   })
 
   const handleChange = (e) => {
@@ -50,25 +42,18 @@ function YourDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const user = await dispatch(register(formData)).unwrap()
-    if (user && !user?.error) {
-      dispatch(setAuthenticated())
-      router.replace('/')
-    }
+    console.log(e)
   }
 
   return (
-    <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
-      <Steps stepsType={'box'} />
-      <div className="mt-5 sm:mt-0 flex flex-col justify-center flex-1 item-center">
+    <RegistrationLayout>
+      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <UserCircleIcon className="w-auto mx-auto rounded-full h-14" />
+          <KeyIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Your details
+            Choose a password
           </h2>
-          <p className="mt-4 text-center">
-            Will be displayed on your profile and <br /> visible to the public
-          </p>
+          <p className="mt-4 text-center">Must be at least 8 characters.</p>
         </div>
         <div className="flex justify-center pt-2">
           {auth.errorMessage && (
@@ -105,11 +90,8 @@ function YourDetails() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-end pt-10 sm:pt-0">
-        <Steps stepsType={'line'} />
-      </div>
-    </div>
+    </RegistrationLayout>
   )
 }
 
-export default YourDetails
+export default RegistrationChoosePassword

@@ -5,7 +5,7 @@ import pageTransitionVariants from '@/animations/page-transition'
 import Footer from '../footer'
 import { twMerge } from 'tailwind-merge'
 
-const LoginRegisterLayout = ({ children, title, className }) => {
+const LoginLayout = ({ children, title, className }) => {
   return (
     <>
       <Head>
@@ -24,10 +24,10 @@ const LoginRegisterLayout = ({ children, title, className }) => {
   )
 }
 
-LoginRegisterLayout.propTypes = {
+LoginLayout.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
 }
 
-export default LoginRegisterLayout
+export default LoginLayout
