@@ -13,7 +13,7 @@ const ProductsCarouselCard = ({ data, mr }) => {
         mr ? 'sm:mr-5' : '',
       )}
     >
-      <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl min-h-[28.75rem] aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-[28.75rem] lg:aspect-none">
+      <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
         <Image
           src={data.imageSrc}
           alt={data.imageAlt}
