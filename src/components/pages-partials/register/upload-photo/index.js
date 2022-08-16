@@ -55,9 +55,15 @@ const RegistrationUploadPhoto = () => {
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <ImageUpload text="Cover Photo" subinfo="Max. size 4MB" />
+              <ImageUpload
+                text="Click to upload Cover"
+                subinfo="Max. size 4MB"
+              />
 
-              <ImageUpload text="Cover Photo" subinfo="Max 400x400" />
+              <ImageUpload
+                text="Click to upload profile photo"
+                subinfo="Max 400x400"
+              />
               <div>
                 <button
                   disabled={auth.isPending ? true : false}

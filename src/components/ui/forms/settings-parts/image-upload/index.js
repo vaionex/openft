@@ -1,7 +1,8 @@
 import { UploadIcon } from '@/components/common/icons'
 import PropTypes from 'prop-types'
+import { forwardRef } from 'react'
 
-const ImageUpload = ({ text, subinfo }) => {
+function ImageUpload({ text, subinfo }, ref) {
   return (
     <div className="mt-1 sm:mt-0 sm:col-span-2">
       <div className="flex justify-center w-full px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -20,6 +21,7 @@ const ImageUpload = ({ text, subinfo }) => {
                 name="file-upload"
                 type="file"
                 className="sr-only"
+                ref={ref}
               />
             </label>
             <p className="pl-1">or drag and drop</p>
@@ -33,6 +35,8 @@ const ImageUpload = ({ text, subinfo }) => {
     </div>
   )
 }
+
+ImageUpload = forwardRef(ImageUpload)
 
 ImageUpload.defaultProps = {
   text: 'Click to upload',

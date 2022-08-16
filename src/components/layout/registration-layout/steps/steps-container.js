@@ -65,9 +65,16 @@ const StepsContainer = ({ stepsType }) => {
     }
   }, [currentStep])
 
-  if (stepsType === 'line') return <LineSteps list={stepList} />
-  if (stepsType === 'box') return <BoxSteps list={stepList} />
-  if (stepsType === 'circle') return <CircleSteps list={stepList} />
+  switch (stepsType) {
+    case 'line':
+      return <LineSteps list={stepList} />
+    case 'box':
+      return <BoxSteps list={stepList} />
+    case 'circle':
+      return <CircleSteps list={stepList} />
+    default:
+      return null
+  }
 }
 
 export default StepsContainer

@@ -7,15 +7,15 @@ const initialState = {
     email: '',
     role: '',
   },
-  choosePasswordValues: {
+  passwordValues: {
     password: '',
     confirmPassword: '',
   },
-  uploadPhotoValues: {
+  photoValues: {
     coverImage: '',
     profileImage: '',
   },
-  addSocialsValues: {
+  socialsValues: {
     facebook: '',
     instagram: '',
     website: '',
@@ -30,14 +30,14 @@ const registrationFormSlice = createSlice({
     setDetailsValues: (state, action) => {
       state.detailsValues = action.payload
     },
-    setChoosePasswordValues: (state, action) => {
-      state.choosePasswordValues = action.payload
+    setPasswordValues: (state, action) => {
+      state.passwordValues = action.payload
     },
-    setUploadPhotoValues: (state, action) => {
-      state.uploadPhotoValues = action.payload
+    setPhotoValues: (state, action) => {
+      se.photoValues = action.payload
     },
     setAddSocialsValues: (state, action) => {
-      state.addSocialsValues = action.payload
+      state.socialsValues = action.payload
     },
     setCurrentStep: (state, action) => {
       state.currentStep = action.payload
@@ -48,8 +48,8 @@ const registrationFormSlice = createSlice({
 export default registrationFormSlice
 export const {
   setDetailsValues,
-  setChoosePasswordValues,
-  setUploadPhotoValues,
-  setAddSocialsValues,
+  setPasswordValues,
+  setPhotoValues,
+  setSocialsValues,
   setCurrentStep,
 } = registrationFormSlice.actions

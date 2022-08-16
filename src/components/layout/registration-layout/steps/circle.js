@@ -36,9 +36,8 @@ const CircleSteps = ({ list }) => {
                 <span
                   className={twMerge(
                     'relative z-10 flex items-center justify-center w-8 h-8 bg-white rounded-full',
-                    step.status === 'upcoming'
-                      ? 'bg-blue-700 border-2 border-gray-300 rounded-full'
-                      : '',
+                    step.status === 'upcoming' &&
+                      'bg-blue-700 border-2 border-gray-300 rounded-full',
                   )}
                 >
                   {step.status === 'current' && (

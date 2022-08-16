@@ -5,44 +5,63 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FormInput } from '@/components/ui/inputs'
+import { InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { KeyIcon } from '@heroicons/react/outline'
 import RegistrationLayout from '@/components/layout/registration-layout'
+import { Controller, useForm } from 'react-hook-form'
+import registrationFormSelector from '@/redux/selectors/registration-form'
+import * as yup from 'yup'
+import authSelector from '@/redux/selectors/auth'
+import useYupValidationResolver from '@/hooks/useYupValidationResolver'
+import {
+  setCurrentStep,
+  setPasswordValues,
+} from '@/redux/slices/registration-form'
 
 const inputAttributes = [
   {
     type: 'password',
     placeholder: 'Choose a password',
-    name: 'choose-password',
-    label: 'Choose a password',
+    name: 'password',
   },
   {
     type: 'password',
     placeholder: 'Confirm password',
-    name: 'confirm-password',
-    label: 'Confirm password',
+    name: 'confirmPassword',
   },
 ]
 
-function RegistrationChoosePassword() {
-  const dispatch = useDispatch()
-  const router = useRouter()
-  const auth = useSelector((state) => state.auth)
+const validationSchema = yup.object({
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(6, 'Password must be at least 6 characters'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+})
 
-  const [formData, setFormData] = useState({
-    password: '',
-    'confim-password': '',
+function RegistrationChoosePassword() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const auth = useSelector(authSelector)
+  const { passwordValues } = useSelector(registrationFormSelector)
+
+  const resolver = useYupValidationResolver(validationSchema)
+  const { control, handleSubmit, formState } = useForm({
+    mode: 'onChange',
+    defaultValues: passwordValues,
+    resolver,
   })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
+  const { isSubmitting, isValid, errors } = formState
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log(e)
+  const onSubmit = (data) => {
+    dispatch(setCurrentStep(3))
+    dispatch(setPasswordValues(data))
+    router.push('/register/upload-photo')
   }
 
   return (
@@ -62,30 +81,39 @@ function RegistrationChoosePassword() {
         </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {inputAttributes.map((inputAttribute) => (
-                <FormInput
+                <InputMain
                   key={inputAttribute.name}
-                  visibility={false}
-                  {...inputAttribute}
-                  value={formData[inputAttribute.name]}
-                  onChange={handleChange}
-                />
+                  className="relative pb-0 border-none"
+                >
+                  <Controller
+                    name={inputAttribute.name}
+                    control={control}
+                    rules={inputAttribute.rules}
+                    render={({ field }) => (
+                      <InputMain.Input
+                        id={inputAttribute.name}
+                        placeholder={inputAttribute.placeholder}
+                        className="mb-8 sm:mb-4"
+                        type={inputAttribute.type}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
+                    {errors[inputAttribute.name]?.message}
+                  </span>
+                </InputMain>
               ))}
 
-              <div>
-                <button
-                  disabled={auth.isPending ? true : false}
-                  type="submit"
-                  className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                    auth.isPending
-                      ? 'bg-gray-100'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                >
-                  Continue
-                </button>
-              </div>
+              <button
+                disabled={isSubmitting || !isValid}
+                type="submit"
+                className="w-full font-semibold btn-primary"
+              >
+                Continue
+              </button>
             </form>
           </div>
         </div>

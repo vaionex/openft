@@ -96,15 +96,13 @@ function RegistrationDetails() {
                   </span>
                 </InputMain>
               ))}
-              <div>
-                <button
-                  disabled={isSubmitting || !isValid}
-                  type="submit"
-                  className="w-full font-semibold btn-primary"
-                >
-                  Continue
-                </button>
-              </div>
+              <button
+                disabled={isSubmitting || !isValid}
+                type="submit"
+                className="w-full font-semibold btn-primary"
+              >
+                Continue
+              </button>
             </form>
           </div>
         </div>
