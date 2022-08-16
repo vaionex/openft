@@ -8,53 +8,49 @@ import { useDispatch, useSelector } from 'react-redux'
 import Alert from '@/components/ui/alert'
 import { setAuthenticated, register } from '@/redux/slices/auth'
 import { UserCircleIcon } from '@/components/common/icons'
-import { FormInput } from '@/components/ui/inputs'
+import { InputMain } from '@/components/ui/inputs'
 import RegistrationLayout from '@/components/layout/registration-layout'
+import authSelector from '@/redux/selectors/auth'
+import { useForm, Controller } from 'react-hook-form'
+import registrationFormSelector from '@/redux/selectors/registration-form'
+import * as yup from 'yup'
+import useYupValidationResolver from '@/hooks/useYupValidationResolver'
+import { setDetailsValues } from '@/redux/slices/registration-form'
 
 const inputAttributes = [
-  {
-    type: 'text',
-    placeholder: 'Name',
-    name: 'name',
-    label: 'name',
-  },
-  {
-    type: 'text',
-    placeholder: 'Username',
-    name: 'username',
-    label: 'User name',
-  },
-  {
-    type: 'text',
-    placeholder: 'Role, e.g. Illustrator',
-    name: 'role',
-    label: 'Role',
-  },
+  { type: 'text', placeholder: 'Name', name: 'name' },
+  { type: 'text', placeholder: 'Username', name: 'username' },
+  { type: 'text', placeholder: 'Email', name: 'email' },
+  { type: 'text', placeholder: 'Role, e.g. Illustrator', name: 'role' },
 ]
 
-function RegistrationDetails() {
-  const dispatch = useDispatch()
-  const router = useRouter()
-  const auth = useSelector((state) => state.auth)
+const validationSchema = yup.object({
+  name: yup
+    .string()
+    .required('Name is required')
+    .min(2, 'Name must be at least 2 characters long'),
+  username: yup.string().required('Username is required'),
+  email: yup.string().email('Email is invalid').required('Email is required'),
+})
 
-  const [formData, setFormData] = useState({
-    name: '',
-    username: '',
-    role: '',
+function RegistrationDetails() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const auth = useSelector(authSelector)
+  const { detailsValues } = useSelector(registrationFormSelector)
+
+  const resolver = useYupValidationResolver(validationSchema)
+  const { control, handleSubmit, watch, formState } = useForm({
+    mode: 'onBlur',
+    defaultValues: detailsValues,
+    resolver,
   })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
+  const { isSubmitting, isValid, errors, touched } = formState
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const user = await dispatch(register(formData)).unwrap()
-    if (user && !user?.error) {
-      dispatch(setAuthenticated())
-      router.replace('/')
-    }
+  const onSubmit = (data) => {
+    dispatch(setDetailsValues(data))
+    router.push('/register/choose-password')
   }
 
   return (
@@ -76,30 +72,45 @@ function RegistrationDetails() {
         </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {inputAttributes.map((inputAttribute) => (
-                <FormInput
+                <InputMain
                   key={inputAttribute.name}
-                  visibility={false}
-                  {...inputAttribute}
-                  value={formData[inputAttribute.name]}
-                  onChange={handleChange}
-                />
+                  className="relative pb-0 border-none"
+                >
+                  <Controller
+                    name={inputAttribute.name}
+                    control={control}
+                    rules={inputAttribute.rules}
+                    render={({ field }) => (
+                      <InputMain.Input
+                        id={inputAttribute.name}
+                        placeholder={inputAttribute.placeholder}
+                        className="mb-4"
+                        type={inputAttribute.type}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <span className="absolute text-xs text-red-600 -bottom-2 left-2">
+                    {errors[inputAttribute.name]?.message}
+                  </span>
+                </InputMain>
               ))}
-
               <div>
                 <button
-                  disabled={auth.isPending ? true : false}
+                  disabled={isSubmitting || !isValid}
                   type="submit"
-                  className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                    auth.isPending
-                      ? 'bg-gray-100'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                  className="w-full font-semibold btn-primary"
                 >
                   Continue
                 </button>
               </div>
+              <div>{JSON.stringify(watch())}</div>
+              <div>touched:{JSON.stringify(touched)}</div>
+              <div>errors:{JSON.stringify(errors)}</div>
+              <div>isValid:{JSON.stringify(isValid)}</div>
+              <div>isSubmitting:{JSON.stringify(isSubmitting)}</div>
             </form>
           </div>
         </div>

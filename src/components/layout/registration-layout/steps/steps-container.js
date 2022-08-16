@@ -55,7 +55,7 @@ const StepsContainer = ({ stepsType }) => {
   }, [router.pathname])
 
   useEffect(() => {
-    const newCircleStepList = steps.map((step) => {
+    const newStepList = steps.map((step) => {
       return {
         ...step,
         status:
@@ -67,7 +67,7 @@ const StepsContainer = ({ stepsType }) => {
       }
     })
 
-    setStepList(newCircleStepList)
+    setStepList(newStepList)
   }, [stepCount])
 
   if (stepsType === 'line') return <LineSteps list={stepList} />

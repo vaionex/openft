@@ -2,6 +2,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import ReactTooltip from 'react-tooltip'
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
+import { forwardRef } from 'react'
 
 const InputMain = ({ className, children }) => {
   return (
@@ -65,17 +66,20 @@ InputMain.Label = function InputMainLabel({
   )
 }
 
-InputMain.Input = function InputMainInput({
-  id,
-  addon,
-  variant,
-  additionalCheckbox,
-  inputType,
-  className,
-  inputClassName,
-  tooltip,
-  ...props
-}) {
+InputMain.Input = function InputMainInput(
+  {
+    id,
+    addon,
+    variant,
+    additionalCheckbox,
+    inputType,
+    className,
+    inputClassName,
+    tooltip,
+    ...props
+  },
+  ref,
+) {
   return (
     <div className={className}>
       {variant === 'add-on' && !!addon && (
@@ -90,6 +94,7 @@ InputMain.Input = function InputMainInput({
               'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
               inputClassName,
             )}
+            ref={ref}
             {...props}
           />
         </div>
@@ -105,6 +110,7 @@ InputMain.Input = function InputMainInput({
                 'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
                 inputClassName,
               )}
+              ref={ref}
               {...props}
             />
           </div>
@@ -126,6 +132,7 @@ InputMain.Input = function InputMainInput({
               'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200  rounded-md',
               inputClassName,
             )}
+            ref={ref}
             {...props}
           />
           {!!tooltip && (
@@ -156,6 +163,8 @@ InputMain.Input = function InputMainInput({
     </div>
   )
 }
+
+InputMain.Input = forwardRef(InputMain.Input)
 
 InputMain.Input.defaultProps = {
   inputType: 'text',

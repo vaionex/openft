@@ -10,12 +10,12 @@ export default function BoxSteps({ list }) {
   return (
     <div className="block md:hidden lg:border-t lg:border-b lg:border-gray-200">
       <nav
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
         aria-label="Progress"
       >
         <ol
           role="list"
-          className="rounded-md overflow-hidden lg:flex lg:border-l lg:border-r lg:border-gray-200 lg:rounded-none"
+          className="overflow-hidden rounded-md lg:flex lg:border-l lg:border-r lg:border-gray-200 lg:rounded-none"
         >
           {list.map((step, stepIdx) => (
             <li key={step.id} className="relative overflow-hidden lg:flex-1">
@@ -27,106 +27,100 @@ export default function BoxSteps({ list }) {
                 )}
               >
                 {step.status === 'complete' ? (
-                  <NextLink href={step.href}>
-                    <a className="group">
-                      <span
-                        className="absolute top-0 left-0 w-1 h-full bg-transparent group-hover:bg-gray-200 lg:w-full lg:h-1 lg:bottom-0 lg:top-auto"
-                        aria-hidden="true"
-                      />
-                      <span
-                        className={classNames(
-                          stepIdx !== 0 ? 'lg:pl-9' : '',
-                          'px-6 py-5 flex items-start text-sm font-medium',
-                        )}
-                      >
-                        <span className="flex-shrink-0">
-                          <span className="w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full">
-                            <CheckIcon
-                              className="w-6 h-6 text-white"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </span>
-                        <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-                          <span className="text-xs font-semibold tracking-wide uppercase">
-                            {step.name}
-                          </span>
-                          <span className="text-sm font-medium text-gray-500">
-                            {step.description}
-                          </span>
+                  <span>
+                    <span
+                      className="absolute top-0 left-0 w-1 h-full bg-transparent lg:w-full lg:h-1 lg:bottom-0 lg:top-auto"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={classNames(
+                        stepIdx !== 0 ? 'lg:pl-9' : '',
+                        'px-6 py-5 flex items-start text-sm font-medium',
+                      )}
+                    >
+                      <span className="flex-shrink-0">
+                        <span className="flex items-center justify-center w-10 h-10 bg-indigo-600 rounded-full">
+                          <CheckIcon
+                            className="w-6 h-6 text-white"
+                            aria-hidden="true"
+                          />
                         </span>
                       </span>
-                    </a>
-                  </NextLink>
+                      <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
+                        <span className="text-xs font-semibold tracking-wide uppercase">
+                          {step.name}
+                        </span>
+                        <span className="text-sm font-medium text-gray-500">
+                          {step.description}
+                        </span>
+                      </span>
+                    </span>
+                  </span>
                 ) : step.status === 'current' ? (
-                  <NextLink href={step.href}>
-                    <a aria-current="step">
-                      <span
-                        className="absolute top-0 left-0 w-1 h-full bg-indigo-600 lg:w-full lg:h-1 lg:bottom-0 lg:top-auto"
-                        aria-hidden="true"
-                      />
-                      <span
-                        className={classNames(
-                          stepIdx !== 0 ? 'lg:pl-9' : '',
-                          'px-6 py-5 flex items-start text-sm font-medium',
-                        )}
-                      >
-                        <span className="flex-shrink-0">
-                          <span className="w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full">
-                            <span className="text-indigo-600">{step.id}</span>
-                          </span>
-                        </span>
-                        <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-                          <span className="text-xs font-semibold text-indigo-600 tracking-wide uppercase">
-                            {step.name}
-                          </span>
-                          <span className="text-sm font-medium text-gray-500">
-                            {step.description}
-                          </span>
+                  <span aria-current="step">
+                    <span
+                      className="absolute top-0 left-0 w-1 h-full bg-indigo-600 lg:w-full lg:h-1 lg:bottom-0 lg:top-auto"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={classNames(
+                        stepIdx !== 0 ? 'lg:pl-9' : '',
+                        'px-6 py-5 flex items-start text-sm font-medium',
+                      )}
+                    >
+                      <span className="flex-shrink-0">
+                        <span className="flex items-center justify-center w-10 h-10 border-2 border-indigo-600 rounded-full">
+                          <span className="text-indigo-600">{step.id}</span>
                         </span>
                       </span>
-                    </a>
-                  </NextLink>
+                      <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
+                        <span className="text-xs font-semibold tracking-wide text-indigo-600 uppercase">
+                          {step.name}
+                        </span>
+                        <span className="text-sm font-medium text-gray-500">
+                          {step.description}
+                        </span>
+                      </span>
+                    </span>
+                  </span>
                 ) : (
-                  <NextLink href={step.href}>
-                    <a className="group">
-                      <span
-                        className="absolute top-0 left-0 w-1 h-full bg-transparent group-hover:bg-gray-200 lg:w-full lg:h-1 lg:bottom-0 lg:top-auto"
-                        aria-hidden="true"
-                      />
-                      <span
-                        className={classNames(
-                          stepIdx !== 0 ? 'lg:pl-9' : '',
-                          'px-6 py-5 flex items-start text-sm font-medium',
-                        )}
-                      >
-                        <span className="flex-shrink-0">
-                          <span className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full">
-                            <span className="text-gray-500">{step.id}</span>
-                          </span>
-                        </span>
-                        <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-                          <span className="text-xs font-semibold text-gray-500 tracking-wide uppercase">
-                            {step.name}
-                          </span>
-                          <span className="text-sm font-medium text-gray-500">
-                            {step.description}
-                          </span>
+                  <span>
+                    <span
+                      className="absolute top-0 left-0 w-1 h-full bg-transparent lg:w-full lg:h-1 lg:bottom-0 lg:top-auto"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={classNames(
+                        stepIdx !== 0 ? 'lg:pl-9' : '',
+                        'px-6 py-5 flex items-start text-sm font-medium',
+                      )}
+                    >
+                      <span className="flex-shrink-0">
+                        <span className="flex items-center justify-center w-10 h-10 border-2 border-gray-300 rounded-full">
+                          <span className="text-gray-500">{step.id}</span>
                         </span>
                       </span>
-                    </a>
-                  </NextLink>
+                      <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
+                        <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                          {step.name}
+                        </span>
+                        <span className="text-sm font-medium text-gray-500">
+                          {step.description}
+                        </span>
+                      </span>
+                    </span>
+                  </span>
                 )}
 
                 {stepIdx !== 0 ? (
                   <>
                     {/* Separator */}
                     <div
-                      className="hidden absolute top-0 left-0 w-3 inset-0 lg:block"
+                      className="absolute inset-0 top-0 left-0 hidden w-3 lg:block"
                       aria-hidden="true"
                     >
                       <svg
-                        className="h-full w-full text-gray-300"
+                        className="w-full h-full text-gray-300"
                         viewBox="0 0 12 82"
                         fill="none"
                         preserveAspectRatio="none"
