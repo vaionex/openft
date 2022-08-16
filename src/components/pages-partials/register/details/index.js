@@ -1,12 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable @next/next/no-img-element */
-
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Alert from '@/components/ui/alert'
-import { setAuthenticated, register } from '@/redux/slices/auth'
 import { UserCircleIcon } from '@/components/common/icons'
 import { InputMain } from '@/components/ui/inputs'
 import RegistrationLayout from '@/components/layout/registration-layout'
@@ -14,8 +9,11 @@ import authSelector from '@/redux/selectors/auth'
 import { useForm, Controller } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import * as yup from 'yup'
+import {
+  setCurrentStep,
+  setDetailsValues,
+} from '@/redux/slices/registration-form'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
-import { setDetailsValues } from '@/redux/slices/registration-form'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Name', name: 'name' },
@@ -40,15 +38,16 @@ function RegistrationDetails() {
   const { detailsValues } = useSelector(registrationFormSelector)
 
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, watch, formState } = useForm({
+  const { control, handleSubmit, formState } = useForm({
     mode: 'onBlur',
     defaultValues: detailsValues,
     resolver,
   })
 
-  const { isSubmitting, isValid, errors, touched } = formState
+  const { isSubmitting, isValid, errors } = formState
 
   const onSubmit = (data) => {
+    dispatch(setCurrentStep(2))
     dispatch(setDetailsValues(data))
     router.push('/register/choose-password')
   }
@@ -70,7 +69,7 @@ function RegistrationDetails() {
             <Alert message={auth.errorMessage} type="error" />
           )}
         </div>
-        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="w-full mt-2 sm:mx-auto md:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {inputAttributes.map((inputAttribute) => (
@@ -86,13 +85,13 @@ function RegistrationDetails() {
                       <InputMain.Input
                         id={inputAttribute.name}
                         placeholder={inputAttribute.placeholder}
-                        className="mb-4"
+                        className="mb-8 sm:mb-4"
                         type={inputAttribute.type}
                         {...field}
                       />
                     )}
                   />
-                  <span className="absolute text-xs text-red-600 -bottom-2 left-2">
+                  <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
                     {errors[inputAttribute.name]?.message}
                   </span>
                 </InputMain>
@@ -106,11 +105,6 @@ function RegistrationDetails() {
                   Continue
                 </button>
               </div>
-              <div>{JSON.stringify(watch())}</div>
-              <div>touched:{JSON.stringify(touched)}</div>
-              <div>errors:{JSON.stringify(errors)}</div>
-              <div>isValid:{JSON.stringify(isValid)}</div>
-              <div>isSubmitting:{JSON.stringify(isSubmitting)}</div>
             </form>
           </div>
         </div>

@@ -1,8 +1,10 @@
-import NextLink from 'next/link'
+import { setCurrentStep } from '@/redux/slices/registration-form'
 import { CheckIcon } from '@heroicons/react/solid'
+import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 
 const CircleSteps = ({ list }) => {
+  const dispatch = useDispatch()
   return (
     <nav aria-label="Progress">
       <ol role="list" className="overflow-hidden">
@@ -12,7 +14,15 @@ const CircleSteps = ({ list }) => {
             className={twMerge(
               stepIdx !== list.length - 1 ? 'pb-10' : '',
               'relative',
+              step.status === 'completed'
+                ? 'cursor-pointer'
+                : 'pointer-events-none cursor-default',
             )}
+            onClick={
+              step.status === 'completed'
+                ? () => dispatch(setCurrentStep(step.id))
+                : () => {}
+            }
           >
             {step.id !== list.length ? (
               <div
@@ -39,7 +49,7 @@ const CircleSteps = ({ list }) => {
                     <span className="h-2.5 w-2.5 bg-gray-200 rounded-full group-hover:bg-gray-300" />
                   )}
 
-                  {step.status === 'complete' && (
+                  {step.status === 'completed' && (
                     <CheckIcon
                       className="w-5 h-5 text-blue-500"
                       aria-hidden="true"

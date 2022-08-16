@@ -20,9 +20,7 @@ const initialState = {
     instagram: '',
     website: '',
   },
-  isPending: false,
-  errorMessage: null,
-  isAuthenticated: false,
+  currentStep: 1,
 }
 
 const registrationFormSlice = createSlice({
@@ -41,6 +39,9 @@ const registrationFormSlice = createSlice({
     setAddSocialsValues: (state, action) => {
       state.addSocialsValues = action.payload
     },
+    setCurrentStep: (state, action) => {
+      state.currentStep = action.payload
+    },
   },
 })
 
@@ -50,4 +51,5 @@ export const {
   setChoosePasswordValues,
   setUploadPhotoValues,
   setAddSocialsValues,
+  setCurrentStep,
 } = registrationFormSlice.actions

@@ -1,10 +1,11 @@
 import React from 'react'
-import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import LineSteps from './line'
 import BoxSteps from './box'
 import CircleSteps from './circle'
+import { useSelector } from 'react-redux'
+import registrationFormSelector from '@/redux/selectors/registration-form'
 
 const steps = [
   {
@@ -46,29 +47,30 @@ const paths = {
 
 const StepsContainer = ({ stepsType }) => {
   const [stepList, setStepList] = useState(steps)
-  const [stepCount, setStepCount] = useState(1)
+  const { currentStep } = useSelector(registrationFormSelector)
   const router = useRouter()
-
-  useEffect(() => {
-    const step = steps.find((step) => step.href === router.pathname)
-    setStepCount(step.id)
-  }, [router.pathname])
 
   useEffect(() => {
     const newStepList = steps.map((step) => {
       return {
         ...step,
         status:
-          step.id === stepCount
+          step.id === currentStep
             ? 'current'
-            : step.id < stepCount
-            ? 'complete'
+            : step.id < currentStep
+            ? 'completed'
             : 'upcoming',
       }
     })
-
     setStepList(newStepList)
-  }, [stepCount])
+  }, [currentStep])
+
+  useEffect(() => {
+    const current = steps.find((step) => step.id === currentStep)
+    if (current.href !== router.pathname) {
+      router.push(current.href)
+    }
+  }, [currentStep])
 
   if (stepsType === 'line') return <LineSteps list={stepList} />
   if (stepsType === 'box') return <BoxSteps list={stepList} />
