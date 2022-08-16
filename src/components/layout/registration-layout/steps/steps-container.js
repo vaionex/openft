@@ -38,13 +38,6 @@ const steps = [
   },
 ]
 
-const paths = {
-  register: '/register',
-  'choose-password': '/register/choose-password',
-  'upload-photo': '/register/upload-photo',
-  'add-socials': '/register/add-socials',
-}
-
 const StepsContainer = ({ stepsType }) => {
   const [stepList, setStepList] = useState(steps)
   const { currentStep } = useSelector(registrationFormSelector)

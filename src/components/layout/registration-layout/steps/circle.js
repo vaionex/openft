@@ -51,7 +51,7 @@ const CircleSteps = ({ list }) => {
 
                   {step.status === 'completed' && (
                     <CheckIcon
-                      className="w-5 h-5 text-blue-500"
+                      className="w-5 h-5 text-blue-700"
                       aria-hidden="true"
                     />
                   )}
