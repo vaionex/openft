@@ -2,14 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   detailsValues: {
-    name: '',
-    username: '',
-    email: '',
+    name: 'eeeee',
+    username: 'eeee',
+    email: 'ee@ee.com',
     role: '',
   },
   passwordValues: {
-    password: '',
-    confirmPassword: '',
+    password: 'eeeeee',
+    confirmPassword: 'eeeeee',
   },
   photoValues: {
     coverImage: '',
@@ -34,7 +34,7 @@ const registrationFormSlice = createSlice({
       state.passwordValues = action.payload
     },
     setPhotoValues: (state, action) => {
-      se.photoValues = action.payload
+      state.photoValues = action.payload
     },
     setAddSocialsValues: (state, action) => {
       state.socialsValues = action.payload

@@ -1,10 +1,5 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable @next/next/no-img-element */
-
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { KeyIcon } from '@heroicons/react/outline'
@@ -90,7 +85,6 @@ function RegistrationChoosePassword() {
                   <Controller
                     name={inputAttribute.name}
                     control={control}
-                    rules={inputAttribute.rules}
                     render={({ field }) => (
                       <InputMain.Input
                         id={inputAttribute.name}

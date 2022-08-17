@@ -80,7 +80,6 @@ function RegistrationDetails() {
                   <Controller
                     name={inputAttribute.name}
                     control={control}
-                    rules={inputAttribute.rules}
                     render={({ field }) => (
                       <InputMain.Input
                         id={inputAttribute.name}

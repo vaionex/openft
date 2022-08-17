@@ -1,4 +1,4 @@
-import { getFirstCharsOfName } from '@/utils/getFirstCharsOfName'
+import getFirstCharsOfName from '@/utils/getFirstCharsOfName'
 import PropTypes from 'prop-types'
 
 const AvatarWithName = ({ name }) => {

@@ -1,37 +1,66 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable @next/next/no-img-element */
-
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import Alert from '@/components/ui/alert'
-import { setAuthenticated, register } from '@/redux/slices/auth'
 import { CameraIcon } from '@heroicons/react/outline'
 import ImageUpload from '@/components/ui/forms/settings-parts/image-upload'
 import RegistrationLayout from '@/components/layout/registration-layout'
+import { Controller, useForm } from 'react-hook-form'
+import registrationFormSelector from '@/redux/selectors/registration-form'
+import useYupValidationResolver from '@/hooks/useYupValidationResolver'
+import * as yup from 'yup'
+import { setPhotoValues } from '@/redux/slices/registration-form'
+import checkImageResolution from '@/utils/checkImageResolution'
+import { useEffect, useState } from 'react'
+
+const COVER_IMAGE_SIZE = 4 * 1024 * 1024
+const PROFILE_IMAGE_SIZE = 1 * 1024 * 1024
+const PROFILE_IMAGE_WIDTH = 400
+const PROFILE_IMAGE_HEIGHT = 400
+
+const validationSchema = yup.object().shape({
+  profileImage: yup
+    .mixed()
+    .required('Profile image is required')
+    .test(
+      'profileImageSize',
+      `Profile Image size must be less than ${
+        PROFILE_IMAGE_SIZE / 1024 / 1024
+      }MB`,
+      (value) => value.length && value[0].size < PROFILE_IMAGE_SIZE,
+    ),
+  coverImage: yup
+    .mixed()
+    .required('Cover image is required')
+    .test(
+      'coverImageSize',
+      `Cover Image size must be less than ${COVER_IMAGE_SIZE / 1024 / 1024}MB`,
+      (value) => {
+        return value.length && value[0].size <= COVER_IMAGE_SIZE
+      },
+    ),
+})
 
 const RegistrationUploadPhoto = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const auth = useSelector((state) => state.auth)
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const { photoValues } = useSelector(registrationFormSelector)
+
+  const resolver = useYupValidationResolver(validationSchema)
+  const { handleSubmit, formState, register, control, watch } = useForm({
+    // mode: 'onChange',
+    defaultValues: photoValues,
+    resolver,
   })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
+  const { isSubmitting, isValid, errors } = formState
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const user = await dispatch(register(formData)).unwrap()
-    if (user && !user?.error) {
-      dispatch(setAuthenticated())
-      router.replace('/')
-    }
+  console.log(isValid)
+
+  const onSubmit = (data) => {
+    console.log('data', data)
+    // dispatch(setPhotoValues(data))
   }
 
   return (
@@ -54,29 +83,44 @@ const RegistrationUploadPhoto = () => {
         </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <ImageUpload
-                text="Click to upload Cover"
-                subinfo="Max. size 4MB"
-              />
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+              <span className="inline-block w-full">
+                <ImageUpload
+                  type="file"
+                  id="profileImage"
+                  text="Click to upload profile photo"
+                  subinfo="Max 400x400"
+                  {...register('profileImage')}
+                />
+                <span className="text-xs text-red-600 ">
+                  <span className="text-xs text-red-600 ">
+                    {errors?.profileImage?.message}
+                  </span>
+                </span>
+              </span>
 
-              <ImageUpload
-                text="Click to upload profile photo"
-                subinfo="Max 400x400"
-              />
-              <div>
-                <button
-                  disabled={auth.isPending ? true : false}
-                  type="submit"
-                  className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                    auth.isPending
-                      ? 'bg-gray-100'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                >
-                  Continue
-                </button>
-              </div>
+              <span className="inline-block w-full">
+                <ImageUpload
+                  type="file"
+                  id="coverImage"
+                  text="Click to upload profile photo"
+                  subinfo="Max 400x400"
+                  {...register('coverImage')}
+                />
+                <span className="text-xs text-red-600 ">
+                  <span className="text-xs text-red-600 ">
+                    {errors?.coverImage?.message}
+                  </span>
+                </span>
+              </span>
+
+              <button
+                disabled={isSubmitting || !isValid}
+                type="submit"
+                className="w-full font-semibold btn-primary"
+              >
+                Continue
+              </button>
             </form>
           </div>
         </div>
