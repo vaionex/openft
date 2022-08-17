@@ -5,6 +5,10 @@ import { Logo } from '@/components/common/svgs'
 import { GoogleIcon } from '@/components/common/icons'
 import Image from 'next/image'
 import LoginCarousel from '@/components/ui/carousels/login-carousel'
+import { firebaseLoginWithGoogle } from '@/firebase/utils'
+import { useDispatch } from 'react-redux'
+import { setAuthenticated } from '@/redux/slices/auth'
+import { useRouter } from 'next/router'
 
 const testimonials = [
   {
@@ -29,8 +33,18 @@ const testimonials = [
     location: 'Canada, United States',
   },
 ]
-
 const Login = () => {
+  const router = useRouter()
+  const dispatch = useDispatch()
+
+  const handleFirebaseAuthWithProvider = async () => {
+    const userInfo = await firebaseLoginWithGoogle()
+    if (userInfo) {
+      dispatch(setAuthenticated())
+      router.replace('/')
+    }
+  }
+
   return (
     <LoginRegisterLayout title="Login">
       <div className="flex min-h-[calc(100vh-56px)]">
@@ -58,7 +72,7 @@ const Login = () => {
                 <div>
                   <button
                     className="w-full text-gray-700 bg-white border border-gray-300 btn-primary hover:bg-gray-100"
-                    // onClick={() => handleFirebaseAuthWithProvider('GOOGLE')}
+                    onClick={() => handleFirebaseAuthWithProvider('GOOGLE')}
                   >
                     <GoogleIcon className="w-6 h-6" />
                     <span className="ml-3">Sign in with Google</span>

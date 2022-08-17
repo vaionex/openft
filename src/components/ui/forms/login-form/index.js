@@ -2,32 +2,52 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAuthenticated, login } from '@/redux/slices/auth'
-import NextLink from 'next/link'
 import { EyeIcon, EyeOffIcon, MenuIcon } from '@heroicons/react/outline'
+import NextLink from 'next/link'
 
 import authSelector from '@/redux/selectors/auth'
 import Checkbox from '../../checkbox'
+import Alert from '../../alert'
 
 function LoginForm() {
   const dispatch = useDispatch()
   const router = useRouter()
-
-  // Auth State from Redux
-  const authState = useSelector(authSelector)
+  const auth = useSelector((state) => state.auth)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
-
+  const [error, setError] = useState(null)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   })
 
-  const handleChange = (e) => {}
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+    if (error) setError(null)
+  }
 
-  const handleSubmit = (e) => {}
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const user = await dispatch(login(formData)).unwrap()
+      if (user && !user?.error) {
+        dispatch(setAuthenticated())
+        router.replace('/')
+      }
+    } catch (e) {
+      console.log('error', e)
+      setError(e)
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="flex justify-center pt-2">
+        {error && (
+          <Alert message={error} type="error" />
+        )}
+      </div>
       <div>
         <label
           htmlFor="email"
@@ -43,6 +63,7 @@ function LoginForm() {
             autoComplete="email"
             required
             className="block w-full p-3 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            onChange={handleChange}
             placeholder="Enter email address"
           />
         </div>
@@ -90,7 +111,14 @@ function LoginForm() {
       </div>
 
       <div>
-        <button className="w-full btn-primary" type="submit">
+        <button
+          disabled={auth.isPending}
+          className={`w-full btn-primary 
+          ${auth.isPending
+              ? 'bg-gray-100'
+              : 'bg-blue-600 hover:bg-blue-700'
+            } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`} type="submit"
+        >
           Sign in
         </button>
       </div>
