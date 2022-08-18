@@ -2,8 +2,6 @@ import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Alert from '@/components/ui/alert'
-import { UserCircleIcon } from '@/components/common/icons'
-import { InputMain } from '@/components/ui/inputs'
 import RegistrationLayout from '@/components/layout/registration-layout'
 import authSelector from '@/redux/selectors/auth'
 import { useForm, Controller } from 'react-hook-form'
@@ -14,6 +12,8 @@ import {
   setDetailsValues,
 } from '@/redux/slices/registration-form'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
+import { InputMain } from '@/components/ui/inputs'
+import { UserCircleIcon } from '@/components/common/icons'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Name', name: 'name' },

@@ -13,8 +13,10 @@
   "dependencies": {
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.5",
+    "@ramonak/react-progress-bar": "^5.0.2",
     "@reduxjs/toolkit": "^1.7.2",
     "@tailwindcss/forms": "^0.4.0",
+    "attr-accept": "^2.2.2",
     "axios": "^0.26.0",
     "draft-js": "^0.11.7",
     "firebase": "^9.6.6",
@@ -30,6 +32,7 @@
     "react-draft-wysiwyg": "^1.15.0",
     "react-dropzone": "^14.2.2",
     "react-hook-form": "^7.34.1",
+    "react-image-crop": "^10.0.6",
     "react-redux": "^7.2.6",
     "react-slick": "^0.29.0",
     "react-tooltip": "^4.2.21",

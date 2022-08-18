@@ -66,6 +66,14 @@
   .react-tooltip h5 {
     @apply mb-2 font-bold;
   }
+
+  .progress-bar-wrapper > div:first-of-type {
+    @apply overflow-hidden;
+  }
+
+  .progress-bar-wrapper div div {
+    @apply !bg-blue-600;
+  }
 }
 
 @layer components {

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { motion } from 'framer-motion'
 import NextLink from 'next/link'
-import { Logo, RegisterLogo } from '@/components/common/svgs'
+import { Logo } from '@/components/common/svgs'
 import { StepsContainer } from './steps'
 import pageTransitionVariants from '@/animations/page-transition'
 import PropTypes from 'prop-types'
