@@ -1,15 +1,32 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import React, { Fragment } from 'react'
+import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import { Avatar } from '../avatars'
+import { logout, setUserData } from '@/redux/slices/auth'
+import { useRouter } from 'next/router'
 
-const DropdownUser = ({ user }) => {
+const DropdownUser = ({ user, avatar }) => {
+  const router = useRouter()
+  const dispatch = useDispatch()
+
+  const signOut = async (e) => {
+    e.preventDefault()
+    await dispatch(logout()).unwrap()
+    dispatch(setUserData(null))
+    router.push("/")
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full p-0.5 text-sm font-medium text-gray-700 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-          <Avatar className="w-10 h-10 sm:w-10 sm:h-10" user={user} />
+          <Avatar
+            className="w-10 h-10 sm:w-10 sm:h-10"
+            user={user}
+            avatar={avatar}
+          />
         </Menu.Button>
       </div>
 
@@ -38,7 +55,7 @@ const DropdownUser = ({ user }) => {
               )}
             </Menu.Item>
 
-            <form>
+            <form onSubmit={(e) => signOut(e)}>
               <Menu.Item>
                 {({ active }) => (
                   <button

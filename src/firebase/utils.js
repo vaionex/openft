@@ -265,6 +265,16 @@ const updateUserEmail = async (user, email, photoURL) => {
   }
 }
 
+const firebaseGetSingleDocFromDb = async (collectionName, id) => {
+  try {
+    const docRef = doc(firebaseDb, collectionName, id)
+    const docSnap = await getDoc(docRef)
+    return docSnap.data()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -273,4 +283,5 @@ export {
   firebaseUpdateProfilePicture,
   firebaseUpdateProfilDetails,
   firebaseLoginWithGoogle,
+  firebaseGetUserInfoFromDb,
 }

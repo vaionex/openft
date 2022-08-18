@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { getwalletDetails } from '@/services/relysia-queries'
 import { onIdTokenChanged } from 'firebase/auth'
-import apiConfig from '@/config/relysiaApi'
+import { useDispatch } from 'react-redux'
 import { firebaseAuth } from '@/firebase/init'
+import { useRouter } from 'next/router'
+import apiConfig from '@/config/relysiaApi'
+import useAuthProtection from '@/hooks/useAuthProtection'
 
 function GetCurrentUser() {
+  const router = useRouter()
   const dispatch = useDispatch()
+  const authStatus = useAuthProtection()
 
   useEffect(() => {
     try {
@@ -20,7 +24,7 @@ function GetCurrentUser() {
     } catch (err) {
       console.log('err ', err.message, err.response)
     }
-  }, [])
+  }, [router])
 
   return <></>
 }
