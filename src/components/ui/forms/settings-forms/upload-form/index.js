@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import { EyeIcon } from '@heroicons/react/outline'
-import { InputMain } from '../../../inputs'
-import ImageUpload from '../../settings-parts/image-upload'
 import DropdownSelect from '@/components/ui/dropdown-select'
+import ImageUpload from '@/components/ui/image-upload'
+import { InputMain } from '@/components/ui/inputs'
 
 const UploadForm = () => {
   return (

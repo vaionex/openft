@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { getAuth } from 'firebase/auth'
 
-import AvatarUpload from '../settings-parts/avatar-upload'
 import {
   firebaseUpdateProfilePicture,
   firebaseUpdateProfilDetails,
 } from '@/firebase/utils'
+import AvatarUpload from '@/components/ui/avatar-upload'
 
 export default function SettingsForm() {
   const router = useRouter()
