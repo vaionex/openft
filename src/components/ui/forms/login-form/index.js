@@ -15,6 +15,7 @@ function LoginForm() {
   const auth = useSelector((state) => state.auth)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
+  const [rememberMe, setRemeberMe] = useState(false)
   const [error, setError] = useState(null)
   const [formData, setFormData] = useState({
     email: '',
@@ -30,7 +31,7 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const user = await dispatch(login(formData)).unwrap()
+      const user = await dispatch(login({ ...formData, rememberMe })).unwrap()
       if (user && !user?.error) {
         dispatch(setAuthenticated())
         router.replace('/')
@@ -101,7 +102,13 @@ function LoginForm() {
       </div>
 
       <div className="flex items-center justify-between gap-2">
-        <Checkbox id="remember-me" text="Remember for 30 days" />
+        <Checkbox
+          id="remember-me"
+          text="Remember me"
+          onChange={(e) =>
+            setRemeberMe(e.target.checked)
+          }
+        />
 
         <div className="text-sm">
           <NextLink href="/forgot-password">

@@ -1,5 +1,3 @@
 import { getFirstCharsOfName } from './getFirstCharsOfName'
 
-export {
-  getFirstCharsOfName,
-}
+export { getFirstCharsOfName }

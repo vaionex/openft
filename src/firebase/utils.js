@@ -16,6 +16,9 @@ import {
   signInWithPopup,
   updatePassword,
   updateEmail,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth'
 import store from '@/redux/store'
 import { setUserData } from '@/redux/slices/auth'
@@ -30,8 +33,13 @@ const firebaseGetUserInfoFromDb = async (id) => {
   }
 }
 
-const firebaseLogin = async ({ email, password }) => {
+const firebaseLogin = async ({ email, password, rememberMe }) => {
   try {
+    await setPersistence(
+      firebaseAuth,
+      rememberMe
+        ? browserLocalPersistence
+        : browserSessionPersistence)
     const auth = await signInWithEmailAndPassword(firebaseAuth, email, password)
     return {
       name: auth.user.displayName,
