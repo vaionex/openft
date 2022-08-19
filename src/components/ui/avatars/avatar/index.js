@@ -1,8 +1,9 @@
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
+import { getFirstCharsOfName } from '@/utils/getFirstCharsOfName'
 
-const Avatar = ({ user, className }) => {
+const Avatar = ({ user, avatar, className }) => {
   return (
     <div
       className={twMerge(
@@ -10,13 +11,22 @@ const Avatar = ({ user, className }) => {
         className,
       )}
     >
-      <Image
-        src={user.avatar}
-        className=""
-        layout="fill"
-        alt={user.name}
-        objectFit="cover"
-      />
+      {user && avatar
+        ? (
+          <Image
+            src={avatar}
+            className=""
+            layout="fill"
+            alt={user.name}
+            objectFit="cover"
+          />
+        ) : (
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full border">
+            <span className="text-sm font-medium leading-none">
+              {getFirstCharsOfName(user?.name)}
+            </span>
+          </span>
+        )}
     </div>
   )
 }

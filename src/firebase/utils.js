@@ -1,4 +1,4 @@
-import { firebaseAuth, firebaseDb } from '@/firebase/init'
+import { firebaseAuth, firebaseDb, firebaseStorage } from '@/firebase/init'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import {
   getStorage,
@@ -16,6 +16,9 @@ import {
   signInWithPopup,
   updatePassword,
   updateEmail,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth'
 import store from '@/redux/store'
 import { setUserData } from '@/redux/slices/auth'
@@ -30,8 +33,13 @@ const firebaseGetUserInfoFromDb = async (id) => {
   }
 }
 
-const firebaseLogin = async ({ email, password }) => {
+const firebaseLogin = async ({ email, password, rememberMe }) => {
   try {
+    await setPersistence(
+      firebaseAuth,
+      rememberMe
+        ? browserLocalPersistence
+        : browserSessionPersistence)
     const auth = await signInWithEmailAndPassword(firebaseAuth, email, password)
     return {
       name: auth.user.displayName,
@@ -106,6 +114,9 @@ const firebaseGetAuthorizedUser = () => {
 const firebaseLoginWithGoogle = async () => {
   try {
     const firebaseGoogleProvider = new GoogleAuthProvider()
+    firebaseGoogleProvider.setCustomParameters({
+      prompt: "select_account"
+    });
     const userInfo = await signInWithPopup(firebaseAuth, firebaseGoogleProvider)
       .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -113,6 +124,10 @@ const firebaseLoginWithGoogle = async () => {
         const token = credential?.accessToken
         // The signed-in user info.
         const user = result.user
+        let fileRef = ref(firebaseStorage, `profiles/${user.uid}_256x256?alt=media`)
+        if (user.photoURL) {
+          await uploadBytes(fileRef, user.photoURL)
+        }
         const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
         if (!userInfoFromDb) {
           const infos = {
@@ -265,6 +280,16 @@ const updateUserEmail = async (user, email, photoURL) => {
   }
 }
 
+const firebaseGetSingleDocFromDb = async (collectionName, id) => {
+  try {
+    const docRef = doc(firebaseDb, collectionName, id)
+    const docSnap = await getDoc(docRef)
+    return docSnap.data()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -273,4 +298,5 @@ export {
   firebaseUpdateProfilePicture,
   firebaseUpdateProfilDetails,
   firebaseLoginWithGoogle,
+  firebaseGetUserInfoFromDb,
 }
