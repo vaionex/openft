@@ -12,9 +12,9 @@ export const protectedRoute = (user, router) => {
     || router.pathname === '/login'
 
   if (routesWithAuth || authRoute) {
-    !user
+    (routesWithAuth && !user)
       ? router.push('/')
-      : authRoute
+      : (authRoute && user)
         ? router.push('/')
         : ''
   }
