@@ -15,7 +15,7 @@ function LoginForm() {
   const auth = useSelector((state) => state.auth)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
-  const [rememberMe, setRemeberMe] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState(null)
   const [formData, setFormData] = useState({
     email: '',
@@ -106,7 +106,7 @@ function LoginForm() {
           id="remember-me"
           text="Remember me"
           onChange={(e) =>
-            setRemeberMe(e.target.checked)
+            setRememberMe(e.target.checked)
           }
         />
 
