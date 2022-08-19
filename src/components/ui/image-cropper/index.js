@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
@@ -6,31 +6,46 @@ import ReactCrop, {
   PixelCrop,
 } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
-import ModalSimple from '../modal-simple'
+import ModalImgCropper from '../modal-img-cropper'
 
-const ImageCropper = ({
-  file,
-  crop,
-  isCropping,
-  setIsCropping,
-  onCropChange,
-  onCropComplete,
-  onCropImageLoaded,
-}) => {
+const ImageCropper = ({ src, aspect, isCropping, setIsCropping }) => {
+  const [cropConfig, setCropConfig] = useState({
+    unit: 'px',
+    width: 100,
+    height: 100,
+  })
+
+  // crop functions
+
+  const handleOnCropImageLoaded = (image) => {
+    console.log(image, 'imageeeeeee')
+  }
+
+  const onCropChange = useCallback((crop) => {
+    setCropConfig(crop)
+  }, [])
+
+  const onCropComplete = useCallback((crop, pixelCrop) => {
+    console.log(crop, 'crop')
+    console.log(pixelCrop, 'pixelCrop')
+  }, [])
+
+  // end crop functions
+
   return (
-    <ModalSimple isOpen={isCropping} handleOnClose={setIsCropping}>
+    <ModalImgCropper isOpen={isCropping} handleOnClose={setIsCropping}>
       <div>
         <ReactCrop
-          crop={crop}
-          aspect={1 / 1}
-          onImageLoaded={onCropImageLoaded}
+          crop={cropConfig}
+          aspect={aspect || 1}
           onChange={onCropChange}
           onComplete={onCropComplete}
         >
-          <img src={file?.src} />
+          <img src={src} alt="Crop" />
         </ReactCrop>
+        {JSON.stringify(src)}
       </div>
-    </ModalSimple>
+    </ModalImgCropper>
   )
 }
 

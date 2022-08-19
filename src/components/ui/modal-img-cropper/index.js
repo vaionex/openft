@@ -3,14 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import PropTypes from 'prop-types'
 
-const ModalSimple = ({
-  icon,
-  title,
-  description,
-  isOpen,
-  handleOnClose,
-  children,
-}) => {
+const ModalImgCropper = ({ isOpen, handleOnClose, children }) => {
   const [open, setOpen] = useState(isOpen)
 
   const onClose = () => {
@@ -20,7 +13,7 @@ const ModalSimple = ({
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10 " onClose={onClose}>
+      <Dialog as="div" className="relative z-10 " onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -46,35 +39,7 @@ const ModalSimple = ({
             >
               <Dialog.Panel className="relative px-4 pt-5 pb-4 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-2xl sm:w-full sm:p-6">
                 <div>
-                  {icon && (
-                    <div className="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full">
-                      <CheckIcon
-                        className="w-6 h-6 text-green-600"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  )}
-
-                  <div className="text-center ">
-                    {title && (
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
-                        Payment successful
-                      </Dialog.Title>
-                    )}
-                    {description && (
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Consequatur amet labore.
-                        </p>
-                      </div>
-                    )}
-
-                    {children}
-                  </div>
+                  {children}
                   <div className="max-w-[40%] flex">
                     <button className="w-full btn-primary" onClick={onClose}>
                       Crop
@@ -90,11 +55,11 @@ const ModalSimple = ({
   )
 }
 
-ModalSimple.defaultProps = {
+ModalImgCropper.defaultProps = {
   isOpen: false,
 }
 
-ModalSimple.propTypes = {
+ModalImgCropper.propTypes = {
   icon: PropTypes.node,
   isOpen: PropTypes.bool,
   title: PropTypes.string,
@@ -102,4 +67,4 @@ ModalSimple.propTypes = {
   children: PropTypes.node,
 }
 
-export default ModalSimple
+export default ModalImgCropper

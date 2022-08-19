@@ -4,28 +4,30 @@ import { CameraIcon } from '@heroicons/react/outline'
 import RegistrationLayout from '@/components/layout/registration-layout'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import ImageUploadDragAndDrop from '@/components/ui/image-upload-drag-n-drop'
+import { useState } from 'react'
 
 const ImageInputAttributes = [
   {
     id: 'profileImage',
     name: 'profileImage',
     text: 'Click to upload profile photo',
-    subinfo: 'Max 400x400',
+    subinfo: 'Max 400x400 - 500KB',
   },
   {
     id: 'coverImage',
     name: 'coverImage',
     text: 'Click to upload cover photo',
-    subinfo: 'Max 4MB',
+    subinfo: 'Max 1440x900 - 2MB',
   },
 ]
 
 const RegistrationUploadPhoto = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const auth = useSelector((state) => state.auth)
 
   const { photoValues } = useSelector(registrationFormSelector)
+
+  console.log(photoValues, 'photoValues')
 
   const onSubmit = (data) => {
     console.log('data', data)
@@ -52,17 +54,19 @@ const RegistrationUploadPhoto = () => {
                 {ImageInputAttributes.map((inputAttribute) => (
                   <ImageUploadDragAndDrop
                     key={inputAttribute.id}
+                    id={inputAttribute.id}
                     name={inputAttribute.name}
                     text={inputAttribute.text}
                     subinfo={inputAttribute.subinfo}
                   />
                 ))}
-                {/* <span className="text-xs text-red-600 ">
-                  <span className="text-xs text-red-600 ">error message</span>
-                </span> */}
               </span>
 
               <button
+                disabled={
+                  photoValues.profileImage === '' ||
+                  photoValues.coverImage === ''
+                }
                 type="submit"
                 className="w-full font-semibold btn-primary"
               >

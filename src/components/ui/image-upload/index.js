@@ -42,8 +42,14 @@ const ImageUpload = forwardRef(
 ImageUpload.defaultProps = {
   text: 'Click to upload',
   subinfo: '',
-  acceptableFileTypes:
-    'image/jpeg, image/jpg, image/png, image/gif, image/webp',
+  acceptableFileTypes: [
+    'JPEG',
+    'PNG',
+    'WEBP',
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+  ],
 }
 
 ImageUpload.propTypes = {

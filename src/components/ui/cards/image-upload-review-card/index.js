@@ -15,7 +15,6 @@ const ImageUploadReviewCard = ({ image, collection }) => {
   useEffect(() => {
     async function upload() {
       const url = await uploadFile(image?.file, collection)
-      console.log(url)
     }
     upload()
   }, [image])
