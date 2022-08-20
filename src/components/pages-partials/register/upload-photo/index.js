@@ -17,7 +17,7 @@ const ImageInputAttributes = [
     id: 'coverImage',
     name: 'coverImage',
     text: 'Click to upload cover photo',
-    subinfo: 'Max 1920x1080 - 2MB',
+    subinfo: 'Max 3840x2160 - 4MB',
   },
 ]
 
@@ -48,17 +48,15 @@ const RegistrationUploadPhoto = () => {
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={onSubmit}>
-              <span className="inline-block w-full">
-                {ImageInputAttributes.map((inputAttribute) => (
-                  <ImageUploadDragAndDrop
-                    key={inputAttribute.id}
-                    id={inputAttribute.id}
-                    name={inputAttribute.name}
-                    text={inputAttribute.text}
-                    subinfo={inputAttribute.subinfo}
-                  />
-                ))}
-              </span>
+              {ImageInputAttributes.map((inputAttribute) => (
+                <ImageUploadDragAndDrop
+                  key={inputAttribute.id}
+                  id={inputAttribute.id}
+                  name={inputAttribute.name}
+                  text={inputAttribute.text}
+                  subinfo={inputAttribute.subinfo}
+                />
+              ))}
 
               <button
                 disabled={

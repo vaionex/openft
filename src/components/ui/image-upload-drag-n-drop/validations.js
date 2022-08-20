@@ -39,7 +39,7 @@ export const checkValidation = async (
     if (!checkImageType(file, acceptableFileTypes)) {
       resolve({
         type: 'imageType',
-        message: 'Image type is not supported',
+        message: 'File type is not supported, plase select PNG, JPG, WEBP',
       })
     } else {
       if (!(await checkImageSize(file, limit))) {

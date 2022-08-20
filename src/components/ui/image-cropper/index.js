@@ -1,21 +1,24 @@
-import { getCroppedImg } from '@/utils/cropImageUtils'
 import { useCallback, useState } from 'react'
 import Cropper from 'react-easy-crop'
 import ModalImgCropper from '../modal-img-cropper'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import blobToBase64 from '@/utils/blobToBase64'
+import blobDOMStringToBase64 from '@/utils/blobToBase64'
+import getCroppedImg from '@/utils/cropImageUtils'
 
 const ImageCropper = ({
   image,
-  filename,
   aspect,
   isCropping,
   setIsCropping,
+  setCroppedImageFile,
+  setCroppedImageUrl,
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
-  const [croppedImage, setCroppedImage] = useState(null)
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
@@ -23,18 +26,10 @@ const ImageCropper = ({
 
   const handleCroppedImage = useCallback(async () => {
     try {
-      const croppedImage = await getCroppedImg(image.src, croppedAreaPixels)
-      console.log('donee', { croppedImage })
-      setCroppedImage(croppedImage)
-
-      const storage = getStorage()
-
-      const storageRef = ref(storage, `${image.name}`)
-
-      uploadBytes(storageRef, croppedImage).then((snapshot) => {
-        console.log('Uploaded a blob or file!')
-        console.log(snapshot)
-      })
+      const { file, url } = await getCroppedImg(image.src, croppedAreaPixels)
+      setCroppedImageFile(file)
+      setCroppedImageUrl(url)
+      setIsCropping(false)
     } catch (e) {
       console.warn(e)
     }
@@ -72,9 +67,6 @@ const ImageCropper = ({
         />
       </div>
 
-      <div>
-        <img src={croppedImage} alt="" />
-      </div>
       <div className="flex flex-wrap justify-center gap-2 mt-10">
         <button className="min-w-[180px] btn-secondary" onClick={onClose}>
           Cancel
