@@ -4,15 +4,8 @@ import { CheckIcon } from '@heroicons/react/outline'
 import PropTypes from 'prop-types'
 
 const ModalImgCropper = ({ isOpen, handleOnClose, children }) => {
-  const [open, setOpen] = useState(isOpen)
-
-  const onClose = () => {
-    setOpen(false)
-    handleOnClose(false)
-  }
-
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10 " onClose={() => {}}>
         <Transition.Child
           as={Fragment}
@@ -27,7 +20,7 @@ const ModalImgCropper = ({ isOpen, handleOnClose, children }) => {
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
+          <div className="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -37,15 +30,8 @@ const ModalImgCropper = ({ isOpen, handleOnClose, children }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative px-4 pt-5 pb-4 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-2xl sm:w-full sm:p-6">
-                <div>
-                  {children}
-                  <div className="max-w-[40%] flex">
-                    <button className="w-full btn-primary" onClick={onClose}>
-                      Crop
-                    </button>
-                  </div>
-                </div>
+              <Dialog.Panel className="relative px-4 pt-5 pb-4 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-3xl sm:p-6">
+                <div className="relative">{children}</div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

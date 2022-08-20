@@ -1,16 +1,23 @@
-const image64ToImageCanvas = (image64, canvas, pixelCrop) => {
+const image64ToCanvas = (canvasRef, image64, pixelCrop) => {
+  const canvas = canvasRef // document.createElement('canvas');
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
+  const ctx = canvas.getContext('2d')
   const image = new Image()
   image.src = image64
-  image.onload = () => {
-    const { width, height } = image
-    const { x, y, width: cropWidth, height: cropHeight } = pixelCrop
-    const cropCanvas = document.createElement('canvas')
-    cropCanvas.width = cropWidth
-    cropCanvas.height = cropHeight
-    const ctx = cropCanvas.getContext('2d')
-    ctx.drawImage(image, x, y, width, height, 0, 0, cropWidth, cropHeight)
-    canvas.width = cropWidth
-    canvas.height = cropHeight
-    canvas.getContext('2d').drawImage(cropCanvas, 0, 0)
+  image.onload = function () {
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height,
+    )
   }
 }
+
+export default image64ToCanvas

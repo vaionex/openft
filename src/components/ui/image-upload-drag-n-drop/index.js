@@ -33,8 +33,8 @@ const ImageUploadDragAndDrop = ({
     id === 'profileImage' ? 1 * 1000 * 1000 : 2 * 1000 * 1000
 
   const IMAGE_RESOLUTION_LIMIT = {
-    width: id === 'profileImage' ? 400 : 1440,
-    height: id === 'profileImage' ? 400 : 900,
+    width: id === 'profileImage' ? 400 : 1920,
+    height: id === 'profileImage' ? 400 : 1080,
   }
 
   const validateImage = async (file) => {
@@ -52,17 +52,20 @@ const ImageUploadDragAndDrop = ({
 
     const errorObjects = await validateImage(imageFile)
 
-    console.log(errorObjects)
-
     if (!errorObjects) {
       const image = await imageFileToBase64(imageFile)
-      setSelectedImage(image)
+      setSelectedImage({
+        src: image,
+        name: imageFile.name,
+      })
+      setImageCategory(id)
+      setIsCropping(true)
     } else {
       setErrorMap(errorObjects)
     }
   }, [])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false,
   })
@@ -90,7 +93,7 @@ const ImageUploadDragAndDrop = ({
                 className="relative font-medium text-blue-600 bg-white rounded-md hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
               >
                 <span>{text}</span>
-                <input {...getInputProps()} />
+                <input accept="image/*" {...getInputProps()} />
               </label>
               <p className="pl-1">or drag and drop</p>
             </div>
@@ -103,8 +106,8 @@ const ImageUploadDragAndDrop = ({
 
         {isCropping && (
           <ImageCropper
-            src={selectedImage}
-            aspect={imageCategory === 'coverImage' ? 16 / 9 : 1}
+            image={selectedImage}
+            aspect={imageCategory === 'coverImage' ? 191 / 48 : 1}
             isCropping={isCropping}
             setIsCropping={setIsCropping}
           />
@@ -121,8 +124,7 @@ const ImageUploadDragAndDrop = ({
 ImageUploadDragAndDrop.defaultProps = {
   text: 'Click to upload',
   subinfo: '',
-  acceptableFileTypes:
-    'image/jpeg, image/jpg, image/png, image/gif, image/webp',
+  acceptableFileTypes: 'image/jpeg, image/png, image/webp',
 }
 
 ImageUploadDragAndDrop.propTypes = {

@@ -11,13 +11,13 @@ const ImageInputAttributes = [
     id: 'profileImage',
     name: 'profileImage',
     text: 'Click to upload profile photo',
-    subinfo: 'Max 400x400 - 500KB',
+    subinfo: 'Max 400x400 - 1MB',
   },
   {
     id: 'coverImage',
     name: 'coverImage',
     text: 'Click to upload cover photo',
-    subinfo: 'Max 1440x900 - 2MB',
+    subinfo: 'Max 1920x1080 - 2MB',
   },
 ]
 
@@ -26,8 +26,6 @@ const RegistrationUploadPhoto = () => {
   const router = useRouter()
 
   const { photoValues } = useSelector(registrationFormSelector)
-
-  console.log(photoValues, 'photoValues')
 
   const onSubmit = (data) => {
     console.log('data', data)

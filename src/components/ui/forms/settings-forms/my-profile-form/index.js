@@ -1,5 +1,5 @@
+import AvatarUpload from '@/components/ui/avatar-upload'
 import Checkbox from '@/components/ui/checkbox'
-import { AvatarUpload } from '@/components/ui/forms'
 import { InputMain } from '@/components/ui/inputs'
 import TextEditor from '@/components/ui/text-editor'
 import PropTypes from 'prop-types'
