@@ -6,6 +6,8 @@ import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { UploadBoxIcon, UploadIcon } from '@/components/common/icons'
+import { useSelector } from 'react-redux'
+import authSelector from '@/redux/selectors/auth'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -13,12 +15,8 @@ const navigation = [
   { name: 'Contribute', href: '/contribute' },
 ]
 
-const user = {
-  name: 'John Doe',
-  avatar: '/images/test/test-user-image.webp',
-}
-
 const Header = () => {
+  const { user, isAuthenticated } = useSelector(authSelector)
   return (
     <Popover as="header" className="relative">
       <div className="bg-transparent">
@@ -56,49 +54,49 @@ const Header = () => {
             </div>
           </div>
 
-          {/* for NOT logged in user */}
-          <div className="hidden md:flex md:items-center md:space-x-6">
-            <NextLink href="/login">
-              <a className="text-base font-medium hover:text-gradient-primary-hover">
-                Login
-              </a>
-            </NextLink>
-            <NextLink href="register">
-              <a className="btn-primary">Sign up</a>
-            </NextLink>
-          </div>
+          {!isAuthenticated ? (
+            <div className="hidden md:flex md:items-center md:space-x-6">
+              <NextLink href="/login">
+                <a className="text-base font-medium hover:text-gradient-primary-hover">
+                  Login
+                </a>
+              </NextLink>
+              <NextLink href="register">
+                <a className="btn-primary">Sign up</a>
+              </NextLink>
+            </div>
+          ) : (
+            <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
+              <li>
+                <button className="btn-secondary">
+                  <UploadBoxIcon className="w-6 h-6 mr-2" aria-hidden="true" />
+                  Upload
+                </button>
+              </li>
+              <li>
+                <ul className="flex items-center gap-1">
+                  <li className="inline-flex">
+                    <NextLink href="/user-settings">
+                      <a className="inline-block p-3 text-base font-medium bg-gray-50 hover:text-gradient-primary-hover">
+                        <CogIcon className="w-6 h-6" aria-hidden="true" />
+                      </a>
+                    </NextLink>
+                  </li>
+                  <li className="inline-flex">
+                    <NextLink href="/user-settings">
+                      <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">
+                        <BellIcon className="w-6 h-6" aria-hidden="true" />
+                      </a>
+                    </NextLink>
+                  </li>
+                </ul>
+              </li>
 
-          {/* for logged in user */}
-          {/* <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
-            <li>
-              <button className="btn-secondary">
-                <UploadBoxIcon className="w-6 h-6 mr-2" aria-hidden="true" />
-                Upload
-              </button>
-            </li>
-            <li>
-              <ul className="flex items-center gap-1">
-                <li className="inline-flex">
-                  <NextLink href="/user-settings">
-                    <a className="inline-block p-3 text-base font-medium bg-gray-50 hover:text-gradient-primary-hover">
-                      <CogIcon className="w-6 h-6" aria-hidden="true" />
-                    </a>
-                  </NextLink>
-                </li>
-                <li className="inline-flex">
-                  <NextLink href="/user-settings">
-                    <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">
-                      <BellIcon className="w-6 h-6" aria-hidden="true" />
-                    </a>
-                  </NextLink>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <DropdownUser user={user} />
-            </li>
-          </ul> */}
+              <li>
+                <DropdownUser user={user} />
+              </li>
+            </ul>
+          )}
         </nav>
       </div>
 

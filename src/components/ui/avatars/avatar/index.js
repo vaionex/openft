@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
 
 const Avatar = ({ user, className }) => {
+  console.log(user)
   return (
     <div
       className={twMerge(
@@ -11,10 +12,10 @@ const Avatar = ({ user, className }) => {
       )}
     >
       <Image
-        src={user.avatar}
+        src={user?.profileImage}
         className=""
         layout="fill"
-        alt={user.name}
+        alt={user?.name}
         objectFit="cover"
       />
     </div>

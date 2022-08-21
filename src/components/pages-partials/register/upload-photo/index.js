@@ -4,7 +4,7 @@ import { CameraIcon } from '@heroicons/react/outline'
 import RegistrationLayout from '@/components/layout/registration-layout'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import ImageUploadDragAndDrop from '@/components/ui/image-upload-drag-n-drop'
-import { useState } from 'react'
+import { setCurrentStep } from '@/redux/slices/registration-form'
 
 const ImageInputAttributes = [
   {
@@ -22,13 +22,15 @@ const ImageInputAttributes = [
 ]
 
 const RegistrationUploadPhoto = () => {
-  const dispatch = useDispatch()
   const router = useRouter()
-
+  const dispatch = useDispatch()
   const { photoValues } = useSelector(registrationFormSelector)
 
-  const onSubmit = (data) => {
-    console.log('data', data)
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    dispatch(setCurrentStep(4))
+    router.push('/register/add-socials')
   }
 
   return (
@@ -60,8 +62,8 @@ const RegistrationUploadPhoto = () => {
 
               <button
                 disabled={
-                  photoValues.profileImage === '' ||
-                  photoValues.coverImage === ''
+                  photoValues?.profileImage === null ||
+                  photoValues?.coverImage === null
                 }
                 type="submit"
                 className="w-full font-semibold btn-primary"

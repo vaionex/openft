@@ -4,18 +4,12 @@ import ModalImgCropper from '../modal-img-cropper'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import blobToBase64 from '@/utils/blobToBase64'
-import blobDOMStringToBase64 from '@/utils/blobToBase64'
 import getCroppedImg from '@/utils/cropImageUtils'
+import { useDispatch } from 'react-redux'
+import { setPhotoValues } from '@/redux/slices/registration-form'
 
-const ImageCropper = ({
-  image,
-  aspect,
-  isCropping,
-  setIsCropping,
-  setCroppedImageFile,
-  setCroppedImageUrl,
-}) => {
+const ImageCropper = ({ id, image, aspect, isCropping, setIsCropping }) => {
+  const dispatch = useDispatch()
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
@@ -25,10 +19,28 @@ const ImageCropper = ({
   }, [])
 
   const handleCroppedImage = useCallback(async () => {
+    const src = image.src
+    const ext = image.ext
+    const name = `${uuidv4()}.${ext}`
+    const type = id
     try {
-      const { file, url } = await getCroppedImg(image.src, croppedAreaPixels)
-      setCroppedImageFile(file)
-      setCroppedImageUrl(url)
+      const { file, url } = await getCroppedImg(
+        { src, ext, name, type },
+        croppedAreaPixels,
+      )
+      dispatch(
+        setPhotoValues({
+          [id]: {
+            src,
+            srcCropped: url,
+            name: image.name,
+            ext: ext,
+            size: file.size,
+            type: id,
+            croppedAreaPixels,
+          },
+        }),
+      )
       setIsCropping(false)
     } catch (e) {
       console.warn(e)

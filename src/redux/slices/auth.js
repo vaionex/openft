@@ -40,6 +40,7 @@ export const register = createAsyncThunk(
   async (request, thunkAPI) => {
     try {
       const user = await firebaseRegister(request)
+      console.log(user)
       if (user && !user?.error) return user
       else throw user?.error
     } catch (error) {
@@ -53,7 +54,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action) => {
-      state.user = action.payload
+      state.user = { ...state.user, ...action.payload }
     },
     setAuthenticated: (state) => {
       state.isAuthenticated = true

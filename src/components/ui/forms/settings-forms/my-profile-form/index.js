@@ -36,7 +36,7 @@ const MyProfileForm = ({ profile }) => {
             sublabel="This will be displayed on your profile."
           />
           <div className="sm:col-span-2">
-            <AvatarUpload size={64} tempAvatar={profile.avatar} />
+            <AvatarUpload size={64} tempAvatar={profile.profileImage} />
           </div>
         </InputMain>
 

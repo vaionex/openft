@@ -12,8 +12,8 @@ const initialState = {
     confirmPassword: 'eeeeee',
   },
   photoValues: {
-    coverImage: '',
-    profileImage: '',
+    coverImage: null,
+    profileImage: null,
   },
   socialsValues: {
     facebook: '',
@@ -34,13 +34,38 @@ const registrationFormSlice = createSlice({
       state.passwordValues = action.payload
     },
     setPhotoValues: (state, action) => {
-      state.photoValues = action.payload
+      state.photoValues = { ...state.photoValues, ...action.payload }
     },
-    setAddSocialsValues: (state, action) => {
+    clearPhotoValues: (state, action) => {
+      state.photoValues[action.payload] = null
+    },
+    setSocialsValues: (state, action) => {
       state.socialsValues = action.payload
     },
     setCurrentStep: (state, action) => {
       state.currentStep = action.payload
+    },
+    clearRegistrationForm: (state) => {
+      state.detailsValues = {
+        name: '',
+        username: '',
+        email: '',
+        role: '',
+      }
+      state.passwordValues = {
+        password: '',
+        confirmPassword: '',
+      }
+      state.photoValues = {
+        coverImage: null,
+        profileImage: null,
+      }
+      state.socialsValues = {
+        facebook: '',
+        instagram: '',
+        website: '',
+      }
+      state.currentStep = 1
     },
   },
 })
@@ -52,4 +77,6 @@ export const {
   setPhotoValues,
   setSocialsValues,
   setCurrentStep,
+  clearPhotoValues,
+  clearRegistrationForm,
 } = registrationFormSlice.actions

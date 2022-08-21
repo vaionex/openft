@@ -31,10 +31,10 @@ const RegistrationLayout = ({ children }) => {
                 </a>
               </NextLink>
             </div>
-            <div className="flex flex-col h-full py-12 sm:px-6 lg:px-8">
+            <div className="flex flex-col h-full py-12 sm:gap-8 sm:px-6 lg:px-8">
               <StepsContainer stepsType="box" />
-              {children}
 
+              {children}
               <div className="flex flex-col justify-end pt-10 sm:pt-0">
                 <StepsContainer stepsType="line" />
               </div>

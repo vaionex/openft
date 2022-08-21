@@ -5,28 +5,34 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
-import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
-import { UsersIcon } from '@/components/common/icons'
+import { register } from '@/redux/slices/auth'
 import RegistrationLayout from '@/components/layout/registration-layout'
+import { InputMain } from '@/components/ui/inputs'
+import { UsersCircleIcon } from '@/components/common/icons'
+import { Controller, useForm } from 'react-hook-form'
+import registrationFormSelector from '@/redux/selectors/registration-form'
+import { setSocialsValues } from '@/redux/slices/registration-form'
+import { firebaseUploadImage } from '@/firebase/utils'
+import authSelector from '@/redux/selectors/auth'
+import getCroppedImg from '@/utils/cropImageUtils'
+import { twMerge } from 'tailwind-merge'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 
 const inputAttributes = [
   {
     id: 'instagram',
     type: 'text',
     addon: 'http://instagram.com/',
-    placeholder: 'name',
+    placeholder: 'username',
     name: 'instagram',
-    label: 'Instagram',
   },
   {
     id: 'facebook',
     type: 'text',
     addon: 'http://facebook.com/',
-    placeholder: 'name',
+    placeholder: 'username',
     name: 'facebook',
-    label: 'Facebook',
   },
   {
     id: 'website',
@@ -34,35 +40,69 @@ const inputAttributes = [
     addon: 'http://',
     placeholder: 'yourwebsite.com',
     name: 'website',
-    label: 'Website',
   },
 ]
 
 function RegistrationAddSocials() {
-  const dispatch = useDispatch()
   const router = useRouter()
-  const auth = useSelector((state) => state.auth)
-
-  const [formData, setFormData] = useState({
-    name: '',
-    password: '',
+  const dispatch = useDispatch()
+  const { user, isPending, isAuthenticated } = useSelector(authSelector)
+  const registrationValues = useSelector(registrationFormSelector)
+  const { photoValues } = registrationValues
+  const { control, handleSubmit, formState } = useForm({
+    mode: 'onBlur',
+    defaultValues: registrationValues.socialValues,
   })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
+  const onSubmit = async (data) => {
+    dispatch(setSocialsValues(data))
+
+    const dataForServer = {
+      ...registrationValues.detailsValues,
+      ...registrationValues.passwordValues,
+      ...data,
+    }
+
+    const coverImageForUpload = await getCroppedImg(
+      photoValues.coverImage,
+      photoValues.coverImage.croppedAreaPixels,
+    )
+    const profileImageForUpload = await getCroppedImg(
+      photoValues.profileImage,
+      photoValues.profileImage.croppedAreaPixels,
+    )
+
+    const returnData = await dispatch(register(dataForServer))
+    await firebaseUploadImage({
+      user: returnData.payload,
+      imageFile: coverImageForUpload.file,
+      imageType: 'coverImage',
+      ext: photoValues.coverImage.ext,
+    })
+    await firebaseUploadImage({
+      user: returnData.payload,
+      imageFile: profileImageForUpload.file,
+      imageType: 'profileImage',
+      ext: photoValues.profileImage.ext,
+    })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log(e)
-  }
+  useEffect(() => {
+    if (isPending) {
+      document.body.style.pointerEvents = 'none'
+      document.body.style.touchAction = 'none'
+    }
+  }, [isPending])
+
+  // useEffect(() => {
+  //   console.log(photoDatas)
+  // }, [photoDatas])
 
   return (
     <RegistrationLayout>
       <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <UsersIcon className="w-auto mx-auto rounded-full h-14" />
+          <UsersCircleIcon className="w-auto mx-auto rounded-full h-14" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
             Add your socials
           </h2>
@@ -71,37 +111,48 @@ function RegistrationAddSocials() {
             details.
           </p>
         </div>
-        <div className="flex justify-center pt-2">
-          {auth.errorMessage && (
-            <Alert message={auth.errorMessage} type="error" />
-          )}
-        </div>
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6">
               {inputAttributes.map((inputAttribute) => (
-                <InputMain key={inputAttribute.name}>
-                  <InputMain.Input
-                    variant="add-on"
-                    addon={inputAttribute.addon}
-                    className="sm:col-span-2"
-                    value={formData[inputAttribute.name]}
-                    {...inputAttribute}
+                <InputMain
+                  key={inputAttribute.name}
+                  className="relative pb-0 border-none"
+                >
+                  <Controller
+                    name={inputAttribute.name}
+                    control={control}
+                    render={({ field }) => (
+                      <InputMain.Input
+                        id={inputAttribute.name}
+                        variant="add-on"
+                        addon={inputAttribute.addon}
+                        placeholder={inputAttribute.placeholder}
+                        className="mb-8 sm:mb-4"
+                        type={inputAttribute.type}
+                        {...field}
+                      />
+                    )}
                   />
                 </InputMain>
               ))}
 
               <div>
                 <button
-                  disabled={auth.isPending ? true : false}
-                  type="submit"
-                  className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                    auth.isPending
-                      ? 'bg-gray-100'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                  disabled={isPending}
+                  type="button"
+                  onClick={handleSubmit(onSubmit)}
+                  className={twMerge(
+                    'w-full btn-primary transition-all duration-300 ease-in-out',
+                    isPending && 'cursor-not-allowed',
+                  )}
                 >
-                  Finish
+                  <span className="relative flex items-center">
+                    Finish
+                    {isPending && (
+                      <span className="absolute -right-10 spinner-small"></span>
+                    )}
+                  </span>
                 </button>
               </div>
             </form>

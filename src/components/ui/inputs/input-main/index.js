@@ -99,7 +99,6 @@ InputMain.Input = function InputMainInput(
           />
         </div>
       )}
-
       {variant === 'add-on-reverse' && !!addon && (
         <div className="flex mt-1 rounded-md shadow-sm">
           <div className="relative flex items-stretch flex-grow focus-within:z-10">
@@ -122,7 +121,6 @@ InputMain.Input = function InputMainInput(
           </button>
         </div>
       )}
-
       {variant === 'default' && (
         <div className="relative flex rounded-md shadow-sm">
           <input
@@ -132,6 +130,7 @@ InputMain.Input = function InputMainInput(
               'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200  rounded-md',
               inputClassName,
             )}
+            onChange={props.onChange}
             ref={ref}
             {...props}
           />
@@ -158,7 +157,6 @@ InputMain.Input = function InputMainInput(
           )}
         </div>
       )}
-
       {additionalCheckbox && additionalCheckbox}
     </div>
   )

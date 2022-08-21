@@ -8,19 +8,19 @@ import { firebaseAuth } from '@/firebase/init'
 function GetCurrentUser() {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    try {
-      onIdTokenChanged(firebaseAuth, (user) => {
-        if (user) {
-          console.log('get token id, iiiiiii')
-          apiConfig.defaults.headers.common['authToken'] = user.accessToken
-          getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
-        }
-      })
-    } catch (err) {
-      console.log('err ', err.message, err.response)
-    }
-  }, [])
+  // useEffect(() => {
+  //   try {
+  //     onIdTokenChanged(firebaseAuth, (user) => {
+  //       if (user) {
+  //         console.log('get token id, iiiiiii')
+  //         apiConfig.defaults.headers.common['authToken'] = user.accessToken
+  //         getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
+  //       }
+  //     })
+  //   } catch (err) {
+  //     console.log('err ', err.message, err.response)
+  //   }
+  // }, [])
 
   return <></>
 }

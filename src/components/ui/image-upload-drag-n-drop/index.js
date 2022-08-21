@@ -1,8 +1,10 @@
 import { UploadIcon } from '@/components/common/icons'
-import imageFileToBase64 from '@/utils/imageFileToBase64'
+import registrationFormSelector from '@/redux/selectors/registration-form'
+import { clearPhotoValues } from '@/redux/slices/registration-form'
 import PropTypes from 'prop-types'
-import { forwardRef, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useDispatch, useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import ImageUploadReviewCard from '../cards/image-upload-review-card'
 import ImageCropper from '../image-cropper'
@@ -16,18 +18,16 @@ const ImageUploadDragAndDrop = ({
   acceptableFileTypes,
   ...props
 }) => {
+  const dispatch = useDispatch()
+  const { photoValues } = useSelector(registrationFormSelector)
   const [selectedImage, setSelectedImage] = useState('')
-  const [imageCategory, setImageCategory] = useState('')
-  const [croppedImageFile, setCroppedImageFile] = useState(null)
-  const [croppedImageUrl, setCroppedImageUrl] = useState(null)
   const [isCropping, setIsCropping] = useState(false)
   const [errorMap, setErrorMap] = useState(null)
 
-  const cleanUp = () => {
+  const cleanUpState = () => {
     setSelectedImage(null)
-    setCroppedImageFile(null)
-    setImageCategory('')
     setErrorMap(null)
+    dispatch(clearPhotoValues(id))
   }
 
   const IMAGE_SIZE_LIMIT =
@@ -48,20 +48,18 @@ const ImageUploadDragAndDrop = ({
   }
 
   const onDrop = useCallback(async (files) => {
-    cleanUp()
+    cleanUpState()
     const imageFile = files[0]
 
     const errorObjects = await validateImage(imageFile)
 
     if (!errorObjects) {
-      console.log(imageFile)
       const createFileUrl = URL.createObjectURL(imageFile)
       setSelectedImage({
         src: createFileUrl,
-        name: imageFile.name.split('.')[0],
-        ext: imageFile.name.split('.')[1],
+        name: imageFile.name,
+        ext: imageFile.name.split(/\.(?=[^\.]+$)/)[1],
       })
-      setImageCategory(id)
       setIsCropping(true)
     } else {
       setErrorMap(errorObjects)
@@ -75,17 +73,8 @@ const ImageUploadDragAndDrop = ({
 
   return (
     <>
-      {croppedImageFile && croppedImageUrl ? (
-        <ImageUploadReviewCard
-          filename={
-            selectedImage && `${selectedImage.name}.${selectedImage.ext}`
-          }
-          filesize={croppedImageFile?.size}
-          imageFile={croppedImageFile}
-          imageUrl={croppedImageUrl}
-          collection={imageCategory}
-          clearImage={cleanUp}
-        />
+      {photoValues[id] ? (
+        <ImageUploadReviewCard id={id} cleanUpState={cleanUpState} />
       ) : (
         <>
           <div
@@ -106,7 +95,7 @@ const ImageUploadDragAndDrop = ({
                     className="relative font-medium text-blue-600 bg-white rounded-md hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
                   >
                     <span>{text}</span>
-                    <input accept="image/*" {...getInputProps()} />
+                    <input accept={acceptableFileTypes} {...getInputProps()} />
                   </label>
                   <p className="pl-1">or drag and drop</p>
                 </div>
@@ -122,12 +111,11 @@ const ImageUploadDragAndDrop = ({
 
             {isCropping && (
               <ImageCropper
+                id={id}
                 image={selectedImage}
-                aspect={imageCategory === 'coverImage' ? 191 / 48 : 1}
+                aspect={id === 'coverImage' ? 191 / 48 : 1}
                 isCropping={isCropping}
                 setIsCropping={setIsCropping}
-                setCroppedImageFile={setCroppedImageFile}
-                setCroppedImageUrl={setCroppedImageUrl}
               />
             )}
           </div>

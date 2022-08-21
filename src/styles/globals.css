@@ -32,6 +32,29 @@
     @apply inline-flex items-center justify-center px-4 py-3 font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:bg-slate-300 disabled:opacity-50 disabled:pointer-events-none;
   }
 
+  .spinner-small {
+    @apply block w-4 h-4 mx-2 ease-linear border-2 border-t-2 border-transparent rounded-full border-t-white;
+    animation: spinner 1s linear infinite;
+  }
+
+  @-webkit-keyframes spinner {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
   .pale-gradient {
     background: linear-gradient(
       180deg,

@@ -18,7 +18,7 @@ import {
   updateEmail,
 } from 'firebase/auth'
 import store from '@/redux/store'
-import { setUserData } from '@/redux/slices/auth'
+import { setAuthenticated, setUserData } from '@/redux/slices/auth'
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -45,37 +45,49 @@ const firebaseLogin = async ({ email, password }) => {
   }
 }
 
-const firebaseRegister = async ({ username, email, password }) => {
+const firebaseRegister = async (data) => {
+  const { email, password, username, name } = data
   try {
-    const userInfos = await createUserWithEmailAndPassword(
+    const response = await createUserWithEmailAndPassword(
       firebaseAuth,
       email,
       password,
-    ).then(async (result) => {
-      const user = result.user
-      const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
-      if (!userInfoFromDb) {
-        const infos = {
-          displayName: `${username}`,
-          email: user.email,
-          uid: user.uid,
-          photoPATH: null,
-          createdAt: user.metadata.creationTime,
-        }
-        await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-        return {
-          name: `${username}`,
-          uid: user.uid,
-          email: user.email,
-          photoURL: user.photoURL,
-          accessToken: user.accessToken,
-        }
+    )
+
+    const { user } = response
+
+    const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
+
+    if (!userInfoFromDb) {
+      const infos = {
+        displayName: username,
+        name: name,
+        email: user.email,
+        uid: user.uid,
+        createdAt: user.metadata.creationTime,
+        profileImage: null,
+        coverImage: null,
+        socialLinks: {
+          facebook: null,
+          twitter: null,
+          website: null,
+        },
       }
-    })
-    return { ...userInfos }
+
+      await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+      return {
+        name: user.name,
+        uid: user.uid,
+        email: user.email,
+        accessToken: user.accessToken,
+        photoURL: user.photoURL,
+      }
+    }
+
+    return user
   } catch (error) {
     console.log(error)
-    return { error: 'Email has already been taken.' }
+    return { error: error.message }
   }
 }
 
@@ -87,14 +99,9 @@ const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
-      store.dispatch(
-        setUserData({
-          name: user.displayName,
-          uid: user.uid,
-          email: user.email,
-          photoURL: user.photoURL,
-        }),
-      )
+      console.log(user)
+      store.dispatch(setAuthenticated())
+      store.dispatch(setUserData(user))
     } else {
       console.log('not auth')
     }
@@ -173,42 +180,42 @@ const firebaseResetPassword = async (user, newPassword) => {
   }
 }
 
-const firebaseUpdateProfilePicture = async ({ user, file, filePath }) => {
-  if (user && file && filePath) {
+const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
+  debugger
+  if (user && imageFile) {
+    const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
+    const imagePath = `${imageFolder}/${user.uid}.${ext}`
     const storage = getStorage()
     const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
     const userRef = doc(firebaseDb, 'users', user.uid)
-    const fileRef = ref(storage, filePath)
-    const oldRef = ref(storage, userInfoFromDb.photoPATH)
+    const fileRef = ref(storage, imagePath)
+    const oldRef = ref(storage, userInfoFromDb[imageType])
 
-    await uploadBytes(fileRef, file).then(async (snapshot) => {
-      const firebaseProfileURL = await getDownloadURL(snapshot.ref)
+    await uploadBytes(fileRef, imageFile).then(async () => {
+      const firebaseProfileURL = await getDownloadURL(ref(storage, imagePath))
       await updateProfile(user, {
-        photoURL: firebaseProfileURL,
+        [imageType]: firebaseProfileURL,
       }).then(async () => {
-        if (userInfoFromDb.photoPATH) {
+        if (userInfoFromDb[imageType]) {
           deleteObject(oldRef).catch((error) => console.log(error))
         }
         store.dispatch(
           setUserData({
-            name: userInfoFromDb.displayName,
-            uid: userInfoFromDb.uid,
-            email: userInfoFromDb.email,
-            photoURL: firebaseProfileURL,
+            [imageType]: firebaseProfileURL,
           }),
         )
         await updateDoc(userRef, {
           ...userInfoFromDb,
-          photoPATH: filePath,
+          [imageType]: firebaseProfileURL,
         })
       })
     })
-    return { message: 'successful' }
+    return { success: 'Image uploaded successfully.' }
   }
   return { message: 'fail' }
 }
 
-const firebaseUpdateProfilDetails = async ({
+const firebaseUpdateProfileDetails = async ({
   user,
   password,
   username,
@@ -244,7 +251,7 @@ const firebaseUpdateProfilDetails = async ({
   }
 }
 
-const updateUserEmail = async (user, email, photoURL) => {
+const updateUserEmail = async (user, email) => {
   try {
     await updateEmail(user, email)
     store.dispatch(
@@ -252,7 +259,6 @@ const updateUserEmail = async (user, email, photoURL) => {
         name: user.displayName,
         uid: user.uid,
         email: email,
-        photoURL: photoURL,
       }),
     )
 
@@ -270,7 +276,7 @@ export {
   firebaseRegister,
   firebaseGetAuthorizedUser,
   firebaseLogout,
-  firebaseUpdateProfilePicture,
-  firebaseUpdateProfilDetails,
+  firebaseUploadImage,
+  firebaseUpdateProfileDetails,
   firebaseLoginWithGoogle,
 }
