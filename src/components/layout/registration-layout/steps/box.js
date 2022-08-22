@@ -1,7 +1,7 @@
 import { CheckIcon } from '@heroicons/react/solid'
 import { twMerge } from 'tailwind-merge'
 
-const BoxSteps = ({ list, goToStep }) => {
+const BoxSteps = ({ list, goTo }) => {
   return (
     <div className="block md:hidden lg:border-t lg:border-b lg:border-gray-200">
       <nav className="px-4 mx-auto max-w-7xl sm:px-0" aria-label="Progress">
@@ -20,9 +20,7 @@ const BoxSteps = ({ list, goToStep }) => {
                     : 'pointer-events-none cursor-default touch-none',
                 )}
                 onClick={
-                  step.status === 'completed'
-                    ? () => goToStep(step.id)
-                    : () => {}
+                  step.status === 'completed' ? () => goTo(step.id) : () => {}
                 }
               >
                 <span aria-current="step">

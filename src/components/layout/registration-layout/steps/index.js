@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react'
 import LineSteps from './line'
 import BoxSteps from './box'
 import CircleSteps from './circle'
-import { useSelector } from 'react-redux'
-import registrationFormSelector from '@/redux/selectors/registration-form'
 
 const steps = [
   {
@@ -62,13 +60,17 @@ const RegistrationSteps = ({ stepsType }) => {
     setStepList(newStepList)
   }, [currentStep])
 
+  const goTo = (step) => {
+    router.push(`${router.pathname}?step=${step}`)
+  }
+
   switch (stepsType) {
     case 'line':
-      return <LineSteps list={stepList} />
+      return <LineSteps list={stepList} goTo={goTo} />
     case 'box':
-      return <BoxSteps list={stepList} />
+      return <BoxSteps list={stepList} goTo={goTo} />
     case 'circle':
-      return <CircleSteps list={stepList} />
+      return <CircleSteps list={stepList} goTo={goTo} />
     default:
       return null
   }

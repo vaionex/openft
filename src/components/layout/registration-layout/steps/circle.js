@@ -1,7 +1,7 @@
 import { CheckIcon } from '@heroicons/react/solid'
 import { twMerge } from 'tailwind-merge'
 
-const CircleSteps = ({ list, goToStep }) => {
+const CircleSteps = ({ list, goTo }) => {
   return (
     <nav aria-label="Progress">
       <ol role="list" className="overflow-hidden">
@@ -16,7 +16,7 @@ const CircleSteps = ({ list, goToStep }) => {
                 : 'pointer-events-none cursor-default',
             )}
             onClick={
-              step.status === 'completed' ? () => goToStep(step.id) : () => {}
+              step.status === 'completed' ? () => goTo(step.id) : () => {}
             }
           >
             {step.id !== list.length ? (

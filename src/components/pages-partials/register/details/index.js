@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import RegistrationLayout from '@/components/layout/registration-layout'
 import { useForm, Controller } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import * as yup from 'yup'
@@ -40,7 +38,6 @@ const validationSchema = yup.object({
 })
 
 function RegistrationDetails({ goToStep }) {
-  const router = useRouter()
   const dispatch = useDispatch()
   const [isEmailInUse, setIsEmailInUse] = useState(false)
   const { detailsValues } = useSelector(registrationFormSelector)
@@ -52,7 +49,7 @@ function RegistrationDetails({ goToStep }) {
     resolver,
   })
 
-  const { isSubmitting, isValid, errors, values } = formState
+  const { errors } = formState
 
   const onSubmit = (data) => {
     dispatch(setDetailsValues(data))

@@ -1,13 +1,9 @@
 import Head from 'next/head'
 import NextLink from 'next/link'
 import { Logo } from '@/components/common/svgs'
-
-import pageTransitionVariants from '@/animations/page-transition'
 import PropTypes from 'prop-types'
 import RegistrationPageSidebar from './sidebar'
-import { useRouter } from 'next/router'
 import RegistrationSteps from './steps'
-import { useEffect } from 'react'
 
 const RegistrationLayout = ({ children }) => {
   return (

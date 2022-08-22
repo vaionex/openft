@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-export default function LineSteps({ list, goToStep }) {
+export default function LineSteps({ list, goTo }) {
   return (
     <nav className="px-4 sm:px-0" aria-label="Progress">
       <ol role="list" className="flex max-w-md mx-auto space-x-8 space-y-0 ">
@@ -14,7 +14,7 @@ export default function LineSteps({ list, goToStep }) {
                 : 'pointer-events-none cursor-default',
             )}
             onClick={
-              step.status === 'completed' ? () => goToStep(step.id) : () => {}
+              step.status === 'completed' ? () => goTo(step.id) : () => {}
             }
           >
             <span
