@@ -1,5 +1,5 @@
+import { firebaseLogout } from '@/firebase/utils'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
 import React, { Fragment } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { Avatar } from '../avatars'
@@ -42,7 +42,7 @@ const DropdownUser = ({ user }) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    type="submit"
+                    onClick={() => firebaseLogout()}
                     className={twMerge(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full text-left px-4 py-2 text-sm',

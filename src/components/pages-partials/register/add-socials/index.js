@@ -85,6 +85,8 @@ function RegistrationAddSocials({ goToStep }) {
       imageType: 'profileImage',
       ext: photoValues.profileImage.ext,
     })
+
+    router.push('/')
   }
 
   useEffect(() => {
@@ -139,7 +141,7 @@ function RegistrationAddSocials({ goToStep }) {
               <button
                 type="button"
                 className="w-full font-semibold btn-secondary"
-                onClick={(e) => goToStep(3)}
+                onClick={() => goToStep(3)}
               >
                 Back
               </button>

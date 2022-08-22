@@ -99,7 +99,6 @@ const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
-      console.log(user)
       store.dispatch(setAuthenticated())
       store.dispatch(setUserData(user))
     } else {
@@ -181,7 +180,6 @@ const firebaseResetPassword = async (user, newPassword) => {
 }
 
 const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
-  debugger
   if (user && imageFile) {
     const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
     const imagePath = `${imageFolder}/${user.uid}.${ext}`

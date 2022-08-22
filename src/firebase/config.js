@@ -5,20 +5,16 @@ let config
 
 if (envMODE === 'DEV') {
   config = {
-    apiKey: 'AIzaSyBm1PRFUgyethkZdRHCkjZ2IJh5PQiD0hg',
-    authDomain: 'openft-98e94.firebaseapp.com',
-    projectId: 'openft-98e94',
-    storageBucket: 'openft-98e94.appspot.com',
-    messagingSenderId: '635036232353',
-    appId: '1:635036232353:web:53d0930c0a1a309f801ee0',
-    measurementId: 'G-NRVT06LPJT',
+    apiKey: 'AIzaSyBiRif-fL1DXYBOYXERmpSKRiODxt8GPTs',
+    authDomain: 'for-my-test-7c54d.firebaseapp.com',
+    projectId: 'for-my-test-7c54d',
+    storageBucket: 'for-my-test-7c54d.appspot.com',
+    messagingSenderId: '12348669238',
+    appId: '1:12348669238:web:3e349cd50aa5cb0b808797',
   }
 
-  storageBucket =
-    'https://firebasestorage.googleapis.com/v0/b/openft-98e94.appspot.com/o/'
-
-  apiConfig.defaults.headers.common['serviceId'] =
-    '9cf81e50-eeb9-40dd-a790-10a0813b48b5'
+  // apiConfig.defaults.headers.common['serviceId'] =
+  //   '9cf81e50-eeb9-40dd-a790-10a0813b48b5'
 }
 
 export default config

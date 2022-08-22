@@ -52,7 +52,7 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
 
             <div className="flex gap-4">
               <button
-                type="submit"
+                type="button"
                 className="w-full font-semibold btn-secondary"
                 onClick={() => goToStep(2)}
               >
@@ -63,7 +63,7 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
                   photoValues?.profileImage === null ||
                   photoValues?.coverImage === null
                 }
-                type="submit"
+                type="button"
                 className="w-full font-semibold btn-primary"
                 onClick={() => goToStep(4)}
               >

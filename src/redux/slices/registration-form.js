@@ -2,14 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   detailsValues: {
-    name: 'eeeee',
-    username: 'eeee',
-    email: 'ee@ee.com',
+    name: '',
+    username: '',
+    email: '',
     role: '',
   },
   passwordValues: {
-    password: 'eeeeee',
-    confirmPassword: 'eeeeee',
+    password: '',
+    confirmPassword: '',
   },
   photoValues: {
     coverImage: null,

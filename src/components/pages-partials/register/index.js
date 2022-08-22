@@ -8,36 +8,19 @@ import RegistrationUploadPhoto from './upload-photo'
 
 const RegistrationFormMain = () => {
   const router = useRouter()
-  const step = router.query.step ?? router.pathname
-  const stepList = ['details', 'choose-password', 'upload-photo', 'add-socials']
+  const step = router.query.step ?? '1'
 
   const goToStep = (step) => {
     router.push(`${router.pathname}?step=${step}`)
   }
 
-  useEffect(() => {
-    if (stepList.length < step) {
-      router.push('/')
-    }
-
-    if (router.asPath === '/register') {
-      router.replace('/register?step=1')
-    }
-  }, [])
-
   const renderComponent = () => {
-    switch (step) {
-      case '1':
-        return <RegistrationDetails goToStep={goToStep} />
-      case '2':
-        return <RegistrationChoosePassword goToStep={goToStep} />
-      case '3':
-        return <RegistrationUploadPhoto goToStep={goToStep} />
-      case '4':
-        return <RegistrationAddSocials goToStep={goToStep} />
-      default:
-        return <RegistrationDetails goToStep={goToStep} />
-    }
+    if (step === '1') return <RegistrationDetails goToStep={goToStep} />
+    if (step === '2') return <RegistrationChoosePassword goToStep={goToStep} />
+    if (step === '3') return <RegistrationUploadPhoto goToStep={goToStep} />
+    if (step === '4') return <RegistrationAddSocials goToStep={goToStep} />
+
+    router.push('/')
   }
 
   return (
