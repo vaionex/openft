@@ -1,16 +1,10 @@
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-
-import Alert from '@/components/ui/alert'
 import RegistrationLayout from '@/components/layout/registration-layout'
-import authSelector from '@/redux/selectors/auth'
 import { useForm, Controller } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import * as yup from 'yup'
-import {
-  setCurrentStep,
-  setDetailsValues,
-} from '@/redux/slices/registration-form'
+import { setDetailsValues } from '@/redux/slices/registration-form'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { InputMain } from '@/components/ui/inputs'
 import { UserCircleIcon } from '@/components/common/icons'
@@ -45,7 +39,7 @@ const validationSchema = yup.object({
     .email('Email is invalid'),
 })
 
-function RegistrationDetails() {
+function RegistrationDetails({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
   const [isEmailInUse, setIsEmailInUse] = useState(false)
@@ -62,60 +56,56 @@ function RegistrationDetails() {
 
   const onSubmit = (data) => {
     dispatch(setDetailsValues(data))
-    router.push('/register/choose-password')
-    dispatch(setCurrentStep(2))
+
+    goToStep(2)
   }
 
   return (
-    <RegistrationLayout>
-      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <UserCircleIcon className="w-auto mx-auto rounded-full h-14" />
-          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Your details
-          </h2>
-          <p className="mt-4 text-center">
-            Will be displayed on your profile and <br /> visible to the public
-          </p>
-        </div>
-        <div className="w-full mt-2 sm:mx-auto md:max-w-md">
-          <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              {inputAttributes.map((inputAttribute) => (
-                <InputMain
-                  key={inputAttribute.name}
-                  className="relative pb-0 border-none"
-                >
-                  <Controller
-                    name={inputAttribute.name}
-                    control={control}
-                    render={({ field }) => (
-                      <InputMain.Input
-                        id={inputAttribute.name}
-                        placeholder={inputAttribute.placeholder}
-                        className="mb-8 sm:mb-4"
-                        type={inputAttribute.type}
-                        {...field}
-                      />
-                    )}
-                  />
-                  <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
-                    {errors[inputAttribute.name]?.message}
-                    {inputAttribute.name === 'email' && isEmailInUse}
-                  </span>
-                </InputMain>
-              ))}
-              <button
-                type="submit"
-                className="w-full font-semibold btn-primary"
+    <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <UserCircleIcon className="w-auto mx-auto rounded-full h-14" />
+        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+          Your details
+        </h2>
+        <p className="mt-4 text-center">
+          Will be displayed on your profile and <br /> visible to the public
+        </p>
+      </div>
+      <div className="w-full mt-2 sm:mx-auto md:max-w-md">
+        <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            {inputAttributes.map((inputAttribute) => (
+              <InputMain
+                key={inputAttribute.name}
+                className="relative pb-0 border-none"
               >
-                Continue
-              </button>
-            </form>
-          </div>
+                <Controller
+                  name={inputAttribute.name}
+                  control={control}
+                  render={({ field }) => (
+                    <InputMain.Input
+                      id={inputAttribute.name}
+                      placeholder={inputAttribute.placeholder}
+                      className="mb-8 sm:mb-4"
+                      type={inputAttribute.type}
+                      {...field}
+                    />
+                  )}
+                />
+                <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
+                  {errors[inputAttribute.name]?.message}
+                  {inputAttribute.name === 'email' && isEmailInUse}
+                </span>
+              </InputMain>
+            ))}
+
+            <button type="submit" className="w-full font-semibold btn-primary">
+              Continue
+            </button>
+          </form>
         </div>
       </div>
-    </RegistrationLayout>
+    </div>
   )
 }
 

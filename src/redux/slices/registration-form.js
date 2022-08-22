@@ -20,7 +20,6 @@ const initialState = {
     instagram: '',
     website: '',
   },
-  currentStep: 1,
 }
 
 const registrationFormSlice = createSlice({
@@ -42,9 +41,7 @@ const registrationFormSlice = createSlice({
     setSocialsValues: (state, action) => {
       state.socialsValues = action.payload
     },
-    setCurrentStep: (state, action) => {
-      state.currentStep = action.payload
-    },
+
     clearRegistrationForm: (state) => {
       state.detailsValues = {
         name: '',
@@ -65,7 +62,6 @@ const registrationFormSlice = createSlice({
         instagram: '',
         website: '',
       }
-      state.currentStep = 1
     },
   },
 })

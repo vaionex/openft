@@ -1,8 +1,8 @@
 import { RegisterLogo } from '@/components/common/svgs'
 import NextLink from 'next/link'
-import { StepsContainer } from '../steps'
+import RegistrationSteps from '../steps'
 
-const RegistrationPageSidebar = () => {
+const RegistrationPageSidebar = ({ steps, paths }) => {
   return (
     <div className="hidden max-w-lg col-span-4 md:block">
       <div className="w-full h-full bg-bottom bg-no-repeat bg-cover bg-registration-bg">
@@ -14,7 +14,7 @@ const RegistrationPageSidebar = () => {
             </a>
           </NextLink>
           <div className="flex-1 mt-20">
-            <StepsContainer stepsType="circle" />
+            <RegistrationSteps stepsType="circle" steps={steps} paths={paths} />
           </div>
           <div className="flex justify-between gap-2 text-blue-200">
             <span>© Vaionex 2022</span>

@@ -1,11 +1,7 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { setCurrentStep } from '@/redux/slices/registration-form'
 import { CheckIcon } from '@heroicons/react/solid'
-import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 
-const BoxSteps = ({ list }) => {
-  const dispatch = useDispatch()
+const BoxSteps = ({ list, goToStep }) => {
   return (
     <div className="block md:hidden lg:border-t lg:border-b lg:border-gray-200">
       <nav className="px-4 mx-auto max-w-7xl sm:px-0" aria-label="Progress">
@@ -13,7 +9,7 @@ const BoxSteps = ({ list }) => {
           role="list"
           className="overflow-hidden rounded-md lg:flex lg:border-l lg:border-r lg:border-gray-200 lg:rounded-none"
         >
-          {list.map((step, stepIdx) => (
+          {list?.map((step, stepIdx) => (
             <li key={step.id} className="relative overflow-hidden lg:flex-1">
               <div
                 className={twMerge(
@@ -25,7 +21,7 @@ const BoxSteps = ({ list }) => {
                 )}
                 onClick={
                   step.status === 'completed'
-                    ? () => dispatch(setCurrentStep(step.id))
+                    ? () => goToStep(step.id)
                     : () => {}
                 }
               >

@@ -1,14 +1,11 @@
-import { setCurrentStep } from '@/redux/slices/registration-form'
 import { CheckIcon } from '@heroicons/react/solid'
-import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 
-const CircleSteps = ({ list }) => {
-  const dispatch = useDispatch()
+const CircleSteps = ({ list, goToStep }) => {
   return (
     <nav aria-label="Progress">
       <ol role="list" className="overflow-hidden">
-        {list.map((step, stepIdx) => (
+        {list?.map((step, stepIdx) => (
           <li
             key={step.name}
             className={twMerge(
@@ -19,9 +16,7 @@ const CircleSteps = ({ list }) => {
                 : 'pointer-events-none cursor-default',
             )}
             onClick={
-              step.status === 'completed'
-                ? () => dispatch(setCurrentStep(step.id))
-                : () => {}
+              step.status === 'completed' ? () => goToStep(step.id) : () => {}
             }
           >
             {step.id !== list.length ? (

@@ -8,15 +8,14 @@ import 'slick-carousel/slick/slick.css'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import 'react-circular-progressbar/dist/styles.css'
 import '@/styles/globals.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { firebaseGetAuthorizedUser } from '@/firebase/utils'
 
 function App({ Component, pageProps }) {
-  useEffect(() => {
-    const unsubscribe = firebaseGetAuthorizedUser()
+  const [user, setUser] = useState(null)
+  useEffect(() => firebaseGetAuthorizedUser(setUser), [])
 
-    return () => unsubscribe
-  }, [])
+  console.log(user)
 
   return (
     <AnimatePresence exitBeforeEnter>

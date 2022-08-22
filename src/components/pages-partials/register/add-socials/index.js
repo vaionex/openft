@@ -43,7 +43,7 @@ const inputAttributes = [
   },
 ]
 
-function RegistrationAddSocials() {
+function RegistrationAddSocials({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user, isPending, isAuthenticated } = useSelector(authSelector)
@@ -99,67 +99,71 @@ function RegistrationAddSocials() {
   // }, [photoDatas])
 
   return (
-    <RegistrationLayout>
-      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <UsersCircleIcon className="w-auto mx-auto rounded-full h-14" />
-          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Add your socials
-          </h2>
-          <p className="mt-4 text-center">
-            You are welcome to link to your own webpage <br /> with more
-            details.
-          </p>
-        </div>
-        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6">
-              {inputAttributes.map((inputAttribute) => (
-                <InputMain
-                  key={inputAttribute.name}
-                  className="relative pb-0 border-none"
-                >
-                  <Controller
-                    name={inputAttribute.name}
-                    control={control}
-                    render={({ field }) => (
-                      <InputMain.Input
-                        id={inputAttribute.name}
-                        variant="add-on"
-                        addon={inputAttribute.addon}
-                        placeholder={inputAttribute.placeholder}
-                        className="mb-8 sm:mb-4"
-                        type={inputAttribute.type}
-                        {...field}
-                      />
-                    )}
-                  />
-                </InputMain>
-              ))}
-
-              <div>
-                <button
-                  disabled={isPending}
-                  type="button"
-                  onClick={handleSubmit(onSubmit)}
-                  className={twMerge(
-                    'w-full btn-primary transition-all duration-300 ease-in-out',
-                    isPending && 'cursor-not-allowed',
+    <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <UsersCircleIcon className="w-auto mx-auto rounded-full h-14" />
+        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+          Add your socials
+        </h2>
+        <p className="mt-4 text-center">
+          You are welcome to link to your own webpage <br /> with more details.
+        </p>
+      </div>
+      <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
+          <form className="space-y-6">
+            {inputAttributes.map((inputAttribute) => (
+              <InputMain
+                key={inputAttribute.name}
+                className="relative pb-0 border-none"
+              >
+                <Controller
+                  name={inputAttribute.name}
+                  control={control}
+                  render={({ field }) => (
+                    <InputMain.Input
+                      id={inputAttribute.name}
+                      variant="add-on"
+                      addon={inputAttribute.addon}
+                      placeholder={inputAttribute.placeholder}
+                      className="mb-8 sm:mb-4"
+                      type={inputAttribute.type}
+                      {...field}
+                    />
                   )}
-                >
-                  <span className="relative flex items-center">
-                    Finish
-                    {isPending && (
-                      <span className="absolute -right-10 spinner-small"></span>
-                    )}
-                  </span>
-                </button>
-              </div>
-            </form>
-          </div>
+                />
+              </InputMain>
+            ))}
+
+            <div className="flex gap-4">
+              <button
+                type="button"
+                className="w-full font-semibold btn-secondary"
+                onClick={(e) => goToStep(3)}
+              >
+                Back
+              </button>
+              <button
+                disabled={isPending}
+                type="button"
+                onClick={handleSubmit(onSubmit)}
+                className={twMerge(
+                  'w-full btn-primary transition-all duration-300 ease-in-out',
+                  isPending && 'cursor-not-allowed',
+                )}
+              >
+                <span className="relative flex items-center">
+                  Finish
+                  {isPending && (
+                    <span className="absolute -right-10 spinner-small"></span>
+                  )}
+                </span>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </RegistrationLayout>
+    </div>
   )
 }
 

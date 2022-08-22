@@ -28,7 +28,7 @@ const ImageUploadReviewCard = ({ id, cleanUpState }) => {
           <img
             src={photoValues[id].srcCropped}
             alt={photoValues[id].filename}
-            className="w-full h-full"
+            className="w-full h-full rounded-md"
           />
         </>
       )}

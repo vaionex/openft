@@ -19,29 +19,29 @@ const steps = [
     id: 2,
     name: 'Choose a password',
     description: 'Choose a secure password',
-    href: '/register/choose-password',
+    href: '/register?step=choose-password',
     status: 'upcoming',
   },
   {
     id: 3,
     name: 'Upload your photo',
     description: 'Beautify your profile',
-    href: '/register/upload-photo',
+    href: '/register?step=upload-photo',
     status: 'upcoming',
   },
   {
     id: 4,
     name: 'Add your socials',
     description: 'Let people know more about you',
-    href: '/register/add-socials',
+    href: '/register?step=add-socials',
     status: 'upcoming',
   },
 ]
 
-const StepsContainer = ({ stepsType }) => {
-  const [stepList, setStepList] = useState(steps)
-  const { currentStep } = useSelector(registrationFormSelector)
+const StepsContainer = ({ paths, stepsType }) => {
   const router = useRouter()
+  const currentStep = router.query.step
+  const [stepList, setStepList] = useState(steps)
 
   useEffect(() => {
     const newStepList = steps.map((step) => {
@@ -56,13 +56,6 @@ const StepsContainer = ({ stepsType }) => {
       }
     })
     setStepList(newStepList)
-  }, [currentStep])
-
-  useEffect(() => {
-    const current = steps.find((step) => step.id === currentStep)
-    if (current.href !== router.pathname) {
-      router.push(current.href)
-    }
   }, [currentStep])
 
   switch (stepsType) {

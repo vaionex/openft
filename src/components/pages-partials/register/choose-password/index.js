@@ -3,16 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { InputMain } from '@/components/ui/inputs'
 import Alert from '@/components/ui/alert'
 import { KeyIcon } from '@heroicons/react/outline'
-import RegistrationLayout from '@/components/layout/registration-layout'
 import { Controller, useForm } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import * as yup from 'yup'
 import authSelector from '@/redux/selectors/auth'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
-import {
-  setCurrentStep,
-  setPasswordValues,
-} from '@/redux/slices/registration-form'
+import { setPasswordValues } from '@/redux/slices/registration-form'
 
 const inputAttributes = [
   {
@@ -38,7 +34,7 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Passwords must match'),
 })
 
-function RegistrationChoosePassword() {
+function RegistrationChoosePassword({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
   const auth = useSelector(authSelector)
@@ -54,53 +50,59 @@ function RegistrationChoosePassword() {
   const { isSubmitting, isValid, errors } = formState
 
   const onSubmit = (data) => {
-    dispatch(setCurrentStep(3))
     dispatch(setPasswordValues(data))
-    router.push('/register/upload-photo')
+    goToStep(3)
   }
 
   return (
-    <RegistrationLayout>
-      <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <KeyIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
-          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Choose a password
-          </h2>
-          <p className="mt-4 text-center">Must be at least 8 characters.</p>
-        </div>
-        <div className="flex justify-center pt-2">
-          {auth.errorMessage && (
-            <Alert message={auth.errorMessage} type="error" />
-          )}
-        </div>
-        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              {inputAttributes.map((inputAttribute) => (
-                <InputMain
-                  key={inputAttribute.name}
-                  className="relative pb-0 border-none"
-                >
-                  <Controller
-                    name={inputAttribute.name}
-                    control={control}
-                    render={({ field }) => (
-                      <InputMain.Input
-                        id={inputAttribute.name}
-                        placeholder={inputAttribute.placeholder}
-                        className="mb-8 sm:mb-4"
-                        type={inputAttribute.type}
-                        {...field}
-                      />
-                    )}
-                  />
-                  <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
-                    {errors[inputAttribute.name]?.message}
-                  </span>
-                </InputMain>
-              ))}
+    <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <KeyIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
+        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+          Choose a password
+        </h2>
+        <p className="mt-4 text-center">Must be at least 8 characters.</p>
+      </div>
+      <div className="flex justify-center pt-2">
+        {auth.errorMessage && (
+          <Alert message={auth.errorMessage} type="error" />
+        )}
+      </div>
+      <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            {inputAttributes.map((inputAttribute) => (
+              <InputMain
+                key={inputAttribute.name}
+                className="relative pb-0 border-none"
+              >
+                <Controller
+                  name={inputAttribute.name}
+                  control={control}
+                  render={({ field }) => (
+                    <InputMain.Input
+                      id={inputAttribute.name}
+                      placeholder={inputAttribute.placeholder}
+                      className="mb-8 sm:mb-4"
+                      type={inputAttribute.type}
+                      {...field}
+                    />
+                  )}
+                />
+                <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
+                  {errors[inputAttribute.name]?.message}
+                </span>
+              </InputMain>
+            ))}
 
+            <div className="flex gap-4">
+              <button
+                type="button"
+                className="w-full font-semibold btn-secondary"
+                onClick={(e) => goToStep(1)}
+              >
+                Back
+              </button>
               <button
                 disabled={isSubmitting || !isValid}
                 type="submit"
@@ -108,11 +110,11 @@ function RegistrationChoosePassword() {
               >
                 Continue
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
-    </RegistrationLayout>
+    </div>
   )
 }
 
