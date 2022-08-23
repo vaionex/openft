@@ -56,31 +56,37 @@ const firebaseRegister = async (data) => {
 
     const { user } = response
 
+    if (user) {
+      store.dispatch(setAuthenticated())
+    }
+
     const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
 
     if (!userInfoFromDb) {
       const infos = {
-        displayName: username,
+        displayName: name,
         name: name,
         email: user.email,
+        username: username,
         uid: user.uid,
         createdAt: user.metadata.creationTime,
         profileImage: null,
         coverImage: null,
         socialLinks: {
-          facebook: null,
-          twitter: null,
-          website: null,
+          facebook: data.facebook || '',
+          instagram: data.instagram || '',
+          website: data.website || '',
         },
       }
 
       await setDoc(doc(firebaseDb, 'users', user.uid), infos)
       return {
         name: user.name,
-        uid: user.uid,
+        displayName: user.displayName,
         email: user.email,
-        accessToken: user.accessToken,
-        photoURL: user.photoURL,
+        username: user.username,
+        uid: user.uid,
+        socialLinks: user.socialLinks,
       }
     }
 

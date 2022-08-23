@@ -12,10 +12,7 @@ import { useEffect, useState } from 'react'
 import { firebaseGetAuthorizedUser } from '@/firebase/utils'
 
 function App({ Component, pageProps }) {
-  const [user, setUser] = useState(null)
-  useEffect(() => firebaseGetAuthorizedUser(setUser), [])
-
-  console.log(user)
+  useEffect(() => firebaseGetAuthorizedUser(), [])
 
   return (
     <AnimatePresence exitBeforeEnter>

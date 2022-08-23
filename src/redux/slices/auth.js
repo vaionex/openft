@@ -60,10 +60,10 @@ const authSlice = createSlice({
       state.isAuthenticated = true
     },
     setResetAuth: (state) => {
-      ;(state.user = null),
-        (state.isPending = false),
-        (state.errorMessage = null),
-        (state.isAuthenticated = false)
+      state.user = null
+      state.isPending = false
+      state.errorMessage = null
+      state.isAuthenticated = false
     },
   },
   extraReducers: {

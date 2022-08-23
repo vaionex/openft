@@ -4,10 +4,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-
-import Alert from '@/components/ui/alert'
 import { register } from '@/redux/slices/auth'
-import RegistrationLayout from '@/components/layout/registration-layout'
 import { InputMain } from '@/components/ui/inputs'
 import { UsersCircleIcon } from '@/components/common/icons'
 import { Controller, useForm } from 'react-hook-form'
@@ -17,7 +14,6 @@ import { firebaseUploadImage } from '@/firebase/utils'
 import authSelector from '@/redux/selectors/auth'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { twMerge } from 'tailwind-merge'
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 
 const inputAttributes = [
   {
@@ -47,14 +43,15 @@ function RegistrationAddSocials({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user, isPending, isAuthenticated } = useSelector(authSelector)
+  const [submitStarted, setSubmitStarted] = useState(false)
   const registrationValues = useSelector(registrationFormSelector)
   const { photoValues } = registrationValues
   const { control, handleSubmit, formState } = useForm({
-    mode: 'onBlur',
     defaultValues: registrationValues.socialValues,
   })
 
   const onSubmit = async (data) => {
+    setSubmitStarted(true)
     dispatch(setSocialsValues(data))
 
     const dataForServer = {
@@ -72,27 +69,37 @@ function RegistrationAddSocials({ goToStep }) {
       photoValues.profileImage.croppedAreaPixels,
     )
 
-    const returnData = await dispatch(register(dataForServer))
-    await firebaseUploadImage({
-      user: returnData.payload,
-      imageFile: coverImageForUpload.file,
-      imageType: 'coverImage',
-      ext: photoValues.coverImage.ext,
-    })
-    await firebaseUploadImage({
-      user: returnData.payload,
-      imageFile: profileImageForUpload.file,
-      imageType: 'profileImage',
-      ext: photoValues.profileImage.ext,
-    })
-
-    router.push('/')
+    dispatch(register(dataForServer))
+      .then(async ({ payload }) => {
+        await firebaseUploadImage({
+          user: payload,
+          imageFile: coverImageForUpload.file,
+          imageType: 'coverImage',
+          ext: photoValues.coverImage.ext,
+        })
+        await firebaseUploadImage({
+          user: payload,
+          imageFile: profileImageForUpload.file,
+          imageType: 'profileImage',
+          ext: photoValues.profileImage.ext,
+        })
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+      .finally(() => {
+        setSubmitStarted(false)
+        router.push('/')
+      })
   }
 
   useEffect(() => {
     if (isPending) {
       document.body.style.pointerEvents = 'none'
       document.body.style.touchAction = 'none'
+    } else {
+      document.body.style.pointerEvents = 'auto'
+      document.body.style.touchAction = 'auto'
     }
   }, [isPending])
 
@@ -146,7 +153,7 @@ function RegistrationAddSocials({ goToStep }) {
                 Back
               </button>
               <button
-                disabled={isPending}
+                disabled={isPending || submitStarted}
                 type="button"
                 onClick={handleSubmit(onSubmit)}
                 className={twMerge(
@@ -156,7 +163,7 @@ function RegistrationAddSocials({ goToStep }) {
               >
                 <span className="relative flex items-center">
                   Finish
-                  {isPending && (
+                  {submitStarted && (
                     <span className="absolute -right-10 spinner-small"></span>
                   )}
                 </span>

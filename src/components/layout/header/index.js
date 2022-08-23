@@ -8,6 +8,7 @@ import DropdownUser from '@/components/ui/dropdown-user'
 import { UploadBoxIcon, UploadIcon } from '@/components/common/icons'
 import { useSelector } from 'react-redux'
 import authSelector from '@/redux/selectors/auth'
+import { useEffect } from 'react'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -17,6 +18,9 @@ const navigation = [
 
 const Header = () => {
   const { user, isAuthenticated } = useSelector(authSelector)
+
+  useEffect(() => {}, [isAuthenticated])
+
   return (
     <Popover as="header" className="relative">
       <div className="bg-transparent">
