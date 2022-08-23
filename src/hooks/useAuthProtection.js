@@ -1,17 +1,15 @@
-import authSelector from '@/redux/selectors/auth'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { protectedRoute } from '@/utils/protectedRoute'
 
 const useAuthProtection = () => {
   const router = useRouter()
-  const { user } = useSelector(authSelector)
+  const auth = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (!user) {
-      router.replace('/')
-    }
-  }, [user, router])
+    protectedRoute(auth.user, router)
+  }, [auth.user, router])
 
   return user
 }

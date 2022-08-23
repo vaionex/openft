@@ -1,5 +1,5 @@
 import { envMODE } from '../config/envMode'
-import apiConfig from '../config/relysiaApi'
+import apiConfig from '@/config/relysiaApi'
 
 let config
 let storageBucket = ''
@@ -23,3 +23,4 @@ if (envMODE === 'DEV') {
 }
 
 export default config
+export const storageBucketUrl = storageBucket
