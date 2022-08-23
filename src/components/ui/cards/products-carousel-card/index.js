@@ -7,7 +7,7 @@ import CardLikeButton from '../../card-like-button'
 const ProductsCarouselCard = ({ data, mr }) => {
   return (
     <div
-      key={data.id}
+      key={data?.id}
       className={twMerge(
         'relative border border-gray-200 group rounded-xl',
         mr ? 'sm:mr-5' : '',
@@ -15,8 +15,8 @@ const ProductsCarouselCard = ({ data, mr }) => {
     >
       <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
         <Image
-          src={data.imageSrc}
-          alt={data.imageAlt}
+          src={data?.imageURL}
+          // alt={data.imageAlt}
           layout="fill"
           className="absolute inset-0 object-cover object-center w-full h-full"
         />
@@ -29,16 +29,16 @@ const ProductsCarouselCard = ({ data, mr }) => {
         <div className="flex items-center justify-between">
           <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
           <p className="text-xl font-medium text-gray-900">
-            {data.price} {data.priceType}
+            ${data?.amount} BSV 1
           </p>
         </div>
         <div className="my-6">
           <h3 className="text-sm text-gray-700">
-            <a href={`/discover/${data.href}`} className="text-blue-600">
-              {data.name}
+            <a href={`/discover/${data.id}`} className="text-blue-600">
+              {/* {data.name} */}
             </a>
           </h3>
-          <p className="mt-1 text-lg text-gray-900">{data.color}</p>
+          <p className="mt-1 text-lg text-gray-900">{data.name}</p>
         </div>
         <div className="flex gap-1.5">
           <button className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal">

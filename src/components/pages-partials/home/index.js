@@ -5,12 +5,12 @@ import CompaniesSection from './compaines'
 import CtaMidSection from './cta-mid'
 import HeroSection from './hero'
 
-const HomePageMain = () => {
+const HomePageMain = ({ nftsData }) => {
   return (
     <SharedLayout title="Home">
       <HeroSection />
       <CompaniesSection />
-      <CollectionsSection />
+      <CollectionsSection nftsData={nftsData} />
       <CtaMidSection />
       <BannerSection />
     </SharedLayout>

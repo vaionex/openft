@@ -21,7 +21,7 @@ function NextArrow({ currentSlide, slideCount, cardsToShow, ...props }) {
       className={twMerge(
         'absolute inline-flex items-center justify-center left-0 border border-gray-200 rounded-full -bottom-20 w-14 h-14 translate-x-[100px]',
         currentSlide !== slideCount - cardsToShow &&
-          'text-blue-600 border-blue-200',
+        'text-blue-600 border-blue-200',
         currentSlide === slideCount - cardsToShow && 'text-gray-400 ',
       )}
       aria-hidden="true"
@@ -107,7 +107,7 @@ const ProductsCarousel = ({ data }) => {
   return (
     <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
-        {data.map((item) => (
+        {data && data.map((item) => (
           <ProductsCarouselCard key={item.id} mr data={item} />
         ))}
       </Slider>

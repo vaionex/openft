@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { MoreFilterIcon } from '@/components/common/icons'
@@ -10,78 +10,126 @@ import {
 } from '@heroicons/react/solid'
 
 import FilteredContents from './filtered-contents'
+import { firebaseGetFilterNfts } from '@/firebase/utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchFirstNfts, setFetchFirstNfts } from '@/redux/slices/nft'
+import nftSelector from '@/redux/selectors/nft'
 
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '1',
-    imageSrc: '/images/mock-carousel/Image.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '2',
-    imageSrc: '/images/mock-carousel/Image_1.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 3,
-    name: 'Basic Tee',
-    href: '3',
-    imageSrc: '/images/mock-carousel/Image_2.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 4,
-    name: 'Basic Tee',
-    href: '3',
-    imageSrc: '/images/mock-carousel/Image_3.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 5,
-    name: 'Basic Tee',
-    href: '4',
-    imageSrc: '/images/mock-carousel/Image_2.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-  {
-    id: 6,
-    name: 'Basic Tee',
-    href: '5',
-    imageSrc: '/images/mock-carousel/Image_1.png',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    priceType: 'BSV 1',
-    color: 'Black',
-  },
-]
+// const products = [
+//   {
+//     id: 1,
+//     name: 'Basic Tee',
+//     href: '1',
+//     imageSrc: '/images/mock-carousel/Image.png',
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: '$35',
+//     priceType: 'BSV 1',
+//     color: 'Black',
+//   },
+//   {
+//     id: 2,
+//     name: 'Basic Tee',
+//     href: '2',
+//     imageSrc: '/images/mock-carousel/Image_1.png',
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: '$35',
+//     priceType: 'BSV 1',
+//     color: 'Black',
+//   },
+//   {
+//     id: 3,
+//     name: 'Basic Tee',
+//     href: '3',
+//     imageSrc: '/images/mock-carousel/Image_2.png',
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: '$35',
+//     priceType: 'BSV 1',
+//     color: 'Black',
+//   },
+//   {
+//     id: 4,
+//     name: 'Basic Tee',
+//     href: '3',
+//     imageSrc: '/images/mock-carousel/Image_3.png',
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: '$35',
+//     priceType: 'BSV 1',
+//     color: 'Black',
+//   },
+//   {
+//     id: 5,
+//     name: 'Basic Tee',
+//     href: '4',
+//     imageSrc: '/images/mock-carousel/Image_2.png',
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: '$35',
+//     priceType: 'BSV 1',
+//     color: 'Black',
+//   },
+//   {
+//     id: 6,
+//     name: 'Basic Tee',
+//     href: '5',
+//     imageSrc: '/images/mock-carousel/Image_1.png',
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     price: '$35',
+//     priceType: 'BSV 1',
+//     color: 'Black',
+//   },
+// ]
 
-export default function CategoryFilter() {
+export default function CategoryFilter({ nftsData }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [currentStatus, setCurrentStatus] = useState('buy-now')
+  const [pageOfItems, setPageOfItems] = useState(nftsData)
+  const [selectedPriceRange, setSelectedPriceRange] = useState({
+    min: '',
+    max: ''
+  });
+
+  const dispatch = useDispatch()
+  const { firstNfts } = useSelector(nftSelector)
+
+  useEffect(() => {
+    dispatch(setFetchFirstNfts(nftsData))
+  }, [nftsData])
+
+  useEffect(() => {
+    if (firstNfts) {
+      setPageOfItems(firstNfts)
+    }
+  }, [firstNfts])
 
   const statusHandle = (e) => {
     e.preventDefault()
     setCurrentStatus(e.target.value)
   }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setSelectedPriceRange((price) => ({ ...price, [name]: value }))
+  }
+
+  const onApplyFilter = async () => {
+    try {
+      const data = await firebaseGetFilterNfts(selectedPriceRange)
+      setPageOfItems(data)
+      setMobileFiltersOpen(false)
+    } catch (err) {
+      console.log(err)
+      setMobileFiltersOpen(false)
+    }
+  }
+
+  const onClearHandler = () => {
+    setSelectedPriceRange({
+      min: "",
+      max: ""
+    });
+    setMobileFiltersOpen(false)
+    dispatch(fetchFirstNfts())
+  };
+
 
   return (
     <div>
@@ -131,7 +179,7 @@ export default function CategoryFilter() {
                   </div>
 
                   {/* Filters */}
-                  <form className="mt-4 px-2">
+                  <form className="mt-4 px-2" onSubmit={(e) => e.preventDefault()}>
                     <h3 className="sr-only">Categories</h3>
 
                     <h3 className="mt-5">Price (BSV)</h3>
@@ -142,10 +190,11 @@ export default function CategoryFilter() {
                         </label>
                         <input
                           type="text"
-                          name="price-first"
+                          name="min"
                           id="price-first"
                           className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                           placeholder="$ Min price"
+                          onChange={handleChange}
                         />
                       </div>
                       <div>
@@ -154,20 +203,24 @@ export default function CategoryFilter() {
                         </label>
                         <input
                           type="text"
-                          name="price-second"
+                          name="max"
                           id="price-second"
                           className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                           placeholder="$ Max price"
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
                     <div className="mt-4 grid grid-cols-6 gap-4">
                       <button
                         className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 hover:bg-gray-50 rounded-md md:text-lg`}
+                        onClick={() => onClearHandler()}
                       >
                         Clear
                       </button>
-                      <button className="col-span-4 flex items-center justify-center btn-primary text-white w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg">
+                      <button className="col-span-4 flex items-center justify-center btn-primary text-white w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg"
+                        onClick={() => onApplyFilter()}
+                      >
                         Apply filter
                       </button>
                     </div>
@@ -228,7 +281,7 @@ export default function CategoryFilter() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
               {/* Filters */}
-              <form className="hidden lg:block">
+              <form className="hidden lg:block" onSubmit={(e) => e.preventDefault()}>
                 <h3 className="sr-only">Categories</h3>
                 <h3>Price (BSV)</h3>
                 <div className="mt-4 grid grid-cols-2 gap-4">
@@ -237,11 +290,13 @@ export default function CategoryFilter() {
                       Price First
                     </label>
                     <input
-                      type="text"
-                      name="price-first"
+                      type="number"
+                      name="min"
                       id="price-first"
                       className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="$ Min Price"
+                      value={selectedPriceRange.min}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -249,21 +304,26 @@ export default function CategoryFilter() {
                       Price Second
                     </label>
                     <input
-                      type="text"
-                      name="price-second"
+                      type="number"
+                      name="max"
                       id="price-second"
                       className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="$ Max price"
+                      value={selectedPriceRange.max}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-6 gap-4">
                   <button
                     className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 hover:bg-gray-50 rounded-md md:text-lg`}
+                    onClick={() => onClearHandler()}
                   >
                     Clear
                   </button>
-                  <button className="col-span-4 flex items-center justify-center btn-primary text-white w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg">
+                  <button className="col-span-4 flex items-center justify-center btn-primary text-white w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg"
+                    onClick={() => onApplyFilter()}
+                  >
                     Apply filter
                   </button>
                 </div>
@@ -273,7 +333,7 @@ export default function CategoryFilter() {
               <div className="lg:col-span-3">
                 {/* Replace with your content */}
                 <div className="h-full">
-                  <FilteredContents products={products} />
+                  <FilteredContents nftItems={pageOfItems} />
                 </div>
                 {/* /End replace */}
               </div>

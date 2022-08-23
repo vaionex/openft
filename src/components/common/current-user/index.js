@@ -16,9 +16,9 @@ function GetCurrentUser() {
     try {
       onIdTokenChanged(firebaseAuth, (user) => {
         if (user) {
-          console.log('get token id, iiiiiii')
+          // console.log('get token id, iiiiiii')
           apiConfig.defaults.headers.common['authToken'] = user.accessToken
-          getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
+          // getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
         }
       })
     } catch (err) {

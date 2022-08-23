@@ -1,13 +1,17 @@
 import { ProductsCarouselCard } from '@/components/ui/cards'
+import { useState } from 'react'
 import Pagination from './pagination'
 
-const FilteredContents = ({ products }) => {
+const FilteredContents = ({ nftItems }) => {
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {products.map((item) => (
+      {nftItems && nftItems.map((item) => (
         <ProductsCarouselCard key={item.id} data={item} />
       ))}
-      <Pagination />
+      <Pagination
+        items={nftItems}
+      />
     </div>
   )
 }

@@ -64,7 +64,7 @@ const products = [
   },
 ]
 
-const CollectionsSection = () => {
+const CollectionsSection = ({ nftsData }) => {
   return (
     <div className="relative px-4 mx-auto pb-14 md:pb-20 3xlg:pb-[840px] max-w-7xl lg:mt-24 sm:px-6 lg:px-8">
       <div className="sm:text-center lg:text-left">
@@ -92,7 +92,7 @@ const CollectionsSection = () => {
         </div>
       </div>
       <div className="3xlg:absolute py-12 mx-auto lg:py-20 max-w-7xl 3xlg:max-w-[1364px] ">
-        <ProductsCarousel data={products} />
+        <ProductsCarousel data={nftsData} />
       </div>
     </div>
   )

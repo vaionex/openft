@@ -1,5 +1,5 @@
 import { firebaseAuth, firebaseDb, firebaseStorage } from '@/firebase/init'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import {
   getStorage,
   ref,
@@ -300,6 +300,42 @@ const firebaseGetSingleDocFromDb = async (collectionName, id) => {
   }
 }
 
+const firebaseGetFirstNfts = async (order = 'timestamp') => {
+  const queryRef = query(
+    collection(firebaseDb, 'nfts'),
+    orderBy(order, 'desc'),
+    limit(9)
+  )
+
+  const nfts = await getDocs(queryRef)
+  return nfts.docs.map((doc) => {
+    const docData = doc.data()
+    return {
+      id: doc.id,
+      ...docData,
+    }
+  })
+}
+
+const firebaseGetFilterNfts = async (priceRange) => {
+  const { min, max } = priceRange
+  const queryRef = query(
+    collection(firebaseDb, 'nfts'),
+    where('amount', '>=', parseInt(min)),
+    where('amount', '<=', parseInt(max)),
+    limit(9)
+  )
+
+  const nfts = await getDocs(queryRef)
+  return nfts.docs.map((doc) => {
+    const docData = doc.data()
+    return {
+      id: doc.id,
+      ...docData,
+    }
+  })
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -309,4 +345,6 @@ export {
   firebaseUpdateProfileDetails,
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
+  firebaseGetFirstNfts,
+  firebaseGetFilterNfts
 }
