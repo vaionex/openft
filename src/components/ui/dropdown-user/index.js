@@ -1,32 +1,22 @@
+import { logout } from '@/redux/slices/auth'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
 import React, { Fragment } from 'react'
 import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
-import { Avatar } from '../avatars'
-import { logout, setUserData } from '@/redux/slices/auth'
-import { useRouter } from 'next/router'
+import { Avatar, AvatarWithName } from '../avatars'
 
-const DropdownUser = ({ user, avatar }) => {
-  const router = useRouter()
+const DropdownUser = ({ user }) => {
   const dispatch = useDispatch()
-
-  const signOut = async (e) => {
-    e.preventDefault()
-    await dispatch(logout()).unwrap()
-    dispatch(setUserData(null))
-    router.push("/")
-  }
-
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full p-0.5 text-sm font-medium text-gray-700 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-          <Avatar
-            className="w-10 h-10 sm:w-10 sm:h-10"
-            user={user}
-            avatar={avatar}
-          />
+          {user &&
+            (user.profileImage ? (
+              <Avatar className="w-10 h-10 sm:w-10 sm:h-10" user={user} />
+            ) : (
+              <AvatarWithName name={user.name} />
+            ))}
         </Menu.Button>
       </div>
 
@@ -55,11 +45,12 @@ const DropdownUser = ({ user, avatar }) => {
               )}
             </Menu.Item>
 
-            <form onSubmit={(e) => signOut(e)}>
+            <form>
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={() => dispatch(logout())}
                     className={twMerge(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full text-left px-4 py-2 text-sm',

@@ -1,6 +1,6 @@
 import NextLink from 'next/link'
 import LoginForm from '@/components/ui/forms/login-form'
-import LoginRegisterLayout from '@/components/layout/login-register-layout'
+import LoginLayout from '@/components/layout/login-layout'
 import { Logo } from '@/components/common/svgs'
 import { GoogleIcon } from '@/components/common/icons'
 import Image from 'next/image'
@@ -46,7 +46,7 @@ const Login = () => {
   }
 
   return (
-    <LoginRegisterLayout title="Login">
+    <LoginLayout title="Login">
       <div className="flex min-h-[calc(100vh-56px)]">
         <div className="flex-[2] flex flex-col">
           <div className="flex items-center justify-center h-full">
@@ -104,7 +104,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </LoginRegisterLayout>
+    </LoginLayout>
   )
 }
 

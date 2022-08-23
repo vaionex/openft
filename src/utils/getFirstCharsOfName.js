@@ -1,4 +1,4 @@
-export const getFirstCharsOfName = (name) => {
+const getFirstCharsOfName = (name) => {
   if (!name) return
   const nameArray = name.split(' ')
   const firstName = nameArray[0]
@@ -7,3 +7,5 @@ export const getFirstCharsOfName = (name) => {
   const firstCharsOfLastName = lastName ? lastName.slice(0, 1) : ''
   return `${firstCharsOfFirstName}${firstCharsOfLastName}`.toUpperCase()
 }
+
+export default getFirstCharsOfName

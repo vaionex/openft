@@ -1,5 +1,7 @@
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 import { Avatar } from '../../avatars'
 
 const ProfileHeaderCard = ({ profile }) => {
@@ -7,7 +9,7 @@ const ProfileHeaderCard = ({ profile }) => {
     <div>
       <div className="relative w-full h-32 overflow-hidden rounded-lg lg:h-60">
         <Image
-          src={profile.backgroundImage}
+          src={profile.coverImage}
           alt={profile.name}
           layout="fill"
           objectFit="cover"

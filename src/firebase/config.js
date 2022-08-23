@@ -6,14 +6,14 @@ let storageBucket = ''
 
 if (envMODE === 'DEV') {
   config = {
-    apiKey: "AIzaSyBm1PRFUgyethkZdRHCkjZ2IJh5PQiD0hg",
-    authDomain: "openft-98e94.firebaseapp.com",
-    projectId: "openft-98e94",
-    storageBucket: "openft-98e94.appspot.com",
-    messagingSenderId: "635036232353",
-    appId: "1:635036232353:web:53d0930c0a1a309f801ee0",
-    measurementId: "G-NRVT06LPJT"
-  };
+    apiKey: 'AIzaSyBm1PRFUgyethkZdRHCkjZ2IJh5PQiD0hg',
+    authDomain: 'openft-98e94.firebaseapp.com',
+    projectId: 'openft-98e94',
+    storageBucket: 'openft-98e94.appspot.com',
+    messagingSenderId: '635036232353',
+    appId: '1:635036232353:web:53d0930c0a1a309f801ee0',
+    measurementId: 'G-NRVT06LPJT',
+  }
 
   storageBucket =
     'https://firebasestorage.googleapis.com/v0/b/openft-98e94.appspot.com/o/'
@@ -24,4 +24,3 @@ if (envMODE === 'DEV') {
 
 export default config
 export const storageBucketUrl = storageBucket
-

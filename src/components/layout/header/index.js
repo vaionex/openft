@@ -6,10 +6,9 @@ import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { UploadBoxIcon, UploadIcon } from '@/components/common/icons'
-import { useEffect, useState } from 'react'
-import { storageBucketUrl } from '@/firebase/config'
 import { useSelector } from 'react-redux'
 import authSelector from '@/redux/selectors/auth'
+import { useEffect } from 'react'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -17,27 +16,10 @@ const navigation = [
   { name: 'Contribute', href: '/contribute' },
 ]
 
-// const user = {
-//   name: 'John Doe',
-//   avatar: '/images/test/test-user-image.webp',
-// }
-
 const Header = () => {
-  const { user } = useSelector(authSelector)
-  const [avatar, setAvatar] = useState()
+  const { user, isAuthenticated } = useSelector(authSelector)
 
-  useEffect(async () => {
-    if (user?.uid) {
-      const getUserAvatar = async () => {
-        const url = `${storageBucketUrl}profile%2F${user?.uid}_256x256?alt=media`
-        const response = await fetch(url)
-        if (response.ok)
-          setAvatar(response?.url)
-      }
-      getUserAvatar()
-    }
-  }, [user?.uid])
-
+  useEffect(() => {}, [isAuthenticated])
 
   return (
     <Popover as="header" className="relative">
@@ -76,7 +58,7 @@ const Header = () => {
             </div>
           </div>
 
-          {!user ? (
+          {!isAuthenticated ? (
             <div className="hidden md:flex md:items-center md:space-x-6">
               <NextLink href="/login">
                 <a className="text-base font-medium hover:text-gradient-primary-hover">
@@ -115,7 +97,7 @@ const Header = () => {
               </li>
 
               <li>
-                <DropdownUser user={user} avatar={avatar} />
+                <DropdownUser user={user} />
               </li>
             </ul>
           )}
