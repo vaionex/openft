@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CameraIcon } from '@heroicons/react/outline'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import ImageUploadDragAndDrop from '@/components/ui/image-upload-drag-n-drop'
+import { clearPhotoValues } from '@/redux/slices/registration-form'
 
 const ImageInputAttributes = [
   {
@@ -10,12 +11,24 @@ const ImageInputAttributes = [
     name: 'profileImage',
     text: 'Click to upload profile photo',
     subinfo: 'Max 400x400 - 1MB',
+    limits: {
+      maxWidth: 400,
+      maxHeight: 400,
+      maxSize: 1, //MB
+    },
+    aspect: 1,
   },
   {
     id: 'coverImage',
     name: 'coverImage',
     text: 'Click to upload cover photo',
     subinfo: 'Max 3840x2160 - 4MB',
+    limits: {
+      maxWidth: 3840,
+      maxHeight: 2160,
+      maxSize: 4, //MB
+    },
+    aspect: 191 / 48,
   },
 ]
 
@@ -23,6 +36,10 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { photoValues } = useSelector(registrationFormSelector)
+
+  const handleClear = (id) => {
+    dispatch(clearPhotoValues(id))
+  }
 
   return (
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
@@ -47,6 +64,10 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
                 name={inputAttribute.name}
                 text={inputAttribute.text}
                 subinfo={inputAttribute.subinfo}
+                limits={inputAttribute.limits}
+                aspect={inputAttribute.aspect}
+                handleClear={() => handleClear(inputAttribute.id)}
+                isSelected={!!photoValues[inputAttribute.id]}
               />
             ))}
 

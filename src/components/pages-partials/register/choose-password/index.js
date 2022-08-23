@@ -42,7 +42,7 @@ function RegistrationChoosePassword({ goToStep }) {
 
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState } = useForm({
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: passwordValues,
     resolver,
   })
@@ -104,7 +104,7 @@ function RegistrationChoosePassword({ goToStep }) {
                 Back
               </button>
               <button
-                disabled={isSubmitting || !isValid}
+                // disabled={isSubmitting || !isValid}
                 type="submit"
                 className="w-full font-semibold btn-primary"
               >

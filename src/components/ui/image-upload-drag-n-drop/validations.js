@@ -1,5 +1,13 @@
+import getExtFromType from '@/utils/getExtFromType'
+
 export const checkImageType = (file, acceptableFileTypes) => {
-  if (acceptableFileTypes.includes(file.type)) return true
+  const ext = getExtFromType(file.type)
+
+  const accepted = acceptableFileTypes.some(
+    (type) => type.toLowerCase() === ext,
+  )
+
+  if (accepted) return true
   return false
 }
 
@@ -39,7 +47,7 @@ export const checkValidation = async (
     if (!checkImageType(file, acceptableFileTypes)) {
       resolve({
         type: 'imageType',
-        message: 'File type is not supported, plase select PNG, JPG, WEBP',
+        message: `File type is not supported, plase select ${acceptableFileTypes}`,
       })
     } else {
       if (!(await checkImageSize(file, limit))) {

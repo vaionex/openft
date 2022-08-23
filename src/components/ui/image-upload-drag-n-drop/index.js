@@ -1,25 +1,23 @@
 import { UploadIcon } from '@/components/common/icons'
-import registrationFormSelector from '@/redux/selectors/registration-form'
-import { clearPhotoValues } from '@/redux/slices/registration-form'
+import getFileExt from '@/utils/getFileExt'
 import PropTypes from 'prop-types'
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useDispatch, useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import ImageUploadReviewCard from '../cards/image-upload-review-card'
 import ImageCropper from '../image-cropper'
 import { checkValidation } from './validations'
 
-// eslint-disable-next-line react/display-name
 const ImageUploadDragAndDrop = ({
   id,
   text,
   subinfo,
   acceptableFileTypes,
-  ...props
+  aspect,
+  limits,
+  isSelected,
+  handleClear,
 }) => {
-  const dispatch = useDispatch()
-  const { photoValues } = useSelector(registrationFormSelector)
   const [selectedImage, setSelectedImage] = useState('')
   const [isCropping, setIsCropping] = useState(false)
   const [errorMap, setErrorMap] = useState(null)
@@ -27,15 +25,13 @@ const ImageUploadDragAndDrop = ({
   const cleanUpState = () => {
     setSelectedImage(null)
     setErrorMap(null)
-    dispatch(clearPhotoValues(id))
+    handleClear()
   }
 
-  const IMAGE_SIZE_LIMIT =
-    id === 'profileImage' ? 1 * 1000 * 1000 : 4 * 1000 * 1000
-
+  const IMAGE_SIZE_LIMIT = limits.maxSize * 1000 * 1000
   const IMAGE_RESOLUTION_LIMIT = {
-    width: id === 'profileImage' ? 400 : 3840,
-    height: id === 'profileImage' ? 400 : 2160,
+    width: limits.maxWidth,
+    height: limits.maxHeight,
   }
 
   const validateImage = async (file) => {
@@ -58,7 +54,7 @@ const ImageUploadDragAndDrop = ({
       setSelectedImage({
         src: createFileUrl,
         name: imageFile.name,
-        ext: imageFile.name.split(/\.(?=[^\.]+$)/)[1],
+        ext: getFileExt(imageFile.name),
       })
       setIsCropping(true)
     } else {
@@ -73,7 +69,7 @@ const ImageUploadDragAndDrop = ({
 
   return (
     <>
-      {photoValues[id] ? (
+      {isSelected ? (
         <ImageUploadReviewCard id={id} cleanUpState={cleanUpState} />
       ) : (
         <>
@@ -113,7 +109,7 @@ const ImageUploadDragAndDrop = ({
               <ImageCropper
                 id={id}
                 image={selectedImage}
-                aspect={id === 'coverImage' ? 191 / 48 : 1}
+                aspect={aspect}
                 isCropping={isCropping}
                 setIsCropping={setIsCropping}
               />
@@ -128,12 +124,21 @@ const ImageUploadDragAndDrop = ({
 ImageUploadDragAndDrop.defaultProps = {
   text: 'Click to upload',
   subinfo: '',
-  acceptableFileTypes: 'image/jpeg, image/png, image/webp',
+  acceptableFileTypes: ['PNG', 'JPEG', 'WEBP'],
+  aspect: 1,
 }
 
 ImageUploadDragAndDrop.propTypes = {
   text: PropTypes.string,
   subinfo: PropTypes.node,
+  id: PropTypes.string || PropTypes.number,
+  aspect: PropTypes.number,
+  limits: PropTypes.shape({
+    maxHeight: PropTypes.number.isRequired,
+    maxWidth: PropTypes.number.isRequired,
+    maxSize: PropTypes.number.isRequired,
+  }),
+  isSelected: PropTypes.bool.isRequired,
 }
 
 export default ImageUploadDragAndDrop
