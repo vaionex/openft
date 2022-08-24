@@ -63,11 +63,7 @@ function RegistrationChoosePassword({ goToStep }) {
         </h2>
         <p className="mt-4 text-center">Must be at least 8 characters.</p>
       </div>
-      <div className="flex justify-center pt-2">
-        {auth.errorMessage && (
-          <Alert message={auth.errorMessage} type="error" />
-        )}
-      </div>
+
       <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>

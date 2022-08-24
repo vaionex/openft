@@ -8,7 +8,6 @@ import { InputMain } from '@/components/ui/inputs'
 import { UserCircleIcon } from '@/components/common/icons'
 import { getAuth, fetchSignInMethodsForEmail } from 'firebase/auth'
 import { useState } from 'react'
-import checkEmailIsValid from '@/utils/checkEmailIsValid'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Name', name: 'name' },
@@ -17,7 +16,9 @@ const inputAttributes = [
   { type: 'text', placeholder: 'Role, e.g. Illustrator', name: 'role' },
 ]
 
-const validationSchema = yup.object({
+const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+const validationSchema = yup.object().shape({
   name: yup
     .string()
     .required('Name is required')
@@ -25,27 +26,34 @@ const validationSchema = yup.object({
   username: yup.string().required('Username is required'),
   email: yup
     .string()
-    .test('is-email-in-use', 'This email is already in use', async (value) => {
-      if (!checkEmailIsValid(value)) {
-        return true
-      }
-      const auth = getAuth()
-      return fetchSignInMethodsForEmail(auth, value).then((data) => {
-        return !data.length
-      })
-    })
-    .required('Email is required')
-    .email('Email is invalid'),
+    .matches(emailRegex, 'Email is not valid')
+    .test(
+      'email-is-in-use',
+      'This email is already in use',
+      async function (value) {
+        const auth = getAuth()
+        return fetchSignInMethodsForEmail(auth, value)
+          .then((data) => {
+            return !data.length
+          })
+          .catch((error) => {
+            if (error) {
+              return true
+            }
+          })
+      },
+    )
+    .required('Email is required'),
 })
 
 function RegistrationDetails({ goToStep }) {
   const dispatch = useDispatch()
-  const [isEmailInUse, setIsEmailInUse] = useState(false)
   const { detailsValues } = useSelector(registrationFormSelector)
 
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState } = useForm({
     mode: 'onSubmit',
+    reValidateMode: 'onChange',
     defaultValues: detailsValues,
     resolver,
   })
@@ -54,7 +62,6 @@ function RegistrationDetails({ goToStep }) {
 
   const onSubmit = (data) => {
     dispatch(setDetailsValues(data))
-
     goToStep(2)
   }
 
@@ -80,19 +87,20 @@ function RegistrationDetails({ goToStep }) {
                 <Controller
                   name={inputAttribute.name}
                   control={control}
-                  render={({ field }) => (
-                    <InputMain.Input
-                      id={inputAttribute.name}
-                      placeholder={inputAttribute.placeholder}
-                      className="mb-8 sm:mb-4"
-                      type={inputAttribute.type}
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <InputMain.Input
+                        id={inputAttribute.name}
+                        placeholder={inputAttribute.placeholder}
+                        className="mb-8 sm:mb-4"
+                        type={inputAttribute.type}
+                        {...field}
+                      />
+                    )
+                  }}
                 />
                 <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
                   {errors[inputAttribute.name]?.message}
-                  {inputAttribute.name === 'email' && isEmailInUse}
                 </span>
               </InputMain>
             ))}
