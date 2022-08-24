@@ -1,5 +1,16 @@
 import { firebaseAuth, firebaseDb, firebaseStorage } from '@/firebase/init'
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from 'firebase/firestore'
 import {
   getStorage,
   ref,
@@ -22,6 +33,7 @@ import {
 } from 'firebase/auth'
 import store from '@/redux/store'
 import { setAuthenticated, setUserData } from '@/redux/slices/auth'
+import { clearRegistrationForm } from '@/redux/slices/registration-form'
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -33,13 +45,26 @@ const firebaseGetUserInfoFromDb = async (id) => {
   }
 }
 
+const firebaseIsUsernameExist = async (username) => {
+  console.log(username)
+  const querySnapshot = await getDocs(collection(firebaseDb, 'users'))
+  let isExist
+
+  querySnapshot.forEach((doc) => {
+    if (doc.data().username === username) {
+      isExist = true
+    }
+  })
+
+  return isExist
+}
+
 const firebaseLogin = async ({ email, password, rememberMe }) => {
   try {
     await setPersistence(
       firebaseAuth,
-      rememberMe
-        ? browserLocalPersistence
-        : browserSessionPersistence)
+      rememberMe ? browserLocalPersistence : browserSessionPersistence,
+    )
     const auth = await signInWithEmailAndPassword(firebaseAuth, email, password)
     return {
       name: auth.user.displayName,
@@ -68,37 +93,25 @@ const firebaseRegister = async (data) => {
       store.dispatch(setAuthenticated())
     }
 
-    const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
-
-    if (!userInfoFromDb) {
-      const infos = {
-        displayName: name,
-        name: name,
-        email: user.email,
-        username: username,
-        uid: user.uid,
-        createdAt: user.metadata.creationTime,
-        profileImage: null,
-        coverImage: null,
-        socialLinks: {
-          facebook: data.facebook || '',
-          instagram: data.instagram || '',
-          website: data.website || '',
-        },
-      }
-
-      await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-      return {
-        name: user.name,
-        displayName: user.displayName,
-        email: user.email,
-        username: user.username,
-        uid: user.uid,
-        socialLinks: user.socialLinks,
-      }
+    const infos = {
+      displayName: name,
+      name: name,
+      email: user.email,
+      username: username,
+      uid: user.uid,
+      createdAt: user.metadata.creationTime,
+      profileImage: null,
+      coverImage: null,
+      socialLinks: {
+        facebook: data.facebook || '',
+        instagram: data.instagram || '',
+        website: data.website || '',
+      },
     }
+    await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+    const createdUser = await firebaseGetUserInfoFromDb(user.uid)
 
-    return user
+    return createdUser
   } catch (error) {
     console.log(error)
     return { error: error.message }
@@ -107,6 +120,7 @@ const firebaseRegister = async (data) => {
 
 const firebaseLogout = async () => {
   await firebaseAuth.signOut()
+  store.dispatch(clearRegistrationForm())
 }
 
 const firebaseGetAuthorizedUser = () => {
@@ -127,8 +141,8 @@ const firebaseLoginWithGoogle = async () => {
   try {
     const firebaseGoogleProvider = new GoogleAuthProvider()
     firebaseGoogleProvider.setCustomParameters({
-      prompt: "select_account"
-    });
+      prompt: 'select_account',
+    })
     const userInfo = await signInWithPopup(firebaseAuth, firebaseGoogleProvider)
       .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -136,7 +150,10 @@ const firebaseLoginWithGoogle = async () => {
         const token = credential?.accessToken
         // The signed-in user info.
         const user = result.user
-        let fileRef = ref(firebaseStorage, `profiles/${user.uid}_256x256?alt=media`)
+        let fileRef = ref(
+          firebaseStorage,
+          `profiles/${user.uid}_256x256?alt=media`,
+        )
         if (user.photoURL) {
           await uploadBytes(fileRef, user.photoURL)
         }
@@ -304,7 +321,7 @@ const firebaseGetFirstNfts = async (order = 'timestamp') => {
   const queryRef = query(
     collection(firebaseDb, 'nfts'),
     orderBy(order, 'desc'),
-    limit(9)
+    limit(9),
   )
 
   const nfts = await getDocs(queryRef)
@@ -323,7 +340,7 @@ const firebaseGetFilterNfts = async (priceRange) => {
     collection(firebaseDb, 'nfts'),
     where('amount', '>=', parseInt(min)),
     where('amount', '<=', parseInt(max)),
-    limit(9)
+    limit(9),
   )
 
   const nfts = await getDocs(queryRef)
@@ -346,5 +363,6 @@ export {
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
   firebaseGetFirstNfts,
-  firebaseGetFilterNfts
+  firebaseGetFilterNfts,
+  firebaseIsUsernameExist,
 }

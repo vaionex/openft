@@ -43,25 +43,17 @@ const registrationFormSlice = createSlice({
     },
 
     clearRegistrationForm: (state) => {
-      state.detailsValues = {
-        name: '',
-        username: '',
-        email: '',
-        role: '',
-      }
-      state.passwordValues = {
-        password: '',
-        confirmPassword: '',
-      }
-      state.photoValues = {
-        coverImage: null,
-        profileImage: null,
-      }
-      state.socialsValues = {
-        facebook: '',
-        instagram: '',
-        website: '',
-      }
+      state.detailsValues.name = ''
+      state.detailsValues.username = ''
+      state.detailsValues.email = ''
+      state.detailsValues.role = ''
+      state.passwordValues.password = ''
+      state.passwordValues.confirmPassword = ''
+      state.photoValues.coverImage = ''
+      state.photoValues.profileImage = ''
+      state.socialsValues.facebook = ''
+      state.socialsValues.instagram = ''
+      state.socialsValues.website = ''
     },
   },
 })

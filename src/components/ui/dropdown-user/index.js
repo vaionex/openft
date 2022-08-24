@@ -15,7 +15,10 @@ const DropdownUser = ({ user }) => {
             (user.profileImage ? (
               <Avatar className="w-10 h-10 sm:w-10 sm:h-10" user={user} />
             ) : (
-              <AvatarWithName name={user.name} />
+              <AvatarWithName
+                className="w-10 h-10 sm:w-10 sm:h-10"
+                name={user.name}
+              />
             ))}
         </Menu.Button>
       </div>

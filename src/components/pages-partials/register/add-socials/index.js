@@ -71,6 +71,9 @@ function RegistrationAddSocials({ goToStep }) {
 
     dispatch(register(dataForServer))
       .then(async ({ payload }) => {
+        document.body.style.pointerEvents = 'auto'
+        document.body.style.touchAction = 'auto'
+
         await firebaseUploadImage({
           user: payload,
           imageFile: coverImageForUpload.file,
@@ -89,7 +92,6 @@ function RegistrationAddSocials({ goToStep }) {
       })
       .finally(() => {
         setSubmitStarted(false)
-        router.push('/')
       })
   }
 
@@ -97,15 +99,8 @@ function RegistrationAddSocials({ goToStep }) {
     if (isPending) {
       document.body.style.pointerEvents = 'none'
       document.body.style.touchAction = 'none'
-    } else {
-      document.body.style.pointerEvents = 'auto'
-      document.body.style.touchAction = 'auto'
     }
   }, [isPending])
-
-  // useEffect(() => {
-  //   console.log(photoDatas)
-  // }, [photoDatas])
 
   return (
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">

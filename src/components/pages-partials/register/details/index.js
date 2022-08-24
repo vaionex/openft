@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
-import * as yup from 'yup'
 import { setDetailsValues } from '@/redux/slices/registration-form'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { InputMain } from '@/components/ui/inputs'
 import { UserCircleIcon } from '@/components/common/icons'
-import { getAuth, fetchSignInMethodsForEmail } from 'firebase/auth'
-import { useState } from 'react'
+
+import validationSchema from './validationScheme'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Name', name: 'name' },
@@ -16,36 +15,6 @@ const inputAttributes = [
   { type: 'text', placeholder: 'Role, e.g. Illustrator', name: 'role' },
 ]
 
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-
-const validationSchema = yup.object().shape({
-  name: yup
-    .string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters long'),
-  username: yup.string().required('Username is required'),
-  email: yup
-    .string()
-    .matches(emailRegex, 'Email is not valid')
-    .test(
-      'email-is-in-use',
-      'This email is already in use',
-      async function (value) {
-        const auth = getAuth()
-        return fetchSignInMethodsForEmail(auth, value)
-          .then((data) => {
-            return !data.length
-          })
-          .catch((error) => {
-            if (error) {
-              return true
-            }
-          })
-      },
-    )
-    .required('Email is required'),
-})
-
 function RegistrationDetails({ goToStep }) {
   const dispatch = useDispatch()
   const { detailsValues } = useSelector(registrationFormSelector)
@@ -53,7 +22,7 @@ function RegistrationDetails({ goToStep }) {
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState } = useForm({
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onBlur',
     defaultValues: detailsValues,
     resolver,
   })
