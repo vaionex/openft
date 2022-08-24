@@ -3,8 +3,11 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import CardLikeButton from '../../card-like-button'
+import NextLink from 'next/link'
 
-const ProductsCarouselCard = ({ data, mr }) => {
+const ProductsCarouselCard = ({ data, mr, type, idx }) => {
+  const isInFirstThree = idx < 3
+
   return (
     <div
       key={data?.id}
@@ -13,15 +16,23 @@ const ProductsCarouselCard = ({ data, mr }) => {
         mr ? 'sm:mr-5' : '',
       )}
     >
-      <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
-        <Image
-          src={data?.imageURL}
-          // alt={data.imageAlt}
-          layout="fill"
-          className="absolute inset-0 object-cover object-center w-full h-full"
-        />
-        <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
-        <div className="absolute inset-x-0 bottom-0 z-50 flex items-end justify-end p-4 overflow-hidden rounded-lg">
+      <div className="relative">
+        <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
+          <NextLink href={`/discover/${data.id}`}>
+            <a className="cursor-pointer">
+              <Image
+                src={data?.imageURL}
+                alt={data?.name}
+                layout="fill"
+                className="absolute inset-0 object-cover object-center w-full h-full"
+                priority={type === 'list' && isInFirstThree}
+                quality={70}
+              />
+              <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
+            </a>
+          </NextLink>
+        </div>
+        <div className="absolute bottom-0 right-0 z-50 inline-flex p-4 overflow-hidden rounded-lg">
           <CardLikeButton />
         </div>
       </div>
@@ -33,17 +44,19 @@ const ProductsCarouselCard = ({ data, mr }) => {
           </p>
         </div>
         <div className="my-6">
-          <h3 className="text-sm text-gray-700">
+          {/* <h3 className="text-sm text-gray-700">
             <a href={`/discover/${data.id}`} className="text-blue-600">
-              {/* {data.name} */}
+              {data.name}
             </a>
-          </h3>
-          <p className="mt-1 text-lg text-gray-900">{data.name}</p>
+          </h3> */}
+          <p className="mt-1 text-lg text-blue-600">{data.name}</p>
         </div>
         <div className="flex gap-1.5">
-          <button className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal">
-            Buy now
-          </button>
+          <NextLink href={`/discover/${data.id}`}>
+            <a className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal">
+              Buy now
+            </a>
+          </NextLink>
           <button className="p-3.5 rounded-md border border-gray-200">
             <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" />
           </button>
@@ -56,11 +69,13 @@ const ProductsCarouselCard = ({ data, mr }) => {
 ProductsCarouselCard.defaultProps = {
   data: {},
   mr: false,
+  type: 'default',
 }
 
 ProductsCarouselCard.propTypes = {
   data: PropTypes.object.isRequired,
   mr: PropTypes.bool,
+  type: PropTypes.oneOf(['default', 'list']),
 }
 
 export default ProductsCarouselCard
