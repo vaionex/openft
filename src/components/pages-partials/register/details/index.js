@@ -8,6 +8,7 @@ import { InputMain } from '@/components/ui/inputs'
 import { UserCircleIcon } from '@/components/common/icons'
 import { getAuth, fetchSignInMethodsForEmail } from 'firebase/auth'
 import { useState } from 'react'
+import checkEmailIsValid from '@/utils/checkEmailIsValid'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Name', name: 'name' },
@@ -25,7 +26,7 @@ const validationSchema = yup.object({
   email: yup
     .string()
     .test('is-email-in-use', 'This email is already in use', async (value) => {
-      if (!value || !value.includes('@' || '.')) {
+      if (!checkEmailIsValid(value)) {
         return true
       }
       const auth = getAuth()
