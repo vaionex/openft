@@ -30,7 +30,7 @@ const ProductsCarouselCard = ({ data, mr, type, idx }) => {
     if (user?.uid) {
       const queryRef = query(
         collection(firebaseDb, "favourites"),
-        where('uid', '==', user.uid)
+        where('uid', '==', user?.uid)
       )
       const unsub = onSnapshot(queryRef, snapshot => {
         setLikes(snapshot.docs.map((doc) => {
@@ -40,7 +40,7 @@ const ProductsCarouselCard = ({ data, mr, type, idx }) => {
       })
       return unsub;
     } else {
-      setLikes(null)
+      setLikes([])
     }
   }, [firebaseDb, user])
 
