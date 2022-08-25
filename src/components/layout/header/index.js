@@ -74,7 +74,7 @@ const Header = () => {
               <li>
                 <button className="btn-secondary">
                   <UploadBoxIcon className="w-6 h-6 mr-2" aria-hidden="true" />
-                  Upload
+                  Mint
                 </button>
               </li>
               <li>
