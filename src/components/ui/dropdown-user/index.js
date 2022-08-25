@@ -1,12 +1,19 @@
-import { logout } from '@/redux/slices/auth'
-import { Menu, Transition } from '@headlessui/react'
 import React, { Fragment } from 'react'
+import { logout } from '@/redux/slices/auth'
+import { clearWalletData } from '@/redux/slices/wallet'
+import { Menu, Transition } from '@headlessui/react'
 import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import { Avatar, AvatarWithName } from '../avatars'
 
 const DropdownUser = ({ user }) => {
   const dispatch = useDispatch()
+
+  const handleLogout = () => {
+    dispatch(logout())
+    dispatch(clearWalletData())
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -53,7 +60,7 @@ const DropdownUser = ({ user }) => {
                 {({ active }) => (
                   <button
                     type="button"
-                    onClick={() => dispatch(logout())}
+                    onClick={() => handleLogout()}
                     className={twMerge(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full text-left px-4 py-2 text-sm',

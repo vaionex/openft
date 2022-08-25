@@ -14,6 +14,7 @@ import { firebaseUploadImage } from '@/firebase/utils'
 import authSelector from '@/redux/selectors/auth'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { twMerge } from 'tailwind-merge'
+import { createwallet } from '@/services/relysia-queries'
 
 const inputAttributes = [
   {
@@ -73,7 +74,10 @@ function RegistrationAddSocials({ goToStep }) {
       .then(async ({ payload }) => {
         document.body.style.pointerEvents = 'auto'
         document.body.style.touchAction = 'auto'
-
+        const walletData = await createwallet('default', dispatch)
+        !walletData
+          ? setSubmitStarted(true)
+          : setSubmitStarted(false)
         await firebaseUploadImage({
           user: payload,
           imageFile: coverImageForUpload.file,
