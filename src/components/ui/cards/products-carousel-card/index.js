@@ -1,12 +1,67 @@
-import { HeartIcon, ShareIcon } from '@heroicons/react/outline'
+import React, { useEffect, useState } from 'react'
+import { firebaseDb } from '@/firebase/init'
+import { ShareIcon } from '@heroicons/react/outline'
+import { collection, increment, onSnapshot, query, where } from 'firebase/firestore'
+import { firbaseAddDocToDb, firbaseDeleteDocFromDb, firbaseUpdateDocFromDb, firebaseGetUserInfoFromDb } from '@/firebase/utils'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import CardLikeButton from '../../card-like-button'
 import NextLink from 'next/link'
+import { useSelector } from 'react-redux'
+import authSelector from '@/redux/selectors/auth'
 
 const ProductsCarouselCard = ({ data, mr, type, idx }) => {
   const isInFirstThree = idx < 3
+
+  const { user } = useSelector(authSelector)
+  const [likes, setLikes] = useState(null)
+  const [hasLike, setHasLike] = useState(false)
+  const [userName, setUserName] = useState(null)
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const user = await firebaseGetUserInfoFromDb(data?.uid)
+      setUserName(user?.displayName)
+    }
+    getUserInfo()
+  }, [])
+
+  useEffect(async () => {
+    if (user?.uid) {
+      const queryRef = query(
+        collection(firebaseDb, "favourites"),
+        where('uid', '==', user.uid)
+      )
+      const unsub = onSnapshot(queryRef, snapshot => {
+        setLikes(snapshot.docs.map((doc) => {
+          const data = doc.data()
+          return { id: doc.id, ...data }
+        }))
+      })
+      return unsub;
+    } else {
+      setLikes(null)
+    }
+  }, [firebaseDb, user])
+
+  useEffect(() => {
+    setHasLike(likes?.findIndex((like) => like.nftId === data?.id) !== -1)
+  }, [likes])
+
+  const likeNfts = async () => {
+    if (!user) return
+    if (hasLike) {
+      const { id } = likes?.find(like => like.nftId === data?.id)
+      await firbaseDeleteDocFromDb('favourites', id)
+      await firbaseUpdateDocFromDb('nfts', data?.id, { likes: increment(-1) })
+    } else {
+      await firbaseAddDocToDb('favourites', {
+        uid: user.uid,
+        nftId: data.id
+      })
+      await firbaseUpdateDocFromDb('nfts', data?.id, { likes: increment(1) })
+    }
+  }
 
   return (
     <div
@@ -33,7 +88,7 @@ const ProductsCarouselCard = ({ data, mr, type, idx }) => {
           </NextLink>
         </div>
         <div className="absolute bottom-0 right-0 z-50 inline-flex p-4 overflow-hidden rounded-lg">
-          <CardLikeButton />
+          <CardLikeButton likeNfts={likeNfts} hasLike={hasLike} />
         </div>
       </div>
       <div className="px-4 py-5">
@@ -44,11 +99,11 @@ const ProductsCarouselCard = ({ data, mr, type, idx }) => {
           </p>
         </div>
         <div className="my-6">
-          {/* <h3 className="text-sm text-gray-700">
+          <h3 className="text-sm text-gray-700">
             <a href={`/discover/${data.id}`} className="text-blue-600">
-              {data.name}
+              {userName}
             </a>
-          </h3> */}
+          </h3>
           <p className="mt-1 text-lg text-blue-600">{data.name}</p>
         </div>
         <div className="flex gap-1.5">
