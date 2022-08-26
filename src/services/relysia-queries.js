@@ -86,22 +86,18 @@ export const getwalletBal = async (walletid, dispatch) => {
       },
     })
     .then((res) => {
-      // console.log("res wallet bal", res.data.data.data.balance / 100000000);
       let balInBsv =
         res.data &&
-        res.data.data &&
-        res.data.data.data &&
-        res.data.data.data.balance &&
-        res.data.data.data.balance / 100000000
+          res.data.data &&
+          res.data.data.data &&
+          res.data.data.data.balance &&
+          res.data.data.data.balance / 100000000
           ? res.data.data.data.balance / 100000000
           : 0
       dispatch(updateBalance(balInBsv))
     })
     .catch((err) => {
       console.log('metrics error', err, err.response)
-      // if (err?.response?.data?.data?.msg?.includes("you don't have 00000000")) {
-      //   createwallet('default', dispatch)
-      // }
       if (
         err?.response?.data?.data?.msg?.includes('user utxos does not exists')
       ) {
@@ -111,7 +107,6 @@ export const getwalletBal = async (walletid, dispatch) => {
 }
 
 export const getwalletDetails = async (walletid, dispatch) => {
-  // console.log("get wallet details", apiConfig.defaults.headers);
 
   apiConfig
     .get('/v1/address', {
@@ -120,7 +115,6 @@ export const getwalletDetails = async (walletid, dispatch) => {
       },
     })
     .then((res) => {
-      // console.log("getting address", res.data.data);
       dispatch(updateAddress(res.data.data.address))
       dispatch(updatePaymail(res.data.data.paymail))
     })
@@ -138,14 +132,10 @@ export const getwalletDetails = async (walletid, dispatch) => {
       },
     })
     .then((res) => {
-      // console.log("getting address", res.data.data);
       dispatch(updateAddressPath0(res.data.data.address))
     })
     .catch((err) => {
       console.log('address error', err, err.response)
-      // if (err?.response?.data?.data?.msg?.includes("you don't have 00000000")) {
-      //   createwallet('default', dispatch)
-      // }
     })
 
   //wallet balance
@@ -160,14 +150,9 @@ export const getwalletDetails = async (walletid, dispatch) => {
     })
     .then((res) => {
       dispatch(updateMnemonic(res.data.data.mnemonic))
-
-      // console.log("getting mnomonic",res);
     })
     .catch((err) => {
       console.log(err)
-      // if (err?.response?.data?.data?.msg?.includes("you don't have 00000000")) {
-      //   createwallet('default', dispatch)
-      // }
     })
 
   //wallet history
@@ -183,19 +168,34 @@ export const getwalletDetails = async (walletid, dispatch) => {
       } else {
         dispatch(updateWalletHistory([]))
       }
-
-      // console.log("getting history",res);
     })
     .catch((err) => {
       console.log(err)
-      // if (err?.response?.data?.data?.msg?.includes("you don't have 00000000")) {
-      //   createwallet('default', dispatch)
-      // }
+    })
+}
+
+export const getWalletAddressAndPaymail = async (walletId) => {
+  let obj = {
+    address: null,
+    paymail: null,
+  }
+  return await apiConfig
+    .get('/v1/address?path=0', {
+      headers: {
+        walletID: walletId,
+      },
+    })
+    .then((res) => {
+      obj.address = res.data.data.address
+      obj.paymail = res.data.data.paymail
+      return obj
+    })
+    .catch((err) => {
+      return obj
     })
 }
 
 export const createwallet = async (name, dispatch) => {
-  console.log('creating wallet')
   apiConfig
     .get('/v1/createWallet', {
       headers: {
@@ -203,8 +203,8 @@ export const createwallet = async (name, dispatch) => {
       },
     })
     .then((res) => {
-      console.log('wallet created')
       getwalletDetails(res.data.data.walletID, dispatch)
+      return true
     })
     .catch((err) => {
       console.log('wallet error', err)
