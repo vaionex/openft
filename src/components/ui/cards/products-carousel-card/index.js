@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { firebaseDb } from '@/firebase/init'
 import { ShareIcon } from '@heroicons/react/outline'
-import { collection, increment, onSnapshot, query, where } from 'firebase/firestore'
-import { firbaseAddDocToDb, firbaseDeleteDocFromDb, firbaseUpdateDocFromDb, firebaseGetUserInfoFromDb } from '@/firebase/utils'
+import { increment, arrayUnion, arrayRemove } from 'firebase/firestore'
+import { firbaseAddDoc, firbaseUpdateDoc, firebaseGetUserInfoFromDb } from '@/firebase/utils'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
@@ -11,13 +10,19 @@ import NextLink from 'next/link'
 import { useSelector } from 'react-redux'
 import authSelector from '@/redux/selectors/auth'
 
-const ProductsCarouselCard = ({ data, mr, type, idx }) => {
+const ProductsCarouselCard = ({ data, mr, type, idx, favouriteNfts }) => {
   const isInFirstThree = idx < 3
 
   const { user } = useSelector(authSelector)
-  const [likes, setLikes] = useState(null)
   const [hasLike, setHasLike] = useState(false)
   const [userName, setUserName] = useState(null)
+
+  useEffect(() => {
+    if (!favouriteNfts) return
+    const isLike = favouriteNfts?.findIndex((like) => like === data?.id) !== -1
+    setHasLike(isLike)
+  }, [favouriteNfts])
+
   useEffect(() => {
     const getUserInfo = async () => {
       const user = await firebaseGetUserInfoFromDb(data?.uid)
@@ -26,42 +31,22 @@ const ProductsCarouselCard = ({ data, mr, type, idx }) => {
     getUserInfo()
   }, [])
 
-  useEffect(async () => {
-    if (user?.uid) {
-      const queryRef = query(
-        collection(firebaseDb, "favourites"),
-        where('uid', '==', user?.uid)
-      )
-      const unsub = onSnapshot(queryRef, snapshot => {
-        setLikes(snapshot.docs.map((doc) => {
-          const data = doc.data()
-          return { id: doc.id, ...data }
-        }))
-      })
-      return unsub;
-    } else {
-      setLikes([])
-    }
-  }, [firebaseDb, user])
-
-  useEffect(() => {
-    setHasLike(likes?.findIndex((like) => like.nftId === data?.id) !== -1)
-  }, [likes])
-
   const likeNfts = async () => {
     if (!user) return
     if (hasLike) {
-      const { id } = likes?.find(like => like.nftId === data?.id)
-      await firbaseDeleteDocFromDb('favourites', id)
-      await firbaseUpdateDocFromDb('nfts', data?.id, { likes: increment(-1) })
+      setHasLike(false)
+      await firbaseUpdateDoc('favourites', user?.uid, { nfts: arrayRemove(data?.id) })
+      await firbaseUpdateDoc('nfts', data?.id, { likes: increment(-1) })
     } else {
-      await firbaseAddDocToDb('favourites', {
-        uid: user.uid,
-        nftId: data.id
-      })
-      await firbaseUpdateDocFromDb('nfts', data?.id, { likes: increment(1) })
+      setHasLike(true)
+      const updateFav = { nfts: arrayUnion(data?.id) }
+      favouriteNfts
+        ? await firbaseUpdateDoc('favourites', user?.uid, updateFav)
+        : await firbaseAddDoc('favourites', user?.uid, updateFav)
+      await firbaseUpdateDoc('nfts', data?.id, { likes: increment(1) })
     }
   }
+
 
   return (
     <div

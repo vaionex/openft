@@ -1,8 +1,12 @@
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Slider from 'react-slick'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid'
 import { twMerge } from 'tailwind-merge'
 import { ProductsCarouselCard } from '../../cards'
+import { useSelector } from 'react-redux'
+import authSelector from '@/redux/selectors/auth'
+import { firebaseGetSingleDoc } from '@/firebase/utils'
 
 const mainSettings = {
   dots: false,
@@ -68,6 +72,18 @@ PrevArrow.propTypes = {
 }
 
 const ProductsCarousel = ({ data }) => {
+  const { user } = useSelector(authSelector)
+  const [favouriteNfts, setFavouriteNfts] = useState(null)
+
+  useEffect(async () => {
+    if (user) {
+      const data = await firebaseGetSingleDoc("favourites", user?.uid)
+      setFavouriteNfts(data?.nfts)
+    } else {
+      setFavouriteNfts([])
+    }
+  }, [user])
+
   const cardsToShow = {
     desktop: 3.5,
     bigTablet: 2.96,
@@ -108,7 +124,12 @@ const ProductsCarousel = ({ data }) => {
     <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
         {data && data.map((item) => (
-          <ProductsCarouselCard key={item.id} mr data={item} />
+          <ProductsCarouselCard
+            key={item.id}
+            mr
+            data={item}
+            favouriteNfts={favouriteNfts}
+          />
         ))}
       </Slider>
     </span>

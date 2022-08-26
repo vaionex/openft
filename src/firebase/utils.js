@@ -308,7 +308,7 @@ const updateUserEmail = async (user, email) => {
   }
 }
 
-const firebaseGetSingleDocFromDb = async (collectionName, id) => {
+const firebaseGetSingleDoc = async (collectionName, id) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     const docSnap = await getDoc(docRef)
@@ -354,16 +354,16 @@ const firebaseGetFilterNfts = async (priceRange) => {
   })
 }
 
-const firbaseAddDocToDb = async (collectionName, obj) => {
+const firbaseAddDoc = async (collectionName, id, obj) => {
   try {
-    const docRef = collection(firebaseDb, collectionName)
-    await addDoc(docRef, obj)
+    const docRef = doc(firebaseDb, collectionName, id)
+    await setDoc(docRef, obj)
   } catch (error) {
     console.error(error)
   }
 }
 
-const firbaseUpdateDocFromDb = async (collectionName, id, obj) => {
+const firbaseUpdateDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await updateDoc(docRef, obj)
@@ -372,7 +372,7 @@ const firbaseUpdateDocFromDb = async (collectionName, id, obj) => {
   }
 }
 
-const firbaseDeleteDocFromDb = async (collectionName, id) => {
+const firbaseDeleteDoc = async (collectionName, id) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await deleteDoc(docRef)
@@ -393,7 +393,8 @@ export {
   firebaseGetFirstNfts,
   firebaseGetFilterNfts,
   firebaseIsUsernameExist,
-  firbaseDeleteDocFromDb,
-  firbaseUpdateDocFromDb,
-  firbaseAddDocToDb,
+  firebaseGetSingleDoc,
+  firbaseAddDoc,
+  firbaseDeleteDoc,
+  firbaseUpdateDoc,
 }
