@@ -10,78 +10,17 @@ import {
 } from '@heroicons/react/solid'
 
 import FilteredContents from './filtered-contents'
-import { firebaseGetFilterNfts } from '@/firebase/utils'
+import { firebaseGetFilterNfts, firebaseGetSingleDoc } from '@/firebase/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchFirstNfts, setFetchFirstNfts } from '@/redux/slices/nft'
 import nftSelector from '@/redux/selectors/nft'
-
-// const products = [
-//   {
-//     id: 1,
-//     name: 'Basic Tee',
-//     href: '1',
-//     imageSrc: '/images/mock-carousel/Image.png',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     priceType: 'BSV 1',
-//     color: 'Black',
-//   },
-//   {
-//     id: 2,
-//     name: 'Basic Tee',
-//     href: '2',
-//     imageSrc: '/images/mock-carousel/Image_1.png',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     priceType: 'BSV 1',
-//     color: 'Black',
-//   },
-//   {
-//     id: 3,
-//     name: 'Basic Tee',
-//     href: '3',
-//     imageSrc: '/images/mock-carousel/Image_2.png',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     priceType: 'BSV 1',
-//     color: 'Black',
-//   },
-//   {
-//     id: 4,
-//     name: 'Basic Tee',
-//     href: '3',
-//     imageSrc: '/images/mock-carousel/Image_3.png',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     priceType: 'BSV 1',
-//     color: 'Black',
-//   },
-//   {
-//     id: 5,
-//     name: 'Basic Tee',
-//     href: '4',
-//     imageSrc: '/images/mock-carousel/Image_2.png',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     priceType: 'BSV 1',
-//     color: 'Black',
-//   },
-//   {
-//     id: 6,
-//     name: 'Basic Tee',
-//     href: '5',
-//     imageSrc: '/images/mock-carousel/Image_1.png',
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     price: '$35',
-//     priceType: 'BSV 1',
-//     color: 'Black',
-//   },
-// ]
+import authSelector from '@/redux/selectors/auth'
 
 export default function CategoryFilter({ nftsData }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [currentStatus, setCurrentStatus] = useState('buy-now')
   const [pageOfItems, setPageOfItems] = useState(nftsData)
+  const [favouriteNfts, setFavouriteNfts] = useState(null)
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     min: '',
     max: ''
@@ -89,6 +28,16 @@ export default function CategoryFilter({ nftsData }) {
 
   const dispatch = useDispatch()
   const { firstNfts } = useSelector(nftSelector)
+  const { user } = useSelector(authSelector)
+
+  useEffect(async () => {
+    if (user) {
+      const data = await firebaseGetSingleDoc("favourites", user?.uid)
+      setFavouriteNfts(data?.nfts)
+    } else {
+      setFavouriteNfts([])
+    }
+  }, [user])
 
   useEffect(() => {
     dispatch(setFetchFirstNfts(nftsData))
@@ -333,7 +282,10 @@ export default function CategoryFilter({ nftsData }) {
               <div className="lg:col-span-3">
                 {/* Replace with your content */}
                 <div className="h-full">
-                  <FilteredContents nftItems={pageOfItems} />
+                  <FilteredContents
+                    favouriteNfts={favouriteNfts}
+                    nftItems={pageOfItems}
+                  />
                 </div>
                 {/* /End replace */}
               </div>

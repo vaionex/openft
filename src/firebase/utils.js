@@ -1,6 +1,8 @@
 import { firebaseAuth, firebaseDb, firebaseStorage } from '@/firebase/init'
 import {
+  addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -17,7 +19,6 @@ import {
   uploadBytes,
   deleteObject,
   getDownloadURL,
-  listAll,
 } from 'firebase/storage'
 import {
   signInWithEmailAndPassword,
@@ -307,7 +308,7 @@ const updateUserEmail = async (user, email) => {
   }
 }
 
-const firebaseGetSingleDocFromDb = async (collectionName, id) => {
+const firebaseGetSingleDoc = async (collectionName, id) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     const docSnap = await getDoc(docRef)
@@ -353,6 +354,33 @@ const firebaseGetFilterNfts = async (priceRange) => {
   })
 }
 
+const firbaseAddDoc = async (collectionName, id, obj) => {
+  try {
+    const docRef = doc(firebaseDb, collectionName, id)
+    await setDoc(docRef, obj)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const firbaseUpdateDoc = async (collectionName, id, obj) => {
+  try {
+    const docRef = doc(firebaseDb, collectionName, id)
+    await updateDoc(docRef, obj)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const firbaseDeleteDoc = async (collectionName, id) => {
+  try {
+    const docRef = doc(firebaseDb, collectionName, id)
+    await deleteDoc(docRef)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -365,4 +393,8 @@ export {
   firebaseGetFirstNfts,
   firebaseGetFilterNfts,
   firebaseIsUsernameExist,
+  firebaseGetSingleDoc,
+  firbaseAddDoc,
+  firbaseDeleteDoc,
+  firbaseUpdateDoc,
 }
