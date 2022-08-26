@@ -8,26 +8,30 @@ import {
   PlusSmIcon,
   SearchIcon,
 } from '@heroicons/react/solid'
-
+import {
+  firebaseGetFilterNfts,
+  firebsaeFetchNextData,
+  firebaseGetSingleDoc
+} from '@/firebase/utils'
+import { useSelector } from 'react-redux'
 import FilteredContents from './filtered-contents'
-import { firebaseGetFilterNfts, firebaseGetSingleDoc } from '@/firebase/utils'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchFirstNfts, setFetchFirstNfts } from '@/redux/slices/nft'
-import nftSelector from '@/redux/selectors/nft'
+import Pagination from './filtered-contents/pagination'
 import authSelector from '@/redux/selectors/auth'
 
 export default function CategoryFilter({ nftsData }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [currentStatus, setCurrentStatus] = useState('buy-now')
-  const [pageOfItems, setPageOfItems] = useState(nftsData)
-  const [favouriteNfts, setFavouriteNfts] = useState(null)
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     min: '',
     max: ''
-  });
+  })
+  const [nfts, setNfts] = useState(nftsData)
+  const [pageOfItems, setPageOfItems] = useState(null)
+  const [lastAddPage, setLastAddPage] = useState(null)
+  const [isFilter, setIsFilter] = useState(false)
+  const [isPagination, setIsPagination] = useState(false)
+  const [favouriteNfts, setFavouriteNfts] = useState(null)
 
-  const dispatch = useDispatch()
-  const { firstNfts } = useSelector(nftSelector)
   const { user } = useSelector(authSelector)
 
   useEffect(async () => {
@@ -38,16 +42,6 @@ export default function CategoryFilter({ nftsData }) {
       setFavouriteNfts([])
     }
   }, [user])
-
-  useEffect(() => {
-    dispatch(setFetchFirstNfts(nftsData))
-  }, [nftsData])
-
-  useEffect(() => {
-    if (firstNfts) {
-      setPageOfItems(firstNfts)
-    }
-  }, [firstNfts])
 
   const statusHandle = (e) => {
     e.preventDefault()
@@ -62,11 +56,13 @@ export default function CategoryFilter({ nftsData }) {
   const onApplyFilter = async () => {
     try {
       const data = await firebaseGetFilterNfts(selectedPriceRange)
-      setPageOfItems(data)
+      setNfts(data)
       setMobileFiltersOpen(false)
+      setIsFilter(true)
     } catch (err) {
       console.log(err)
       setMobileFiltersOpen(false)
+      setIsFilter(false)
     }
   }
 
@@ -75,10 +71,32 @@ export default function CategoryFilter({ nftsData }) {
       min: "",
       max: ""
     });
+    setIsFilter(false)
     setMobileFiltersOpen(false)
-    dispatch(fetchFirstNfts())
+    setNfts(nftsData)
   };
 
+  const onChangePage = (newPage) => {
+    setPageOfItems(newPage);
+  }
+
+  const loadMoreData = async () => {
+    setIsPagination(true)
+    const item = pageOfItems[pageOfItems?.length - 1]
+    const newNfts = isFilter
+      ? await firebaseGetFilterNfts(selectedPriceRange)
+      : await firebsaeFetchNextData(item)
+    newNfts?.length > 0 && setNfts((item) => ([...item, ...newNfts]))
+    setIsPagination(false)
+  }
+
+  const addItems = async (page) => {
+    if (page === 1 || nftsData?.length < 9) {
+      return null
+    }
+    setLastAddPage(page)
+    loadMoreData()
+  }
 
   return (
     <div>
@@ -280,14 +298,22 @@ export default function CategoryFilter({ nftsData }) {
 
               {/* Product grid */}
               <div className="lg:col-span-3">
-                {/* Replace with your content */}
                 <div className="h-full">
                   <FilteredContents
                     favouriteNfts={favouriteNfts}
                     nftItems={pageOfItems}
                   />
                 </div>
-                {/* /End replace */}
+                <Pagination
+                  items={nfts}
+                  onChangePage={onChangePage}
+                  addItems={addItems}
+                  lastAddPage={lastAddPage}
+                  isFilter={isFilter}
+                  isPagination={isPagination}
+                  loadDataStep={10}
+                  pageItems={9}
+                />
               </div>
             </div>
           </section>

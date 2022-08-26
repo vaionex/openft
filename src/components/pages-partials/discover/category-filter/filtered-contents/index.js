@@ -1,5 +1,4 @@
 import { ProductsCarouselCard } from '@/components/ui/cards'
-import Pagination from './pagination'
 
 const FilteredContents = ({ nftItems, favouriteNfts }) => {
   return (
@@ -14,7 +13,6 @@ const FilteredContents = ({ nftItems, favouriteNfts }) => {
             favouriteNfts={favouriteNfts}
           />
         ))}
-      <Pagination items={nftItems} />
     </div>
   )
 }

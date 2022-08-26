@@ -318,11 +318,29 @@ const firebaseGetSingleDoc = async (collectionName, id) => {
   }
 }
 
-const firebaseGetFirstNfts = async (order = 'timestamp') => {
+const firebaseGetFirstNfts = async (pageLimit, order = 'timestamp') => {
   const queryRef = query(
     collection(firebaseDb, 'nfts'),
     orderBy(order, 'desc'),
-    limit(9),
+    limit(pageLimit)
+  )
+
+  const nfts = await getDocs(queryRef)
+  return nfts.docs.map((doc) => {
+    const docData = doc.data()
+    return {
+      id: doc.id,
+      ...docData,
+    }
+  })
+}
+
+const firebsaeFetchNextData = async (item, pageLimit = 20, order = 'timestamp') => {
+  const queryRef = query(
+    collection(firebaseDb, 'nfts'),
+    limit(pageLimit),
+    orderBy(order, 'desc'),
+    startAfter(item)
   )
 
   const nfts = await getDocs(queryRef)
@@ -341,7 +359,7 @@ const firebaseGetFilterNfts = async (priceRange) => {
     collection(firebaseDb, 'nfts'),
     where('amount', '>=', parseInt(min)),
     where('amount', '<=', parseInt(max)),
-    limit(9),
+    limit(20),
   )
 
   const nfts = await getDocs(queryRef)
@@ -397,4 +415,5 @@ export {
   firbaseAddDoc,
   firbaseDeleteDoc,
   firbaseUpdateDoc,
+  firebsaeFetchNextData,
 }
