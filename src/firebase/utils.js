@@ -128,7 +128,7 @@ const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
-      store.dispatch(setAuthenticated())
+      store.dispatch(setAuthenticated(!!user))
       store.dispatch(setUserData(user))
     } else {
       console.log('not auth')

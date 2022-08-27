@@ -10,7 +10,7 @@ const initialState = {
   user: null,
   isPending: false,
   errorMessage: null,
-  isAuthenticated: false,
+  isAuthenticated: null,
   accessToken: null,
 }
 
@@ -55,8 +55,8 @@ const authSlice = createSlice({
     setUserData: (state, action) => {
       state.user = { ...state.user, ...action.payload }
     },
-    setAuthenticated: (state) => {
-      state.isAuthenticated = true
+    setAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload
     },
     setResetAuth: (state) => {
       state.user = null
