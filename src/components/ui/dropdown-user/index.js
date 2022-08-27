@@ -26,7 +26,7 @@ const DropdownUser = ({ user }) => {
               />
             ) : (
               <AvatarWithName
-                className="w-10 h-10 text-xl sm:w-10 sm:h-10"
+                className="w-10 h-10 text-xs sm:w-10 sm:h-10"
                 name={user.name}
               />
             )
@@ -66,7 +66,10 @@ const DropdownUser = ({ user }) => {
                 {({ active }) => (
                   <button
                     type="button"
-                    onClick={() => handleLogout()}
+                    onClick={() => {
+                      handleLogout()
+                      router.push('/')
+                    }}
                     className={twMerge(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full text-left px-4 py-2 text-sm',

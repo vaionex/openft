@@ -255,6 +255,24 @@ const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
   return { message: 'fail' }
 }
 
+const firebaseDeleteImage = async ({ uid, imageType }) => {
+  const storage = getStorage()
+  const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+  const imgRef = ref(storage, userInfoFromDb[imageType])
+  const userRef = doc(firebaseDb, 'users', uid)
+
+  deleteObject(imgRef).catch((error) => alert(error.message))
+  store.dispatch(
+    setUserData({
+      [imageType]: '',
+    }),
+  )
+  await updateDoc(userRef, {
+    ...userInfoFromDb,
+    [imageType]: '',
+  })
+}
+
 const firebaseUpdateMyProfile = async (uid, updatedAreas) => {
   const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
   const userRef = doc(firebaseDb, 'users', uid)
@@ -387,4 +405,5 @@ export {
   firbaseAddDoc,
   firbaseDeleteDoc,
   firbaseUpdateDoc,
+  firebaseDeleteImage,
 }

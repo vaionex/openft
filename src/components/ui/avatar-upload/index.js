@@ -8,9 +8,10 @@ import authSelector from '@/redux/selectors/auth'
 import ImageCropper from '../image-cropper'
 import { checkValidation } from '@/utils/imageValidation'
 import getFileExt from '@/utils/getFileExt'
-import { firebaseUploadImage } from '@/firebase/utils'
+import { firebaseDeleteImage, firebaseUploadImage } from '@/firebase/utils'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { useCallback } from 'react'
+import ModalConfirm from '../modal-confirm'
 
 export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   const { user } = useSelector(authSelector)
@@ -18,6 +19,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   const [uploading, setUploading] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [errorMap, setErrorMap] = useState(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const IMAGE_SIZE_LIMIT = limits.maxSize * 1000 * 1000
   const IMAGE_RESOLUTION_LIMIT = {
@@ -69,6 +71,16 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
     e.target.value = ''
   }
 
+  const handleOnDelete = async () => {
+    const uid = user?.uid
+    try {
+      await firebaseDeleteImage({ uid, imageType: 'profileImage' })
+      setIsDeleteModalOpen(false)
+    } catch (error) {
+      alert(error.message)
+    }
+  }
+
   return (
     <div className="flex items-start justify-between w-full gap-2">
       <div className="flex justify-center p-2">
@@ -89,7 +101,10 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
 
       <div className="flex">
         {user?.profileImage && (
-          <span className="inline-block p-2 text-sm text-gray-500 cursor-pointer">
+          <span
+            className="inline-block p-2 text-sm text-gray-500 cursor-pointer"
+            onClick={() => setIsDeleteModalOpen(true)}
+          >
             Delete
           </span>
         )}
@@ -127,6 +142,14 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
           setToState={setImageState}
         />
       )}
+
+      <ModalConfirm
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleOnDelete}
+        isOpen={isDeleteModalOpen}
+        title="Delete Profile Image"
+        text="Are you sure you want to delete the photo?"
+      />
     </div>
   )
 }
