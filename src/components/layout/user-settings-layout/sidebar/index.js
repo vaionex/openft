@@ -24,7 +24,6 @@ const UserSettingsSidebar = () => {
           <NextLink
             href={item.href}
             scroll={false}
-            shallow={true}
             key={`${item.name}-${Math.random() * 100}`}
           >
             <a
