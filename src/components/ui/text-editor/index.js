@@ -1,14 +1,15 @@
 import { EditorUlistIcon } from '@/components/common/icons'
+import { ContentState, EditorState } from 'draft-js'
 import dynamic from 'next/dynamic'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
   { ssr: false },
 )
 
-const TextEditor = ({ onChange }) => {
-  const [editorState, setEditorState] = useState(null)
+const TextEditor = ({ onChange, placeholder }) => {
+  const [editorState, setEditorState] = useState()
 
   return (
     <div className="">
@@ -18,7 +19,6 @@ const TextEditor = ({ onChange }) => {
         wrapperClassName=""
         editorClassName="p-3 border border-gray-200 rounded min-h-[154px]"
         onEditorStateChange={setEditorState}
-        placeholder="Add a short bio..."
         toolbar={{
           options: ['blockType', 'inline', 'link', 'list'],
           inline: {
@@ -77,6 +77,7 @@ const TextEditor = ({ onChange }) => {
             },
           },
         }}
+        placeholder={placeholder}
       />
     </div>
   )

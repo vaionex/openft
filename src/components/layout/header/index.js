@@ -58,24 +58,14 @@ const Header = () => {
           </div>
 
           <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
-            <li
-              className={twMerge(
-                'hidden',
-                isAuthenticated === false && 'list-item',
-              )}
-            >
+            <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="/login">
                 <a className="text-base font-medium hover:text-gradient-primary-hover">
                   Login
                 </a>
               </NextLink>
             </li>
-            <li
-              className={twMerge(
-                'hidden',
-                isAuthenticated === false && 'list-item',
-              )}
-            >
+            <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="register">
                 <a className="btn-primary">Sign up</a>
               </NextLink>

@@ -24,12 +24,9 @@ const UserSettingsSidebar = () => {
           <NextLink
             href={item.href}
             scroll={false}
-            shallow={true}
             key={`${item.name}-${Math.random() * 100}`}
           >
             <a
-              key={item.name}
-              href={item.href}
               className={twMerge(
                 pathname === item.href
                   ? 'bg-blue-50 border-blue-500 text-blue-700 hover:bg-blue-50 hover:text-teal-700'

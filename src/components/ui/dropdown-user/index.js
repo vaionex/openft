@@ -18,15 +18,21 @@ const DropdownUser = ({ user }) => {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full p-0.5 text-sm font-medium text-gray-700 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-          {user &&
-            (user.profileImage ? (
-              <Avatar className="w-10 h-10 sm:w-10 sm:h-10" user={user} />
+          {user ? (
+            user.profileImage ? (
+              <Avatar
+                className="w-10 h-10 bg-blue-700 sm:w-10 sm:h-10"
+                user={user}
+              />
             ) : (
               <AvatarWithName
-                className="w-10 h-10 sm:w-10 sm:h-10"
+                className="w-10 h-10 text-xl sm:w-10 sm:h-10"
                 name={user.name}
               />
-            ))}
+            )
+          ) : (
+            <AvatarWithName className="w-10 h-10 sm:w-10 sm:h-10 " />
+          )}
         </Menu.Button>
       </div>
 

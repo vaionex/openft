@@ -91,7 +91,7 @@ const firebaseRegister = async (data) => {
     const { user } = response
 
     if (user) {
-      store.dispatch(setAuthenticated())
+      store.dispatch(setAuthenticated(!!user))
     }
 
     const infos = {
@@ -228,47 +228,43 @@ const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
     const fileRef = ref(storage, imagePath)
     const oldRef = ref(storage, userInfoFromDb[imageType])
 
-    await uploadBytes(fileRef, imageFile).then(async () => {
+    try {
+      await uploadBytes(fileRef, imageFile)
+
       const firebaseProfileURL = await getDownloadURL(ref(storage, imagePath))
-      await updateProfile(user, {
-        [imageType]: firebaseProfileURL,
-      }).then(async () => {
-        if (userInfoFromDb[imageType]) {
-          deleteObject(oldRef).catch((error) => console.log(error))
-        }
-        store.dispatch(
-          setUserData({
-            [imageType]: firebaseProfileURL,
-          }),
-        )
-        await updateDoc(userRef, {
-          ...userInfoFromDb,
+      await updateProfile(user, { [imageType]: firebaseProfileURL })
+
+      if (userInfoFromDb[imageType]) {
+        deleteObject(oldRef).catch((error) => console.log(error))
+      }
+
+      store.dispatch(
+        setUserData({
           [imageType]: firebaseProfileURL,
-        })
+        }),
+      )
+
+      await updateDoc(userRef, {
+        ...userInfoFromDb,
+        [imageType]: firebaseProfileURL,
       })
-    })
-    return { success: 'Image uploaded successfully.' }
+    } catch (error) {
+      console.log(error)
+    }
   }
   return { message: 'fail' }
 }
 
-const firebaseUpdateProfileDetails = async ({
-  user,
-  password,
-  username,
-  email,
-  photoURL,
-}) => {
-  const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
-  const userRef = doc(firebaseDb, 'users', user.uid)
+const firebaseUpdateMyProfile = async (uid, updatedAreas) => {
+  const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+  const userRef = doc(firebaseDb, 'users', uid)
   if (username) {
     await updateProfile(user, {
       displayName: username,
     }).then(async () => {
       await updateDoc(userRef, {
         ...userInfoFromDb,
-        displayName: username,
-        username: username,
+        ...updatedAreas,
       })
       store.dispatch(
         setUserData({
@@ -279,12 +275,6 @@ const firebaseUpdateProfileDetails = async ({
         }),
       )
     })
-  }
-  if (email) {
-    await updateUserEmail(user, email, photoURL)
-  }
-  if (password) {
-    await firebaseResetPassword(user, password)
   }
 }
 
@@ -387,7 +377,7 @@ export {
   firebaseGetAuthorizedUser,
   firebaseLogout,
   firebaseUploadImage,
-  firebaseUpdateProfileDetails,
+  firebaseUpdateMyProfile,
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
   firebaseGetFirstNfts,

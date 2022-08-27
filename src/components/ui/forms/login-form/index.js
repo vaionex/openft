@@ -45,9 +45,7 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex justify-center pt-2">
-        {error && (
-          <Alert message={error} type="error" />
-        )}
+        {error && <Alert message={error} type="error" />}
       </div>
       <div>
         <label
@@ -105,9 +103,7 @@ function LoginForm() {
         <Checkbox
           id="remember-me"
           text="Remember me"
-          onChange={(e) =>
-            setRememberMe(e.target.checked)
-          }
+          onChange={(e) => setRememberMe(e.target.checked)}
         />
 
         <div className="text-sm">
@@ -120,11 +116,11 @@ function LoginForm() {
       <div>
         <button
           disabled={auth.isPending}
-          className={`w-full btn-primary 
-          ${auth.isPending
-              ? 'bg-gray-100'
-              : 'bg-blue-600 hover:bg-blue-700'
-            } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`} type="submit"
+          className={`w-full btn-primary
+          ${
+            auth.isPending ? 'bg-gray-100' : 'bg-blue-600 hover:bg-blue-700'
+          } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+          type="submit"
         >
           Sign in
         </button>
