@@ -71,6 +71,10 @@ const ImageCropper = ({
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
+          classes={{
+            containerClassName: 'bg-blue-500',
+            mediaClassName: 'shadow-2xl',
+          }}
         />
       </div>
 
