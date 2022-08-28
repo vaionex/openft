@@ -9,11 +9,9 @@ export const protectedRoute = (isAuthenticated, router) => {
   const authRoute =
     router.pathname === '/register' || router.pathname === '/login'
 
-  if (routesWithAuth && !isAuthenticated) {
-    router.push('/')
-  }
+  const isAuthenticatedRoute = localStorage.getItem('authed')
 
-  if (authRoute && isAuthenticated) {
-    router.push('/')
-  }
+  routesWithAuth && Boolean(!isAuthenticatedRoute)
+    ? router.push('/login')
+    : authRoute && Boolean(isAuthenticatedRoute) && router.push('/')
 }

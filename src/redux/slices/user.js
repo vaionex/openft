@@ -3,6 +3,7 @@ import {
   firebaseLogin,
   firebaseLogout,
   firebaseRegister,
+  firebaseUpdateProfile,
 } from '@/firebase/utils'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
@@ -48,18 +49,18 @@ export const register = createAsyncThunk(
   },
 )
 
-// export const updateUser = createAsyncThunk(
-//   'user/signupUser',
-//   async (request, thunkAPI) => {
-//     try {
-//       const user = await firebaseRegister(request)
-//       if (user && !user?.error) return user
-//       else throw user?.error
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error)
-//     }
-//   },
-// )
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (request, thunkAPI) => {
+    try {
+      const user = await firebaseUpdateProfile(request)
+      if (user && !user?.error) return user
+      else throw user?.error
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
 
 const userSlice = createSlice({
   name: 'user',
@@ -117,6 +118,18 @@ const userSlice = createSlice({
       state.isPending = false
       state.errorMessage = null
       state.isAuthenticated = false
+    },
+    [updateUser.pending]: (state) => {
+      state.isPending = true
+      state.errorMessage = null
+    },
+    [updateUser.rejected]: (state, action) => {
+      state.isPending = false
+      state.errorMessage = action.payload
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.isPending = false
+      state.currentUser = { ...state.currentUser, ...action.payload }
     },
   },
 })

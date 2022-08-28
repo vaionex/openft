@@ -128,15 +128,15 @@ const firebaseGetAuthorizedUser = () => {
     const isAuth = localStorage.getItem('authed')
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
+      store.dispatch(setUserData(user))
       if (!isAuth) {
         localStorage.setItem('authed', true)
         store.dispatch(setAuthenticated(true))
       }
-      store.dispatch(setAuthenticated(!!user))
-      store.dispatch(setUserData(user))
     } else {
       console.log('not auth')
       localStorage.removeItem('authed')
+      store.dispatch(setAuthenticated(false))
     }
   })
 
@@ -278,26 +278,17 @@ const firebaseDeleteImage = async ({ uid, imageType }) => {
   })
 }
 
-const firebaseUpdateMyProfile = async (uid, updatedAreas) => {
-  const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
-  const userRef = doc(firebaseDb, 'users', uid)
-  if (username) {
-    await updateProfile(user, {
-      displayName: username,
-    }).then(async () => {
-      await updateDoc(userRef, {
-        ...userInfoFromDb,
-        ...updatedAreas,
-      })
-      store.dispatch(
-        setUserData({
-          name: username,
-          uid: userInfoFromDb.uid,
-          email: userInfoFromDb.email,
-          photoURL: photoURL,
-        }),
-      )
-    })
+const firebaseUpdateProfile = async ({ uid, values }) => {
+  try {
+    const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+    const mergedValues = { ...userInfoFromDb, ...values }
+    const userRef = doc(firebaseDb, 'users', uid)
+    await updateDoc(userRef, mergedValues, uid)
+    store.dispatch(setUserData(mergedValues))
+    return { success: 'Profile update successful.' }
+  } catch (error) {
+    console.log(error)
+    return { error: error.message }
   }
 }
 
@@ -400,7 +391,7 @@ export {
   firebaseGetAuthorizedUser,
   firebaseLogout,
   firebaseUploadImage,
-  firebaseUpdateMyProfile,
+  firebaseUpdateProfile,
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
   firebaseGetFirstNfts,

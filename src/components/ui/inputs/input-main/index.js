@@ -76,6 +76,7 @@ InputMain.Input = function InputMainInput(
     className,
     inputClassName,
     tooltip,
+    error,
     ...props
   },
   ref,
@@ -83,20 +84,27 @@ InputMain.Input = function InputMainInput(
   return (
     <div className={className}>
       {variant === 'add-on' && !!addon && (
-        <div className="flex mt-1 rounded-md shadow-sm sm:mt-0">
-          <span className="inline-flex items-center px-3 text-gray-500 border border-r-0 border-gray-200 rounded-l-md bg-gray-50 sm:text-sm">
-            {addon}
-          </span>
-          <input
-            id={id}
-            type={inputType}
-            className={twMerge(
-              'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
-              inputClassName,
-            )}
-            ref={ref}
-            {...props}
-          />
+        <div>
+          <div className="flex mt-1 rounded-md shadow-sm sm:mt-0">
+            <span className="inline-flex items-center px-3 text-gray-500 border border-r-0 border-gray-200 rounded-l-md bg-gray-50 sm:text-sm">
+              {addon}
+            </span>
+            <input
+              id={id}
+              type={inputType}
+              className={twMerge(
+                'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
+                inputClassName,
+              )}
+              ref={ref}
+              {...props}
+            />
+          </div>
+          {error && (
+            <div className="mt-2 text-xs text-red-600 ">
+              <span className="text-xs text-red-600 ">{error}</span>
+            </div>
+          )}
         </div>
       )}
       {variant === 'add-on-reverse' && !!addon && (

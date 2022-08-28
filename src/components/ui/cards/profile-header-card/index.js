@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import { twMerge } from 'tailwind-merge'
 import { Avatar, AvatarWithName } from '../../avatars'
 
-const ProfileHeaderCard = ({ user }) => {
+const ProfileHeaderCard = ({ user, onSubmit, isError }) => {
+  console.log(isError)
   return (
     <div>
       <div className="relative w-full h-32 overflow-hidden bg-blue-300 rounded-lg lg:h-60">
@@ -41,10 +43,15 @@ const ProfileHeaderCard = ({ user }) => {
               <h3 className="font-normal text-gray-500">{user?.title}</h3>
             </div>
             <div className="flex flex-col space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
-              <button type="button" className="btn-secondary py-2.5">
-                Cancel
-              </button>
-              <button type="button" className="btn-primary py-2.5">
+              <button
+                type="button"
+                disabled={isError}
+                className={twMerge(
+                  'btn-primary py-2.5',
+                  isError ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                )}
+                onClick={onSubmit}
+              >
                 Save
               </button>
             </div>

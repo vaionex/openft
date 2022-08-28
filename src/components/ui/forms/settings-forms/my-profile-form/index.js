@@ -3,51 +3,10 @@ import Checkbox from '@/components/ui/checkbox'
 import { InputMain } from '@/components/ui/inputs'
 import TextEditor from '@/components/ui/text-editor'
 import PropTypes from 'prop-types'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-const MyProfileForm = ({ user }) => {
-  const dispatch = useDispatch()
-  const usernameRegex = /^[a-z0-9]+$/
-  const [formValues, setFormValues] = useState({
-    username: '',
-    instagram: '',
-    bio: '',
-    jobTitle: '',
-    showJobTitle: false,
-  })
-
-  useEffect(() => {
-    if (user) {
-      setFormValues({
-        username: user?.username || '',
-        instagram: user?.instagram || '',
-        bio: user?.bio || '',
-        jobTitle: user?.jobTitle?.title || '',
-        showJobTitle: user?.jobTitle?.show || false,
-      })
-    }
-  }, [user])
-
-  const handleInputChange = (e) => {
-    if (e.target.name === 'showJobTitle') {
-      setFormValues((prev) => {
-        return {
-          ...prev,
-          [e.target.name]: e.target.checked,
-        }
-      })
-    } else {
-      setFormValues((prev) => {
-        return {
-          ...prev,
-          [e.target.name]: e.target.value,
-        }
-      })
-    }
-  }
-
+const MyProfileForm = ({ formValues, handleInputChange, errorMessage }) => {
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
@@ -62,6 +21,7 @@ const MyProfileForm = ({ user }) => {
             className="sm:col-span-2"
             value={formValues.username}
             onChange={handleInputChange}
+            error={errorMessage}
           />
         </InputMain>
 
@@ -120,6 +80,7 @@ const MyProfileForm = ({ user }) => {
             name="jobTitle"
             placeholder="e.g. UI Artist"
             className="sm:col-span-2"
+            value={formValues.jobTitle}
             additionalCheckbox={
               <Checkbox
                 id="showJobTitle"
@@ -127,7 +88,7 @@ const MyProfileForm = ({ user }) => {
                 text="Show my job title in my profile"
                 className="mt-4"
                 labelClassName="font-normal"
-                checked={formValues.jobTitle.show}
+                checked={formValues.showJobTitle}
                 onChange={handleInputChange}
               />
             }
