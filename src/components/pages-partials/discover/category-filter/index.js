@@ -14,7 +14,7 @@ import { firebaseGetFilterNfts, firebaseGetSingleDoc } from '@/firebase/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchFirstNfts, setFetchFirstNfts } from '@/redux/slices/nft'
 import nftSelector from '@/redux/selectors/nft'
-import authSelector from '@/redux/selectors/auth'
+import userSelector from '@/redux/selectors/user'
 
 export default function CategoryFilter({ nftsData }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -23,21 +23,21 @@ export default function CategoryFilter({ nftsData }) {
   const [favouriteNfts, setFavouriteNfts] = useState(null)
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     min: '',
-    max: ''
-  });
+    max: '',
+  })
 
   const dispatch = useDispatch()
   const { firstNfts } = useSelector(nftSelector)
-  const { user } = useSelector(authSelector)
+  const { currentUser } = useSelector(userSelector)
 
   useEffect(async () => {
-    if (user) {
-      const data = await firebaseGetSingleDoc("favourites", user?.uid)
+    if (currentUser) {
+      const data = await firebaseGetSingleDoc('favourites', currentUser?.uid)
       setFavouriteNfts(data?.nfts)
     } else {
       setFavouriteNfts([])
     }
-  }, [user])
+  }, [currentUser])
 
   useEffect(() => {
     dispatch(setFetchFirstNfts(nftsData))
@@ -72,13 +72,12 @@ export default function CategoryFilter({ nftsData }) {
 
   const onClearHandler = () => {
     setSelectedPriceRange({
-      min: "",
-      max: ""
-    });
+      min: '',
+      max: '',
+    })
     setMobileFiltersOpen(false)
     dispatch(fetchFirstNfts())
-  };
-
+  }
 
   return (
     <div>
@@ -102,7 +101,7 @@ export default function CategoryFilter({ nftsData }) {
               <div className="fixed inset-0 bg-black bg-opacity-25" />
             </Transition.Child>
 
-            <div className="fixed inset-0 flex z-40">
+            <div className="fixed inset-0 z-40 flex">
               <Transition.Child
                 as={Fragment}
                 enter="transition ease-in-out duration-300 transform"
@@ -112,27 +111,30 @@ export default function CategoryFilter({ nftsData }) {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-4 pb-12 flex flex-col overflow-y-auto">
-                  <div className="px-4 flex items-center justify-between">
+                <Dialog.Panel className="relative flex flex-col w-full h-full max-w-xs py-4 pb-12 ml-auto overflow-y-auto bg-white shadow-xl">
+                  <div className="flex items-center justify-between px-4">
                     <h2 className="text-lg font-medium text-gray-900">
                       Filters
                     </h2>
                     <button
                       type="button"
-                      className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400"
+                      className="flex items-center justify-center w-10 h-10 p-2 -mr-2 text-gray-400 bg-white rounded-md"
                       onClick={() => setMobileFiltersOpen(false)}
                     >
                       <span className="sr-only">Close menu</span>
-                      <XIcon className="h-6 w-6" aria-hidden="true" />
+                      <XIcon className="w-6 h-6" aria-hidden="true" />
                     </button>
                   </div>
 
                   {/* Filters */}
-                  <form className="mt-4 px-2" onSubmit={(e) => e.preventDefault()}>
+                  <form
+                    className="px-2 mt-4"
+                    onSubmit={(e) => e.preventDefault()}
+                  >
                     <h3 className="sr-only">Categories</h3>
 
                     <h3 className="mt-5">Price (BSV)</h3>
-                    <div className="mt-4 grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 mt-4">
                       <div>
                         <label htmlFor="price-first" className="sr-only">
                           Price First
@@ -141,7 +143,7 @@ export default function CategoryFilter({ nftsData }) {
                           type="text"
                           name="min"
                           id="price-first"
-                          className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 sm:text-sm"
                           placeholder="$ Min price"
                           onChange={handleChange}
                         />
@@ -154,20 +156,21 @@ export default function CategoryFilter({ nftsData }) {
                           type="text"
                           name="max"
                           id="price-second"
-                          className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 sm:text-sm"
                           placeholder="$ Max price"
                           onChange={handleChange}
                         />
                       </div>
                     </div>
-                    <div className="mt-4 grid grid-cols-6 gap-4">
+                    <div className="grid grid-cols-6 gap-4 mt-4">
                       <button
                         className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 hover:bg-gray-50 rounded-md md:text-lg`}
                         onClick={() => onClearHandler()}
                       >
                         Clear
                       </button>
-                      <button className="col-span-4 flex items-center justify-center btn-primary text-white w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg"
+                      <button
+                        className="flex items-center justify-center w-full col-span-4 px-5 py-3 text-base font-medium text-white border border-transparent rounded-md btn-primary md:text-lg"
                         onClick={() => onApplyFilter()}
                       >
                         Apply filter
@@ -180,20 +183,20 @@ export default function CategoryFilter({ nftsData }) {
           </Dialog>
         </Transition.Root>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="relative z-10 grid grid-cols-12 gap-4 pt-24 pb-6 ">
-            <div className="flex space-x-2 w-full col-span-10 sm:col-span-11 lg:col-span-12">
+            <div className="flex w-full col-span-10 space-x-2 sm:col-span-11 lg:col-span-12">
               <div className="w-full">
                 <label
                   htmlFor="search"
-                  className="sr-only block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 sr-only"
                 >
                   Search
                 </label>
-                <div className="relative rounded-md shadow-sm w-full">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <div className="relative w-full rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <SearchIcon
-                      className="h-5 w-5 text-gray-400"
+                      className="w-5 h-5 text-gray-400"
                       aria-hidden="true"
                     />
                   </div>
@@ -201,20 +204,20 @@ export default function CategoryFilter({ nftsData }) {
                     type="search"
                     name="search"
                     id="search"
-                    className="focus:ring-blue-600 focus:border-blue-600 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                    className="block w-full pl-10 border-gray-300 rounded-md focus:ring-blue-600 focus:border-blue-600 sm:text-sm"
                     placeholder="Search"
                   />
                 </div>
               </div>
-              <button className="p-2 w-12 btn-primary rounded-md">
+              <button className="w-12 p-2 rounded-md btn-primary">
                 <SearchIcon className="w-5 h-5 text-white" aria-hidden="true" />
               </button>
             </div>
 
-            <div className="col-span-2 sm:col-span-1 flex justify-end items-center">
+            <div className="flex items-center justify-end col-span-2 sm:col-span-1">
               <button
                 type="button"
-                className="p-2  text-gray-400 hover:text-gray-500 lg:hidden"
+                className="p-2 text-gray-400 hover:text-gray-500 lg:hidden"
                 onClick={() => setMobileFiltersOpen(true)}
               >
                 <span className="sr-only">Filters</span>
@@ -230,10 +233,13 @@ export default function CategoryFilter({ nftsData }) {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
               {/* Filters */}
-              <form className="hidden lg:block" onSubmit={(e) => e.preventDefault()}>
+              <form
+                className="hidden lg:block"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <h3 className="sr-only">Categories</h3>
                 <h3>Price (BSV)</h3>
-                <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
                     <label htmlFor="price-first" className="sr-only">
                       Price First
@@ -242,7 +248,7 @@ export default function CategoryFilter({ nftsData }) {
                       type="number"
                       name="min"
                       id="price-first"
-                      className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 sm:text-sm"
                       placeholder="$ Min Price"
                       value={selectedPriceRange.min}
                       onChange={handleChange}
@@ -256,21 +262,22 @@ export default function CategoryFilter({ nftsData }) {
                       type="number"
                       name="max"
                       id="price-second"
-                      className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 sm:text-sm"
                       placeholder="$ Max price"
                       value={selectedPriceRange.max}
                       onChange={handleChange}
                     />
                   </div>
                 </div>
-                <div className="mt-4 grid grid-cols-6 gap-4">
+                <div className="grid grid-cols-6 gap-4 mt-4">
                   <button
                     className={`col-span-2 flex items-center justify-center text-gray-600 w-full px-5 py-3 text-base font-medium border border-gray-200 hover:bg-gray-50 rounded-md md:text-lg`}
                     onClick={() => onClearHandler()}
                   >
                     Clear
                   </button>
-                  <button className="col-span-4 flex items-center justify-center btn-primary text-white w-full px-5 py-3 text-base font-medium border border-transparent rounded-md md:text-lg"
+                  <button
+                    className="flex items-center justify-center w-full col-span-4 px-5 py-3 text-base font-medium text-white border border-transparent rounded-md btn-primary md:text-lg"
                     onClick={() => onApplyFilter()}
                   >
                     Apply filter

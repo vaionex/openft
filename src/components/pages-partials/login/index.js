@@ -7,7 +7,7 @@ import Image from 'next/image'
 import LoginCarousel from '@/components/ui/carousels/login-carousel'
 import { firebaseLoginWithGoogle } from '@/firebase/utils'
 import { useDispatch } from 'react-redux'
-import { setAuthenticated } from '@/redux/slices/auth'
+import { setAuthenticated } from '@/redux/slices/user'
 import { useRouter } from 'next/router'
 
 const testimonials = [

@@ -4,17 +4,16 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AvatarWithName from '@/components/ui/avatars/avatar-w-name'
-import authSelector from '@/redux/selectors/auth'
 import ImageCropper from '../image-cropper'
 import { checkValidation } from '@/utils/imageValidation'
 import getFileExt from '@/utils/getFileExt'
 import { firebaseDeleteImage, firebaseUploadImage } from '@/firebase/utils'
-import getCroppedImg from '@/utils/cropImageUtils'
 import { useCallback } from 'react'
 import ModalConfirm from '../modal-confirm'
+import userSelector from '@/redux/selectors/user'
 
 export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
-  const { user } = useSelector(authSelector)
+  const { currentUser } = useSelector(userSelector)
   const [isCropping, setIsCropping] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
@@ -37,6 +36,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   }
 
   const setImageState = async ({ id, file, croppedBlobFile }) => {
+    setUploading(true)
     try {
       await firebaseUploadImage({
         user,
@@ -44,12 +44,14 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
         imageType: id,
         ext: file.ext,
       })
+      setUploading(false)
     } catch (error) {
       console.log(error)
     }
   }
 
   const handleOnChange = useCallback(async (e) => {
+    setErrorMap(null)
     const imageFile = e.target.files[0]
 
     const errorObjects = await validateImage(imageFile)
@@ -72,7 +74,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   }
 
   const handleOnDelete = async () => {
-    const uid = user?.uid
+    const uid = currentUser?.uid
     try {
       await firebaseDeleteImage({ uid, imageType: 'profileImage' })
       setIsDeleteModalOpen(false)
@@ -82,75 +84,81 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   }
 
   return (
-    <div className="flex items-start justify-between w-full gap-2">
-      <div className="flex justify-center p-2">
-        <div className="relative overflow-hidden bg-blue-700 rounded-full w-14 h-14 ring-offset-base-100 ring-offset-2">
-          {user?.profileImage ? (
-            <Image
-              src={user.profileImage}
-              alt="avatar preview"
-              className="rounded-box"
-              objectFit="cover"
-              layout="fill"
-            />
-          ) : (
-            <AvatarWithName name={user?.name} />
+    <>
+      <div className="flex items-start justify-between w-full gap-2">
+        <div className="flex justify-center p-2">
+          <div className="relative overflow-hidden bg-blue-700 rounded-full w-14 h-14 ring-offset-base-100 ring-offset-2">
+            {currentUser?.profileImage ? (
+              <Image
+                src={currentUser.profileImage}
+                alt="avatar preview"
+                className="rounded-box"
+                objectFit="cover"
+                layout="fill"
+              />
+            ) : (
+              <AvatarWithName name={currentUser?.name} />
+            )}
+          </div>
+        </div>
+
+        <div className="flex">
+          {currentUser?.profileImage && !uploading && (
+            <span
+              className="inline-block p-2 text-sm text-gray-500 cursor-pointer"
+              onClick={() => setIsDeleteModalOpen(true)}
+            >
+              Delete
+            </span>
           )}
-        </div>
-      </div>
-
-      <div className="flex">
-        {user?.profileImage && (
-          <span
-            className="inline-block p-2 text-sm text-gray-500 cursor-pointer"
-            onClick={() => setIsDeleteModalOpen(true)}
-          >
-            Delete
-          </span>
-        )}
-        <div className="flex justify-center">
-          <label
-            className={`cursor-pointer p-2 text-sm font-medium text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-              uploading ? 'loading' : ''
-            }`}
-            htmlFor="profileImage"
-          >
-            {user?.profileImage
-              ? uploading
+          <div className="flex justify-center">
+            <label
+              className={`cursor-pointer p-2 text-sm font-medium text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                uploading ? 'loading' : ''
+              }`}
+              htmlFor="profileImage"
+            >
+              {currentUser?.profileImage
+                ? 'Update'
+                : !currentUser?.profileImage && uploading
                 ? 'Uploading'
-                : 'Update'
-              : 'Upload'}
-          </label>
-          <input
-            className="absolute hidden"
-            type="file"
-            id="profileImage"
-            accept={acceptableFileTypes}
-            onChange={(e) => handleOnChange(e)}
-            onClick={clearEventValue}
-            disabled={uploading}
-          />
+                : 'Upload'}
+            </label>
+            <input
+              className="absolute hidden"
+              type="file"
+              id="profileImage"
+              accept={acceptableFileTypes}
+              onChange={(e) => handleOnChange(e)}
+              onClick={clearEventValue}
+              disabled={uploading}
+            />
+          </div>
         </div>
-      </div>
-      {isCropping && (
-        <ImageCropper
-          id="profileImage"
-          image={selectedImage}
-          aspect={aspect}
-          isCropping={isCropping}
-          setIsCropping={setIsCropping}
-          setToState={setImageState}
-        />
-      )}
 
-      <ModalConfirm
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleOnDelete}
-        isOpen={isDeleteModalOpen}
-        title="Delete Profile Image"
-        text="Are you sure you want to delete the photo?"
-      />
-    </div>
+        {isCropping && (
+          <ImageCropper
+            id="profileImage"
+            image={selectedImage}
+            aspect={aspect}
+            isCropping={isCropping}
+            setIsCropping={setIsCropping}
+            setToState={setImageState}
+          />
+        )}
+
+        <ModalConfirm
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleOnDelete}
+          isOpen={isDeleteModalOpen}
+          title="Delete Profile Image"
+          text="Are you sure you want to delete the photo?"
+        />
+      </div>
+      <div className="mt-2 text-xs text-red-600 ">
+        <span className="text-xs text-red-600 ">{errorMap?.message}</span>
+      </div>
+    </>
   )
 }
 

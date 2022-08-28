@@ -5,11 +5,10 @@ import MobileNav from '../mobile/nav'
 import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
-import { UploadBoxIcon, UploadIcon } from '@/components/common/icons'
+import { UploadBoxIcon } from '@/components/common/icons'
 import { useSelector } from 'react-redux'
-import authSelector from '@/redux/selectors/auth'
-import { useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
+import userSelector from '@/redux/selectors/user'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -18,7 +17,7 @@ const navigation = [
 ]
 
 const Header = () => {
-  const { user, isAuthenticated } = useSelector(authSelector)
+  const { currentUser, isAuthenticated } = useSelector(userSelector)
 
   return (
     <Popover as="header" className="relative">
@@ -96,7 +95,7 @@ const Header = () => {
             </li>
 
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
-              <DropdownUser user={user} />
+              <DropdownUser user={currentUser} />
             </li>
           </ul>
         </nav>

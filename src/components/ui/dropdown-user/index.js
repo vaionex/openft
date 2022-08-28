@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { logout } from '@/redux/slices/auth'
+import { logout } from '@/redux/slices/user'
 import { clearWalletData } from '@/redux/slices/wallet'
 import { Menu, Transition } from '@headlessui/react'
 import { useDispatch } from 'react-redux'

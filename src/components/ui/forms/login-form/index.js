@@ -1,18 +1,17 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-import { setAuthenticated, login } from '@/redux/slices/auth'
+import { setAuthenticated, login } from '@/redux/slices/user'
 import { EyeIcon, EyeOffIcon, MenuIcon } from '@heroicons/react/outline'
 import NextLink from 'next/link'
-
-import authSelector from '@/redux/selectors/auth'
 import Checkbox from '../../checkbox'
 import Alert from '../../alert'
+import userSelector from '@/redux/selectors/user'
 
 function LoginForm() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const auth = useSelector((state) => state.auth)
+  const user = useSelector(userSelector)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
@@ -115,10 +114,10 @@ function LoginForm() {
 
       <div>
         <button
-          disabled={auth.isPending}
+          disabled={user.isPending}
           className={`w-full btn-primary
           ${
-            auth.isPending ? 'bg-gray-100' : 'bg-blue-600 hover:bg-blue-700'
+            user.isPending ? 'bg-gray-100' : 'bg-blue-600 hover:bg-blue-700'
           } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
           type="submit"
         >

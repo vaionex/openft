@@ -1,15 +1,15 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { ProfileHeaderCard } from '@/components/ui/cards'
 import { MyProfileForm } from '@/components/ui/forms'
-import authSelector from '@/redux/selectors/auth'
+import userSelector from '@/redux/selectors/user'
 import { useSelector } from 'react-redux'
 
 const UserSettingsMain = () => {
-  const { user } = useSelector(authSelector)
+  const { currentUser } = useSelector(userSelector)
   return (
     <UserSettingsLayout>
-      <ProfileHeaderCard user={user} />
-      <MyProfileForm user={user} />
+      <ProfileHeaderCard user={currentUser} />
+      <MyProfileForm user={currentUser} />
     </UserSettingsLayout>
   )
 }

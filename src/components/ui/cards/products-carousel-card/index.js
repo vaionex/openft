@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { ShareIcon } from '@heroicons/react/outline'
 import { increment, arrayUnion, arrayRemove } from 'firebase/firestore'
-import { firbaseAddDoc, firbaseUpdateDoc, firebaseGetUserInfoFromDb } from '@/firebase/utils'
+import {
+  firbaseAddDoc,
+  firbaseUpdateDoc,
+  firebaseGetUserInfoFromDb,
+} from '@/firebase/utils'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import CardLikeButton from '../../card-like-button'
 import NextLink from 'next/link'
 import { useSelector } from 'react-redux'
-import authSelector from '@/redux/selectors/auth'
+import userSelector from '@/redux/selectors/user'
 
 const ProductsCarouselCard = ({ data, mr, type, idx, favouriteNfts }) => {
   const isInFirstThree = idx < 3
 
-  const { user } = useSelector(authSelector)
+  const { currentUser } = useSelector(userSelector)
   const [hasLike, setHasLike] = useState(false)
   const [userName, setUserName] = useState(null)
 
@@ -32,21 +36,22 @@ const ProductsCarouselCard = ({ data, mr, type, idx, favouriteNfts }) => {
   }, [])
 
   const likeNfts = async () => {
-    if (!user) return
+    if (!currentUser) return
     if (hasLike) {
       setHasLike(false)
-      await firbaseUpdateDoc('favourites', user?.uid, { nfts: arrayRemove(data?.id) })
+      await firbaseUpdateDoc('favourites', currentUser?.uid, {
+        nfts: arrayRemove(data?.id),
+      })
       await firbaseUpdateDoc('nfts', data?.id, { likes: increment(-1) })
     } else {
       setHasLike(true)
       const updateFav = { nfts: arrayUnion(data?.id) }
       favouriteNfts
-        ? await firbaseUpdateDoc('favourites', user?.uid, updateFav)
-        : await firbaseAddDoc('favourites', user?.uid, updateFav)
+        ? await firbaseUpdateDoc('favourites', currentUser?.uid, updateFav)
+        : await firbaseAddDoc('favourites', currentUser?.uid, updateFav)
       await firbaseUpdateDoc('nfts', data?.id, { likes: increment(1) })
     }
   }
-
 
   return (
     <div

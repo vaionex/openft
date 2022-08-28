@@ -9,8 +9,9 @@ import { firebaseLoginWithGoogle } from '@/firebase/utils'
 import Alert from '@/components/ui/alert'
 import apiConfig from '@/config/relysiaApi'
 import { createwallet } from '@/services/relysia-queries'
-import { setUserData, setAuthenticated, register } from '@/redux/slices/auth'
+import { setUserData, setAuthenticated, register } from '@/redux/slices/user'
 import { FormInput } from '../../inputs'
+import userSelector from '@/redux/selectors/user'
 
 const inputAttributes = [
   {
@@ -36,7 +37,7 @@ const inputAttributes = [
 function RegisterForm() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const auth = useSelector((state) => state.auth)
+  const user = useSelector(userSelector)
 
   const [formData, setFormData] = useState({
     email: '',
@@ -87,8 +88,8 @@ function RegisterForm() {
         </h2>
       </div>
       <div className="flex justify-center pt-2">
-        {auth.errorMessage && (
-          <Alert message={auth.errorMessage} type="error" />
+        {user.errorMessage && (
+          <Alert message={user.errorMessage} type="error" />
         )}
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -130,10 +131,10 @@ function RegisterForm() {
 
             <div>
               <button
-                disabled={auth.isPending ? true : false}
+                disabled={user.isPending ? true : false}
                 type="submit"
                 className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                  auth.isPending
+                  user.isPending
                     ? 'bg-gray-100'
                     : 'bg-indigo-600 hover:bg-indigo-700'
                 } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}

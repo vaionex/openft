@@ -7,7 +7,7 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  user: null,
+  currentUser: null,
   isPending: false,
   errorMessage: null,
   isAuthenticated: null,
@@ -48,25 +48,25 @@ export const register = createAsyncThunk(
   },
 )
 
-const authSlice = createSlice({
-  name: 'auth',
+const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
     setUserData: (state, action) => {
-      state.user = { ...state.user, ...action.payload }
+      state.currentUser = { ...state.currentUser, ...action.payload }
     },
     setAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload
     },
     setResetAuth: (state) => {
-      state.user = null
+      state.currentUser = null
       state.isPending = false
       state.errorMessage = null
       state.isAuthenticated = false
     },
   },
   extraReducers: {
-    [login.pending]: (state, action) => {
+    [login.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
     },
@@ -76,9 +76,9 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.isPending = false
-      state.user = action.payload
+      state.currentUser = action.payload
     },
-    [register.pending]: (state, action) => {
+    [register.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
     },
@@ -88,9 +88,9 @@ const authSlice = createSlice({
     },
     [register.fulfilled]: (state, action) => {
       state.isPending = false
-      state.user = action.payload
+      state.currentUser = action.payload
     },
-    [logout.pending]: (state, action) => {
+    [logout.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
     },
@@ -98,9 +98,9 @@ const authSlice = createSlice({
       state.isPending = false
       state.errorMessage = action.payload
     },
-    [logout.fulfilled]: (state, action) => {
+    [logout.fulfilled]: (state) => {
       state.isPending = false
-      state.user = null
+      state.currentUser = null
       state.isPending = false
       state.errorMessage = null
       state.isAuthenticated = false
@@ -108,5 +108,5 @@ const authSlice = createSlice({
   },
 })
 
-export default authSlice
-export const { setUserData, setAuthenticated, setResetAuth } = authSlice.actions
+export default userSlice
+export const { setUserData, setAuthenticated, setResetAuth } = userSlice.actions

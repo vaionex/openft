@@ -33,7 +33,7 @@ import {
   browserSessionPersistence,
 } from 'firebase/auth'
 import store from '@/redux/store'
-import { setAuthenticated, setUserData } from '@/redux/slices/auth'
+import { setAuthenticated, setUserData } from '@/redux/slices/user'
 import { clearRegistrationForm } from '@/redux/slices/registration-form'
 
 const firebaseGetUserInfoFromDb = async (id) => {
@@ -71,7 +71,6 @@ const firebaseLogin = async ({ email, password, rememberMe }) => {
       name: auth.user.displayName,
       uid: auth.user.uid,
       email: auth.user.email,
-      photoURL: auth.user.photoURL,
       accessToken: auth.user.accessToken,
     }
   } catch (error) {
