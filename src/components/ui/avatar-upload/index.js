@@ -39,7 +39,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
     setUploading(true)
     try {
       await firebaseUploadImage({
-        user,
+        user: currentUser,
         imageFile: croppedBlobFile,
         imageType: id,
         ext: file.ext,
@@ -112,27 +112,31 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
             </span>
           )}
           <div className="flex justify-center">
-            <label
-              className={`cursor-pointer p-2 text-sm font-medium text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                uploading ? 'loading' : ''
-              }`}
-              htmlFor="profileImage"
-            >
-              {currentUser?.profileImage
-                ? 'Update'
-                : !currentUser?.profileImage && uploading
-                ? 'Uploading'
-                : 'Upload'}
-            </label>
-            <input
-              className="absolute hidden"
-              type="file"
-              id="profileImage"
-              accept={acceptableFileTypes}
-              onChange={(e) => handleOnChange(e)}
-              onClick={clearEventValue}
-              disabled={uploading}
-            />
+            {uploading && (
+              <span className="p-2 text-sm font-medium text-blue-700 ">
+                Uploading...
+              </span>
+            )}
+
+            {!uploading && (
+              <>
+                <label
+                  className="p-2 text-sm font-medium text-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  htmlFor="profileImage"
+                >
+                  {currentUser?.profileImage ? 'Update' : 'Upload'}
+                </label>
+                <input
+                  className="absolute hidden"
+                  type="file"
+                  id="profileImage"
+                  accept={acceptableFileTypes}
+                  onChange={(e) => handleOnChange(e)}
+                  onClick={clearEventValue}
+                  disabled={uploading}
+                />
+              </>
+            )}
           </div>
         </div>
 

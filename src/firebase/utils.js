@@ -224,6 +224,7 @@ const firebaseResetPassword = async (user, newPassword) => {
 }
 
 const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
+  debugger
   if (user && imageFile) {
     const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
     const imagePath = `${imageFolder}/${user.uid}.${ext}`
