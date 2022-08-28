@@ -3,10 +3,61 @@ import Checkbox from '@/components/ui/checkbox'
 import { InputMain } from '@/components/ui/inputs'
 import TextEditor from '@/components/ui/text-editor'
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
-const MyProfileForm = ({ formValues, handleInputChange, errorMessage }) => {
+const MyProfileForm = ({
+  formValues,
+  setFormValues,
+  errorMessage,
+  setErrorMessage,
+  isError,
+  setIsError,
+}) => {
+  const setNewEditorStateToForm = (newState) => {
+    setFormValues((prev) => {
+      return {
+        ...prev,
+        bio: newState,
+      }
+    })
+  }
+
+  const validateUsername = (username) => {
+    const usernameRegex = /^[a-z0-9]+$/i
+
+    if (username.length === 0) {
+      setIsError(true)
+      return 'Username is required'
+    } else if (!usernameRegex.test(username)) {
+      setIsError(true)
+      return 'Username can only contain lowercase letters and numbers'
+    } else {
+      setIsError(false)
+      return null
+    }
+  }
+
+  const handleInputChange = (e) => {
+    if (e.target.name === 'username') {
+      setErrorMessage(validateUsername(e.target.value))
+    }
+
+    if (e.target.name === 'showJobTitle') {
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.checked,
+        }
+      })
+    } else {
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.value,
+        }
+      })
+    }
+  }
+
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
@@ -64,9 +115,8 @@ const MyProfileForm = ({ formValues, handleInputChange, errorMessage }) => {
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
             <TextEditor
-              onChange={(eee) => {
-                console.log(eee)
-              }}
+              initialState={formValues.bio}
+              setNewState={setNewEditorStateToForm}
               placeholder="Add a short bio..."
             />
             <p className="mt-2 text-sm text-gray-500">400 characters left</p>

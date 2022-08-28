@@ -1,4 +1,4 @@
-export const protectedRoute = (isAuthenticated, router) => {
+export const protectedRoute = (user, isAuthenticated, isPending, router) => {
   const routesWithAuth =
     router.pathname === '/user-settings' ||
     router.pathname === '/user-settings/upload' ||
@@ -9,9 +9,19 @@ export const protectedRoute = (isAuthenticated, router) => {
   const authRoute =
     router.pathname === '/register' || router.pathname === '/login'
 
-  const isAuthenticatedRoute = localStorage.getItem('authed')
+  if (
+    routesWithAuth &&
+    isAuthenticated === false &&
+    (isPending === false || isPending === null)
+  ) {
+    router.push('/')
+  }
 
-  routesWithAuth && Boolean(!isAuthenticatedRoute)
-    ? router.push('/login')
-    : authRoute && Boolean(isAuthenticatedRoute) && router.push('/')
+  if (
+    authRoute &&
+    isAuthenticated &&
+    (isPending === false || isPending === null)
+  ) {
+    router.push('/')
+  }
 }

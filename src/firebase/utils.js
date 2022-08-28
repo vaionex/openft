@@ -129,9 +129,9 @@ const firebaseGetAuthorizedUser = () => {
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
       store.dispatch(setUserData(user))
+      store.dispatch(setAuthenticated(true))
       if (!isAuth) {
         localStorage.setItem('authed', true)
-        store.dispatch(setAuthenticated(true))
       }
     } else {
       console.log('not auth')
@@ -285,7 +285,7 @@ const firebaseUpdateProfile = async ({ uid, values }) => {
     const userRef = doc(firebaseDb, 'users', uid)
     await updateDoc(userRef, mergedValues, uid)
     store.dispatch(setUserData(mergedValues))
-    return { success: 'Profile update successful.' }
+    return mergedValues
   } catch (error) {
     console.log(error)
     return { error: error.message }

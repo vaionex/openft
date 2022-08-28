@@ -3,8 +3,13 @@ import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import { Avatar, AvatarWithName } from '../../avatars'
 
-const ProfileHeaderCard = ({ user, onSubmit, isError }) => {
-  console.log(isError)
+const ProfileHeaderCard = ({
+  user,
+  isPending,
+  isSuccess,
+  onSubmit,
+  isError,
+}) => {
   return (
     <div>
       <div className="relative w-full h-32 overflow-hidden bg-blue-300 rounded-lg lg:h-60">
@@ -42,7 +47,12 @@ const ProfileHeaderCard = ({ user, onSubmit, isError }) => {
               </h2>
               <h3 className="font-normal text-gray-500">{user?.title}</h3>
             </div>
-            <div className="flex flex-col space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
+              {isSuccess && (
+                <span className="text-xs text-green-500">
+                  Profile successfully updated.{' '}
+                </span>
+              )}
               <button
                 type="button"
                 disabled={isError}
@@ -51,10 +61,16 @@ const ProfileHeaderCard = ({ user, onSubmit, isError }) => {
                   isError
                     ? 'opacity-50 cursor-not-allowed pointer-events-none'
                     : 'cursor-pointer',
+                  isPending && 'pointer-events-none',
                 )}
                 onClick={onSubmit}
               >
                 Save
+                {isPending && (
+                  <span className="relative flex items-center">
+                    <span className="spinner-small"></span>
+                  </span>
+                )}
               </button>
             </div>
           </div>

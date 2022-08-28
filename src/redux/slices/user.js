@@ -12,7 +12,7 @@ const initialState = {
   isPending: false,
   errorMessage: null,
   isAuthenticated: null,
-  accessToken: null,
+  isSuccess: false,
 }
 
 export const login = createAsyncThunk(
@@ -78,6 +78,12 @@ const userSlice = createSlice({
       state.errorMessage = null
       state.isAuthenticated = false
     },
+    setError: (state, action) => {
+      state.errorMessage = action.payload
+    },
+    setSuccess: (state, action) => {
+      state.isSuccess = action.payload
+    },
   },
   extraReducers: {
     [login.pending]: (state) => {
@@ -122,17 +128,26 @@ const userSlice = createSlice({
     [updateUser.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
+      state.isSuccess = false
     },
     [updateUser.rejected]: (state, action) => {
       state.isPending = false
       state.errorMessage = action.payload
+      state.isSuccess = false
     },
     [updateUser.fulfilled]: (state, action) => {
       state.isPending = false
-      state.currentUser = { ...state.currentUser, ...action.payload }
+      state.currentUser = action.payload
+      state.isSuccess = true
     },
   },
 })
 
 export default userSlice
-export const { setUserData, setAuthenticated, setResetAuth } = userSlice.actions
+export const {
+  setUserData,
+  setAuthenticated,
+  setResetAuth,
+  setError,
+  setSuccess,
+} = userSlice.actions
