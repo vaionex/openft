@@ -10,9 +10,14 @@ import 'react-circular-progressbar/dist/styles.css'
 import '@/styles/globals.css'
 import { useEffect, useState } from 'react'
 import { firebaseGetAuthorizedUser } from '@/firebase/utils'
+import { setAuthenticated } from '@/redux/slices/user'
 
 function App({ Component, pageProps }) {
-  useEffect(() => firebaseGetAuthorizedUser(), [])
+  useEffect(() => {
+    const isAuth = localStorage.getItem('authed') ? true : false
+    store.dispatch(setAuthenticated(isAuth))
+    firebaseGetAuthorizedUser()
+  }, [])
 
   return (
     <AnimatePresence exitBeforeEnter>

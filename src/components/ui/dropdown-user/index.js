@@ -5,9 +5,11 @@ import { Menu, Transition } from '@headlessui/react'
 import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import { Avatar, AvatarWithName } from '../avatars'
+import { useRouter } from 'next/router'
 
 const DropdownUser = ({ user }) => {
   const dispatch = useDispatch()
+  const router = useRouter()
 
   const handleLogout = () => {
     dispatch(logout())

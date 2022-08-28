@@ -6,11 +6,11 @@ import userSelector from '@/redux/selectors/user'
 
 const useAuthProtection = () => {
   const router = useRouter()
-  const { currentUser, isPending, isAuthenticated } = useSelector(userSelector)
+  const { currentUser, isAuthenticated } = useSelector(userSelector)
 
   useEffect(() => {
-    protectedRoute(currentUser, isAuthenticated, isPending, router)
-  }, [currentUser, router])
+    protectedRoute(isAuthenticated, router)
+  }, [isAuthenticated, router])
 
   return currentUser
 }

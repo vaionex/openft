@@ -125,12 +125,18 @@ const firebaseLogout = async () => {
 
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
+    const isAuth = localStorage.getItem('authed')
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
+      if (!isAuth) {
+        localStorage.setItem('authed', true)
+        store.dispatch(setAuthenticated(true))
+      }
       store.dispatch(setAuthenticated(!!user))
       store.dispatch(setUserData(user))
     } else {
       console.log('not auth')
+      localStorage.removeItem('authed')
     }
   })
 

@@ -48,6 +48,19 @@ export const register = createAsyncThunk(
   },
 )
 
+// export const updateUser = createAsyncThunk(
+//   'user/signupUser',
+//   async (request, thunkAPI) => {
+//     try {
+//       const user = await firebaseRegister(request)
+//       if (user && !user?.error) return user
+//       else throw user?.error
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error)
+//     }
+//   },
+// )
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
