@@ -5,8 +5,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid'
 import { twMerge } from 'tailwind-merge'
 import { ProductsCarouselCard } from '../../cards'
 import { useSelector } from 'react-redux'
-import authSelector from '@/redux/selectors/auth'
 import { firebaseGetSingleDoc } from '@/firebase/utils'
+import userSelector from '@/redux/selectors/user'
 
 const mainSettings = {
   dots: false,
@@ -25,7 +25,7 @@ function NextArrow({ currentSlide, slideCount, cardsToShow, ...props }) {
       className={twMerge(
         'absolute inline-flex items-center justify-center left-0 border border-gray-200 rounded-full -bottom-20 w-14 h-14 translate-x-[100px]',
         currentSlide !== slideCount - cardsToShow &&
-        'text-blue-600 border-blue-200',
+          'text-blue-600 border-blue-200',
         currentSlide === slideCount - cardsToShow && 'text-gray-400 ',
       )}
       aria-hidden="true"
@@ -72,17 +72,20 @@ PrevArrow.propTypes = {
 }
 
 const ProductsCarousel = ({ data }) => {
-  const { user } = useSelector(authSelector)
+  const { currentUser } = useSelector(userSelector)
   const [favouriteNfts, setFavouriteNfts] = useState(null)
 
-  useEffect(async () => {
-    if (user) {
-      const data = await firebaseGetSingleDoc("favourites", user?.uid)
-      setFavouriteNfts(data?.nfts)
-    } else {
-      setFavouriteNfts([])
+  useEffect(() => {
+    const getFavourites = async () => {
+      if (currentUser) {
+        const data = await firebaseGetSingleDoc('favourites', currentUser?.uid)
+        setFavouriteNfts(data?.nfts)
+      } else {
+        setFavouriteNfts([])
+      }
     }
-  }, [user])
+    getFavourites()
+  }, [currentUser])
 
   const cardsToShow = {
     desktop: 3.5,
@@ -123,14 +126,15 @@ const ProductsCarousel = ({ data }) => {
   return (
     <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
-        {data && data.map((item) => (
-          <ProductsCarouselCard
-            key={item.id}
-            mr
-            data={item}
-            favouriteNfts={favouriteNfts}
-          />
-        ))}
+        {data &&
+          data.map((item) => (
+            <ProductsCarouselCard
+              key={item.id}
+              mr
+              data={item}
+              favouriteNfts={favouriteNfts}
+            />
+          ))}
       </Slider>
     </span>
   )

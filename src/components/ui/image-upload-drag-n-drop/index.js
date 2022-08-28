@@ -1,12 +1,12 @@
 import { UploadIcon } from '@/components/common/icons'
 import getFileExt from '@/utils/getFileExt'
+import { checkValidation } from '@/utils/imageValidation'
 import PropTypes from 'prop-types'
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import ImageUploadReviewCard from '../cards/image-upload-review-card'
 import ImageCropper from '../image-cropper'
-import { checkValidation } from './validations'
 
 const ImageUploadDragAndDrop = ({
   id,
@@ -17,6 +17,7 @@ const ImageUploadDragAndDrop = ({
   limits,
   isSelected,
   handleClear,
+  setImageToState,
 }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [isCropping, setIsCropping] = useState(false)
@@ -112,6 +113,7 @@ const ImageUploadDragAndDrop = ({
                 aspect={aspect}
                 isCropping={isCropping}
                 setIsCropping={setIsCropping}
+                setToState={setImageToState}
               />
             )}
           </div>

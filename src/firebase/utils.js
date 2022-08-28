@@ -33,7 +33,7 @@ import {
   browserSessionPersistence,
 } from 'firebase/auth'
 import store from '@/redux/store'
-import { setAuthenticated, setUserData } from '@/redux/slices/auth'
+import { setAuthenticated, setUserData } from '@/redux/slices/user'
 import { clearRegistrationForm } from '@/redux/slices/registration-form'
 
 const firebaseGetUserInfoFromDb = async (id) => {
@@ -71,7 +71,6 @@ const firebaseLogin = async ({ email, password, rememberMe }) => {
       name: auth.user.displayName,
       uid: auth.user.uid,
       email: auth.user.email,
-      photoURL: auth.user.photoURL,
       accessToken: auth.user.accessToken,
     }
   } catch (error) {
@@ -91,7 +90,7 @@ const firebaseRegister = async (data) => {
     const { user } = response
 
     if (user) {
-      store.dispatch(setAuthenticated())
+      store.dispatch(setAuthenticated(!!user))
     }
 
     const infos = {
@@ -126,12 +125,18 @@ const firebaseLogout = async () => {
 
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
+    const isAuth = localStorage.getItem('authed')
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
-      store.dispatch(setAuthenticated(!!user))
       store.dispatch(setUserData(user))
+      store.dispatch(setAuthenticated(true))
+      if (!isAuth) {
+        localStorage.setItem('authed', true)
+      }
     } else {
       console.log('not auth')
+      localStorage.removeItem('authed')
+      store.dispatch(setAuthenticated(false))
     }
   })
 
@@ -228,63 +233,62 @@ const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
     const fileRef = ref(storage, imagePath)
     const oldRef = ref(storage, userInfoFromDb[imageType])
 
-    await uploadBytes(fileRef, imageFile).then(async () => {
+    try {
+      await uploadBytes(fileRef, imageFile)
+
       const firebaseProfileURL = await getDownloadURL(ref(storage, imagePath))
-      await updateProfile(user, {
-        [imageType]: firebaseProfileURL,
-      }).then(async () => {
-        if (userInfoFromDb[imageType]) {
-          deleteObject(oldRef).catch((error) => console.log(error))
-        }
-        store.dispatch(
-          setUserData({
-            [imageType]: firebaseProfileURL,
-          }),
-        )
-        await updateDoc(userRef, {
-          ...userInfoFromDb,
+      await updateProfile(user, { [imageType]: firebaseProfileURL })
+
+      if (userInfoFromDb[imageType]) {
+        deleteObject(oldRef).catch((error) => console.log(error))
+      }
+
+      store.dispatch(
+        setUserData({
           [imageType]: firebaseProfileURL,
-        })
+        }),
+      )
+
+      await updateDoc(userRef, {
+        ...userInfoFromDb,
+        [imageType]: firebaseProfileURL,
       })
-    })
-    return { success: 'Image uploaded successfully.' }
+    } catch (error) {
+      console.log(error)
+    }
   }
   return { message: 'fail' }
 }
 
-const firebaseUpdateProfileDetails = async ({
-  user,
-  password,
-  username,
-  email,
-  photoURL,
-}) => {
-  const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
-  const userRef = doc(firebaseDb, 'users', user.uid)
-  if (username) {
-    await updateProfile(user, {
-      displayName: username,
-    }).then(async () => {
-      await updateDoc(userRef, {
-        ...userInfoFromDb,
-        displayName: username,
-        username: username,
-      })
-      store.dispatch(
-        setUserData({
-          name: username,
-          uid: userInfoFromDb.uid,
-          email: userInfoFromDb.email,
-          photoURL: photoURL,
-        }),
-      )
-    })
-  }
-  if (email) {
-    await updateUserEmail(user, email, photoURL)
-  }
-  if (password) {
-    await firebaseResetPassword(user, password)
+const firebaseDeleteImage = async ({ uid, imageType }) => {
+  const storage = getStorage()
+  const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+  const imgRef = ref(storage, userInfoFromDb[imageType])
+  const userRef = doc(firebaseDb, 'users', uid)
+
+  deleteObject(imgRef).catch((error) => alert(error.message))
+  store.dispatch(
+    setUserData({
+      [imageType]: '',
+    }),
+  )
+  await updateDoc(userRef, {
+    ...userInfoFromDb,
+    [imageType]: '',
+  })
+}
+
+const firebaseUpdateProfile = async ({ uid, values }) => {
+  try {
+    const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+    const mergedValues = { ...userInfoFromDb, ...values }
+    const userRef = doc(firebaseDb, 'users', uid)
+    await updateDoc(userRef, mergedValues, uid)
+    store.dispatch(setUserData(mergedValues))
+    return mergedValues
+  } catch (error) {
+    console.log(error)
+    return { error: error.message }
   }
 }
 
@@ -387,7 +391,7 @@ export {
   firebaseGetAuthorizedUser,
   firebaseLogout,
   firebaseUploadImage,
-  firebaseUpdateProfileDetails,
+  firebaseUpdateProfile,
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
   firebaseGetFirstNfts,
@@ -397,4 +401,5 @@ export {
   firbaseAddDoc,
   firbaseDeleteDoc,
   firbaseUpdateDoc,
+  firebaseDeleteImage,
 }

@@ -6,7 +6,6 @@ import { KeyIcon } from '@heroicons/react/outline'
 import { Controller, useForm } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import * as yup from 'yup'
-import authSelector from '@/redux/selectors/auth'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { setPasswordValues } from '@/redux/slices/registration-form'
 
@@ -35,9 +34,7 @@ const validationSchema = yup.object({
 })
 
 function RegistrationChoosePassword({ goToStep }) {
-  const router = useRouter()
   const dispatch = useDispatch()
-  const auth = useSelector(authSelector)
   const { passwordValues } = useSelector(registrationFormSelector)
 
   const resolver = useYupValidationResolver(validationSchema)

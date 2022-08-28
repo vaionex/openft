@@ -3,15 +3,16 @@ import {
   firebaseLogin,
   firebaseLogout,
   firebaseRegister,
+  firebaseUpdateProfile,
 } from '@/firebase/utils'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  user: null,
+  currentUser: null,
   isPending: false,
   errorMessage: null,
   isAuthenticated: null,
-  accessToken: null,
+  isSuccess: false,
 }
 
 export const login = createAsyncThunk(
@@ -48,25 +49,44 @@ export const register = createAsyncThunk(
   },
 )
 
-const authSlice = createSlice({
-  name: 'auth',
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (request, thunkAPI) => {
+    try {
+      const user = await firebaseUpdateProfile(request)
+      if (user && !user?.error) return user
+      else throw user?.error
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
+const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
     setUserData: (state, action) => {
-      state.user = { ...state.user, ...action.payload }
+      state.currentUser = { ...state.currentUser, ...action.payload }
     },
     setAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload
     },
     setResetAuth: (state) => {
-      state.user = null
+      state.currentUser = null
       state.isPending = false
       state.errorMessage = null
       state.isAuthenticated = false
     },
+    setError: (state, action) => {
+      state.errorMessage = action.payload
+    },
+    setSuccess: (state, action) => {
+      state.isSuccess = action.payload
+    },
   },
   extraReducers: {
-    [login.pending]: (state, action) => {
+    [login.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
     },
@@ -76,9 +96,9 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.isPending = false
-      state.user = action.payload
+      state.currentUser = action.payload
     },
-    [register.pending]: (state, action) => {
+    [register.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
     },
@@ -88,9 +108,9 @@ const authSlice = createSlice({
     },
     [register.fulfilled]: (state, action) => {
       state.isPending = false
-      state.user = action.payload
+      state.currentUser = action.payload
     },
-    [logout.pending]: (state, action) => {
+    [logout.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
     },
@@ -98,15 +118,36 @@ const authSlice = createSlice({
       state.isPending = false
       state.errorMessage = action.payload
     },
-    [logout.fulfilled]: (state, action) => {
+    [logout.fulfilled]: (state) => {
       state.isPending = false
-      state.user = null
+      state.currentUser = null
       state.isPending = false
       state.errorMessage = null
       state.isAuthenticated = false
     },
+    [updateUser.pending]: (state) => {
+      state.isPending = true
+      state.errorMessage = null
+      state.isSuccess = false
+    },
+    [updateUser.rejected]: (state, action) => {
+      state.isPending = false
+      state.errorMessage = action.payload
+      state.isSuccess = false
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.isPending = false
+      state.currentUser = action.payload
+      state.isSuccess = true
+    },
   },
 })
 
-export default authSlice
-export const { setUserData, setAuthenticated, setResetAuth } = authSlice.actions
+export default userSlice
+export const {
+  setUserData,
+  setAuthenticated,
+  setResetAuth,
+  setError,
+  setSuccess,
+} = userSlice.actions

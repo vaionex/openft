@@ -4,17 +4,17 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '@/redux/slices/auth'
+import { register } from '@/redux/slices/user'
 import { InputMain } from '@/components/ui/inputs'
 import { UsersCircleIcon } from '@/components/common/icons'
 import { Controller, useForm } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import { setSocialsValues } from '@/redux/slices/registration-form'
 import { firebaseUploadImage } from '@/firebase/utils'
-import authSelector from '@/redux/selectors/auth'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { twMerge } from 'tailwind-merge'
 import { createwallet } from '@/services/relysia-queries'
+import userSelector from '@/redux/selectors/user'
 
 const inputAttributes = [
   {
@@ -43,7 +43,7 @@ const inputAttributes = [
 function RegistrationAddSocials({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { user, isPending, isAuthenticated } = useSelector(authSelector)
+  const { isPending } = useSelector(userSelector)
   const [submitStarted, setSubmitStarted] = useState(false)
   const registrationValues = useSelector(registrationFormSelector)
   const { photoValues } = registrationValues

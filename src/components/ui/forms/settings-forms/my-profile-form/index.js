@@ -4,7 +4,60 @@ import { InputMain } from '@/components/ui/inputs'
 import TextEditor from '@/components/ui/text-editor'
 import PropTypes from 'prop-types'
 
-const MyProfileForm = ({ profile }) => {
+const MyProfileForm = ({
+  formValues,
+  setFormValues,
+  errorMessage,
+  setErrorMessage,
+  isError,
+  setIsError,
+}) => {
+  const setNewEditorStateToForm = (newState) => {
+    setFormValues((prev) => {
+      return {
+        ...prev,
+        bio: newState,
+      }
+    })
+  }
+
+  const validateUsername = (username) => {
+    const usernameRegex = /^[a-z0-9]+$/i
+
+    if (username.length === 0) {
+      setIsError(true)
+      return 'Username is required'
+    } else if (!usernameRegex.test(username)) {
+      setIsError(true)
+      return 'Username can only contain lowercase letters and numbers'
+    } else {
+      setIsError(false)
+      return null
+    }
+  }
+
+  const handleInputChange = (e) => {
+    if (e.target.name === 'username') {
+      setErrorMessage(validateUsername(e.target.value))
+    }
+
+    if (e.target.name === 'showJobTitle') {
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.checked,
+        }
+      })
+    } else {
+      setFormValues((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.value,
+        }
+      })
+    }
+  }
+
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
@@ -12,21 +65,29 @@ const MyProfileForm = ({ profile }) => {
           <InputMain.Label label="Username" htmlFor="username" />
           <InputMain.Input
             id="username"
+            name="username"
             variant="add-on"
             addon="open.ft/"
-            placeholder="Username"
+            placeholder="username"
             className="sm:col-span-2"
+            value={formValues.username}
+            onChange={handleInputChange}
+            error={errorMessage}
           />
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
           <InputMain.Label label="Instagram" htmlFor="user-instagram" />
+
           <InputMain.Input
-            id="user-instagram"
+            id="instagram"
+            name="instagram"
             variant="add-on"
             addon="https://instagram.com/"
-            placeholder="Instagram username"
+            placeholder="username"
             className="sm:col-span-2"
+            value={formValues.instagram}
+            onChange={handleInputChange}
           />
         </InputMain>
 
@@ -36,7 +97,14 @@ const MyProfileForm = ({ profile }) => {
             sublabel="This will be displayed on your profile."
           />
           <div className="sm:col-span-2">
-            <AvatarUpload size={64} tempAvatar={profile.profileImage} />
+            <AvatarUpload
+              limits={{
+                maxWidth: 400,
+                maxHeight: 400,
+                maxSize: 1,
+              }}
+              aspect={1}
+            />
           </div>
         </InputMain>
 
@@ -46,25 +114,35 @@ const MyProfileForm = ({ profile }) => {
             sublabel="Write a short introduction."
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <TextEditor onChange={() => {}} />
+            <TextEditor
+              initialState={formValues.bio}
+              setNewState={setNewEditorStateToForm}
+              placeholder="Add a short bio..."
+            />
             <p className="mt-2 text-sm text-gray-500">400 characters left</p>
           </div>
         </InputMain>
 
         <InputMain className="border-none sm:grid-cols-3">
-          <InputMain.Label label="Job title" htmlFor="job-title" />
+          <InputMain.Label label="Job title" htmlFor="jobTitle" />
           <InputMain.Input
-            id="job-title"
+            id="jobTitle"
+            name="jobTitle"
             placeholder="e.g. UI Artist"
             className="sm:col-span-2"
+            value={formValues.jobTitle}
             additionalCheckbox={
               <Checkbox
-                id="show-job-title"
+                id="showJobTitle"
+                name="showJobTitle"
                 text="Show my job title in my profile"
                 className="mt-4"
                 labelClassName="font-normal"
+                checked={formValues.showJobTitle}
+                onChange={handleInputChange}
               />
             }
+            onChange={handleInputChange}
           />
         </InputMain>
       </div>
@@ -73,7 +151,7 @@ const MyProfileForm = ({ profile }) => {
 }
 
 MyProfileForm.propTypes = {
-  profile: PropTypes.object.isRequired,
+  profile: PropTypes.object,
 }
 
 export default MyProfileForm

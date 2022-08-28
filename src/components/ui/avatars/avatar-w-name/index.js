@@ -6,11 +6,11 @@ const AvatarWithName = ({ name, className }) => {
   return (
     <span
       className={twMerge(
-        'inline-flex items-center justify-center bg-blue-700 rounded-full h-14 w-14',
+        'inline-flex items-center justify-center bg-blue-700 rounded-full h-14 w-14 z-10',
         className,
       )}
     >
-      <span className="text-xl font-medium leading-none text-white">
+      <span className="font-medium leading-none text-white ">
         {name ? getFirstCharsOfName(name) : ''}
       </span>
     </span>
@@ -18,7 +18,7 @@ const AvatarWithName = ({ name, className }) => {
 }
 
 AvatarWithName.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
 }
 
 export default AvatarWithName
