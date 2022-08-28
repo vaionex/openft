@@ -5,6 +5,7 @@ import TextEditor from '@/components/ui/text-editor'
 import PropTypes from 'prop-types'
 
 const MyProfileForm = ({
+  user,
   formValues,
   setFormValues,
   errorMessage,
@@ -115,7 +116,7 @@ const MyProfileForm = ({
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
             <TextEditor
-              initialState={formValues.bio}
+              initialState={user?.bio}
               setNewState={setNewEditorStateToForm}
               placeholder="Add a short bio..."
             />

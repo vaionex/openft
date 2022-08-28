@@ -14,11 +14,11 @@ const UserSettingsMain = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   const [formValues, setFormValues] = useState({
-    username: currentUser?.username || '',
-    instagram: currentUser?.instagram || '',
-    bio: currentUser?.bio || '',
-    jobTitle: currentUser?.jobTitle || '',
-    showJobTitle: currentUser?.showJobTitle || false,
+    username: '',
+    instagram: '',
+    bio: '',
+    jobTitle: '',
+    showJobTitle: false,
   })
 
   useEffect(() => {
@@ -26,7 +26,6 @@ const UserSettingsMain = () => {
       setFormValues({
         username: currentUser?.username || '',
         instagram: currentUser?.instagram || '',
-        bio: currentUser?.bio || '',
         jobTitle: currentUser?.jobTitle || '',
         showJobTitle: currentUser?.showJobTitle || false,
       })
@@ -80,6 +79,7 @@ const UserSettingsMain = () => {
         isSuccess={isSuccess}
       />
       <MyProfileForm
+        user={currentUser}
         formValues={formValues}
         setFormValues={setFormValues}
         errorMessage={errorMessage}

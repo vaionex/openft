@@ -3,6 +3,8 @@ import { ContentState, convertToRaw, EditorState } from 'draft-js'
 import dynamic from 'next/dynamic'
 import PropTypes from 'prop-types'
 import draftToHtml from 'draftjs-to-html'
+import userSelector from '@/redux/selectors/user'
+import { useSelector } from 'react-redux'
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
@@ -14,11 +16,12 @@ const TextEditor = ({ placeholder, initialState, setNewState }) => {
   const [mounted, setMounted] = useState(0)
 
   useEffect(() => {
+    console.log(mounted)
     setMounted((prev) => prev + 1)
-    if (mounted === 1) {
+    if (mounted === 0 || mounted === 1) {
       const getInitialEditorState = () => {
         const htmlToDraft = require('html-to-draftjs').default
-        const contentBlock = htmlToDraft(initialState)
+        const contentBlock = htmlToDraft(initialState || '')
         const contentState = ContentState.createFromBlockArray(
           contentBlock.contentBlocks,
         )
