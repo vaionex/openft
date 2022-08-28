@@ -1,6 +1,7 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { ProfileHeaderCard } from '@/components/ui/cards'
 import { MyProfileForm } from '@/components/ui/forms'
+import { firebaseIsUsernameExist } from '@/firebase/utils'
 import userSelector from '@/redux/selectors/user'
 import { updateUser } from '@/redux/slices/user'
 import { useEffect, useState } from 'react'
@@ -69,14 +70,27 @@ const UserSettingsMain = () => {
     }
   }
 
+  const checkIsUsernameAvailable = async (username) => {
+    const isExist = await firebaseIsUsernameExist(username)
+    return isExist
+  }
+
   const handleOnSubmit = async (e) => {
     e.preventDefault()
-    dispatch(
-      updateUser({
-        uid: currentUser.uid,
-        values: formValues,
-      }),
-    )
+    const { username } = formValues
+    if (currentUser.username !== username) {
+      const isExist = await checkIsUsernameAvailable(username)
+      if (isExist) {
+        setIsError(true)
+        setErrorMessage('This username is already in use')
+      }
+    }
+    // dispatch(
+    //   updateUser({
+    //     uid: currentUser.uid,
+    //     values: formValues,
+    //   }),
+    // )
   }
 
   return (

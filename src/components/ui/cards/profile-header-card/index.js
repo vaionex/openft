@@ -48,7 +48,9 @@ const ProfileHeaderCard = ({ user, onSubmit, isError }) => {
                 disabled={isError}
                 className={twMerge(
                   'btn-primary py-2.5',
-                  isError ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                  isError
+                    ? 'opacity-50 cursor-not-allowed pointer-events-none'
+                    : 'cursor-pointer',
                 )}
                 onClick={onSubmit}
               >
