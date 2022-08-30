@@ -1,10 +1,40 @@
+import { useEffect, useState } from 'react'
 import { CopyDIcon } from '@/components/common/icons'
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { InputMain } from '@/components/ui/inputs'
 import ProgressCircular from '@/components/ui/progress-circular'
 import { ArrowSmUpIcon } from '@heroicons/react/outline'
+import { useSelector } from 'react-redux'
+import walletSelector from '@/redux/selectors/wallet'
+import Spinner from '@/components/ui/spinner'
+import apiConfig from '@/config/relysiaApi'
 
 const UserSettingsWalletSection = () => {
+  const [loading, setLoading] = useState(true)
+  const [usdBalance, setUsdBalance] = useState(0)
+  const { paymail, address, balance } = useSelector(walletSelector)
+  useEffect(() => {
+    if (balance !== null) {
+      if (balance > 0) {
+        ;(async () => {
+          await apiConfig
+            .get('/v1/currencyConversion', {
+              headers: {
+                satoshis: `${balance}`,
+                currency: 'USD',
+              },
+            })
+            .then((res) => {
+              setUsdBalance(res.data.data.balance)
+              setLoading(false)
+            })
+            .catch(() => setLoading(false))
+        })()
+      } else {
+        setLoading(false)
+      }
+    }
+  }, [balance])
   return (
     <UserSettingsLayout>
       <div>
@@ -27,11 +57,11 @@ const UserSettingsWalletSection = () => {
                 <div className="flex flex-col justify-between flex-1">
                   <div className="font-medium">Wallet</div>
                   <div>
-                    <p className="mb-2 text-sm text-gray-500 ">
+                    <p className="mb-2 text-sm text-gray-500">
                       Current balance
                     </p>
                     <span className="text-2xl font-bold text-gray-900 truncate sm:text-3xl">
-                      $40,206.20
+                      {!loading ? '$' + usdBalance : <Spinner size="w-7 h-7" />}
                     </span>
                   </div>
                 </div>
@@ -42,7 +72,11 @@ const UserSettingsWalletSection = () => {
                 />
                 <div className="flex items-end justify-center flex-1 md:relative md:justify-end">
                   <span className="text-xs text-amber-400 bg-amber-50 truncate font-medium p-y1 px-2.5 rounded-full">
-                    749,1335941866964 BSV
+                    {!loading ? (
+                      balance + ' ' + 'BSV'
+                    ) : (
+                      <Spinner size="w-4 h-4" />
+                    )}
                   </span>
                 </div>
               </div>
@@ -53,15 +87,19 @@ const UserSettingsWalletSection = () => {
                     id="paymail"
                     variant="add-on-reverse"
                     addon={
-                      <>
-                        <CopyDIcon
-                          className="w-5 h-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span>Copy</span>
-                      </>
+                      paymail ? (
+                        <>
+                          <CopyDIcon
+                            className="w-5 h-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span>Copy</span>
+                        </>
+                      ) : (
+                        <Spinner />
+                      )
                     }
-                    defaultValue="1029@relysia.com"
+                    defaultValue={paymail}
                     onChange={() => {}}
                     className="sm:col-span-2"
                     disabled
@@ -77,15 +115,19 @@ const UserSettingsWalletSection = () => {
                     id="bitcoinSVAddress"
                     variant="add-on-reverse"
                     addon={
-                      <>
-                        <CopyDIcon
-                          className="w-5 h-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span>Copy</span>
-                      </>
+                      address ? (
+                        <>
+                          <CopyDIcon
+                            className="w-5 h-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span>Copy</span>
+                        </>
+                      ) : (
+                        <Spinner />
+                      )
                     }
-                    defaultValue="1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2"
+                    defaultValue={address}
                     onChange={() => {}}
                     className="sm:col-span-2"
                     disabled
