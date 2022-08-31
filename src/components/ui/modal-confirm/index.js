@@ -1,9 +1,17 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 
-const ModalConfirm = ({ isOpen, onClose, onConfirm, text, title }) => {
-  const [open, setOpen] = useState(true)
-
+const ModalConfirm = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  text,
+  title,
+  button1Text = 'Delete',
+  button2Text = 'Cancel',
+  cancelButton = true,
+  deleteButton = true,
+}) => {
   const cancelButtonRef = useRef(null)
 
   return (
@@ -47,26 +55,36 @@ const ModalConfirm = ({ isOpen, onClose, onConfirm, text, title }) => {
                       {title}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">{text}</p>
+                      <div className="text-sm text-gray-500">{text}</div>
                     </div>
                   </div>
                 </div>
-                <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
-                    onClick={onConfirm}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                    onClick={onClose}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
+                <div
+                  className={`mt-5 sm:mt-6 ${
+                    deleteButton && cancelButton
+                      ? 'sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense'
+                      : 'flex justify-center items-center max-w-xs mx-auto'
+                  }`}
+                >
+                  {deleteButton && (
+                    <button
+                      type="button"
+                      className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                      onClick={onConfirm}
+                    >
+                      {button1Text}
+                    </button>
+                  )}
+                  {cancelButton && (
+                    <button
+                      type="button"
+                      className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                      onClick={onClose}
+                      ref={cancelButtonRef}
+                    >
+                      {button2Text}
+                    </button>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

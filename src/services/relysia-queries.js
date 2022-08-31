@@ -106,6 +106,16 @@ export const getwalletBal = async (walletid, dispatch) => {
     })
 }
 
+
+export const metricsApiWithoutBody = async () => {
+  await apiConfig
+    .get('/v1/metrics')
+    .then((res) => { })
+    .catch((err) => {
+      console.log('without body', err)
+    })
+}
+
 export const getwalletDetails = async (walletid, dispatch) => {
 
   apiConfig
