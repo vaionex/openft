@@ -1,24 +1,51 @@
-import { EditorUlistIcon } from '@/components/common/icons'
+import { useEffect, useState } from 'react'
+import { ContentState, convertToRaw, EditorState } from 'draft-js'
 import dynamic from 'next/dynamic'
-import { useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import draftToHtml from 'draftjs-to-html'
+import userSelector from '@/redux/selectors/user'
+import { useSelector } from 'react-redux'
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
   { ssr: false },
 )
 
-const TextEditor = ({ onChange }) => {
-  const [editorState, setEditorState] = useState(null)
+const TextEditor = ({ placeholder, initialState, setNewState }) => {
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [mounted, setMounted] = useState(0)
+
+  useEffect(() => {
+    console.log(mounted)
+    setMounted((prev) => prev + 1)
+    if (mounted >= 1) {
+      const getInitialEditorState = () => {
+        const htmlToDraft = require('html-to-draftjs').default
+        const contentBlock = htmlToDraft(initialState || '')
+        const contentState = ContentState.createFromBlockArray(
+          contentBlock.contentBlocks,
+        )
+        const editorState = EditorState.createWithContent(contentState)
+        setEditorState(editorState)
+      }
+      getInitialEditorState()
+    }
+  }, [initialState])
+
+  const handleOnEditorStateChange = (newState) => {
+    setEditorState(newState)
+    const draft = draftToHtml(convertToRaw(newState.getCurrentContent()))
+
+    setNewState(draft)
+  }
 
   return (
     <div className="">
       <Editor
         editorState={editorState}
         toolbarClassName="border-none px-0"
-        wrapperClassName=""
         editorClassName="p-3 border border-gray-200 rounded min-h-[154px]"
-        onEditorStateChange={setEditorState}
-        placeholder="Add a short bio..."
+        onEditorStateChange={handleOnEditorStateChange}
         toolbar={{
           options: ['blockType', 'inline', 'link', 'list'],
           inline: {
@@ -77,9 +104,17 @@ const TextEditor = ({ onChange }) => {
             },
           },
         }}
+        placeholder={placeholder}
+        moveFocusToEnd={true}
       />
     </div>
   )
+}
+
+TextEditor.propTypes = {
+  placeholder: PropTypes.string,
+  initialState: PropTypes.string,
+  setNewState: PropTypes.func,
 }
 
 export default TextEditor

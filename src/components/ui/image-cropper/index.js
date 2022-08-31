@@ -8,7 +8,14 @@ import getCroppedImg from '@/utils/cropImageUtils'
 import { useDispatch } from 'react-redux'
 import { setPhotoValues } from '@/redux/slices/registration-form'
 
-const ImageCropper = ({ id, image, aspect, isCropping, setIsCropping }) => {
+const ImageCropper = ({
+  id,
+  image,
+  aspect,
+  isCropping,
+  setIsCropping,
+  setToState,
+}) => {
   const dispatch = useDispatch()
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
@@ -28,19 +35,21 @@ const ImageCropper = ({ id, image, aspect, isCropping, setIsCropping }) => {
         { src, ext, name, type },
         croppedAreaPixels,
       )
-      dispatch(
-        setPhotoValues({
-          [id]: {
-            src,
-            srcCropped: url,
-            name: image.name,
-            ext: ext,
-            size: file.size,
-            type: id,
-            croppedAreaPixels,
-          },
-        }),
-      )
+
+      setToState({
+        id,
+        file: {
+          src,
+          srcCropped: url,
+          name: image.name,
+          ext: ext,
+          size: file.size,
+          type: id,
+          croppedAreaPixels,
+        },
+        croppedBlobFile: file,
+      })
+
       setIsCropping(false)
     } catch (e) {
       console.warn(e)
@@ -62,6 +71,10 @@ const ImageCropper = ({ id, image, aspect, isCropping, setIsCropping }) => {
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
+          classes={{
+            containerClassName: 'bg-blue-500',
+            mediaClassName: 'shadow-2xl',
+          }}
         />
       </div>
 

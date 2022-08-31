@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CameraIcon } from '@heroicons/react/outline'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import ImageUploadDragAndDrop from '@/components/ui/image-upload-drag-n-drop'
-import { clearPhotoValues } from '@/redux/slices/registration-form'
+import {
+  clearPhotoValues,
+  setPhotoValues,
+} from '@/redux/slices/registration-form'
 
 const ImageInputAttributes = [
   {
@@ -33,12 +36,19 @@ const ImageInputAttributes = [
 ]
 
 const RegistrationUploadPhoto = ({ goToStep }) => {
-  const router = useRouter()
   const dispatch = useDispatch()
   const { photoValues } = useSelector(registrationFormSelector)
 
   const handleClear = (id) => {
     dispatch(clearPhotoValues(id))
+  }
+
+  const setImageToState = ({ id, file }) => {
+    dispatch(
+      setPhotoValues({
+        [id]: { ...file },
+      }),
+    )
   }
 
   return (
@@ -68,6 +78,7 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
                 aspect={inputAttribute.aspect}
                 handleClear={() => handleClear(inputAttribute.id)}
                 isSelected={!!photoValues[inputAttribute.id]}
+                setImageToState={setImageToState}
               />
             ))}
 

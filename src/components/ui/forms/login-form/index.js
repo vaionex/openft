@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-import { setAuthenticated, login } from '@/redux/slices/auth'
+import { setAuthenticated, login } from '@/redux/slices/user'
 import { EyeIcon, EyeOffIcon, MenuIcon } from '@heroicons/react/outline'
 import NextLink from 'next/link'
-
-import authSelector from '@/redux/selectors/auth'
 import Checkbox from '../../checkbox'
 import Alert from '../../alert'
+import userSelector from '@/redux/selectors/user'
+import ButtonWLoading from '../../button-w-loading'
 
 function LoginForm() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const auth = useSelector((state) => state.auth)
+  const { isPending } = useSelector(userSelector)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
@@ -43,11 +43,9 @@ function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form className="space-y-6">
       <div className="flex justify-center pt-2">
-        {error && (
-          <Alert message={error} type="error" />
-        )}
+        {error && <Alert message={error} type="error" />}
       </div>
       <div>
         <label
@@ -105,9 +103,7 @@ function LoginForm() {
         <Checkbox
           id="remember-me"
           text="Remember me"
-          onChange={(e) =>
-            setRememberMe(e.target.checked)
-          }
+          onChange={(e) => setRememberMe(e.target.checked)}
         />
 
         <div className="text-sm">
@@ -118,16 +114,13 @@ function LoginForm() {
       </div>
 
       <div>
-        <button
-          disabled={auth.isPending}
-          className={`w-full btn-primary 
-          ${auth.isPending
-              ? 'bg-gray-100'
-              : 'bg-blue-600 hover:bg-blue-700'
-            } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`} type="submit"
-        >
-          Sign in
-        </button>
+        <ButtonWLoading
+          isError={error}
+          isPending={isPending}
+          text="Sign In"
+          onClick={handleSubmit}
+          fullWidth
+        />
       </div>
     </form>
   )

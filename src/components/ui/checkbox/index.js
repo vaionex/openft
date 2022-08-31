@@ -8,6 +8,7 @@ const Checkbox = ({
   className,
   checkboxClassName,
   labelClassName,
+  checked,
   ...props
 }) => {
   return (
@@ -20,6 +21,7 @@ const Checkbox = ({
             'w-4 h-4 text-white rounded cursor-pointer checked:bg-center checked:border-blue-500 checked:bg-checkbox-icon checked:bg-auto focus:ring-blue-300 focus:ring-1',
             checkboxClassName,
           )}
+          checked={checked}
           {...props}
         />
       </div>

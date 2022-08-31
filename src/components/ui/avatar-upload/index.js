@@ -4,103 +4,179 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AvatarWithName from '@/components/ui/avatars/avatar-w-name'
+import ImageCropper from '../image-cropper'
+import { checkValidation } from '@/utils/imageValidation'
+import getFileExt from '@/utils/getFileExt'
+import { firebaseDeleteImage, firebaseUploadImage } from '@/firebase/utils'
+import { useCallback } from 'react'
+import ModalConfirm from '../modal-confirm'
+import userSelector from '@/redux/selectors/user'
 
-export const AvatarUpload = ({
-  size,
-  avatarPathSetter,
-  tempAvatarSetter,
-  tempAvatar,
-}) => {
-  const auth = useSelector((state) => state.auth)
+export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
+  const { currentUser } = useSelector(userSelector)
+  const [isCropping, setIsCropping] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [errorMap, setErrorMap] = useState(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  async function uploadAvatar(event) {
+  const IMAGE_SIZE_LIMIT = limits.maxSize * 1000 * 1000
+  const IMAGE_RESOLUTION_LIMIT = {
+    width: limits.maxWidth,
+    height: limits.maxHeight,
+  }
+
+  const validateImage = async (file) => {
+    return await checkValidation(
+      file,
+      acceptableFileTypes,
+      IMAGE_SIZE_LIMIT,
+      IMAGE_RESOLUTION_LIMIT,
+    )
+  }
+
+  const setImageState = async ({ id, file, croppedBlobFile }) => {
+    setUploading(true)
     try {
-      setUploading(true)
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.')
-      }
-
-      const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
-
-      const blob = URL.createObjectURL(file)
-      tempAvatarSetter(blob)
-      avatarPathSetter({ filePath, file })
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message)
-      }
-    } finally {
+      await firebaseUploadImage({
+        user: currentUser,
+        imageFile: croppedBlobFile,
+        imageType: id,
+        ext: file.ext,
+      })
       setUploading(false)
+    } catch (error) {
+      console.log(error)
     }
   }
 
-  const renderAvatarImage = () => {
-    if (!tempAvatar || auth.user?.photoURL) {
-      return (
-        <div className="flex justify-center p-2">
-          {/* that || name will be deleted when user data comes */}
-          <AvatarWithName name={auth.user?.displayName || 'Olivia John'} />
-        </div>
-      )
-    } else if (tempAvatar ?? auth.user?.photoURL) {
-      return (
-        <div className="flex justify-center p-2">
-          <div className="overflow-hidden rounded-full w-14 h-14 ring-offset-base-100 ring-offset-2">
-            <Image
-              src={tempAvatar ?? auth.user?.photoURL ?? ''}
-              alt="avatar preview"
-              className="rounded-box"
-              width={size}
-              height={size}
-              objectFit="cover"
-            />
-          </div>
-        </div>
-      )
+  const handleOnChange = useCallback(async (e) => {
+    setErrorMap(null)
+    const imageFile = e.target.files[0]
+
+    const errorObjects = await validateImage(imageFile)
+
+    if (!errorObjects) {
+      const createFileUrl = URL.createObjectURL(imageFile)
+      setSelectedImage({
+        src: createFileUrl,
+        name: imageFile.name,
+        ext: getFileExt(imageFile.name),
+      })
+      setIsCropping(true)
+    } else {
+      setErrorMap(errorObjects)
+    }
+  }, [])
+
+  const clearEventValue = (e) => {
+    e.target.value = ''
+  }
+
+  const handleOnDelete = async () => {
+    const uid = currentUser?.uid
+    try {
+      await firebaseDeleteImage({ uid, imageType: 'profileImage' })
+      setIsDeleteModalOpen(false)
+    } catch (error) {
+      alert(error.message)
     }
   }
 
   return (
-    <div className="flex items-start justify-between w-full gap-2">
-      {renderAvatarImage()}
-
-      <div className="flex">
-        <span className="inline-block p-2 text-sm text-gray-500 cursor-pointer">
-          Delete
-        </span>
-        <div className="flex justify-center">
-          <label
-            className={`cursor-pointer p-2 text-sm font-medium text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-              uploading ? 'loading' : ''
-            }`}
-            htmlFor="single"
-          >
-            {uploading ? 'Uploading' : 'Update'}
-          </label>
-          <input
-            className="absolute hidden"
-            type="file"
-            id="single"
-            accept="image/*"
-            onChange={(e) => uploadAvatar(e)}
-            disabled={uploading}
-          />
+    <>
+      <div className="flex items-start justify-between w-full gap-2">
+        <div className="flex justify-center p-2">
+          <div className="relative overflow-hidden bg-blue-700 rounded-full w-14 h-14 ring-offset-base-100 ring-offset-2">
+            {currentUser?.profileImage ? (
+              <Image
+                src={currentUser.profileImage}
+                alt="avatar preview"
+                className="rounded-box"
+                objectFit="cover"
+                layout="fill"
+              />
+            ) : (
+              <AvatarWithName name={currentUser?.name} />
+            )}
+          </div>
         </div>
+
+        <div className="flex">
+          {currentUser?.profileImage && !uploading && (
+            <span
+              className="inline-block p-2 text-sm text-gray-500 cursor-pointer"
+              onClick={() => setIsDeleteModalOpen(true)}
+            >
+              Delete
+            </span>
+          )}
+          <div className="flex justify-center">
+            {uploading && (
+              <span className="p-2 text-sm font-medium text-blue-700 ">
+                Uploading...
+              </span>
+            )}
+
+            {!uploading && (
+              <>
+                <label
+                  className="p-2 text-sm font-medium text-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  htmlFor="profileImage"
+                >
+                  {currentUser?.profileImage ? 'Update' : 'Upload'}
+                </label>
+                <input
+                  className="absolute hidden"
+                  type="file"
+                  id="profileImage"
+                  accept={acceptableFileTypes}
+                  onChange={(e) => handleOnChange(e)}
+                  onClick={clearEventValue}
+                  disabled={uploading}
+                />
+              </>
+            )}
+          </div>
+        </div>
+
+        {isCropping && (
+          <ImageCropper
+            id="profileImage"
+            image={selectedImage}
+            aspect={aspect}
+            isCropping={isCropping}
+            setIsCropping={setIsCropping}
+            setToState={setImageState}
+          />
+        )}
+
+        <ModalConfirm
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleOnDelete}
+          isOpen={isDeleteModalOpen}
+          title="Delete Profile Image"
+          text="Are you sure you want to delete the photo?"
+        />
       </div>
-    </div>
+      <div className="mt-2 text-xs text-red-600 ">
+        <span className="text-xs text-red-600 ">{errorMap?.message}</span>
+      </div>
+    </>
   )
 }
 
+AvatarUpload.defaultProps = {
+  acceptableFileTypes: ['PNG', 'JPEG', 'JPG', 'WEBP'],
+}
+
 AvatarUpload.propTypes = {
-  size: PropTypes.number,
-  avatarPathSetter: PropTypes.func,
-  tempAvatarSetter: PropTypes.func,
-  tempAvatar: PropTypes.string,
+  acceptableFileTypes: PropTypes.array,
+  limits: PropTypes.shape({
+    maxWidth: PropTypes.number,
+    maxHeight: PropTypes.number,
+    maxSize: PropTypes.number,
+  }),
 }
 
 export default AvatarUpload

@@ -4,16 +4,18 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '@/redux/slices/auth'
+import { register } from '@/redux/slices/user'
 import { InputMain } from '@/components/ui/inputs'
 import { UsersCircleIcon } from '@/components/common/icons'
 import { Controller, useForm } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import { setSocialsValues } from '@/redux/slices/registration-form'
 import { firebaseUploadImage } from '@/firebase/utils'
-import authSelector from '@/redux/selectors/auth'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { twMerge } from 'tailwind-merge'
+import { createwallet } from '@/services/relysia-queries'
+import userSelector from '@/redux/selectors/user'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
 const inputAttributes = [
   {
@@ -42,7 +44,7 @@ const inputAttributes = [
 function RegistrationAddSocials({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { user, isPending, isAuthenticated } = useSelector(authSelector)
+  const { isPending } = useSelector(userSelector)
   const [submitStarted, setSubmitStarted] = useState(false)
   const registrationValues = useSelector(registrationFormSelector)
   const { photoValues } = registrationValues
@@ -73,7 +75,6 @@ function RegistrationAddSocials({ goToStep }) {
       .then(async ({ payload }) => {
         document.body.style.pointerEvents = 'auto'
         document.body.style.touchAction = 'auto'
-
         await firebaseUploadImage({
           user: payload,
           imageFile: coverImageForUpload.file,
@@ -86,6 +87,7 @@ function RegistrationAddSocials({ goToStep }) {
           imageType: 'profileImage',
           ext: photoValues.profileImage.ext,
         })
+        await createwallet('default', dispatch)
       })
       .catch((error) => {
         alert(error.message)
@@ -147,22 +149,13 @@ function RegistrationAddSocials({ goToStep }) {
               >
                 Back
               </button>
-              <button
-                disabled={isPending || submitStarted}
-                type="button"
+              <ButtonWLoading
+                isError={isError}
+                isPending={isPending}
+                text="Finish"
                 onClick={handleSubmit(onSubmit)}
-                className={twMerge(
-                  'w-full btn-primary transition-all duration-300 ease-in-out',
-                  isPending && 'cursor-not-allowed',
-                )}
-              >
-                <span className="relative flex items-center">
-                  Finish
-                  {submitStarted && (
-                    <span className="absolute -right-10 spinner-small"></span>
-                  )}
-                </span>
-              </button>
+                fullWidth
+              />
             </div>
           </form>
         </div>
