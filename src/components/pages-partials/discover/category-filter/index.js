@@ -26,16 +26,26 @@ export default function CategoryFilter({ nftsData }) {
     max: '',
   })
 
-  const { user } = useSelector(authSelector)
+  const [nfts, setNfts] = useState(nftsData)
+  const [pageOfItems, setPageOfItems] = useState(null)
+  const [lastAddPage, setLastAddPage] = useState(null)
+  const [isFilter, setIsFilter] = useState(false)
+  const [isPagination, setIsPagination] = useState(false)
+  const [favouriteNfts, setFavouriteNfts] = useState(null)
 
-  useEffect(async () => {
-    if (user) {
-      const data = await firebaseGetSingleDoc('favourites', user?.uid)
-      setFavouriteNfts(data?.nfts)
-    } else {
-      setFavouriteNfts([])
+  const { currentUser } = useSelector(userSelector)
+
+  useEffect(() => {
+    const setFavorites = async () => {
+      if (currentUser) {
+        const data = await firebaseGetSingleDoc('favourites', currentUser?.uid)
+        setFavouriteNfts(data?.nfts)
+      } else {
+        setFavouriteNfts([])
+      }
     }
-  }, [user])
+    setFavorites()
+  }, [currentUser])
 
   const statusHandle = (e) => {
     e.preventDefault()
