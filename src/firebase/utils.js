@@ -33,8 +33,18 @@ import {
   browserSessionPersistence,
 } from 'firebase/auth'
 import store from '@/redux/store'
-import { setAuthenticated, setUserData } from '@/redux/slices/user'
+import {
+  setAuthenticated,
+  setUserData,
+  setUserPending,
+} from '@/redux/slices/user'
 import { clearRegistrationForm } from '@/redux/slices/registration-form'
+import {
+  createwallet,
+  getWalletAddressAndPaymail,
+  getwalletDetails,
+} from '@/services/relysia-queries'
+import apiConfig from '@/config/relysiaApi'
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -123,26 +133,6 @@ const firebaseLogout = async () => {
   store.dispatch(clearRegistrationForm())
 }
 
-const firebaseGetAuthorizedUser = () => {
-  const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
-    const isAuth = localStorage.getItem('authed')
-    if (userResponse) {
-      const user = await firebaseGetUserInfoFromDb(userResponse.uid)
-      store.dispatch(setUserData(user))
-      store.dispatch(setAuthenticated(true))
-      if (!isAuth) {
-        localStorage.setItem('authed', true)
-      }
-    } else {
-      console.log('not auth')
-      localStorage.removeItem('authed')
-      store.dispatch(setAuthenticated(false))
-    }
-  })
-
-  return fn
-}
-
 const firebaseLoginWithGoogle = async () => {
   try {
     const firebaseGoogleProvider = new GoogleAuthProvider()
@@ -224,7 +214,6 @@ const firebaseResetPassword = async (user, newPassword) => {
 }
 
 const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
-  debugger
   if (user && imageFile) {
     const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
     const imagePath = `${imageFolder}/${user.uid}.${ext}`
@@ -386,6 +375,42 @@ const firbaseDeleteDoc = async (collectionName, id) => {
   }
 }
 
+const firebaseGetAuthorizedUser = () => {
+  const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
+    if (userResponse) {
+      const user = await firebaseGetUserInfoFromDb(userResponse.uid)
+      store.dispatch(setUserData(user))
+      store.dispatch(setAuthenticated(true))
+    } else {
+      console.log('not auth')
+      store.dispatch(setAuthenticated(false))
+    }
+    store.dispatch(setUserPending(false))
+  })
+
+  return fn
+}
+
+const firebaseOnIdTokenChange = async () => {
+  const walletId = '00000000-0000-0000-0000-000000000000'
+  const paymail = store.getState().user.paymail
+  const address = store.getState().user.address
+
+  firebaseAuth.onIdTokenChanged(async (user) => {
+    if (user) {
+      apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      if (!paymail && !address) {
+        const walletData = await getWalletAddressAndPaymail(walletId)
+        if (walletData.address && walletData.paymail) {
+          getwalletDetails(walletId, store.dispatch)
+        } else {
+          createwallet('default', store.dispatch)
+        }
+      }
+    }
+  })
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -403,4 +428,5 @@ export {
   firbaseDeleteDoc,
   firbaseUpdateDoc,
   firebaseDeleteImage,
+  firebaseOnIdTokenChange,
 }

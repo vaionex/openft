@@ -10,8 +10,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 const initialState = {
   currentUser: null,
   isPending: false,
+  isUserPending: true,
   errorMessage: null,
-  isAuthenticated: null,
+  isAuthenticated: false,
   isSuccess: false,
 }
 
@@ -84,6 +85,12 @@ const userSlice = createSlice({
     setSuccess: (state, action) => {
       state.isSuccess = action.payload
     },
+    setPending: (state, action) => {
+      state.isPending = action.payload
+    },
+    setUserPending: (state, action) => {
+      state.isUserPending = action.payload
+    },
   },
   extraReducers: {
     [login.pending]: (state) => {
@@ -92,10 +99,12 @@ const userSlice = createSlice({
     },
     [login.rejected]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.errorMessage = action.payload
     },
     [login.fulfilled]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.currentUser = action.payload
     },
     [register.pending]: (state) => {
@@ -104,10 +113,12 @@ const userSlice = createSlice({
     },
     [register.rejected]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.errorMessage = action.payload
     },
     [register.fulfilled]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.currentUser = action.payload
     },
     [logout.pending]: (state) => {
@@ -116,12 +127,13 @@ const userSlice = createSlice({
     },
     [logout.rejected]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.errorMessage = action.payload
     },
     [logout.fulfilled]: (state) => {
       state.isPending = false
       state.currentUser = null
-      state.isPending = false
+      state.isUserPending = false
       state.errorMessage = null
       state.isAuthenticated = false
     },
@@ -132,11 +144,13 @@ const userSlice = createSlice({
     },
     [updateUser.rejected]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.errorMessage = action.payload
       state.isSuccess = false
     },
     [updateUser.fulfilled]: (state, action) => {
       state.isPending = false
+      state.isUserPending = false
       state.currentUser = action.payload
       state.isSuccess = true
     },
@@ -150,4 +164,6 @@ export const {
   setResetAuth,
   setError,
   setSuccess,
+  setPending,
+  setUserPending,
 } = userSlice.actions

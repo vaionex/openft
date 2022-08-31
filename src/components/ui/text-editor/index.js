@@ -18,7 +18,7 @@ const TextEditor = ({ placeholder, initialState, setNewState }) => {
   useEffect(() => {
     console.log(mounted)
     setMounted((prev) => prev + 1)
-    if (mounted === 0 || mounted === 1) {
+    if (mounted >= 1) {
       const getInitialEditorState = () => {
         const htmlToDraft = require('html-to-draftjs').default
         const contentBlock = htmlToDraft(initialState || '')

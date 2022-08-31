@@ -1,29 +1,34 @@
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import store from '@/redux/store'
-import CurrentUser from '@/components/common/current-user'
 import { AnimatePresence } from 'framer-motion'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import 'react-circular-progressbar/dist/styles.css'
 import '@/styles/globals.css'
-import { useEffect, useState } from 'react'
-import { firebaseGetAuthorizedUser } from '@/firebase/utils'
+import { useEffect } from 'react'
+import {
+  firebaseGetAuthorizedUser,
+  firebaseOnIdTokenChange,
+} from '@/firebase/utils'
 import { setAuthenticated } from '@/redux/slices/user'
+import ProtectedRoute from '@/components/common/protected-route'
 
 function App({ Component, pageProps }) {
   useEffect(() => {
-    const isAuth = localStorage.getItem('authed') ? true : false
-    store.dispatch(setAuthenticated(isAuth))
-    firebaseGetAuthorizedUser()
+    const unsubscribe = firebaseGetAuthorizedUser()
+    firebaseOnIdTokenChange()
+
+    return () => unsubscribe()
   }, [])
 
   return (
     <AnimatePresence exitBeforeEnter>
       <Provider store={store}>
-        <CurrentUser />
-        <Component {...pageProps} />
+        <ProtectedRoute>
+          <Component {...pageProps} />
+        </ProtectedRoute>
       </Provider>
     </AnimatePresence>
   )

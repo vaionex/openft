@@ -1,5 +1,5 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
-import { NotificationsForm, SecurityForm } from '@/components/ui/forms'
+import { NotificationsForm } from '@/components/ui/forms'
 import React from 'react'
 import NotificationList from '@/components/ui/lists/notification-list'
 import DropdownMinimal from '@/components/ui/dropdown-minimal'
