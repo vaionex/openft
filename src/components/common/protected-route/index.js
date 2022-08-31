@@ -14,9 +14,6 @@ const ProtectedRoute = ({ children }) => {
   const routesWithAuth = router.pathname.includes('user-settings')
 
   useEffect(() => {
-    console.log(isUserPending, 'isUserPending')
-    console.log(isAuthenticated, 'isAuthenticated')
-
     if (routesWithAuth && !isAuthenticated && !isUserPending) {
       routesWithAuth && !isAuthenticated && router.push('/login')
     }
