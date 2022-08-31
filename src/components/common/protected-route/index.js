@@ -21,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
     if (authRoute && isAuthenticated && !isUserPending) {
       router.push('/')
     }
-  }, [isUserPending])
+  }, [isUserPending, router])
 
   if (
     isUserPending ||

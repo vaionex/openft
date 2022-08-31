@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
-import { Avatar, AvatarWithName } from '../../avatars'
+import { Avatar, AvatarWithName } from '@/components/ui/avatars'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
 const ProfileHeaderCard = ({
   user,
@@ -55,25 +56,12 @@ const ProfileHeaderCard = ({
                   Profile successfully updated.{' '}
                 </span>
               )}
-              <button
-                type="button"
-                disabled={isError}
-                className={twMerge(
-                  'btn-primary py-2.5',
-                  isError
-                    ? 'opacity-50 cursor-not-allowed pointer-events-none'
-                    : 'cursor-pointer',
-                  isPending && 'pointer-events-none',
-                )}
+              <ButtonWLoading
+                isError={isError}
+                isPending={isPending}
+                text="Save"
                 onClick={onSubmit}
-              >
-                Save
-                {isPending && (
-                  <span className="relative flex items-center">
-                    <span className="spinner-small"></span>
-                  </span>
-                )}
-              </button>
+              />
             </div>
           </div>
         </div>

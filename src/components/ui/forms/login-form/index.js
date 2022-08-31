@@ -7,11 +7,12 @@ import NextLink from 'next/link'
 import Checkbox from '../../checkbox'
 import Alert from '../../alert'
 import userSelector from '@/redux/selectors/user'
+import ButtonWLoading from '../../button-w-loading'
 
 function LoginForm() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const user = useSelector(userSelector)
+  const { isPending } = useSelector(userSelector)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
@@ -42,7 +43,7 @@ function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form className="space-y-6">
       <div className="flex justify-center pt-2">
         {error && <Alert message={error} type="error" />}
       </div>
@@ -113,16 +114,13 @@ function LoginForm() {
       </div>
 
       <div>
-        <button
-          disabled={user.isPending}
-          className={`w-full btn-primary
-          ${
-            user.isPending ? 'bg-gray-100' : 'bg-blue-600 hover:bg-blue-700'
-          } transition ease-in-out delay-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-          type="submit"
-        >
-          Sign in
-        </button>
+        <ButtonWLoading
+          isError={error}
+          isPending={isPending}
+          text="Sign In"
+          onClick={handleSubmit}
+          fullWidth
+        />
       </div>
     </form>
   )

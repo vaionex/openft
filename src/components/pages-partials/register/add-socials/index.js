@@ -15,6 +15,7 @@ import getCroppedImg from '@/utils/cropImageUtils'
 import { twMerge } from 'tailwind-merge'
 import { createwallet } from '@/services/relysia-queries'
 import userSelector from '@/redux/selectors/user'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
 const inputAttributes = [
   {
@@ -148,22 +149,13 @@ function RegistrationAddSocials({ goToStep }) {
               >
                 Back
               </button>
-              <button
-                disabled={isPending || submitStarted}
-                type="button"
+              <ButtonWLoading
+                isError={isError}
+                isPending={isPending}
+                text="Finish"
                 onClick={handleSubmit(onSubmit)}
-                className={twMerge(
-                  'w-full btn-primary transition-all duration-300 ease-in-out',
-                  isPending && 'cursor-not-allowed',
-                )}
-              >
-                <span className="relative flex items-center">
-                  Finish
-                  {submitStarted && (
-                    <span className="absolute -right-10 spinner-small"></span>
-                  )}
-                </span>
-              </button>
+                fullWidth
+              />
             </div>
           </form>
         </div>
