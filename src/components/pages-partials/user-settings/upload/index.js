@@ -5,7 +5,6 @@ import { EyeIcon } from '@heroicons/react/outline'
 const UserSettingsUploadSection = () => {
   const showPreview = (e) => {
     e.preventDefault()
-    console.log('show preview')
   }
 
   return (
