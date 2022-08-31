@@ -6,7 +6,8 @@ export default function DiscoverPage({ nftsData }) {
 }
 
 export const getServerSideProps = async () => {
-  const nftsData = await firebaseGetFirstNfts()
+  const pageLimit = 20
+  const nftsData = await firebaseGetFirstNfts(pageLimit)
 
   return {
     props: { nftsData: JSON.parse(JSON.stringify(nftsData)) }
