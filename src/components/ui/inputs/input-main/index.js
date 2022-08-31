@@ -2,7 +2,8 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import ReactTooltip from 'react-tooltip'
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const InputMain = ({ className, children }) => {
   return (
@@ -81,6 +82,7 @@ InputMain.Input = function InputMainInput(
   },
   ref,
 ) {
+  const [message, setMessage] = useState(false)
   return (
     <div className={className}>
       {variant === 'add-on' && !!addon && (
@@ -114,20 +116,29 @@ InputMain.Input = function InputMainInput(
               id={id}
               type={inputType}
               className={twMerge(
-                'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
+                'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-l-md sm:text-sm',
                 inputClassName,
               )}
               ref={ref}
               {...props}
             />
           </div>
-          <button
-            type="button"
-            className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            {addon}
-          </button>
+          <CopyToClipboard text={props.value ?? props.defaultValue}>
+            <button
+              onClick={() => {
+                setMessage(true)
+                setTimeout(() => setMessage(false), 3000)
+              }}
+              type="button"
+              className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              {addon}
+            </button>
+          </CopyToClipboard>
         </div>
+      )}
+      {message && (
+        <span className="text-red-500 text-sm flex justify-end">Copied!</span>
       )}
       {variant === 'default' && (
         <div className="relative flex rounded-md shadow-sm">
