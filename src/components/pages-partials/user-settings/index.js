@@ -27,6 +27,7 @@ const UserSettingsMain = () => {
         username: currentUser?.username || '',
         instagram: currentUser?.instagram || '',
         jobTitle: currentUser?.jobTitle || '',
+        bio: currentUser?.bio || '',
         showJobTitle: currentUser?.showJobTitle || false,
       })
     }

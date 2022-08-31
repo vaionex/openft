@@ -45,7 +45,9 @@ const ProfileHeaderCard = ({
               <h2 className="mb-1 text-2xl font-medium text-gray-900 truncate">
                 {user?.name}
               </h2>
-              <h3 className="font-normal text-gray-500">{user?.title}</h3>
+              {user?.jobTitle && user?.showJobTitle && (
+                <h3 className="font-normal text-gray-500">{user?.jobTitle}</h3>
+              )}
             </div>
             <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
               {isSuccess && (

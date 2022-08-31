@@ -1,8 +1,8 @@
 import AvatarUpload from '@/components/ui/avatar-upload'
 import Checkbox from '@/components/ui/checkbox'
 import { InputMain } from '@/components/ui/inputs'
-import TextEditor from '@/components/ui/text-editor'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 
 const MyProfileForm = ({
   user,
@@ -13,14 +13,7 @@ const MyProfileForm = ({
   isError,
   setIsError,
 }) => {
-  const setNewEditorStateToForm = (newState) => {
-    setFormValues((prev) => {
-      return {
-        ...prev,
-        bio: newState,
-      }
-    })
-  }
+  const BIO_MAX_LENGTH = 400
 
   const validateUsername = (username) => {
     const usernameRegex = /^[a-z0-9]+$/i
@@ -38,22 +31,31 @@ const MyProfileForm = ({
   }
 
   const handleInputChange = (e) => {
-    if (e.target.name === 'username') {
-      setErrorMessage(validateUsername(e.target.value))
+    const { name, value, checked } = e.target
+
+    if (name === 'username') {
+      setErrorMessage(validateUsername(value))
     }
 
-    if (e.target.name === 'showJobTitle') {
+    if (name === 'bio') {
+      if (value.length <= BIO_MAX_LENGTH) {
+        setFormValues((prev) => ({
+          ...prev,
+          [name]: value,
+        }))
+      }
+    } else if (name === 'showJobTitle') {
       setFormValues((prev) => {
         return {
           ...prev,
-          [e.target.name]: e.target.checked,
+          [name]: checked,
         }
       })
     } else {
       setFormValues((prev) => {
         return {
           ...prev,
-          [e.target.name]: e.target.value,
+          [name]: value,
         }
       })
     }
@@ -115,12 +117,17 @@ const MyProfileForm = ({
             sublabel="Write a short introduction."
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <TextEditor
-              initialState={user?.bio}
-              setNewState={setNewEditorStateToForm}
+            <textarea
+              className="w-full p-3 border border-gray-200 rounded min-h-[154px] resize-none"
               placeholder="Add a short bio..."
-            />
-            <p className="mt-2 text-sm text-gray-500">400 characters left</p>
+              name="bio"
+              value={formValues.bio}
+              onChange={handleInputChange}
+              maxLength={BIO_MAX_LENGTH}
+            ></textarea>
+            <p className="mt-2 text-sm text-gray-500">
+              {formValues?.bio.length} characters left
+            </p>
           </div>
         </InputMain>
 
