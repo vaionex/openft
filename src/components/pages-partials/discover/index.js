@@ -1,13 +1,13 @@
 import SharedLayout from '@/components/layout/shared-layout'
 import BannerSection from './banner'
-import CategoryFilter from './category-filter'
+import NFTMarketplace from './nft-marketplace'
 import Cta from './cta'
 
 const DiscoverPageMain = ({ nftsData }) => {
   return (
     <SharedLayout title="Discover">
       <BannerSection />
-      <CategoryFilter nftsData={nftsData} />
+      <NFTMarketplace nftsData={nftsData} />
       <Cta />
     </SharedLayout>
   )
