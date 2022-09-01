@@ -8,11 +8,7 @@ import {
   PlusSmIcon,
   SearchIcon,
 } from '@heroicons/react/solid'
-import {
-  firebaseGetFilterNfts,
-  firebsaeFetchNextData,
-  firebaseGetSingleDoc,
-} from '@/firebase/utils'
+import { firebaseGetSingleDoc } from '@/firebase/utils'
 import { useSelector } from 'react-redux'
 import FilteredContents from './products'
 import Pagination from './pagination'
@@ -20,12 +16,21 @@ import userSelector from '@/redux/selectors/user'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
+import ReactPaginate from 'react-paginate'
+import { useRouter } from 'next/router'
 
 export default function CategoryFilter({ nftsData }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [favouriteNfts, setFavouriteNfts] = useState(null)
+  const router = useRouter()
 
   const { currentUser } = useSelector(userSelector)
+
+  const handlePageClick = (data) => {
+    const { selected } = data
+    const page = selected + 1
+    router.push(`/discover?page=${page}`)
+  }
 
   return (
     <div>
@@ -72,7 +77,18 @@ export default function CategoryFilter({ nftsData }) {
                     nftItems={nftsData}
                   />
                 </div>
-                <Pagination />
+                <ReactPaginate
+                  // previousLabel={renderLeftArrow()}
+                  // nextLabel={renderRightArrow()}
+                  pageCount={2}
+                  onPageChange={handlePageClick}
+                  breakLabel={'...'}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={0}
+                  containerClassName={'pagination'}
+                  activeClassName={'active'}
+                />
+                {/* <Pagination /> */}
               </div>
             </div>
           </section>

@@ -1,15 +1,23 @@
 import DiscoverPageMain from '@/components/pages-partials/discover'
-import { firebaseGetFirstNfts } from '@/firebase/utils'
+import { firebaseGetNftProducts } from '@/firebase/utils'
 
-export default function DiscoverPage({ nftsData }) {
-  return <DiscoverPageMain nftsData={nftsData} />
+export default function DiscoverPage({ data }) {
+  const { nftsData, collectionSize } = data
+  return (
+    <DiscoverPageMain nftsData={nftsData} nftCollectionSize={collectionSize} />
+  )
 }
 
-export const getServerSideProps = async () => {
-  const pageLimit = 20
-  const nftsData = await firebaseGetFirstNfts(pageLimit)
+export const getServerSideProps = async (req, res) => {
+  const pageLimit = 9
+  const page = req.query.page || 1
+  const { nftsData, collectionSize } = await firebaseGetNftProducts(
+    pageLimit,
+    page,
+  )
+  const parsedData = JSON.parse(JSON.stringify(nftsData))
 
   return {
-    props: { nftsData: JSON.parse(JSON.stringify(nftsData)) }
+    props: { data: { nftsData: parsedData, collectionSize } },
   }
 }
