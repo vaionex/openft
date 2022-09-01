@@ -30,6 +30,8 @@ const MyProfileForm = ({
     }
   }
 
+  console.log('formValues', formValues)
+
   const handleInputChange = (e) => {
     const { name, value, checked } = e.target
 
@@ -126,7 +128,7 @@ const MyProfileForm = ({
               maxLength={BIO_MAX_LENGTH}
             ></textarea>
             <p className="mt-2 text-sm text-gray-500">
-              {formValues?.bio.length} characters left
+              {BIO_MAX_LENGTH - formValues?.bio.length} characters left
             </p>
           </div>
         </InputMain>
