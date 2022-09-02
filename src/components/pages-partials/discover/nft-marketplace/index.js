@@ -1,35 +1,33 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
+import { useEffect, useState } from 'react'
 import { MagnifyGlassIcon, MoreFilterIcon } from '@/components/common/icons'
-import {
-  FilterIcon,
-  MinusSmIcon,
-  PlusSmIcon,
-  SearchIcon,
-} from '@heroicons/react/solid'
+import { FilterIcon } from '@heroicons/react/solid'
 import { firebaseGetSingleDoc } from '@/firebase/utils'
 import { useSelector } from 'react-redux'
 import FilteredContents from './products'
-import Pagination from './pagination'
+
 import userSelector from '@/redux/selectors/user'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
-import ReactPaginate from 'react-paginate'
 import { useRouter } from 'next/router'
+import Pagination from '@/components/ui/pagination'
 
-export default function CategoryFilter({ nftsData }) {
+const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [favouriteNfts, setFavouriteNfts] = useState(null)
   const router = useRouter()
 
   const { currentUser } = useSelector(userSelector)
 
-  const handlePageClick = (data) => {
-    const { selected } = data
-    const page = selected + 1
-    router.push(`/discover?page=${page}`)
+  const handlePageClick = (page) => {
+    const currentPath = router.pathname
+    const currentQuery = { ...router.query }
+    currentQuery.page = page.selected + 1
+
+    router.push({
+      pathname: currentPath,
+      query: currentQuery,
+    })
   }
 
   return (
@@ -77,18 +75,11 @@ export default function CategoryFilter({ nftsData }) {
                     nftItems={nftsData}
                   />
                 </div>
-                <ReactPaginate
-                  // previousLabel={renderLeftArrow()}
-                  // nextLabel={renderRightArrow()}
-                  pageCount={2}
-                  onPageChange={handlePageClick}
-                  breakLabel={'...'}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={0}
-                  containerClassName={'pagination'}
-                  activeClassName={'active'}
+                <Pagination
+                  handlePageClick={handlePageClick}
+                  pageCount={Math.ceil(nftCollectionSize / nftLimit)}
+                  currentPage={router.query.page ? router.query.page : 1}
                 />
-                {/* <Pagination /> */}
               </div>
             </div>
           </section>
@@ -97,3 +88,5 @@ export default function CategoryFilter({ nftsData }) {
     </div>
   )
 }
+
+export default NFTMarketplace
