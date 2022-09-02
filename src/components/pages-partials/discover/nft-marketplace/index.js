@@ -13,13 +13,17 @@ import { useRouter } from 'next/router'
 import Pagination from '@/components/ui/pagination'
 
 const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [favouriteNfts, setFavouriteNfts] = useState(null)
   const router = useRouter()
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [initialFilterValues, setInitialFilterValues] = useState({
+    minPrice: router.query.minPrice || '',
+    maxPrice: router.query.maxPrice || '',
+  })
+  const [initialSearchValue, setInitialSearchValue] = useState(
+    router.query.search || '',
+  )
 
-  const { currentUser } = useSelector(userSelector)
-
-  const handlePageClick = (page) => {
+  const handlePaginationClick = (page) => {
     const currentPath = router.pathname
     const currentQuery = { ...router.query }
     currentQuery.page = page.selected + 1
@@ -42,7 +46,7 @@ const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
 
         <main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="relative z-10 flex gap-4 pt-24 pb-6 ">
-            <NFTMarketplaceSearch />
+            <NFTMarketplaceSearch initialSearchValue={initialSearchValue} />
 
             <div className="flex items-center justify-end lg:hidden">
               <button
@@ -64,19 +68,18 @@ const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
               {/* Filters */}
               <div className="hidden lg:block">
-                <NFTMarketplaceFilters />
+                <NFTMarketplaceFilters
+                  initialFilterValues={initialFilterValues}
+                />
               </div>
 
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div className="h-full">
-                  <FilteredContents
-                    favouriteNfts={favouriteNfts}
-                    nftItems={nftsData}
-                  />
+                  <FilteredContents nftItems={nftsData} />
                 </div>
                 <Pagination
-                  handlePageClick={handlePageClick}
+                  onPageChange={handlePaginationClick}
                   pageCount={Math.ceil(nftCollectionSize / nftLimit)}
                   currentPage={router.query.page ? router.query.page : 1}
                 />

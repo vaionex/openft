@@ -3,7 +3,7 @@ import { ArrowNarrowRightIcon } from '@heroicons/react/outline'
 import React from 'react'
 import ReactPaginate from 'react-paginate'
 
-const Pagination = ({ handlePageClick, pageCount, currentPage }) => {
+const Pagination = ({ onPageChange, pageCount, currentPage }) => {
   return (
     <div className="pagination-wrapper">
       <ReactPaginate
@@ -26,7 +26,7 @@ const Pagination = ({ handlePageClick, pageCount, currentPage }) => {
           </span>
         }
         pageCount={pageCount}
-        onPageChange={handlePageClick}
+        onPageChange={onPageChange}
         breakLabel={'...'}
         marginPagesDisplayed={2}
         pageRangeDisplayed={0}

@@ -1,7 +1,7 @@
 import { InputMain } from '@/components/ui/inputs'
 import React from 'react'
 
-const NFTMarketplaceFilters = () => {
+const NFTMarketplaceFilters = ({ initialFilterValues }) => {
   return (
     <form className="flex flex-col gap-4">
       <h3 className="sr-only">Categories</h3>
