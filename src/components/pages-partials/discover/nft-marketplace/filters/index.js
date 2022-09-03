@@ -1,7 +1,12 @@
 import { InputMain } from '@/components/ui/inputs'
 import React from 'react'
 
-const NFTMarketplaceFilters = ({ initialFilterValues }) => {
+const NFTMarketplaceFilters = ({
+  filterValues,
+  onChange,
+  onSubmit,
+  clearFilters,
+}) => {
   return (
     <form className="flex flex-col gap-4">
       <h3 className="sr-only">Categories</h3>
@@ -18,8 +23,8 @@ const NFTMarketplaceFilters = ({ initialFilterValues }) => {
             name="minPrice"
             id="minPrice"
             placeholder="$ Min Price"
-            value={initialFilterValues.minPrice}
-            onChange={() => {}}
+            value={filterValues.minPrice}
+            onChange={onChange}
           />
         </InputMain>
         <InputMain className="pb-0 border-none">
@@ -33,16 +38,16 @@ const NFTMarketplaceFilters = ({ initialFilterValues }) => {
             name="maxPrice"
             id="maxPrice"
             placeholder="$ Max Price"
-            value={initialFilterValues.maxPrice}
-            onChange={() => {}}
+            value={filterValues.maxPrice}
+            onChange={onChange}
           />
         </InputMain>
       </div>
       <div className="flex gap-4 leading-[18px]">
-        <button className="btn-secondary" onClick={() => {}}>
+        <button className="btn-secondary" onClick={clearFilters}>
           Clear
         </button>
-        <button className="w-full font-semibold btn-primary" onClick={() => {}}>
+        <button className="w-full font-semibold btn-primary" onClick={onSubmit}>
           Apply filter
         </button>
       </div>

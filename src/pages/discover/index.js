@@ -2,7 +2,6 @@ import DiscoverPageMain from '@/components/pages-partials/discover'
 import {
   firebaseGetFilteredNftProducts,
   firebaseGetNftProducts,
-  firebaseGetNftProductsSearchResult,
 } from '@/firebase/utils'
 
 export default function DiscoverPage({ products, pageLimit, totalPage }) {
@@ -17,7 +16,7 @@ export default function DiscoverPage({ products, pageLimit, totalPage }) {
 
 export const getServerSideProps = async (req, res) => {
   const pageLimit = 9
-  const page = req.query.page || 1
+  const page = parseInt(req.query.page) || 1
   const minPrice = parseInt(req.query.minPrice) || 0
   const maxPrice = parseInt(req.query.maxPrice) || 0
   const priceRange = { minPrice, maxPrice }

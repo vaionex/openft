@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FilterIcon } from '@heroicons/react/solid'
 import { firebaseGetNftProducts, firebaseGetSingleDoc } from '@/firebase/utils'
 import { useSelector } from 'react-redux'
-import FilteredContents from './products'
 import userSelector from '@/redux/selectors/user'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
 import { useRouter } from 'next/router'
 import Pagination from '@/components/ui/pagination'
+import NFTProducts from './products'
 
 const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
   const router = useRouter()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const currentPage = router.query.page ?? 1
-  const [initialFilterValues, setInitialFilterValues] = useState({
+  const [filterValues, setFilterValues] = useState({
     minPrice: router.query.minPrice || '',
     maxPrice: router.query.maxPrice || '',
   })
@@ -22,7 +22,7 @@ const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
     router.query.search || '',
   )
 
-  const handlePaginationClick = async (page) => {
+  const handlePagination = async (page) => {
     const currentPath = router.pathname
     const currentQuery = router.query
     const newQuery = {
@@ -40,6 +40,43 @@ const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
   }
 
   const handleSearchSubmit = (e) => {}
+
+  const handleFilterChange = (e) => {
+    e.preventDefault()
+    const { name, value } = e.target
+    setFilterValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleFilterSubmit = (e) => {
+    e.preventDefault()
+    const currentPath = router.pathname
+    const newQuery = {
+      page: 1,
+      minPrice: filterValues.minPrice,
+      maxPrice: filterValues.maxPrice,
+    }
+    router.push({
+      pathname: currentPath,
+      query: newQuery,
+    })
+  }
+
+  const clearFilters = (e) => {
+    e.preventDefault()
+    setFilterValues({
+      minPrice: '',
+      maxPrice: '',
+    })
+    router.push({
+      pathname: router.pathname,
+      query: {
+        page: 1,
+      },
+    })
+  }
 
   return (
     <div>
@@ -80,19 +117,23 @@ const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
               {/* Filters */}
               <div className="hidden lg:block">
                 <NFTMarketplaceFilters
-                  initialFilterValues={initialFilterValues}
+                  filterValues={filterValues}
+                  onChange={handleFilterChange}
+                  onSubmit={handleFilterSubmit}
+                  clearFilters={clearFilters}
                 />
               </div>
 
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div className="h-full">
-                  <FilteredContents products={products} />
+                  <NFTProducts products={products} />
                 </div>
                 <Pagination
-                  onPageChange={handlePaginationClick}
+                  onPageChange={handlePagination}
                   totalPage={totalPage}
                   currentPage={currentPage}
+                  forcePage={currentPage - 1}
                 />
               </div>
             </div>

@@ -4,7 +4,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import ReactPaginate from 'react-paginate'
 
-const Pagination = ({ products, onPageChange, totalPage, currentPage }) => {
+const Pagination = ({ onPageChange, totalPage, currentPage, forcePage }) => {
   return (
     <div className="pagination-wrapper">
       <ReactPaginate
@@ -35,6 +35,7 @@ const Pagination = ({ products, onPageChange, totalPage, currentPage }) => {
         containerClassName={'pagination'}
         activeClassName={'active'}
         initialPage={currentPage - 1}
+        forcePage={forcePage}
       />
     </div>
   )

@@ -1,6 +1,6 @@
 import { ProductsCarouselCard } from '@/components/ui/cards'
 
-const FilteredContents = ({ products, favouriteNfts }) => {
+const NFTProducts = ({ products, favouriteNfts }) => {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       {products &&
@@ -17,4 +17,4 @@ const FilteredContents = ({ products, favouriteNfts }) => {
   )
 }
 
-export default FilteredContents
+export default NFTProducts
