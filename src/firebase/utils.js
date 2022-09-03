@@ -326,25 +326,27 @@ const firebaseGetNftProductsCount = async () => {
   }
 }
 
-const firebaseGetNftProducts = async (
-  productLimit,
-  page,
-  order = 'timestamp',
-) => {
-  const start = page > 1 && productLimit * parseInt(page) - productLimit - 1
+const firebaseGetNftProducts = async (pageLimit, page) => {
+  const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
 
   const nftsRef = collection(firebaseDb, 'nfts')
-  const queryRef = query(nftsRef, orderBy(order, 'desc'), limit(productLimit))
+  const queryRef = query(
+    nftsRef,
+    orderBy('timestamp', 'desc'),
+    limit(pageLimit),
+  )
+
   const collectionSize = await firebaseGetNftProductsCount()
   const documentSnapshots = await getDocs(queryRef)
+
   const lastVisible = documentSnapshots.docs[start]
   const nextRef = collection(firebaseDb, 'nfts')
 
   const next = query(
     nextRef,
-    orderBy(order, 'desc'),
+    orderBy('timestamp', 'desc'),
     startAfter(lastVisible || ''),
-    limit(productLimit),
+    limit(pageLimit),
   )
 
   const nextSnapshots = await getDocs(next)
@@ -358,30 +360,57 @@ const firebaseGetNftProducts = async (
   return { nftsData: nfts, collectionSize }
 }
 
-const firebaseGetFilteredNfts = async (productLimit, priceRange) => {
-  const { min, max } = priceRange
+const firebaseGetNftProductsSearchResult = async (searchValue) => {}
+
+const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
+  const { minPrice, maxPrice } = priceRange
+  const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
+
+  const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(
-    collection(firebaseDb, 'nfts'),
-    where('amount', '>=', parseInt(min)),
-    where('amount', '<=', parseInt(max)),
-    limit(productLimit),
+    nftsRef,
+    orderBy('amount', 'desc'),
+    where('amount', '>=', minPrice),
+    where('amount', '<=', maxPrice),
   )
 
-  const nfts = await getDocs(queryRef)
-  return nfts.docs.map((doc) => {
-    const docData = doc.data()
-    return {
-      ...docData,
-      id: doc.id,
-      collectionSize: nfts.docs.length,
-    }
+  const documentSnapshots = await getDocs(queryRef)
+
+  const lastVisible = documentSnapshots.docs[start]
+  const nextRef = collection(firebaseDb, 'nfts')
+
+  console.log(start, 'lastVisible')
+
+  const next = query(
+    nextRef,
+    limit(pageLimit),
+    orderBy('amount', 'desc'),
+    where('amount', '>=', minPrice),
+    where('amount', '<=', maxPrice),
+    startAfter(lastVisible || ''),
+  )
+
+  const nextSnapshots = await getDocs(next)
+
+  const nfts = nextSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
   })
+
+  return {
+    nftsData: nfts,
+    collectionSize: documentSnapshots.docs.length,
+  }
 }
 
 const firbaseAddDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
-    await setDoc(docRef, obj)
+    await setDoc(docRef, {
+      ...obj,
+      searchName: obj.name.toLowerCase(),
+    })
     if (collectionName === 'nfts') {
       const counterRef = doc(firebaseDb, 'nftCounter', 'counter')
       await updateDoc(counterRef, {
@@ -463,7 +492,8 @@ export {
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
   firebaseGetNftProducts,
-  firebaseGetFilteredNfts,
+  firebaseGetNftProductsSearchResult,
+  firebaseGetFilteredNftProducts,
   firebaseIsUsernameExist,
   firebaseGetSingleDoc,
   firbaseAddDoc,

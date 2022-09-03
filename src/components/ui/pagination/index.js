@@ -1,9 +1,10 @@
 import { LeftIcon, RightIcon } from '@/components/common/icons'
 import { ArrowNarrowRightIcon } from '@heroicons/react/outline'
 import React from 'react'
+import { useEffect } from 'react'
 import ReactPaginate from 'react-paginate'
 
-const Pagination = ({ onPageChange, pageCount, currentPage }) => {
+const Pagination = ({ products, onPageChange, totalPage, currentPage }) => {
   return (
     <div className="pagination-wrapper">
       <ReactPaginate
@@ -25,8 +26,9 @@ const Pagination = ({ onPageChange, pageCount, currentPage }) => {
             />
           </span>
         }
-        pageCount={pageCount}
+        pageCount={totalPage}
         onPageChange={onPageChange}
+        // onClick={onPageChange}
         breakLabel={'...'}
         marginPagesDisplayed={2}
         pageRangeDisplayed={0}

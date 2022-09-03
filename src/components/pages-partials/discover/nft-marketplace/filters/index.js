@@ -14,11 +14,11 @@ const NFTMarketplaceFilters = ({ initialFilterValues }) => {
             className="sr-only"
           />
           <InputMain.Input
-            type="number"
+            type="text"
             name="minPrice"
             id="minPrice"
             placeholder="$ Min Price"
-            value=""
+            value={initialFilterValues.minPrice}
             onChange={() => {}}
           />
         </InputMain>
@@ -29,11 +29,11 @@ const NFTMarketplaceFilters = ({ initialFilterValues }) => {
             className="sr-only"
           />
           <InputMain.Input
-            type="number"
+            type="text"
             name="maxPrice"
             id="maxPrice"
             placeholder="$ Max Price"
-            value=""
+            value={initialFilterValues.maxPrice}
             onChange={() => {}}
           />
         </InputMain>

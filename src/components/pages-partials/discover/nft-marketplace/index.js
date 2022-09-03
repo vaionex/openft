@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { MagnifyGlassIcon, MoreFilterIcon } from '@/components/common/icons'
 import { FilterIcon } from '@heroicons/react/solid'
-import { firebaseGetSingleDoc } from '@/firebase/utils'
+import { firebaseGetNftProducts, firebaseGetSingleDoc } from '@/firebase/utils'
 import { useSelector } from 'react-redux'
 import FilteredContents from './products'
-
 import userSelector from '@/redux/selectors/user'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
@@ -12,9 +10,10 @@ import NFTMarketplaceFilters from './filters'
 import { useRouter } from 'next/router'
 import Pagination from '@/components/ui/pagination'
 
-const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
+const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
   const router = useRouter()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const currentPage = router.query.page ?? 1
   const [initialFilterValues, setInitialFilterValues] = useState({
     minPrice: router.query.minPrice || '',
     maxPrice: router.query.maxPrice || '',
@@ -23,16 +22,24 @@ const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
     router.query.search || '',
   )
 
-  const handlePaginationClick = (page) => {
+  const handlePaginationClick = async (page) => {
     const currentPath = router.pathname
-    const currentQuery = { ...router.query }
-    currentQuery.page = page.selected + 1
-
+    const currentQuery = router.query
+    const newQuery = {
+      ...currentQuery,
+      page: page.selected + 1,
+    }
     router.push({
       pathname: currentPath,
-      query: currentQuery,
+      query: newQuery,
     })
   }
+
+  const handleSearchChange = (e) => {
+    setInitialSearchValue(e.target.value)
+  }
+
+  const handleSearchSubmit = (e) => {}
 
   return (
     <div>
@@ -46,7 +53,11 @@ const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
 
         <main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="relative z-10 flex gap-4 pt-24 pb-6 ">
-            <NFTMarketplaceSearch initialSearchValue={initialSearchValue} />
+            <NFTMarketplaceSearch
+              initialSearchValue={initialSearchValue}
+              onChange={handleSearchChange}
+              onSubmit={handleSearchSubmit}
+            />
 
             <div className="flex items-center justify-end lg:hidden">
               <button
@@ -76,12 +87,12 @@ const NFTMarketplace = ({ nftsData, nftCollectionSize, nftLimit }) => {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div className="h-full">
-                  <FilteredContents nftItems={nftsData} />
+                  <FilteredContents products={products} />
                 </div>
                 <Pagination
                   onPageChange={handlePaginationClick}
-                  pageCount={Math.ceil(nftCollectionSize / nftLimit)}
-                  currentPage={router.query.page ? router.query.page : 1}
+                  totalPage={totalPage}
+                  currentPage={currentPage}
                 />
               </div>
             </div>
