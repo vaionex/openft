@@ -7,7 +7,6 @@ import 'slick-carousel/slick/slick.css'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import 'react-circular-progressbar/dist/styles.css'
 import '@/styles/globals.css'
-import '@etchteam/next-pagination/dist/index.css'
 import { useEffect } from 'react'
 import {
   firebaseGetAuthorizedUser,
