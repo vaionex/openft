@@ -4,54 +4,60 @@ import {
   firebaseGetNftProducts,
 } from '@/firebase/utils'
 
-export default function DiscoverPage({ products, pageLimit, totalPage }) {
+export default function DiscoverPage({
+  products,
+  pageLimit,
+  totalPage,
+  productCount,
+}) {
   return (
     <DiscoverPageMain
       products={products}
       pageLimit={pageLimit}
       totalPage={totalPage}
+      productCount={productCount}
     />
   )
 }
 
 export const getServerSideProps = async (req, res) => {
   const pageLimit = 9
-  const page = parseInt(req.query.page) || 1
-  const minPrice = parseInt(req.query.minPrice) || 0
-  const maxPrice = parseInt(req.query.maxPrice) || 0
+  const page = +req.query.page || 1
+  const minPrice = +req.query.minPrice || 0
+  const maxPrice = +req.query.maxPrice || 0
+  const isFiltered = minPrice > 0 || maxPrice > 0
   const priceRange = { minPrice, maxPrice }
+  let nftProducts = []
+  let productCount = 0
+  let totalPage = 0
 
-  const { nftsData, collectionSize } = await firebaseGetNftProducts(
-    pageLimit,
-    page,
-  )
-  const products = JSON.parse(JSON.stringify(nftsData))
-  const totalPage = Math.ceil(collectionSize / pageLimit)
-
-  let filteredProducts = []
-  let filteredProductsSize = 0
-  let filteredProductsTotalPage = 0
-
-  if (minPrice || maxPrice) {
+  if (isFiltered) {
     const { nftsData, collectionSize } = await firebaseGetFilteredNftProducts(
       pageLimit,
       page,
       priceRange,
     )
-    filteredProducts = JSON.parse(JSON.stringify(nftsData))
-    filteredProductsSize = collectionSize
-    filteredProductsTotalPage = Math.ceil(filteredProductsSize / pageLimit)
+    const products = JSON.parse(JSON.stringify(nftsData))
+    nftProducts = [...products]
+    productCount = collectionSize
+    totalPage = Math.ceil(productCount / pageLimit)
+  } else {
+    const { nftsData, collectionSize } = await firebaseGetNftProducts(
+      pageLimit,
+      page,
+    )
+    const products = JSON.parse(JSON.stringify(nftsData))
+    nftProducts = [...products]
+    productCount = collectionSize
+    totalPage = Math.ceil(productCount / pageLimit)
   }
-
-  const nftProducts = filteredProducts.length > 0 ? filteredProducts : products
-  const totalPageCount =
-    filteredProducts.length > 0 ? filteredProductsTotalPage : totalPage
 
   return {
     props: {
       products: nftProducts,
       pageLimit,
-      totalPage: totalPageCount,
+      totalPage,
+      productCount,
     },
   }
 }

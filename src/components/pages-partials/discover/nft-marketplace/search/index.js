@@ -1,7 +1,7 @@
 import { MagnifyGlassIcon } from '@/components/common/icons'
 import { InputMain } from '@/components/ui/inputs'
 
-const NFTMarketplaceSearch = ({ initialSearchValue, onChange, onSubmit }) => {
+const NFTMarketplaceSearch = ({ searchValue, onChange, onSubmit }) => {
   return (
     <form className="flex items-center w-full gap-2" onSubmit={onSubmit}>
       <InputMain className="relative w-full pb-0 border-none">
@@ -14,7 +14,7 @@ const NFTMarketplaceSearch = ({ initialSearchValue, onChange, onSubmit }) => {
           name="search"
           id="search"
           placeholder="Search"
-          value={initialSearchValue}
+          value={searchValue}
           inputClassName="pl-10 min-h-[44px]"
           onChange={onChange}
         />

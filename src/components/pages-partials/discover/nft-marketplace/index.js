@@ -10,33 +10,19 @@ import { useRouter } from 'next/router'
 import Pagination from '@/components/ui/pagination'
 import NFTProducts from './products'
 
-const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
+const NFTMarketplace = ({ products, pageLimit, totalPage, productCount }) => {
   const router = useRouter()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const currentPage = router.query.page ?? 1
+  const numberRegex = /^[0-9\b]+$/
+
   const [filterValues, setFilterValues] = useState({
     minPrice: router.query.minPrice || '',
     maxPrice: router.query.maxPrice || '',
   })
-  const [initialSearchValue, setInitialSearchValue] = useState(
-    router.query.search || '',
-  )
-
-  const handlePagination = async (page) => {
-    const currentPath = router.pathname
-    const currentQuery = router.query
-    const newQuery = {
-      ...currentQuery,
-      page: page.selected + 1,
-    }
-    router.push({
-      pathname: currentPath,
-      query: newQuery,
-    })
-  }
+  const [searchValue, setSearchValue] = useState(router.query.search || '')
 
   const handleSearchChange = (e) => {
-    setInitialSearchValue(e.target.value)
+    setSearchValue(e.target.value)
   }
 
   const handleSearchSubmit = (e) => {}
@@ -44,10 +30,15 @@ const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
   const handleFilterChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
-    setFilterValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+
+    if (name === 'minPrice' || name === 'maxPrice') {
+      if (value === '' || numberRegex.test(value)) {
+        setFilterValues((prev) => ({
+          ...prev,
+          [name]: value,
+        }))
+      }
+    }
   }
 
   const handleFilterSubmit = (e) => {
@@ -91,7 +82,7 @@ const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
         <main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="relative z-10 flex gap-4 pt-24 pb-6 ">
             <NFTMarketplaceSearch
-              initialSearchValue={initialSearchValue}
+              searchValue={searchValue}
               onChange={handleSearchChange}
               onSubmit={handleSearchSubmit}
             />
@@ -130,11 +121,11 @@ const NFTMarketplace = ({ products, pageLimit, totalPage }) => {
                   <NFTProducts products={products} />
                 </div>
                 <Pagination
-                  onPageChange={handlePagination}
                   totalPage={totalPage}
-                  currentPage={currentPage}
-                  forcePage={currentPage - 1}
+                  productCount={productCount}
+                  pageLimit={pageLimit}
                 />
+                {/* <Pagination total={productCount} pageLimit={pageLimit} /> */}
               </div>
             </div>
           </section>

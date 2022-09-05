@@ -364,14 +364,14 @@ const firebaseGetNftProductsSearchResult = async (searchValue) => {}
 
 const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   const { minPrice, maxPrice } = priceRange
-  const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
+  const start = page > 1 && pageLimit * +page - pageLimit - 1
 
   const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(
     nftsRef,
     orderBy('amount', 'desc'),
-    where('amount', '>=', parseInt(minPrice)),
-    where('amount', '<=', parseInt(maxPrice)),
+    where('amount', '>=', +minPrice),
+    where('amount', '<=', +maxPrice),
   )
 
   const documentSnapshots = await getDocs(queryRef)
