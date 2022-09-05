@@ -7,21 +7,22 @@ import pickBy from 'lodash/pickBy'
 import isEmpty from 'lodash/isEmpty'
 import qs from 'query-string'
 
-const Pagination = ({ totalPage, pageLimit, productCount }) => {
+const Pagination = ({ pageLimit, productCount }) => {
   const router = useRouter()
   const query = pickBy({ ...(router.query || {}) }, (q) => !isEmpty(q))
-  const currentPage = +router.query.page ?? 1
+  const currentPage = +router.query.page || 1
   const isLastPage = currentPage * pageLimit >= productCount
   const pageNumbers = getPageNumbers({
     currentPage,
     pageSize: pageLimit,
     total: productCount,
   })
-  console.log(currentPage, pageLimit, productCount)
 
   const path = router.pathname
 
   const url = (page) => `${path}?${qs.stringify({ ...query, page })}`
+
+  if (productCount === 0) return null
 
   return (
     <nav>

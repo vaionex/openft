@@ -357,7 +357,7 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
     return nft
   })
 
-  return { nftsData: nfts, collectionSize }
+  return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
 
 const firebaseGetNftProductsSearchResult = async (searchValue) => {}
@@ -397,7 +397,7 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   })
 
   return {
-    nftsData: nfts,
+    nftsData: JSON.parse(JSON.stringify(nfts)),
     collectionSize: documentSnapshots.docs.length,
   }
 }

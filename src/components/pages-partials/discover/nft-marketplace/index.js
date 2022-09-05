@@ -1,8 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FilterIcon } from '@heroicons/react/solid'
-import { firebaseGetNftProducts, firebaseGetSingleDoc } from '@/firebase/utils'
+import {
+  firebaseGetFilteredNftProducts,
+  firebaseGetNftProducts,
+  firebaseGetSingleDoc,
+} from '@/firebase/utils'
 import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
+import { useQuery } from 'react-query'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
@@ -10,7 +15,26 @@ import { useRouter } from 'next/router'
 import Pagination from '@/components/ui/pagination'
 import NFTProducts from './products'
 
-const NFTMarketplace = ({ products, pageLimit, totalPage, productCount }) => {
+const NFTMarketplace = ({ pageLimit, isFiltered }) => {
+  const {
+    data: { nftsData, collectionSize },
+  } = useQuery(
+    'nftProducts',
+    () =>
+      isFiltered
+        ? firebaseGetFilteredNftProducts(pageLimit, page, priceRange)
+        : firebaseGetNftProducts(pageLimit, page),
+
+    {
+      initialData: {
+        nftsData: [],
+        collectionSize: 0,
+      },
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    },
+  )
+
   const router = useRouter()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const numberRegex = /^[0-9\b]+$/
@@ -118,14 +142,12 @@ const NFTMarketplace = ({ products, pageLimit, totalPage, productCount }) => {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div className="h-full">
-                  <NFTProducts products={products} />
+                  <NFTProducts products={nftsData} />
                 </div>
                 <Pagination
-                  totalPage={totalPage}
-                  productCount={productCount}
                   pageLimit={pageLimit}
+                  productCount={collectionSize}
                 />
-                {/* <Pagination total={productCount} pageLimit={pageLimit} /> */}
               </div>
             </div>
           </section>

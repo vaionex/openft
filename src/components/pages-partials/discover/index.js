@@ -3,16 +3,11 @@ import BannerSection from './banner'
 import NFTMarketplace from './nft-marketplace'
 import Cta from './cta'
 
-const DiscoverPageMain = ({ products, pageLimit, totalPage, productCount }) => {
+const DiscoverPageMain = ({ pageLimit, isFiltered }) => {
   return (
     <SharedLayout title="Discover">
       <BannerSection />
-      <NFTMarketplace
-        products={products}
-        pageLimit={pageLimit}
-        totalPage={totalPage}
-        productCount={productCount}
-      />
+      <NFTMarketplace pageLimit={pageLimit} isFiltered={isFiltered} />
       <Cta />
     </SharedLayout>
   )
