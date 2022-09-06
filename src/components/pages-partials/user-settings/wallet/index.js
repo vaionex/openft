@@ -18,6 +18,7 @@ import {
 } from '@/services/relysia-queries'
 
 import validationSchema from './validationScheme'
+import Alert from '@/components/ui/alert'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -41,7 +42,10 @@ const UserSettingsWalletSection = () => {
   const onSubmit = async (data) => {
     try {
       if (balance < data.amount) {
-        return setMsg('Please enter a valid value')
+        return setMsg({
+          type: 'error',
+          content: 'Please enter a valid value',
+        })
       }
       const dataObj = {
         dataArray: [
@@ -122,7 +126,6 @@ const UserSettingsWalletSection = () => {
       }
     }
   }, [balance])
-  console.log(msg)
   return (
     <UserSettingsLayout>
       <div>
@@ -273,34 +276,7 @@ const UserSettingsWalletSection = () => {
                             </InputMain>
                           ))}
                           {msg && (
-                            <div
-                              className={`flex p-4 mb-4 text-sm ${
-                                msg.type === 'error'
-                                  ? 'text-red-700 bg-red-100'
-                                  : 'text-green-700 bg-green-100'
-                              } rounded-lg`}
-                              role="alert"
-                            >
-                              <svg
-                                aria-hidden="true"
-                                className="flex-shrink-0 inline w-5 h-5 mr-3"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                  clipRule="evenodd"
-                                ></path>
-                              </svg>
-                              <span className="sr-only">Info</span>
-                              <div>
-                                <span className="font-medium">
-                                  {msg.content}
-                                </span>{' '}
-                              </div>
-                            </div>
+                            <Alert message={msg.content} type={msg.type} />
                           )}
                           <button
                             type="submit"

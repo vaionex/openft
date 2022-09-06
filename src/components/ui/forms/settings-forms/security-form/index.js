@@ -1,43 +1,127 @@
+import { useState } from 'react'
 import { InputMain } from '@/components/ui/inputs'
+import useYupValidationResolver from '@/hooks/useYupValidationResolver'
+import { useForm, Controller } from 'react-hook-form'
+import validationSchema from './validationScheme'
+import {
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  getAuth,
+} from 'firebase/auth'
+import Alert from '@/components/ui/alert'
+import Spinner from '@/components/ui/spinner'
 
 const SecurityForm = () => {
+  const [msg, setMsg] = useState(null)
+  const auth = getAuth()
+  const resolver = useYupValidationResolver(validationSchema)
+  const { control, handleSubmit, formState, reset } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onBlur',
+    resolver,
+  })
+  const { isSubmitting, isValid, errors } = formState
+  const onSubmit = async (data) => {
+    const { password, newPassword } = data
+    const credential = EmailAuthProvider.credential(
+      auth.currentUser.email,
+      password,
+    )
+    await reauthenticateWithCredential(auth.currentUser, credential)
+      .then(async () => {
+        await updatePassword(auth.currentUser, newPassword)
+          .then(() => {
+            reset({ password: '', newPassword: '', confirmPassword: '' })
+            setMsg({ type: 'success', content: 'Password updated' })
+          })
+          .catch((error) => {
+            setMsg({ type: 'error', content: 'Something went wrong' })
+            console.log(error)
+          })
+      })
+      .catch((err) =>
+        setMsg({
+          type: 'error',
+          content: 'Please enter your previous password correctly',
+        }),
+      )
+  }
   return (
-    <form className="space-y-8 divide-y divide-gray-200">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-8 divide-y divide-gray-200"
+    >
       <div className="py-6 border-b border-b-gray-200">
-        <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
+        <InputMain className="border-none relative sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="Your password" htmlFor="password" />
-          <InputMain.Input
-            id="password"
-            className="sm:col-span-2"
-            placeholder="Enter your current password"
-            onChange={() => {}}
+          <Controller
+            name={'password'}
+            control={control}
+            render={({ field }) => {
+              return (
+                <InputMain.Input
+                  id="password"
+                  className="sm:col-span-2"
+                  placeholder="Enter your current password"
+                  onChange={() => {}}
+                  {...field}
+                />
+              )
+            }}
           />
+          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
+            {errors['password']?.message}
+          </span>
         </InputMain>
-
-        <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
+        <InputMain className="border-none relative sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="New password" htmlFor="newPassword" />
-          <InputMain.Input
-            id="newPassword"
-            className="sm:col-span-2"
-            placeholder="Enter new password"
-            onChange={() => {}}
+          <Controller
+            name={'newPassword'}
+            control={control}
+            render={({ field }) => {
+              return (
+                <InputMain.Input
+                  id="newPassword"
+                  className="sm:col-span-2"
+                  placeholder="Enter new password"
+                  onChange={() => {}}
+                  {...field}
+                />
+              )
+            }}
           />
+          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
+            {errors['newPassword']?.message}
+          </span>
           <span className="text-sm text-gray-500">
-            Your new password must be more than 8 characters.
+            Your new password must be more than 6 characters.
           </span>
         </InputMain>
 
-        <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
+        <InputMain className="border-none relative sm:grid-cols-1 sm:gap-2">
           <InputMain.Label
             label="Confirm new password"
             htmlFor="confirmPassword"
           />
-          <InputMain.Input
-            id="confirmPassword"
-            className="sm:col-span-2"
-            placeholder="Confirm new password"
-            onChange={() => {}}
+          <Controller
+            name={'confirmPassword'}
+            control={control}
+            render={({ field }) => {
+              return (
+                <InputMain.Input
+                  id="confirmPassword"
+                  className="sm:col-span-2"
+                  placeholder="Confirm new password"
+                  onChange={() => {}}
+                  {...field}
+                />
+              )
+            }}
           />
+          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
+            {errors['confirmPassword']?.message}
+          </span>
         </InputMain>
 
         <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
@@ -58,13 +142,27 @@ const SecurityForm = () => {
             in a safe place.
           </span>
         </InputMain>
+        {msg && <Alert message={msg.content} type={msg.type} />}
       </div>
       <div className="flex justify-end gap-3 border-none">
-        <button type="button" className="btn-secondary py-2.5">
+        <button
+          onClick={() => {
+            reset({ password: '', newPassword: '', confirmPassword: '' })
+            setMsg(null)
+          }}
+          type="button"
+          className="btn-secondary py-2.5"
+        >
           Cancel
         </button>
-        <button type="button" className="btn-primary py-2.5">
+        <button
+          type="submit"
+          className={`py-2.5 font-semibold relative ${
+            isSubmitting ? 'btn-secondary pr-10' : 'btn-primary'
+          }`}
+        >
           Update password
+          {isSubmitting && <Spinner size="w-5 h-5 absolute top-3 right-1" />}
         </button>
       </div>
     </form>
