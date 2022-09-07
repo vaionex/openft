@@ -12,13 +12,9 @@ import {
   firebaseGetAuthorizedUser,
   firebaseOnIdTokenChange,
 } from '@/firebase/utils'
-import { setAuthenticated } from '@/redux/slices/user'
 import ProtectedRoute from '@/components/common/protected-route'
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 
 function App({ Component, pageProps }) {
-  const [queryClient] = useState(() => new QueryClient())
-
   useEffect(() => {
     const unsubscribe = firebaseGetAuthorizedUser()
     firebaseOnIdTokenChange()
@@ -27,17 +23,13 @@ function App({ Component, pageProps }) {
   }, [])
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <AnimatePresence exitBeforeEnter>
-          <Provider store={store}>
-            <ProtectedRoute>
-              <Component {...pageProps} />
-            </ProtectedRoute>
-          </Provider>
-        </AnimatePresence>
-      </Hydrate>
-    </QueryClientProvider>
+    <AnimatePresence exitBeforeEnter>
+      <Provider store={store}>
+        <ProtectedRoute>
+          <Component {...pageProps} />
+        </ProtectedRoute>
+      </Provider>
+    </AnimatePresence>
   )
 }
 

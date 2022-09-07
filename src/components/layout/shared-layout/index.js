@@ -8,10 +8,12 @@ import pageTransitionVariants from '@/animations/page-transition'
 import { useRouter } from 'next/router'
 
 const SharedLayout = ({ children, title, className }) => {
-  const { pathname } = useRouter()
+  const router = useRouter()
 
   const runPageTransition = () => {
-    return !pathname.includes('user-settings') && pageTransitionVariants
+    return (
+      !router?.pathname?.includes('user-settings') && pageTransitionVariants
+    )
   }
 
   return (

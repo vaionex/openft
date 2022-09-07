@@ -3,11 +3,12 @@ import BannerSection from './banner'
 import NFTMarketplace from './nft-marketplace'
 import Cta from './cta'
 
-const DiscoverPageMain = ({ pageLimit, isFiltered }) => {
+const DiscoverPageMain = (props) => {
+  console.log(props, 'props')
   return (
     <SharedLayout title="Discover">
       <BannerSection />
-      <NFTMarketplace pageLimit={pageLimit} isFiltered={isFiltered} />
+      {/* <NFTMarketplace /> */}
       <Cta />
     </SharedLayout>
   )

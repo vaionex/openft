@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import React, { Children } from 'react'
 import PropTypes from 'prop-types'
@@ -8,10 +7,12 @@ const ActiveLink = ({
   children,
   activatedonLinks,
   activeClassName,
+  router,
   ...props
 }) => {
-  const { asPath, pathname } = useRouter()
-
+  console.log(router)
+  // const { asPath, pathname } = router
+  return null
   const child = Children.only(children)
 
   const childClassName = child.props.className || ''

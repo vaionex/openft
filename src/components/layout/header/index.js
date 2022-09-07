@@ -6,9 +6,10 @@ import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { UploadBoxIcon } from '@/components/common/icons'
-import { useSelector } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
+import { useRouter } from 'next/router'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -18,6 +19,7 @@ const navigation = [
 
 const Header = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const router = useRouter()
 
   return (
     <Popover as="header" className="relative">
@@ -43,7 +45,7 @@ const Header = () => {
             </div>
             <div className="hidden space-x-8 md:flex md:ml-10">
               {navigation.map((item) => (
-                <ActiveLink
+                <NextLink
                   key={item.name}
                   href={item.href}
                   activeClassName=" text-blue-600 font-semibold"
@@ -51,7 +53,7 @@ const Header = () => {
                   <a className="font-medium text-gray-500 hover:text-gray-600">
                     {item.name}
                   </a>
-                </ActiveLink>
+                </NextLink>
               ))}
             </div>
           </div>
@@ -106,4 +108,11 @@ const Header = () => {
   )
 }
 
-export default Header
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.user.isAuthenticated,
+    currentUser: state.user.currentUser,
+  }
+}
+
+export default connect(mapStateToProps)(Header)
