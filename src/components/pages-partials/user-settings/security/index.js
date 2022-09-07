@@ -53,7 +53,7 @@ const UserSettingsSecuritySection = () => {
             <SecurityForm />
           </div>
           <div className="md:col-span-4">
-            <div className="relative sm:border-b sm:border-gray-200 sm:pb-5">
+            {/* <div className="relative sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Where you’re logged in
                 <span className="block text-sm font-normal text-gray-500">
@@ -65,7 +65,7 @@ const UserSettingsSecuritySection = () => {
                 <DropdownMinimal items={dropdownItems} />
               </span>
             </div>
-            <ActivityList items={activityItems} />
+            <ActivityList items={activityItems} /> */}
           </div>
         </div>
       </div>

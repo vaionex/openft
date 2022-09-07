@@ -61,6 +61,7 @@ const SecurityForm = () => {
             render={({ field }) => {
               return (
                 <InputMain.Input
+                  inputType={'password'}
                   id="password"
                   className="sm:col-span-2"
                   placeholder="Enter your current password"
@@ -83,6 +84,7 @@ const SecurityForm = () => {
               return (
                 <InputMain.Input
                   id="newPassword"
+                  inputType={'password'}
                   className="sm:col-span-2"
                   placeholder="Enter new password"
                   onChange={() => {}}
@@ -111,6 +113,7 @@ const SecurityForm = () => {
               return (
                 <InputMain.Input
                   id="confirmPassword"
+                  inputType={'password'}
                   className="sm:col-span-2"
                   placeholder="Confirm new password"
                   onChange={() => {}}
