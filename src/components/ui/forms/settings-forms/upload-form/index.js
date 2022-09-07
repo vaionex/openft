@@ -5,6 +5,12 @@ import ImageUpload from '@/components/ui/image-upload'
 import { InputMain } from '@/components/ui/inputs'
 
 const UploadForm = () => {
+  const resolver = useYupValidationResolver(validationSchema)
+  const { control, handleSubmit, formState, reset } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onBlur',
+    resolver,
+  })
   return (
     <form className="space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
