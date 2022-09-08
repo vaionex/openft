@@ -45,7 +45,7 @@ const NFTMarketplaceMobileFilters = ({ open, onClose }) => {
 
               {/* Filters */}
               <div className="block p-4 lg:hidden">
-                <NFTMarketplaceFilters />
+                <NFTMarketplaceFilters attribute="amount" />
               </div>
             </Dialog.Panel>
           </Transition.Child>

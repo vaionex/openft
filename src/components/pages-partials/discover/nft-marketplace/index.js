@@ -3,25 +3,31 @@ import { FilterIcon } from '@heroicons/react/solid'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
-import NFTMarketplacePagination from './pagination'
-import { useRouter } from 'next/router'
-import NFTProducts from './products'
-
-import {
-  Configure,
-  Hits,
-  InstantSearch,
-  Pagination,
-  RangeInput,
-} from 'react-instantsearch-dom'
+import { Configure, InstantSearch } from 'react-instantsearch-dom'
+import NFTMarketplaceResults from './products/results'
+import { firebaseGetSingleDoc } from '@/firebase/utils'
 
 const NFTMarketplace = ({
   indexName,
   searchClient,
   searchState,
+  currentUser,
   ...restProps
 }) => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [favouriteNfts, setFavouriteNfts] = useState(null)
+
+  useEffect(() => {
+    const setFavorites = async () => {
+      if (currentUser) {
+        const data = await firebaseGetSingleDoc('favourites', currentUser?.uid)
+        setFavouriteNfts(data?.nfts)
+      } else {
+        setFavouriteNfts([])
+      }
+    }
+    setFavorites()
+  }, [currentUser])
 
   return (
     <InstantSearch
@@ -46,12 +52,10 @@ const NFTMarketplace = ({
               onClick={() => setMobileFiltersOpen(true)}
             >
               <span className="sr-only">Filters</span>
-              {/* <NFTMarketplaceFilters
-            filterValues={filterValues}
-            onChange={() => {}}
-            onSubmit={() => {}}
-            clearFilters={() => {}}
-          /> */}
+              <NFTMarketplaceMobileFilters
+                open={mobileFiltersOpen}
+                onClose={setMobileFiltersOpen}
+              />
             </button>
           </div>
         </div>
@@ -64,15 +68,10 @@ const NFTMarketplace = ({
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10 cursor">
             <div className="hidden lg:block">
               <NFTMarketplaceFilters attribute="amount" />
-              {/* <RangeInput attribute="amount" min={0} /> */}
             </div>
 
             <div className="lg:col-span-3">
-              <div className="h-full nft-market-products">
-                <Hits hitComponent={NFTProducts} />
-              </div>
-              <NFTMarketplacePagination />
-              {/* <Pagination /> */}
+              <NFTMarketplaceResults />
             </div>
           </div>
         </section>

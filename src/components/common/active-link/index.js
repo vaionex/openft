@@ -2,17 +2,17 @@ import Link from 'next/link'
 import React, { Children } from 'react'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
+import { useRouter } from 'next/router'
 
 const ActiveLink = ({
   children,
   activatedonLinks,
   activeClassName,
-  router,
   ...props
 }) => {
-  console.log(router)
-  // const { asPath, pathname } = router
-  return null
+  const router = useRouter()
+  const { asPath, pathname } = router
+
   const child = Children.only(children)
 
   const childClassName = child.props.className || ''

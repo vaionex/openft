@@ -17,7 +17,8 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
     setSearchState(e.target.value)
   }
 
-  const handleSubmit = (val) => {
+  const handleSubmit = (e, val) => {
+    e.preventDefault()
     refine(val)
   }
 
@@ -26,7 +27,10 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
   }
 
   return (
-    <div className="flex items-center w-full gap-2">
+    <form
+      onSubmit={(e) => handleSubmit(e, searchState)}
+      className="flex items-center w-full gap-2"
+    >
       <InputMain className="relative w-full pb-0 border-none">
         <span className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
           <MagnifyGlassIcon className="w-5 h-5 text-gray-400 " />
@@ -42,14 +46,11 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
           onChange={handleChange}
         />
       </InputMain>
-      <button
-        className="p-3 rounded-md btn-primary"
-        onClick={() => handleSubmit(searchState)}
-      >
+      <button className="p-3 rounded-md btn-primary">
         <span className="sr-only">Search Button</span>
         <MagnifyGlassIcon className="w-5 h-5 text-white" />
       </button>
-    </div>
+    </form>
   )
 })
 

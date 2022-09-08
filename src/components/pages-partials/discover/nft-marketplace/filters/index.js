@@ -27,7 +27,7 @@ const NFTMarketplaceFilters = (props) => {
     e.preventDefault()
     if (values.min < min || values.max > max) {
       setErrorMessage(
-        `Please enter a value between ${min} and ${max} for the price range.`,
+        `Please enter a value between $${min} and $${max} for the price range.`,
       )
       return false
     }
@@ -45,33 +45,41 @@ const NFTMarketplaceFilters = (props) => {
       <h3 className="sr-only">Categories</h3>
       <h3>Filter</h3>
       <div className="grid grid-cols-2 gap-4 ">
-        <InputMain className="pb-0 border-none">
+        <InputMain className="relative pb-0 border-none">
           <InputMain.Label
             htmlFor="min"
             label="Max Price"
             className="sr-only"
           />
+          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+            <span className="text-gray-500 sm:text-sm">$</span>
+          </div>
           <InputMain.Input
             type="number"
             name="min"
             id="minPrice"
-            placeholder="$ Min Price"
+            placeholder="Min Price"
             value={values.min}
             onChange={handleChange}
+            inputClassName="pl-7"
             min={min}
           />
         </InputMain>
-        <InputMain className="pb-0 border-none">
+        <InputMain className="relative pb-0 border-none">
           <InputMain.Label
             htmlFor="max"
             label="Min Price"
             className="sr-only"
           />
+          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+            <span className="text-gray-500 sm:text-sm">$</span>
+          </div>
           <InputMain.Input
             type="number"
             name="max"
             id="maxPrice"
-            placeholder="$ Max Price"
+            placeholder="Max Price"
+            inputClassName="pl-7"
             value={values.max}
             onChange={handleChange}
             max={max}

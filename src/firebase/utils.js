@@ -405,10 +405,7 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
 const firbaseAddDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
-    await setDoc(docRef, {
-      ...obj,
-      searchName: obj.name.toLowerCase(),
-    })
+    await setDoc(docRef, obj)
     if (collectionName === 'nfts') {
       const counterRef = doc(firebaseDb, 'nftCounter', 'counter')
       await updateDoc(counterRef, {
@@ -416,7 +413,7 @@ const firbaseAddDoc = async (collectionName, id, obj) => {
       })
     }
   } catch (error) {
-    console.error(error)
+    console.error(error.message)
   }
 }
 

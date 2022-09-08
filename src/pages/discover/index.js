@@ -14,6 +14,8 @@ import SharedLayout from '@/components/layout/shared-layout'
 import NFTMarketplace from '@/components/pages-partials/discover/nft-marketplace'
 import BannerSection from '@/components/pages-partials/discover/banner'
 import Cta from '@/components/pages-partials/discover/cta'
+import { useSelector } from 'react-redux'
+import userSelector from '@/redux/selectors/user'
 
 const defaultProps = {
   searchClient,
@@ -24,6 +26,7 @@ const debounceTime = 700
 export default function DiscoverPage(props) {
   const { page, seoProps, ...restProps } = props
   const router = useRouter()
+  const { currentUser } = useSelector(userSelector)
 
   const setStateId = React.useRef()
   const [searchState, setSearchState] = useState(
@@ -54,6 +57,7 @@ export default function DiscoverPage(props) {
           resultsState={restProps.resultsState}
           onSearchStateChange={onSearchStateChange}
           createURL={createURL}
+          currentUser={currentUser}
         />
       </SharedLayout>
       <Cta />
