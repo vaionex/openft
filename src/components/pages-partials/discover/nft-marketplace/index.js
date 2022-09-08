@@ -12,6 +12,7 @@ import {
   Hits,
   InstantSearch,
   Pagination,
+  RangeInput,
 } from 'react-instantsearch-dom'
 
 const NFTMarketplace = ({
@@ -21,11 +22,6 @@ const NFTMarketplace = ({
   ...restProps
 }) => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const numberRegex = /^[0-9\b]+$/
-  const [filterValues, setFilterValues] = useState({
-    minPrice: '',
-    maxPrice: '',
-  })
 
   return (
     <InstantSearch
@@ -67,12 +63,8 @@ const NFTMarketplace = ({
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10 cursor">
             <div className="hidden lg:block">
-              <NFTMarketplaceFilters
-                filterValues={filterValues}
-                onChange={() => {}}
-                onSubmit={() => {}}
-                clearFilters={() => {}}
-              />
+              <NFTMarketplaceFilters attribute="amount" />
+              {/* <RangeInput attribute="amount" min={0} /> */}
             </div>
 
             <div className="lg:col-span-3">

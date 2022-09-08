@@ -90,7 +90,9 @@ const ProductsCarouselCard = ({ data, mr, type, idx, favouriteNfts }) => {
         </div>
         <div className="my-6">
           <h3 className="text-sm text-blue-700">{userName}</h3>
-          <p className="mt-1 text-lg text-gray-800">{data.name}</p>
+          <p className="mt-1 text-lg leading-6 min-h-[48px] text-gray-800">
+            {data.name}
+          </p>
         </div>
         <div className="flex gap-1.5">
           <NextLink href={`/discover/${data.id}`}>
