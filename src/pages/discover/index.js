@@ -34,8 +34,6 @@ export default function DiscoverPage(props) {
   )
 
   const onSearchStateChange = (nextSearchState) => {
-    console.log(nextSearchState, 'nextSearchState')
-
     setStateId.current = setTimeout(() => {
       const newUrl = searchStateToURL(router, nextSearchState)
 
@@ -59,8 +57,8 @@ export default function DiscoverPage(props) {
           createURL={createURL}
           currentUser={currentUser}
         />
+        <Cta />
       </SharedLayout>
-      <Cta />
     </>
   )
 }

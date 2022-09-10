@@ -4,8 +4,9 @@ import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
 import { Configure, InstantSearch } from 'react-instantsearch-dom'
-import NFTMarketplaceResults from './products/results'
+import NFTMarketplaceProducts from './products'
 import { firebaseGetSingleDoc } from '@/firebase/utils'
+import { useMediaQuery } from 'react-responsive'
 
 const NFTMarketplace = ({
   indexName,
@@ -16,6 +17,9 @@ const NFTMarketplace = ({
 }) => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [favouriteNfts, setFavouriteNfts] = useState(null)
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1024px)',
+  })
 
   useEffect(() => {
     const setFavorites = async () => {
@@ -45,20 +49,13 @@ const NFTMarketplace = ({
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="relative z-10 flex gap-4 pt-24 pb-6 ">
           <NFTMarketplaceSearch />
-          <div className="flex items-center justify-end lg:hidden">
-            <button
-              type="button"
-              className="p-2 text-gray-400 hover:text-gray-500 "
-              onClick={() => setMobileFiltersOpen(true)}
-            >
-              <span className="sr-only">Filters</span>
-              <NFTMarketplaceMobileFilters
-                open={mobileFiltersOpen}
-                onClose={setMobileFiltersOpen}
-              />
-            </button>
-          </div>
         </div>
+        {!isDesktopOrLaptop && (
+          <NFTMarketplaceMobileFilters
+            open={mobileFiltersOpen}
+            onClose={setMobileFiltersOpen}
+          />
+        )}
 
         <section aria-labelledby="products-heading" className="pt-6 pb-24">
           <h2 id="products-heading" className="sr-only">
@@ -66,12 +63,14 @@ const NFTMarketplace = ({
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10 cursor">
-            <div className="hidden lg:block">
-              <NFTMarketplaceFilters attribute="amount" />
-            </div>
+            {isDesktopOrLaptop && (
+              <div className="hidden lg:block">
+                <NFTMarketplaceFilters />
+              </div>
+            )}
 
             <div className="lg:col-span-3">
-              <NFTMarketplaceResults />
+              <NFTMarketplaceProducts favouriteNfts={favouriteNfts} />
             </div>
           </div>
         </section>

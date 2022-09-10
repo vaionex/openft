@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import store from '@/redux/store'
-import { AnimatePresence } from 'framer-motion'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
@@ -23,13 +22,11 @@ function App({ Component, pageProps }) {
   }, [])
 
   return (
-    <AnimatePresence exitBeforeEnter>
-      <Provider store={store}>
-        <ProtectedRoute>
-          <Component {...pageProps} />
-        </ProtectedRoute>
-      </Provider>
-    </AnimatePresence>
+    <Provider store={store}>
+      <ProtectedRoute>
+        <Component {...pageProps} />
+      </ProtectedRoute>
+    </Provider>
   )
 }
 

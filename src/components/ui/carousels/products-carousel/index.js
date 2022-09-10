@@ -130,9 +130,9 @@ const ProductsCarousel = ({ data }) => {
           data.map((item) => (
             <ProductsCarouselCard
               key={item.id}
-              mr
               data={item}
               favouriteNfts={favouriteNfts}
+              type="carousel"
             />
           ))}
       </Slider>

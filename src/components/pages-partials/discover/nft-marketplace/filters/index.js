@@ -1,105 +1,28 @@
-import { InputMain } from '@/components/ui/inputs'
-import { useState } from 'react'
-import { connectRange } from 'react-instantsearch-dom'
+import NFTMarketplaceAmountFilter from './amounts'
+import NftMarketplaceArtistFilter from './artists'
 
-const NFTMarketplaceFilters = (props) => {
-  const { min, max, currentRefinement, refine } = props
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [values, setValues] = useState({
-    min: '',
-    max: '',
-  })
-
-  const numberRegex = /^[0-9\b]+$/
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    if (
-      min !== values.min ||
-      (max !== values.max && value === '') ||
-      numberRegex.test(value)
-    ) {
-      setValues({ ...values, [name]: value })
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (values.min < min || values.max > max) {
-      setErrorMessage(
-        `Please enter a value between $${min} and $${max} for the price range.`,
-      )
-      return false
-    }
-    refine({ min: values.min, max: values.max })
-  }
-
-  const handleClear = (e) => {
-    e.preventDefault()
-    setValues({ min: '', max: '' })
-    refine({ min: undefined, max: undefined })
-  }
-
+const NFTMarketplaceFilters = () => {
   return (
-    <form className="flex flex-col gap-4">
-      <h3 className="sr-only">Categories</h3>
-      <h3>Filter</h3>
-      <div className="grid grid-cols-2 gap-4 ">
-        <InputMain className="relative pb-0 border-none">
-          <InputMain.Label
-            htmlFor="min"
-            label="Max Price"
-            className="sr-only"
-          />
-          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
-            <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
-          <InputMain.Input
-            type="number"
-            name="min"
-            id="minPrice"
-            placeholder="Min Price"
-            value={values.min}
-            onChange={handleChange}
-            inputClassName="pl-7"
-            min={min}
-          />
-        </InputMain>
-        <InputMain className="relative pb-0 border-none">
-          <InputMain.Label
-            htmlFor="max"
-            label="Min Price"
-            className="sr-only"
-          />
-          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
-            <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
-          <InputMain.Input
-            type="number"
-            name="max"
-            id="maxPrice"
-            placeholder="Max Price"
-            inputClassName="pl-7"
-            value={values.max}
-            onChange={handleChange}
-            max={max}
-          />
-        </InputMain>
+    <div className="flex flex-col gap-4">
+      <div className="relative hidden lg:block">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center">
+          <h3 className="sr-only">Filters</h3>
+          <h3 className="px-3 font-medium text-gray-900 bg-white">Filters</h3>
+        </div>
       </div>
-      <span className="text-xs text-red-500">{errorMessage}</span>
-      <div className="flex gap-4 leading-[18px]">
-        <button className="btn-secondary" onClick={(e) => handleClear(e)}>
-          Clear
-        </button>
-        <button
-          className="w-full font-semibold btn-primary"
-          onClick={(e) => handleSubmit(e)}
-        >
-          Apply filter
-        </button>
-      </div>
-    </form>
+      <ul role="list" className="divide-y divide-gray-200">
+        <li className="pb-8">
+          <NftMarketplaceArtistFilter attribute="uid" />
+        </li>
+        <li className="pt-8">
+          <NFTMarketplaceAmountFilter attribute="amount" />
+        </li>
+      </ul>
+    </div>
   )
 }
 
-export default connectRange(NFTMarketplaceFilters)
+export default NFTMarketplaceFilters
