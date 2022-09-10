@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import React, { Children } from 'react'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
+import { useRouter } from 'next/router'
 
 const ActiveLink = ({
   children,
@@ -10,7 +10,8 @@ const ActiveLink = ({
   activeClassName,
   ...props
 }) => {
-  const { asPath, pathname } = useRouter()
+  const router = useRouter()
+  const { asPath, pathname } = router
 
   const child = Children.only(children)
 

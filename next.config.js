@@ -5,6 +5,7 @@ module.exports = {
       'images.unsplash.com',
       'lh3.googleusercontent.com',
       'firebasestorage.googleapis.com',
+      'dummyimage.com',
     ],
   },
   experimental: {
