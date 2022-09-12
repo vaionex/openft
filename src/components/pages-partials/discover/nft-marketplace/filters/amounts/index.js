@@ -10,15 +10,13 @@ const NFTMarketplaceAmountFilter = (props) => {
     max: '',
   })
 
-  const numberRegex = /^[0-9\b]+$/
+  const onInput = (e) => {
+    e.target.validity.valid || (e.target.value = '')
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    if (
-      min !== values.min ||
-      (max !== values.max && value === '') ||
-      numberRegex.test(value)
-    ) {
+    if (min !== values.min || (max !== values.max && value === '')) {
       setValues({ ...values, [name]: value })
     }
   }
@@ -61,7 +59,11 @@ const NFTMarketplaceAmountFilter = (props) => {
             value={values.min}
             onChange={handleChange}
             inputClassName="pl-7"
-            min={min}
+            min={0}
+            onInput={onInput}
+            // onInput={(e) => {
+            //   e.target.validity.valid || (e.target.value = '')
+            // }}
           />
         </InputMain>
         <InputMain className="relative pb-0 border-none">
@@ -81,7 +83,8 @@ const NFTMarketplaceAmountFilter = (props) => {
             inputClassName="pl-7"
             value={values.max}
             onChange={handleChange}
-            max={max}
+            onInput={onInput}
+            min={0}
           />
         </InputMain>
         {errorMessage && (

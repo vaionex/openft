@@ -50,7 +50,7 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
     >
       <div className="relative">
         <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
-          <NextLink href={`/discover/${data?.id}`}>
+          <NextLink href={`/discover/${data?.uid}`}>
             <a className="cursor-pointer">
               <Image
                 src={data?.imageURL}
@@ -76,13 +76,17 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
           </p>
         </div>
         <div className="flex-1 my-6">
-          <h3 className="text-sm text-blue-700 min-h-[20px]">
-            {data?.artist?.name}
-          </h3>
-          <p className="mt-1 text-lg text-gray-800">{data?.name}</p>
+          <NextLink href={`/discover/${data?.uid}`}>
+            <a className="cursor-pointer">
+              <h3 className="text-sm text-blue-700 min-h-[20px]">
+                {data?.artist?.name}
+              </h3>
+              <p className="mt-1 text-lg text-gray-800">{data?.name}</p>
+            </a>
+          </NextLink>
         </div>
         <div className="flex gap-1.5">
-          <NextLink href={`/discover/${data?.id}`}>
+          <NextLink href={`/discover/${data?.uid}`}>
             <a className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal">
               Buy now
             </a>

@@ -6,6 +6,10 @@ import ReactPaginate from 'react-paginate'
 const NFTMarketplacePagination = ({ currentRefinement, nbPages, refine }) => {
   const handlePageClick = (data) => {
     refine(data.selected + 1)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (

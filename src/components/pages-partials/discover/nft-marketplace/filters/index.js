@@ -15,7 +15,7 @@ const NFTMarketplaceFilters = () => {
       </div>
       <ul role="list" className="divide-y divide-gray-200">
         <li className="pb-8">
-          <NftMarketplaceArtistFilter attribute="uid" />
+          <NftMarketplaceArtistFilter attribute="userId" />
         </li>
         <li className="pt-8">
           <NFTMarketplaceAmountFilter attribute="amount" />
