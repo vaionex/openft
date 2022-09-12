@@ -7,8 +7,9 @@ import bytesToSize from '@/utils/bytesToSizes'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import { useSelector } from 'react-redux'
 
-const ImageUploadReviewCard = ({ id, cleanUpState }) => {
-  const { photoValues } = useSelector(registrationFormSelector)
+const ImageUploadReviewCard = ({ id, cleanUpState, srcUploadNft = null }) => {
+  const { photoValues: srcRegisterPhoto } = useSelector(registrationFormSelector)
+  const photoValues = srcUploadNft ?? srcRegisterPhoto 
 
   return (
     <div className="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg">

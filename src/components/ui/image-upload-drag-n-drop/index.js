@@ -1,4 +1,5 @@
 import { UploadIcon } from '@/components/common/icons'
+import blobToBase64 from '@/utils/blobToBase64'
 import getFileExt from '@/utils/getFileExt'
 import { checkValidation } from '@/utils/imageValidation'
 import PropTypes from 'prop-types'
@@ -18,6 +19,7 @@ const ImageUploadDragAndDrop = ({
   isSelected,
   handleClear,
   setImageToState,
+  srcUploadNft = null,
 }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [isCropping, setIsCropping] = useState(false)
@@ -47,15 +49,15 @@ const ImageUploadDragAndDrop = ({
   const onDrop = useCallback(async (files) => {
     cleanUpState()
     const imageFile = files[0]
-
     const errorObjects = await validateImage(imageFile)
-
+    const buffer = await blobToBase64(imageFile)
     if (!errorObjects) {
       const createFileUrl = URL.createObjectURL(imageFile)
       setSelectedImage({
         src: createFileUrl,
         name: imageFile.name,
         ext: getFileExt(imageFile.name),
+        buffer,
       })
       setIsCropping(true)
     } else {
@@ -71,7 +73,11 @@ const ImageUploadDragAndDrop = ({
   return (
     <>
       {isSelected ? (
-        <ImageUploadReviewCard id={id} cleanUpState={cleanUpState} />
+        <ImageUploadReviewCard
+          id={id}
+          cleanUpState={cleanUpState}
+          srcUploadNft={srcUploadNft}
+        />
       ) : (
         <>
           <div

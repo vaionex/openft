@@ -12,6 +12,7 @@ import {
   setDoc,
   updateDoc,
   where,
+  Timestamp,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -19,6 +20,7 @@ import {
   uploadBytes,
   deleteObject,
   getDownloadURL,
+  uploadString,
 } from 'firebase/storage'
 import {
   signInWithEmailAndPassword,
@@ -373,7 +375,7 @@ const firebaseGetFilterNfts = async (priceRange) => {
 const firbaseAddDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
-    await setDoc(docRef, obj)
+    await setDoc(docRef, { ...obj, timeStamp: Timestamp.now() })
   } catch (error) {
     console.error(error)
   }
@@ -433,6 +435,21 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 
+const firebaseUploadBlob = async (file, name, type) => {
+  let link
+  const blob = file.split(',')[1]
+  const storage = getStorage()
+  const storageRef = ref(storage, `nfts/${name}.${type}`)
+  await uploadString(storageRef, blob, 'base64', {
+    contentType: `image/${type}`,
+  }).then(async (snapshot) => {
+    return new Promise((resolve) => {
+      resolve(getDownloadURL(snapshot.ref).then((res) => (link = res)))
+    })
+  })
+  return link
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -452,4 +469,5 @@ export {
   firebsaeFetchNextData,
   firebaseDeleteImage,
   firebaseOnIdTokenChange,
+  firebaseUploadBlob,
 }

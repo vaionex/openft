@@ -16,7 +16,7 @@ const UserSettingsUploadSection = () => {
             This will be displayed on your profile.
           </span>
         </span>
-        <div className="mt-1 sm:mt-0 sm:col-span-2">
+        {/* <div className="mt-1 sm:mt-0 sm:col-span-2">
           <div className="flex items-center justify-end">
             <button onClick={showPreview} className="btn-secondary">
               Preview
@@ -25,7 +25,7 @@ const UserSettingsUploadSection = () => {
               </span>
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
       <UploadForm />
     </UserSettingsLayout>

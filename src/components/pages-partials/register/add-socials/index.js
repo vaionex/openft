@@ -45,6 +45,7 @@ function RegistrationAddSocials({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
   const { isPending } = useSelector(userSelector)
+  const [isError, setIsError] = useState(false)
   const [submitStarted, setSubmitStarted] = useState(false)
   const registrationValues = useSelector(registrationFormSelector)
   const { photoValues } = registrationValues

@@ -28,6 +28,7 @@ const ImageCropper = ({
   const handleCroppedImage = useCallback(async () => {
     const src = image.src
     const ext = image.ext
+    const buffer = image.buffer
     const name = `${uuidv4()}.${ext}`
     const type = id
     try {
@@ -47,6 +48,7 @@ const ImageCropper = ({
           type: id,
           croppedAreaPixels,
         },
+        buffer,
         croppedBlobFile: file,
       })
 
