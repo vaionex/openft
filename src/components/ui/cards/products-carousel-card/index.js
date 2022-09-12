@@ -13,6 +13,8 @@ import userSelector from '@/redux/selectors/user'
 const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   const isInFirstThree = idx < 3
 
+  console.log(data)
+
   const { currentUser } = useSelector(userSelector)
   const [hasLike, setHasLike] = useState(false)
 
@@ -52,15 +54,21 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
         <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
           <NextLink href={`/discover/${data?.uid}`}>
             <a className="cursor-pointer">
-              <Image
-                src={data?.imageURL}
-                alt={data?.name}
-                layout="fill"
-                className="absolute inset-0 object-cover object-center w-full h-full"
-                priority={type === 'list' && isInFirstThree}
-                quality={70}
-              />
-              <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
+              {data?.imageURL ? (
+                <>
+                  <Image
+                    src={data?.imageURL || ''}
+                    alt={data?.name}
+                    layout="fill"
+                    className="absolute inset-0 object-cover object-center w-full h-full"
+                    priority={type === 'list' && isInFirstThree}
+                    quality={70}
+                  />
+                  <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
+                </>
+              ) : (
+                <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
+              )}
             </a>
           </NextLink>
         </div>
