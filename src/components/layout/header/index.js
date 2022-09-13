@@ -6,9 +6,10 @@ import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { UploadBoxIcon } from '@/components/common/icons'
-import { useSelector } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
+import { useRouter } from 'next/router'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -18,6 +19,7 @@ const navigation = [
 
 const Header = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const router = useRouter()
 
   return (
     <Popover as="header" className="relative">
@@ -106,4 +108,11 @@ const Header = () => {
   )
 }
 
-export default Header
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.user.isAuthenticated,
+    currentUser: state.user.currentUser,
+  }
+}
+
+export default connect(mapStateToProps)(Header)

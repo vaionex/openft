@@ -44,9 +44,7 @@ const inputAttributes = [
 function RegistrationAddSocials({ goToStep }) {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { isPending } = useSelector(userSelector)
-  const [isError, setIsError] = useState(false)
-  const [submitStarted, setSubmitStarted] = useState(false)
+  const { isPending, isError } = useSelector(userSelector)
   const registrationValues = useSelector(registrationFormSelector)
   const { photoValues } = registrationValues
   const { control, handleSubmit, formState } = useForm({
@@ -54,7 +52,6 @@ function RegistrationAddSocials({ goToStep }) {
   })
 
   const onSubmit = async (data) => {
-    setSubmitStarted(true)
     dispatch(setSocialsValues(data))
 
     const dataForServer = {
@@ -94,7 +91,7 @@ function RegistrationAddSocials({ goToStep }) {
         alert(error.message)
       })
       .finally(() => {
-        setSubmitStarted(false)
+        router.push('/')
       })
   }
 

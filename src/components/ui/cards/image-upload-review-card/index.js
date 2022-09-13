@@ -22,9 +22,11 @@ const ImageUploadReviewCard = ({ id, cleanUpState, photoValues }) => {
       )}
       <div className="flex gap-4">
         <ImageUploadedIcon className="w-8 h-8 " />
-        <div className="flex flex-col flex-1">
-          <span className="text-sm text-gray-700">{photoValues[id].name}</span>
-          <span className="text-sm text-gray-500">
+        <div className="flex flex-col flex-1 ">
+          <span className="mb-2 text-sm text-gray-700 break-words">
+            {photoValues[id].name}
+          </span>
+          <span className="text-xs text-gray-500">
             {bytesToSize(photoValues[id].size)}
           </span>
         </div>

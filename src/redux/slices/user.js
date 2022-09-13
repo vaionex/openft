@@ -12,6 +12,7 @@ const initialState = {
   isPending: false,
   isUserPending: true,
   errorMessage: null,
+  isError: false,
   isAuthenticated: false,
   isSuccess: false,
 }
@@ -77,10 +78,12 @@ const userSlice = createSlice({
       state.currentUser = null
       state.isPending = false
       state.errorMessage = null
+      state.isError = false
       state.isAuthenticated = false
     },
     setError: (state, action) => {
       state.errorMessage = action.payload
+      state.isError = true
     },
     setSuccess: (state, action) => {
       state.isSuccess = action.payload
@@ -96,11 +99,13 @@ const userSlice = createSlice({
     [login.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
+      state.isError = false
     },
     [login.rejected]: (state, action) => {
       state.isPending = false
       state.isUserPending = false
       state.errorMessage = action.payload
+      state.isError = true
     },
     [login.fulfilled]: (state, action) => {
       state.isPending = false
@@ -110,11 +115,13 @@ const userSlice = createSlice({
     [register.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
+      state.isError = false
     },
     [register.rejected]: (state, action) => {
       state.isPending = false
       state.isUserPending = false
       state.errorMessage = action.payload
+      state.isError = true
     },
     [register.fulfilled]: (state, action) => {
       state.isPending = false
@@ -124,28 +131,33 @@ const userSlice = createSlice({
     [logout.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
+      state.isError = false
     },
     [logout.rejected]: (state, action) => {
       state.isPending = false
       state.isUserPending = false
       state.errorMessage = action.payload
+      state.isError = true
     },
     [logout.fulfilled]: (state) => {
       state.isPending = false
       state.currentUser = null
       state.isUserPending = false
       state.errorMessage = null
+      state.isError = false
       state.isAuthenticated = false
     },
     [updateUser.pending]: (state) => {
       state.isPending = true
       state.errorMessage = null
+      state.isError = false
       state.isSuccess = false
     },
     [updateUser.rejected]: (state, action) => {
       state.isPending = false
       state.isUserPending = false
       state.errorMessage = action.payload
+      state.isError = true
       state.isSuccess = false
     },
     [updateUser.fulfilled]: (state, action) => {
