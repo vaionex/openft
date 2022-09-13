@@ -10,20 +10,18 @@ import ImageUploadReviewCard from '../cards/image-upload-review-card'
 import ImageCropper from '../image-cropper'
 
 const ImageUploadDragAndDrop = ({
-  id,
-  text,
-  subinfo,
+  attributes,
   acceptableFileTypes,
-  aspect,
-  limits,
   isSelected,
   handleClear,
   setImageToState,
-  srcUploadNft = null,
+  photoValues,
 }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [isCropping, setIsCropping] = useState(false)
   const [errorMap, setErrorMap] = useState(null)
+
+  const { id, title, text, subinfo, limits, aspect } = attributes
 
   const cleanUpState = () => {
     setSelectedImage(null)
@@ -50,14 +48,13 @@ const ImageUploadDragAndDrop = ({
     cleanUpState()
     const imageFile = files[0]
     const errorObjects = await validateImage(imageFile)
-    const buffer = await blobToBase64(imageFile)
     if (!errorObjects) {
       const createFileUrl = URL.createObjectURL(imageFile)
       setSelectedImage({
         src: createFileUrl,
         name: imageFile.name,
         ext: getFileExt(imageFile.name),
-        buffer,
+        title,
       })
       setIsCropping(true)
     } else {
@@ -76,7 +73,7 @@ const ImageUploadDragAndDrop = ({
         <ImageUploadReviewCard
           id={id}
           cleanUpState={cleanUpState}
-          srcUploadNft={srcUploadNft}
+          photoValues={photoValues}
         />
       ) : (
         <>

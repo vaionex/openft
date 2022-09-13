@@ -21,14 +21,13 @@ const ImageCropper = ({
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+  const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
 
   const handleCroppedImage = useCallback(async () => {
     const src = image.src
     const ext = image.ext
-    const buffer = image.buffer
     const name = `${uuidv4()}.${ext}`
     const type = id
     try {
@@ -43,12 +42,12 @@ const ImageCropper = ({
           src,
           srcCropped: url,
           name: image.name,
+          title: image.title,
           ext: ext,
           size: file.size,
           type: id,
           croppedAreaPixels,
         },
-        buffer,
         croppedBlobFile: file,
       })
 

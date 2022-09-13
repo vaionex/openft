@@ -12,6 +12,7 @@ const ImageInputAttributes = [
   {
     id: 'profileImage',
     name: 'profileImage',
+    title: 'Profile Image',
     text: 'Click to upload profile photo',
     subinfo: 'Max 400x400 - 1MB',
     limits: {
@@ -24,6 +25,7 @@ const ImageInputAttributes = [
   {
     id: 'coverImage',
     name: 'coverImage',
+    title: 'Cover Image',
     text: 'Click to upload cover photo',
     subinfo: 'Max 3840x2160 - 4MB',
     limits: {
@@ -70,15 +72,11 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
             {ImageInputAttributes.map((inputAttribute) => (
               <ImageUploadDragAndDrop
                 key={inputAttribute.id}
-                id={inputAttribute.id}
-                name={inputAttribute.name}
-                text={inputAttribute.text}
-                subinfo={inputAttribute.subinfo}
-                limits={inputAttribute.limits}
-                aspect={inputAttribute.aspect}
+                attributes={inputAttribute}
                 handleClear={() => handleClear(inputAttribute.id)}
                 isSelected={!!photoValues[inputAttribute.id]}
                 setImageToState={setImageToState}
+                photoValues={photoValues && photoValues}
               />
             ))}
 
