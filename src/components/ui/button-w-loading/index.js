@@ -1,12 +1,20 @@
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
+import PropTypes from 'prop-types'
 
-const ButtonWLoading = ({ isError, isPending, text, onClick, fullWidth }) => {
+const ButtonWLoading = ({
+  isError,
+  isPending,
+  text,
+  onClick,
+  fullWidth,
+  type,
+}) => {
   if (fullWidth) {
     return (
       <button
         disabled={isPending}
-        type="button"
+        type={type}
         onClick={onClick}
         className={twMerge(
           'w-full btn-primary transition-all duration-300 ease-in-out',
@@ -25,7 +33,7 @@ const ButtonWLoading = ({ isError, isPending, text, onClick, fullWidth }) => {
 
   return (
     <button
-      type="button"
+      type={type}
       disabled={isError}
       className={twMerge(
         'btn-primary py-2.5',
@@ -44,6 +52,23 @@ const ButtonWLoading = ({ isError, isPending, text, onClick, fullWidth }) => {
       )}
     </button>
   )
+}
+
+ButtonWLoading.defaultProps = {
+  isError: false,
+  isPending: false,
+  fullWidth: false,
+  type: 'button',
+  text: 'Submit',
+}
+
+ButtonWLoading.propTypes = {
+  isError: PropTypes.bool,
+  isPending: PropTypes.bool,
+  fullWidth: PropTypes.bool,
+  type: PropTypes.string,
+  text: PropTypes.string,
+  onClick: PropTypes.func,
 }
 
 export default ButtonWLoading

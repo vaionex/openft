@@ -10,7 +10,7 @@ import Spinner from '@/components/ui/spinner'
 import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
 import { mintNFT } from '@/services/relysia-queries'
-import { ButtonWLoading } from '@/components/ui/buttons'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
 const inputAttributes = {
   id: 'nftImage',
@@ -27,17 +27,29 @@ const inputAttributes = {
 }
 
 const UploadForm = () => {
-  const { currentUser, isAuthenticated } = useSelector(userSelector)
-  const [bsValue, setBsValue] = useState('')
+  const { currentUser } = useSelector(userSelector)
   const DESC_MAX_LENGTH = 40
   const { usdBalance } = usePriceConverter()
   const [photoValues, setPhotoValues] = useState({})
+  const [croppedImageBlob, setCroppedImageBlob] = useState(null)
+  const [bsvPrice, setBsvPrice] = useState(0)
+  //
+  const [isError, setIsError] = useState(false)
+  const [isPending, setIsPending] = useState(false)
+  //
+
   const [formValues, setFormValues] = useState({
     name: '',
     description: '',
-    price: '',
-    supply: '',
+    price: null,
+    supply: null,
+    // artist: {
+    //   name: currentUser?.username || '',
+    //   profileImage: currentUser?.profileImage || '',
+    //   username: currentUser?.username || '',
+    // },
   })
+
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState, reset } = useForm({
     mode: 'onSubmit',
@@ -45,14 +57,23 @@ const UploadForm = () => {
     resolver,
   })
 
-  const [msg, setMsg] = useState({
-    photoValidateMessage: null,
-    descriptionValidateMessage: null,
-  })
-  const [descriptionLen, setDescriptionLen] = useState(null)
-  const descriptionRef = useRef(null)
-
   const { isSubmitting, isValid, errors } = formState
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target
+    setFormValues((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleImageState = ({ id, file, croppedBlobFile }) => {
+    setPhotoValues({
+      [id]: file,
+    })
+    setCroppedImageBlob(croppedBlobFile)
+  }
+
+  const onSubmit = async (data) => {
+    console.log(data)
+  }
 
   // useEffect(() => {
   //   if (usdPrice) {
@@ -72,108 +93,70 @@ const UploadForm = () => {
           <InputMain.Label
             label="Upload artwork file"
             sublabel="This will be your NFT"
+            htmlFor="nftImage"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
             <ImageUploadDragAndDrop
               attributes={inputAttributes}
               handleClear={() => setPhotoValues({})}
               isSelected={!!photoValues[inputAttributes.id]}
-              srcUploadNft={photoValues}
               setImageToState={handleImageState}
               photoValues={photoValues}
             />
-            <div className="text-xs text-red-600 ">
-              {msg.photoValidateMessage}
-            </div>
+            {/* <div className="text-xs text-red-600 ">
+              {msg?.photoValidateMessage}
+            </div> */}
           </div>
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Artwork name" htmlFor="artworkName" />
+          <InputMain.Label label="Artwork name" htmlFor="name" />
           <Controller
-            name={'artworkName'}
+            name="name"
             control={control}
             render={({ field }) => {
               return (
                 <InputMain.Input
-                  id="artworkName"
+                  id="name"
                   sublabel="This will be displayed on your artwork."
                   className="sm:col-span-2"
                   placeholder="e.g. My artwork"
                   onChange={() => {}}
+                  error={errors['name']?.message}
                   {...field}
                 />
               )
             }}
           />
-          <div className="grid text-xs text-red-600 sm:col-span-3 sm:grid-cols-3">
-            <div className="sm:col-span-1"></div>
-            <div className="mt-3 sm:col-span-2 sm:pl-2 sm:mt-0">
-              {errors['artworkName']?.message}
-            </div>
-          </div>
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Description"
             sublabel="A quick snapshot of your artwork."
-            htmlFor="art-description"
+            htmlFor="description"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <textarea
-              id="art-description"
-              name="art-description"
-              ref={descriptionRef}
-              onChange={onDescriptonChange}
-              rows={3}
-              maxLength={40}
-              className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              defaultValue={''}
-              placeholder="Write a short description of your artwork."
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <InputMain.Textarea
+                  id="description"
+                  name="description"
+                  rows={3}
+                  placeholder="Write a short description of your artwork."
+                  onChange={handleOnChange}
+                  error={errors['description']?.message}
+                  {...field}
+                />
+              )}
             />
             <p className="mt-2 text-sm text-gray-500">
-              {40 - descriptionLen} characters left
-            </p>
-            <div className="grid text-xs text-red-600 sm:col-span-3 sm:grid-cols-3">
-              {msg.descriptionValidateMessage}
-            </div>
-          </div>
-        </InputMain>
-
-        {/* <InputMain className="sm:grid-cols-3">
-          <InputMain.Label
-            label="External link"
-            sublabel="Additional links about your artwork."
-            htmlFor="external-link"
-            tooltip={{
-              title: 'External link',
-              text: "Openft will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details.",
-            }}
-          />
-          <InputMain.Input
-            id="external-link"
-            variant="add-on"
-            addon="https://"
-            placeholder="e.g. openft.com"
-            onChange={() => {}}
-            className="sm:col-span-2"
-          />
-        </InputMain>
-
-        <InputMain className="sm:grid-cols-3">
-          <InputMain.Label
-            label="Collections"
-            sublabel="This is the collection where your item will appear."
-            htmlFor="collections"
-          />
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <DropdownSelect add />
-            <p className="mt-2 text-sm text-gray-500">
-              You can also create new collections from here.
+              {DESC_MAX_LENGTH - formValues.description.length} characters left
             </p>
           </div>
-        </InputMain> */}
+        </InputMain>
 
         <InputMain className="sm:grid-cols-3">
           <InputMain.Label
@@ -182,7 +165,7 @@ const UploadForm = () => {
             htmlFor="price"
           />
           <Controller
-            name={'price'}
+            name="price"
             control={control}
             render={({ field }) => {
               return (
@@ -192,6 +175,7 @@ const UploadForm = () => {
                   id="price"
                   autoComplete="given-name"
                   placeholder="e.g. $0.00"
+                  error={errors['price']?.message}
                   {...field}
                 />
               )
@@ -201,20 +185,14 @@ const UploadForm = () => {
             name="bsv"
             id="bsv"
             disabled
-            value={bsValue}
-            className="mt-2 sm:mt-0"
+            value={bsvPrice}
+            className="mt-2 text-gray-500 sm:mt-0"
             placeholder="1 BSV"
             onChange={() => {}}
             tooltip={{
               text: 'This conversion is based on coinmarketcap.',
             }}
           />
-          <div className="grid text-xs text-red-600 sm:col-span-3 sm:grid-cols-3">
-            <div className="sm:col-span-1"></div>
-            <div className="mt-3 sm:col-span-2 sm:pl-2 sm:mt-0">
-              {errors['price']?.message}
-            </div>
-          </div>
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
@@ -224,7 +202,7 @@ const UploadForm = () => {
             htmlFor="supply"
           />
           <Controller
-            name={'supply'}
+            name="supply"
             control={control}
             render={({ field }) => {
               return (
@@ -238,20 +216,15 @@ const UploadForm = () => {
                     text: 'Presently we only provide 1 supply for each NFT to preserve the originality of each NFT.',
                   }}
                   onChange={() => {}}
+                  error={errors['supply']?.message}
                   {...field}
                 />
               )
             }}
           />
-          <div className="grid text-xs text-red-600 sm:col-span-3 sm:grid-cols-3">
-            <div className="sm:col-span-1"></div>
-            <div className="mt-3 sm:col-span-2 sm:pl-2 sm:mt-0">
-              {errors['supply']?.message}
-            </div>
-          </div>
         </InputMain>
 
-        <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col items-center justify-end space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
           {/* {isSuccess && (
                 <span className="text-xs text-green-500">
                   Profile successfully updated.{' '}
@@ -261,7 +234,7 @@ const UploadForm = () => {
             isError={isError}
             isPending={isPending}
             text="Save"
-            onClick={onSubmit}
+            type="submit"
           />
         </div>
       </div>

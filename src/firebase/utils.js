@@ -218,6 +218,19 @@ const firebaseResetPassword = async (user, newPassword) => {
   }
 }
 
+const firebaseUploadNftImage = async (file, uid) => {
+  try {
+    const imagePath = `nfts/${uid}.${ext}`
+    const fileRef = ref(firebaseStorage, `nfts/${uid}/${file.name}.${ext}`)
+    await uploadBytes(fileRef, file)
+    const url = await getDownloadURL(fileRef)
+    return url
+  } catch (error) {
+    console.log(error)
+    return { error: error.message }
+  }
+}
+
 const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
   if (user && imageFile) {
     const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
@@ -404,7 +417,7 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
-const firbaseAddDoc = async (collectionName, id, obj) => {
+const firebaseAddDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await setDoc(docRef, { ...obj, timeStamp: Timestamp.now() })
@@ -419,7 +432,7 @@ const firbaseAddDoc = async (collectionName, id, obj) => {
   }
 }
 
-const firbaseUpdateDoc = async (collectionName, id, obj) => {
+const firebaseUpdateDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await updateDoc(docRef, obj)
@@ -428,7 +441,7 @@ const firbaseUpdateDoc = async (collectionName, id, obj) => {
   }
 }
 
-const firbaseDeleteDoc = async (collectionName, id) => {
+const firebaseDeleteDoc = async (collectionName, id) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await deleteDoc(docRef)
@@ -479,21 +492,6 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 
-const firebaseUploadBlob = async (file, name, type) => {
-  let link
-  const blob = file.split(',')[1]
-  const storage = getStorage()
-  const storageRef = ref(storage, `nfts/${name}.${type}`)
-  await uploadString(storageRef, blob, 'base64', {
-    contentType: `image/${type}`,
-  }).then(async (snapshot) => {
-    return new Promise((resolve) => {
-      resolve(getDownloadURL(snapshot.ref).then((res) => (link = res)))
-    })
-  })
-  return link
-}
-
 export {
   firebaseLogin,
   firebaseRegister,
@@ -508,10 +506,10 @@ export {
   firebaseGetFilteredNftProducts,
   firebaseIsUsernameExist,
   firebaseGetSingleDoc,
-  firbaseAddDoc,
-  firbaseDeleteDoc,
-  firbaseUpdateDoc,
+  firebaseAddDoc,
+  firebaseDeleteDoc,
+  firebaseUpdateDoc,
   firebaseDeleteImage,
   firebaseOnIdTokenChange,
-  firebaseUploadBlob,
+  firebaseUploadNftImage,
 }
