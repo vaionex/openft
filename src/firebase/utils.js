@@ -51,6 +51,7 @@ import {
 } from '@/services/relysia-queries'
 import apiConfig from '@/config/relysiaApi'
 import { storageBucketUrl } from './config'
+import { v4 as uuidv4 } from 'uuid'
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -221,9 +222,12 @@ const firebaseResetPassword = async (user, newPassword) => {
 
 const firebaseUploadNftImage = async ({ file, userId }) => {
   try {
-    const imagePath = `nfts/${userId}/${file.name}`
+    const imagePath = `nfts/${userId}/${uuidv4()}`
     const fileRef = ref(firebaseStorage, imagePath)
-    const fileFromStorage = await uploadBytes(fileRef, file)
+    const metadata = {
+      contentType: file.ext,
+    }
+    const fileFromStorage = await uploadBytes(fileRef, file, metadata)
     const url = await getDownloadURL(fileRef)
     return { url, fileFromStorage }
   } catch (error) {
@@ -488,25 +492,20 @@ const firebaseOnIdTokenChange = async () => {
 }
 
 const firebaseGetNftImageUrl = (userId, fileName, size) => {
-  console.log(userId, fileName, size)
-  const extension = fileName.split('.').pop()
-  const fileNameWithoutExtension = fileName.replace(`.${extension}`, '')
-  const path = encodeURIComponent(
-    `nfts/${userId}/nft-assets/${fileNameWithoutExtension}`,
-  )
+  const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
   switch (size) {
     case 'xsmall':
-      return `${storageBucketUrl}${path}_60x60.${extension}?alt=media`
+      return `${storageBucketUrl}${path}_60x60?alt=media`
     case 'small':
-      return `${storageBucketUrl}${path}_250x250.${extension}?alt=media`
+      return `${storageBucketUrl}${path}_250x250?alt=media`
     case 'medium':
-      return `${storageBucketUrl}${path}_600x600.${extension}?alt=media`
+      return `${storageBucketUrl}${path}_600x600?alt=media`
     case 'large':
-      return `${storageBucketUrl}${path}_1500x1500.${extension}?alt=media`
+      return `${storageBucketUrl}${path}_1500x1500?alt=media`
     case 'xlarge':
-      return `${storageBucketUrl}${path}_3000x3000.${extension}?alt=media`
+      return `${storageBucketUrl}${path}_3000x3000?alt=media`
     default:
-      return `${storageBucketUrl}${path}_600x600.${extension}?alt=media`
+      return `${storageBucketUrl}${path}_600x600?alt=media`
   }
 }
 

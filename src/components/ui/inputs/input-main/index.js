@@ -78,6 +78,7 @@ InputMain.Input = function InputMainInput(
     inputClassName,
     tooltip,
     error,
+    inputIcon,
     ...props
   },
   ref,
@@ -98,6 +99,7 @@ InputMain.Input = function InputMainInput(
               className={twMerge(
                 'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
                 inputClassName,
+                props.disabled && 'bg-gray-50',
               )}
               ref={ref}
               {...props}
@@ -119,6 +121,7 @@ InputMain.Input = function InputMainInput(
               className={twMerge(
                 'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-l-md sm:text-sm',
                 inputClassName,
+                props.disabled && 'bg-gray-50',
               )}
               ref={ref}
               {...props}
@@ -150,6 +153,8 @@ InputMain.Input = function InputMainInput(
               className={twMerge(
                 'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200  rounded-md',
                 inputClassName,
+                inputIcon && 'pl-7',
+                props.disabled && 'bg-gray-50',
               )}
               onChange={props.onChange}
               ref={ref}
@@ -174,6 +179,12 @@ InputMain.Input = function InputMainInput(
                     {tooltip.text}
                   </div>
                 </ReactTooltip>
+              </div>
+            )}
+
+            {!!inputIcon && (
+              <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+                <span className="text-gray-500 sm:text-sm">{inputIcon}</span>
               </div>
             )}
           </div>
@@ -204,6 +215,7 @@ InputMain.Textarea = function InputMainTextarea(
           className={twMerge(
             'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200 resize-none rounded-md',
             textareaClassName,
+            props.disabled && 'bg-gray-50',
           )}
           onChange={props.onChange}
           ref={ref}

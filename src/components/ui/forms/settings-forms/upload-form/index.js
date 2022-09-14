@@ -6,7 +6,7 @@ import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { useForm, Controller } from 'react-hook-form'
 import usePriceConverter from '@/hooks/usePriceConverter'
 import userSelector from '@/redux/selectors/user'
-import { mintNFT } from '@/services/relysia-queries'
+import { mintNFT, uploadNFTFile } from '@/services/relysia-queries'
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
@@ -23,8 +23,8 @@ const imageInputAttributes = {
   text: 'Click to upload cover photo',
   subinfo: 'Dimension: 1:1. Max size:10 MB',
   limits: {
-    // maxWidth: 400,
-    // maxHeight: 400,
+    maxWidth: 3000,
+    maxHeight: 3000,
     maxSize: 10, //MB
   },
   aspect: 1,
@@ -33,7 +33,7 @@ const imageInputAttributes = {
 const UploadForm = () => {
   const { currentUser } = useSelector(userSelector)
   const DESC_MAX_LENGTH = 40
-  const { usdBalance } = usePriceConverter()
+  const usdBalance = usePriceConverter()
   const [photoValues, setPhotoValues] = useState({})
   const [bsvPrice, setBsvPrice] = useState('')
   const [croppedImageBlob, setCroppedImageBlob] = useState(null)
@@ -43,18 +43,6 @@ const UploadForm = () => {
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
-  // const [formValues, setFormValues] = useState({
-  //   name: '',
-  //   description: '',
-  //   price: null,
-  //   supply: null,
-  //   artist: {
-  //     name: currentUser?.username || '',
-  //     profileImage: currentUser?.profileImage || '',
-  //     username: currentUser?.username || '',
-  //   },
-  // })
-
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState, reset, watch } = useForm({
     mode: 'onSubmit',
@@ -63,6 +51,8 @@ const UploadForm = () => {
   })
 
   const { errors } = formState
+
+  const usdPrice = watch('amount')
 
   useEffect(() => {
     let timeout
@@ -81,28 +71,53 @@ const UploadForm = () => {
     setCroppedImageBlob(croppedBlobFile)
   }
 
+  const resetAllData = () => {
+    reset({
+      amount: '',
+      description: '',
+      name: '',
+      supply: '',
+    })
+    setPhotoValues({})
+    setCroppedImageBlob(null)
+  }
+
   const submitActions = async (formData) => {
     try {
       const { url, fileFromStorage } = await firebaseUploadNftImage({
         file: croppedImageBlob,
         userId: currentUser.uid,
       })
-      // firebaseGetNftImageUrl
-      console.log(fileFromStorage, 'fileFromStorage')
+
       if (!url || !fileFromStorage) {
         throw new Error('Failed to upload image')
       }
 
+      console.log(fileFromStorage)
+
       const nftImageForMinting = firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
-        'small',
+        'xsmall',
       )
       const nftImageForDisplay = firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
         'medium',
       )
+
+      const fileToBlockchain = {
+        fileUrl: nftImageForMinting,
+        fileName: formData.name,
+      }
+
+      const blockchainResponse = await uploadNFTFile(fileToBlockchain)
+
+      console.log(blockchainResponse, 'blockchainResponse')
+
+      if (!blockchainResponse) {
+        throw new Error('Failed to upload file to blockchain')
+      }
 
       const nftDataToFirebase = {
         ...formData,
@@ -125,20 +140,16 @@ const UploadForm = () => {
       }
       console.log(nftDataFromFirebase, 'nftDataFromFirebase')
 
-      // const res = await mintNFT(nftData)
-      // if (res?.status === 'success') {
-      //   setIsSuccess(true)
-      //   setIsPending(false)
-      //   reset()
-      // } else {
-      //   throw new Error('Failed to mint NFT')
-      // }
+      setIsSuccess(true)
+      resetAllData()
     } catch (error) {
-      console.log(error.message, 'hop')
+      console.log(error.message)
       if (error?.message) {
         setIsError(true)
         setErrorMessage(error.message)
       }
+    } finally {
+      setIsPending(false)
     }
   }
 
@@ -149,8 +160,6 @@ const UploadForm = () => {
       }
       setIsPending(true)
       await submitActions(formData)
-
-      setIsPending(false)
     } catch (error) {
       console.log(error.message)
       if (error?.message) {
@@ -167,13 +176,13 @@ const UploadForm = () => {
 
   // console.log(first)
 
-  // useEffect(() => {
-  //   if (usdPrice) {
-  //     setBsValue((usdPrice / usdBalance).toFixed(3))
-  //   } else {
-  //     setBsValue('0 BSV')
-  //   }
-  // }, [usdPrice])
+  useEffect(() => {
+    if (usdPrice) {
+      setBsvPrice(`${(usdPrice / usdBalance).toFixed(4)} BSV`)
+    } else {
+      setBsvPrice('0 BSV')
+    }
+  }, [usdPrice])
 
   return (
     <form
@@ -261,12 +270,13 @@ const UploadForm = () => {
           </div>
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className=" sm:grid-cols-3">
           <InputMain.Label
             label="Starting price"
             sublabel="The price shown on your artwork."
             htmlFor="amount"
           />
+
           <Controller
             name="amount"
             control={control}
@@ -280,6 +290,7 @@ const UploadForm = () => {
                   placeholder="e.g. $0.00"
                   error={errors['amount']?.message}
                   disabled={isPending}
+                  inputIcon="$"
                   {...field}
                 />
               )

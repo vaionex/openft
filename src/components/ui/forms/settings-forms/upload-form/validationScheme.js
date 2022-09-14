@@ -4,7 +4,7 @@ const validationSchema = yup.object().shape({
   name: yup
     .string()
     .required('Artwork name is required')
-    .min(6, 'Artwork name must be at least 4 characters'),
+    .min(4, 'Artwork name must be at least 4 characters'),
   supply: yup
     .number()
     .typeError('Price must be a number')
