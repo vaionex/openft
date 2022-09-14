@@ -48,7 +48,7 @@ const Header = () => {
                 <ActiveLink
                   key={item.name}
                   href={item.href}
-                  activeClassName=" text-blue-600 font-semibold"
+                  activeClassName="text-blue-600 font-semibold pointer-events-none"
                 >
                   <a className="font-medium text-gray-500 hover:text-gray-600">
                     {item.name}

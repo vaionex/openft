@@ -43,20 +43,16 @@ const UserSettingsMain = () => {
     return () => clearTimeout(timeout)
   }, [isSuccess])
 
-  const checkIsUsernameAvailable = async (username) => {
-    const isExist = await firebaseIsUsernameExist(username)
-    return isExist
-  }
-
   const handleOnSubmit = async (e) => {
     e.preventDefault()
     try {
       const { username } = formValues
       if (currentUser.username !== username) {
-        const isExist = await checkIsUsernameAvailable(username)
+        const isExist = await firebaseIsUsernameExist(username)
         if (isExist) {
           setIsError(true)
           setErrorMessage('This username is already in use')
+          return false
         }
       }
       dispatch(

@@ -7,24 +7,12 @@ import bytesToSize from '@/utils/bytesToSizes'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import { useSelector } from 'react-redux'
 
-const ImageUploadReviewCard = ({ id, cleanUpState }) => {
-  const { photoValues } = useSelector(registrationFormSelector)
-
+const ImageUploadReviewCard = ({ id, cleanUpState, photoValues }) => {
   return (
     <div className="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg">
-      {photoValues[id].srcCropped && id === 'profileImage' && (
+      {photoValues[id].srcCropped && (
         <>
-          <h3 className="text-center">Profile Photo</h3>
-          <img
-            src={photoValues[id].srcCropped}
-            alt={photoValues[id].filename}
-            className="w-16 h-16 mx-auto rounded-full"
-          />
-        </>
-      )}
-      {photoValues[id].srcCropped && id === 'coverImage' && (
-        <>
-          <h3 className="text-center">Cover Photo</h3>
+          <h3 className="text-center">{photoValues[id].title}</h3>
           <img
             src={photoValues[id].srcCropped}
             alt={photoValues[id].filename}

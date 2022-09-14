@@ -60,7 +60,7 @@ export const checkValidation = async (
       if (!(await checkImageResolution(file, resolutionLimit))) {
         resolve({
           type: 'imageResolution',
-          message: `Image resolution must be less than ${resolutionLimit.width}x${resolutionLimit.height}`,
+          message: `Image resolution cannot be more than ${resolutionLimit.width}x${resolutionLimit.height}`,
         })
       }
     }

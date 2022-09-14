@@ -78,11 +78,13 @@ InputMain.Input = function InputMainInput(
     inputClassName,
     tooltip,
     error,
+    inputIcon,
     ...props
   },
   ref,
 ) {
   const [message, setMessage] = useState(false)
+
   return (
     <div className={className}>
       {variant === 'add-on' && !!addon && (
@@ -97,6 +99,7 @@ InputMain.Input = function InputMainInput(
               className={twMerge(
                 'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
                 inputClassName,
+                props.disabled && 'bg-gray-50',
               )}
               ref={ref}
               {...props}
@@ -118,6 +121,7 @@ InputMain.Input = function InputMainInput(
               className={twMerge(
                 'flex-1 block w-full min-w-0 border-gray-200 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-l-md sm:text-sm',
                 inputClassName,
+                props.disabled && 'bg-gray-50',
               )}
               ref={ref}
               {...props}
@@ -138,43 +142,58 @@ InputMain.Input = function InputMainInput(
         </div>
       )}
       {message && (
-        <span className="text-red-500 text-sm flex justify-end">Copied!</span>
+        <span className="flex justify-end text-sm text-red-500">Copied!</span>
       )}
       {variant === 'default' && (
-        <div className="relative flex rounded-md shadow-sm">
-          <input
-            id={id}
-            type={inputType}
-            className={twMerge(
-              'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200  rounded-md',
-              inputClassName,
-            )}
-            onChange={props.onChange}
-            ref={ref}
-            {...props}
-          />
-          {!!tooltip && (
-            <div
-              data-tip
-              data-for={id}
-              className="absolute inset-y-0 right-0 z-10 inline-flex items-center pr-3 cursor-pointer group"
-            >
-              <QuestionMarkCircleIcon
-                className="w-4 h-4 text-gray-400"
-                aria-hidden="true"
-              />
-              <ReactTooltip
-                className="react-tooltip !text-sm !max-w-xs !pt-3 !rounded !text-white !bg-gray-900"
-                id={id}
+        <>
+          <div className="relative flex rounded-md shadow-sm">
+            <input
+              id={id}
+              type={inputType}
+              className={twMerge(
+                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200  rounded-md',
+                inputClassName,
+                inputIcon && 'pl-7',
+                props.disabled && 'bg-gray-50',
+              )}
+              onChange={props.onChange}
+              ref={ref}
+              {...props}
+            />
+            {!!tooltip && (
+              <div
+                data-tip
+                data-for={id}
+                className="absolute inset-y-0 right-0 z-10 inline-flex items-center pr-3 cursor-pointer group"
               >
-                <div>
-                  {tooltip.title && <h5>{tooltip.title}</h5>}
-                  {tooltip.text}
-                </div>
-              </ReactTooltip>
+                <QuestionMarkCircleIcon
+                  className="w-4 h-4 text-gray-400"
+                  aria-hidden="true"
+                />
+                <ReactTooltip
+                  className="react-tooltip !text-sm !max-w-xs !pt-3 !rounded !text-white !bg-gray-900"
+                  id={id}
+                >
+                  <div>
+                    {tooltip.title && <h5>{tooltip.title}</h5>}
+                    {tooltip.text}
+                  </div>
+                </ReactTooltip>
+              </div>
+            )}
+
+            {!!inputIcon && (
+              <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+                <span className="text-gray-500 sm:text-sm">{inputIcon}</span>
+              </div>
+            )}
+          </div>
+          {error && (
+            <div className="mt-2 text-xs text-red-600 ">
+              <span className="text-xs text-red-600 ">{error}</span>
             </div>
           )}
-        </div>
+        </>
       )}
       {additionalCheckbox && additionalCheckbox}
     </div>
@@ -183,9 +202,59 @@ InputMain.Input = function InputMainInput(
 
 InputMain.Input = forwardRef(InputMain.Input)
 
+InputMain.Textarea = function InputMainTextarea(
+  { id, className, textareaClassName, row, error, ...props },
+  ref,
+) {
+  return (
+    <div className={className}>
+      <div className="relative flex rounded-md shadow-sm">
+        <textarea
+          id={id}
+          type="text"
+          className={twMerge(
+            'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-200 resize-none rounded-md',
+            textareaClassName,
+            props.disabled && 'bg-gray-50',
+          )}
+          onChange={props.onChange}
+          ref={ref}
+          {...props}
+        />
+      </div>
+      {error && (
+        <div className="mt-2 text-xs text-red-600 ">
+          <span className="text-xs text-red-600 ">{error}</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+InputMain.Textarea = forwardRef(InputMain.Textarea)
+
+////////////////////////
+
 InputMain.Input.defaultProps = {
   inputType: 'text',
   variant: 'default',
+}
+
+////////////////////////
+
+InputMain.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
+}
+
+InputMain.Label.propTypes = {
+  htmlFor: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  sublabel: PropTypes.string,
+  tooltip: PropTypes.shape({
+    title: PropTypes.string,
+    text: PropTypes.string.isRequired,
+  }),
 }
 
 InputMain.Input.propTypes = {

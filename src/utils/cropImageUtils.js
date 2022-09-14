@@ -159,6 +159,7 @@ export async function getCroppedImgFromBlob(
       file.name = imageFile.name
       resolve({
         file: file,
+        url: URL.createObjectURL(file),
       })
     }, `image/${imageFile.ext}`)
   })

@@ -10,73 +10,6 @@ import {
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 
-export const getMaxNftSize = async () => {
-  let snap = await getDoc(
-    doc(firebaseDb, 'MusicArtGlobalVariables', 'maxNftSize'),
-  )
-
-  return {
-    val:
-      snap.exists &&
-      snap.data() &&
-      snap.data().size &&
-      Number(snap.data().size) &&
-      Math.floor(Number(snap.data().size) * 1048576),
-    mb:
-      snap.exists &&
-      snap.data() &&
-      snap.data().size &&
-      Number(snap.data().size),
-  }
-}
-
-export const getMaxNftBgSize = async () => {
-  let snap = await getDoc(
-    doc(firebaseDb, 'MusicArtGlobalVariables', 'maxNftBgSize'),
-  )
-
-  return {
-    val:
-      snap.exists &&
-      snap.data() &&
-      snap.data().size &&
-      Number(snap.data().size) &&
-      Math.floor(Number(snap.data().size) * 1048576),
-    mb:
-      snap.exists &&
-      snap.data() &&
-      snap.data().size &&
-      Number(snap.data().size),
-  }
-}
-
-export const updateGlobalVariableValue = async ({
-  variableName,
-  key,
-  value,
-}) => {
-  await getDoc()
-  await updateDoc(doc(firebaseDb, 'MusicArtGlobalVariables', variableName), {
-    [key]: Number(value),
-  })
-}
-
-export const getUserName = async (id) => {
-  const docd = await getDoc(doc(firebaseDb, 'MusicArtUsernames', id))
-  if (docd.exists) {
-    let dataObj = docd.data()
-    if (dataObj && dataObj.userNameDisplay) {
-      return dataObj.userNameDisplay
-    }
-  }
-  return null
-}
-
-export const countDecimals = function (value) {
-  if (Math.floor(value) === value) return 0
-  return value.toString().split('.')[1]?.length || 0
-}
-
 export const getwalletBal = async (walletid, dispatch) => {
   //wallet balance
   await apiConfig
@@ -87,11 +20,7 @@ export const getwalletBal = async (walletid, dispatch) => {
     })
     .then((res) => {
       let balInBsv =
-        res.data &&
-          res.data.data &&
-          res.data.data.data &&
-          res.data.data.data.balance &&
-          res.data.data.data.balance / 100000000
+        res?.data?.data?.balance / 100000000
           ? res.data.data.data.balance / 100000000
           : 0
       dispatch(updateBalance(balInBsv))
@@ -106,18 +35,16 @@ export const getwalletBal = async (walletid, dispatch) => {
     })
 }
 
-
 export const metricsApiWithoutBody = async () => {
   await apiConfig
     .get('/v1/metrics')
-    .then((res) => { })
+    .then((res) => {})
     .catch((err) => {
       console.log('without body', err)
     })
 }
 
 export const getwalletDetails = async (walletid, dispatch) => {
-
   apiConfig
     .get('/v1/address', {
       headers: {
@@ -219,4 +146,77 @@ export const createwallet = async (name, dispatch) => {
     .catch((err) => {
       console.log('wallet error', err)
     })
+}
+
+// nft upload file
+
+export const uploadNFTFile = async (formData, walletId) => {
+  if (walletId) {
+    apiConfig.defaults.headers.common['walletID'] = walletId
+  }
+
+  try {
+    const res = await apiConfig.post('/upload', formData)
+
+    return res.data.data
+  } catch (err) {
+    console.log('upload error', err)
+    return false
+  }
+}
+
+//minting
+
+export const mintNFT = async (nftDetails) => {
+  const { url, description, name, supply, amount, txid } = nftDetails
+
+  const parameters = {
+    name,
+    protocolId: 'STAS',
+    symbol: 'SBP',
+    description,
+    image: url,
+    tokenSupply: supply,
+    decimals: 0,
+    satsPerToken: 1,
+    properties: {
+      legal: {
+        terms: 'Your token terms and description.',
+        licenceId: 'T3ST-2',
+      },
+      issuer: {
+        organisation: 'Vaionex Corp.',
+        legalForm: 'Limited',
+        governingLaw: 'US',
+        issuerCountry: 'US',
+        jurisdiction: 'US',
+        email: 'info@vaionex.com',
+      },
+      meta: {
+        schemaId: 'NFT1.0/MA',
+        website: 'vaionex.com',
+        legal: {
+          terms:
+            '© 2020 TAAL TECHNOLOGIES SEZC\nALL RIGHTS RESERVED. ANY USE OF THIS SOFTWARE IS SUBJECT TO TERMS AND CONDITIONS OF LICENSE. USE OF THIS SOFTWARE WITHOUT LICENSE CONSTITUTES INFRINGEMENT OF INTELLECTUAL PROPERTY. FOR LICENSE DETAILS OF THE SOFTWARE, PLEASE REFER TO: www.taal.com/stas-token-license-agreement',
+        },
+        media: [
+          {
+            URI: `B://${txid}`,
+            type: 'image/webp',
+            altURI: url,
+          },
+        ],
+      },
+    },
+    splitable: false,
+  }
+
+  try {
+    const response = await apiConfig.post('/v1/issue', parameters)
+
+    return response.data.data
+  } catch (error) {
+    console.log('error', error)
+    return false
+  }
 }

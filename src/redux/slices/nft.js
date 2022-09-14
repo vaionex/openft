@@ -1,7 +1,13 @@
 import { firebaseGetFirstNfts } from '@/firebase/utils'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-const initialState = {}
+const initialState = {
+  nft: null,
+  isError: false,
+  errorMessage: null,
+  isPending: false,
+  isSuccess: false,
+}
 
 const nftSlice = createSlice({
   name: 'nft',

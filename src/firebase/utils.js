@@ -15,6 +15,7 @@ import {
   startAt,
   updateDoc,
   where,
+  Timestamp,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -22,6 +23,7 @@ import {
   uploadBytes,
   deleteObject,
   getDownloadURL,
+  uploadString,
 } from 'firebase/storage'
 import {
   signInWithEmailAndPassword,
@@ -48,6 +50,8 @@ import {
   getwalletDetails,
 } from '@/services/relysia-queries'
 import apiConfig from '@/config/relysiaApi'
+import { storageBucketUrl } from './config'
+import { v4 as uuidv4 } from 'uuid'
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -213,6 +217,22 @@ const firebaseResetPassword = async (user, newPassword) => {
     return {
       error: error.message,
     }
+  }
+}
+
+const firebaseUploadNftImage = async ({ file, userId }) => {
+  try {
+    const imagePath = `nfts/${userId}/${uuidv4()}`
+    const fileRef = ref(firebaseStorage, imagePath)
+    const metadata = {
+      contentType: file.ext,
+    }
+    const fileFromStorage = await uploadBytes(fileRef, file, metadata)
+    const url = await getDownloadURL(fileRef)
+    return { url, fileFromStorage }
+  } catch (error) {
+    console.log(error)
+    return { error: error.message }
   }
 }
 
@@ -402,22 +422,21 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
-const firbaseAddDoc = async (collectionName, id, obj) => {
+const firebaseAddDoc = async (collectionName, obj) => {
   try {
-    const docRef = doc(firebaseDb, collectionName, id)
-    await setDoc(docRef, obj)
-    if (collectionName === 'nfts') {
-      const counterRef = doc(firebaseDb, 'nftCounter', 'counter')
-      await updateDoc(counterRef, {
-        count: increment(1),
-      })
-    }
+    const docRef = collection(firebaseDb, collectionName)
+    const nftDoc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
+    await firebaseUpdateDoc(collectionName, nftDoc.id, {
+      uid: nftDoc.id,
+    })
+
+    return nftDoc
   } catch (error) {
     console.error(error.message)
   }
 }
 
-const firbaseUpdateDoc = async (collectionName, id, obj) => {
+const firebaseUpdateDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await updateDoc(docRef, obj)
@@ -426,16 +445,10 @@ const firbaseUpdateDoc = async (collectionName, id, obj) => {
   }
 }
 
-const firbaseDeleteDoc = async (collectionName, id) => {
+const firebaseDeleteDoc = async (collectionName, id) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await deleteDoc(docRef)
-    if (collectionName === 'nfts') {
-      const counterRef = doc(firebaseDb, 'nftCounter', 'counter')
-      await updateDoc(counterRef, {
-        count: increment(-1),
-      })
-    }
   } catch (error) {
     console.error(error)
   }
@@ -477,6 +490,21 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 
+const firebaseGetNftImageUrl = async (userId, fileName, size) => {
+  const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
+
+  return new Promise((resolve, reject) => {
+    switch (size) {
+      case 'small':
+        resolve(`${storageBucketUrl}${path}_400x400?alt=media`)
+      case 'normal':
+        resolve(`${storageBucketUrl}${path}_600x600?alt=media`)
+      default:
+        reject('Invalid size')
+    }
+  })
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -491,9 +519,11 @@ export {
   firebaseGetFilteredNftProducts,
   firebaseIsUsernameExist,
   firebaseGetSingleDoc,
-  firbaseAddDoc,
-  firbaseDeleteDoc,
-  firbaseUpdateDoc,
+  firebaseAddDoc,
+  firebaseDeleteDoc,
+  firebaseUpdateDoc,
   firebaseDeleteImage,
   firebaseOnIdTokenChange,
+  firebaseUploadNftImage,
+  firebaseGetNftImageUrl,
 }

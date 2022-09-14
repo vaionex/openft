@@ -1,4 +1,5 @@
 import { UploadIcon } from '@/components/common/icons'
+import blobToBase64 from '@/utils/blobToBase64'
 import getFileExt from '@/utils/getFileExt'
 import { checkValidation } from '@/utils/imageValidation'
 import PropTypes from 'prop-types'
@@ -9,19 +10,18 @@ import ImageUploadReviewCard from '../cards/image-upload-review-card'
 import ImageCropper from '../image-cropper'
 
 const ImageUploadDragAndDrop = ({
-  id,
-  text,
-  subinfo,
+  attributes,
   acceptableFileTypes,
-  aspect,
-  limits,
   isSelected,
   handleClear,
   setImageToState,
+  photoValues,
 }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [isCropping, setIsCropping] = useState(false)
   const [errorMap, setErrorMap] = useState(null)
+
+  const { id, title, text, subinfo, limits, aspect } = attributes
 
   const cleanUpState = () => {
     setSelectedImage(null)
@@ -47,15 +47,15 @@ const ImageUploadDragAndDrop = ({
   const onDrop = useCallback(async (files) => {
     cleanUpState()
     const imageFile = files[0]
-
     const errorObjects = await validateImage(imageFile)
-
+    console.log(errorObjects)
     if (!errorObjects) {
       const createFileUrl = URL.createObjectURL(imageFile)
       setSelectedImage({
         src: createFileUrl,
         name: imageFile.name,
         ext: getFileExt(imageFile.name),
+        title,
       })
       setIsCropping(true)
     } else {
@@ -71,7 +71,11 @@ const ImageUploadDragAndDrop = ({
   return (
     <>
       {isSelected ? (
-        <ImageUploadReviewCard id={id} cleanUpState={cleanUpState} />
+        <ImageUploadReviewCard
+          id={id}
+          cleanUpState={cleanUpState}
+          photoValues={photoValues}
+        />
       ) : (
         <>
           <div
