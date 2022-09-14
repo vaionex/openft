@@ -423,7 +423,6 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
 }
 
 const firebaseAddDoc = async (collectionName, obj) => {
-  console.log(obj)
   try {
     const docRef = collection(firebaseDb, collectionName)
     const nftDoc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
@@ -491,22 +490,19 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 
-const firebaseGetNftImageUrl = (userId, fileName, size) => {
+const firebaseGetNftImageUrl = async (userId, fileName, size) => {
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
-  switch (size) {
-    case 'xsmall':
-      return `${storageBucketUrl}${path}_60x60?alt=media`
-    case 'small':
-      return `${storageBucketUrl}${path}_250x250?alt=media`
-    case 'medium':
-      return `${storageBucketUrl}${path}_600x600?alt=media`
-    case 'large':
-      return `${storageBucketUrl}${path}_1500x1500?alt=media`
-    case 'xlarge':
-      return `${storageBucketUrl}${path}_3000x3000?alt=media`
-    default:
-      return `${storageBucketUrl}${path}_600x600?alt=media`
-  }
+
+  return new Promise((resolve, reject) => {
+    switch (size) {
+      case 'small':
+        resolve(`${storageBucketUrl}${path}_400x400?alt=media`)
+      case 'normal':
+        resolve(`${storageBucketUrl}${path}_600x600?alt=media`)
+      default:
+        reject('Invalid size')
+    }
+  })
 }
 
 export {

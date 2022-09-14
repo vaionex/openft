@@ -21,11 +21,11 @@ const imageInputAttributes = {
   name: 'nftImage',
   title: 'NFT Image',
   text: 'Click to upload cover photo',
-  subinfo: 'Dimension: 1:1. Max size:10 MB',
+  subinfo: 'Max Resolution: 600x600. Max size:4 MB',
   limits: {
-    maxWidth: 3000,
-    maxHeight: 3000,
-    maxSize: 10, //MB
+    maxWidth: 600,
+    maxHeight: 600,
+    maxSize: 4, //MB
   },
   aspect: 1,
 }
@@ -47,7 +47,7 @@ const UploadForm = () => {
   const { control, handleSubmit, formState, reset, watch } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
-    resolver,
+    // resolver,
   })
 
   const { errors } = formState
@@ -82,48 +82,70 @@ const UploadForm = () => {
     setCroppedImageBlob(null)
   }
 
-  const submitActions = async (formData) => {
+  const onSubmit = async (formData) => {
+    setIsPending(true)
+
     try {
+      if (!photoValues?.nftImage) {
+        throw new Error('Please upload an image')
+      }
       const { url, fileFromStorage } = await firebaseUploadNftImage({
         file: croppedImageBlob,
         userId: currentUser.uid,
       })
-
       if (!url || !fileFromStorage) {
-        throw new Error('Failed to upload image')
+        throw new Error('Failed to upload image to server')
       }
 
-      console.log(fileFromStorage)
-
-      const nftImageForMinting = firebaseGetNftImageUrl(
+      const nftImageForChain = await firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
-        'xsmall',
-      )
-      const nftImageForDisplay = firebaseGetNftImageUrl(
-        currentUser.uid,
-        fileFromStorage.metadata?.name,
-        'medium',
+        'small',
       )
 
-      const fileToBlockchain = {
-        fileUrl: nftImageForMinting,
+      const fileToChain = {
+        fileUrl: nftImageForChain,
         fileName: formData.name,
       }
 
-      const blockchainResponse = await uploadNFTFile(fileToBlockchain)
-
-      console.log(blockchainResponse, 'blockchainResponse')
-
+      const blockchainResponse = await uploadNFTFile(fileToChain)
       if (!blockchainResponse) {
-        throw new Error('Failed to upload file to blockchain')
+        throw new Error(
+          'Failed to upload file to blockchain, please refresh the page and try again',
+        )
       }
+      const {
+        uploadObj: { txid, url: blockchainUrl },
+      } = blockchainResponse
+
+      const dataToMint = {
+        name: formData.name,
+        description: formData.description,
+        amount: formData.amount,
+        supply: +formData.supply || 1,
+        txid,
+      }
+
+      const mintResponse = await mintNFT(dataToMint)
+
+      if (!mintResponse) {
+        throw new Error('Failed to mint NFT')
+      }
+
+      const { tokenId, tokenObj } = mintResponse
+      const nftImageForDisplay = await firebaseGetNftImageUrl(
+        currentUser.uid,
+        fileFromStorage.metadata?.name,
+        'normal',
+      )
 
       const nftDataToFirebase = {
         ...formData,
         imageURL: nftImageForDisplay,
         userId: currentUser.uid,
         likes: 0,
+        tokenId,
+        txId: tokenObj.issueTxid,
         artist: {
           name: currentUser?.name || '',
           profileImage: currentUser?.profileImage || '',
@@ -135,15 +157,14 @@ const UploadForm = () => {
         'nfts',
         nftDataToFirebase,
       )
+
       if (!nftDataFromFirebase) {
         throw new Error('Failed occured while uploading the NFT')
       }
-      console.log(nftDataFromFirebase, 'nftDataFromFirebase')
 
       setIsSuccess(true)
       resetAllData()
     } catch (error) {
-      console.log(error.message)
       if (error?.message) {
         setIsError(true)
         setErrorMessage(error.message)
@@ -152,29 +173,6 @@ const UploadForm = () => {
       setIsPending(false)
     }
   }
-
-  const onSubmit = async (formData) => {
-    try {
-      if (!photoValues?.nftImage) {
-        throw new Error('Please upload an image')
-      }
-      setIsPending(true)
-      await submitActions(formData)
-    } catch (error) {
-      console.log(error.message)
-      if (error?.message) {
-        setIsError(true)
-        setErrorMessage(error.message)
-        setIsPending(false)
-      }
-    }
-    // if (isValid && photoValues.nftImage) {
-    //   console.log('hop')
-    //   // submitActions(formData)
-    // }
-  }
-
-  // console.log(first)
 
   useEffect(() => {
     if (usdPrice) {
@@ -221,6 +219,7 @@ const UploadForm = () => {
           <Controller
             name="name"
             control={control}
+            defaultValue=""
             render={({ field }) => {
               return (
                 <InputMain.Input
@@ -247,6 +246,7 @@ const UploadForm = () => {
             <Controller
               name="description"
               control={control}
+              defaultValue=""
               render={({ field }) => (
                 <InputMain.Textarea
                   id="description"
@@ -280,6 +280,7 @@ const UploadForm = () => {
           <Controller
             name="amount"
             control={control}
+            defaultValue=""
             render={({ field }) => {
               return (
                 <InputMain.Input
@@ -319,6 +320,7 @@ const UploadForm = () => {
           <Controller
             name="supply"
             control={control}
+            defaultValue=""
             render={({ field }) => {
               return (
                 <InputMain.Input
