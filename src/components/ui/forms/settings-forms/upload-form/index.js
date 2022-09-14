@@ -1,26 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ImageUploadDragAndDrop from '@/components/ui/image-upload-drag-n-drop'
 import { InputMain } from '@/components/ui/inputs'
 import validationSchema from './validationScheme'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
-import { useForm, Controller, useWatch } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import usePriceConverter from '@/hooks/usePriceConverter'
-import { firbaseAddDoc, firebaseUploadBlob } from '@/firebase/utils'
-import Spinner from '@/components/ui/spinner'
-import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
 import { mintNFT } from '@/services/relysia-queries'
 import ButtonWLoading from '@/components/ui/button-w-loading'
+import { twMerge } from 'tailwind-merge'
+import { useSelector } from 'react-redux'
+import {
+  firebaseAddDoc,
+  firebaseGetNftImageUrl,
+  firebaseUploadNftImage,
+} from '@/firebase/utils'
 
-const inputAttributes = {
+const imageInputAttributes = {
   id: 'nftImage',
   name: 'nftImage',
   title: 'NFT Image',
   text: 'Click to upload cover photo',
-  subinfo: 'Dimension: 1:1. Max size:4 MB',
+  subinfo: 'Dimension: 1:1. Max size:10 MB',
   limits: {
-    maxWidth: 3840,
-    maxHeight: 2160,
+    // maxWidth: 400,
+    // maxHeight: 400,
     maxSize: 10, //MB
   },
   aspect: 1,
@@ -31,38 +35,44 @@ const UploadForm = () => {
   const DESC_MAX_LENGTH = 40
   const { usdBalance } = usePriceConverter()
   const [photoValues, setPhotoValues] = useState({})
+  const [bsvPrice, setBsvPrice] = useState('')
   const [croppedImageBlob, setCroppedImageBlob] = useState(null)
-  const [bsvPrice, setBsvPrice] = useState(0)
-  //
-  const [isError, setIsError] = useState(false)
-  const [isPending, setIsPending] = useState(false)
-  //
 
-  const [formValues, setFormValues] = useState({
-    name: '',
-    description: '',
-    price: null,
-    supply: null,
-    // artist: {
-    //   name: currentUser?.username || '',
-    //   profileImage: currentUser?.profileImage || '',
-    //   username: currentUser?.username || '',
-    // },
-  })
+  const [isPending, setIsPending] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  // const [formValues, setFormValues] = useState({
+  //   name: '',
+  //   description: '',
+  //   price: null,
+  //   supply: null,
+  //   artist: {
+  //     name: currentUser?.username || '',
+  //     profileImage: currentUser?.profileImage || '',
+  //     username: currentUser?.username || '',
+  //   },
+  // })
 
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, formState, reset } = useForm({
+  const { control, handleSubmit, formState, reset, watch } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     resolver,
   })
 
-  const { isSubmitting, isValid, errors } = formState
+  const { errors } = formState
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target
-    setFormValues((prev) => ({ ...prev, [name]: value }))
-  }
+  useEffect(() => {
+    let timeout
+    if (errorMessage) {
+      timeout = setTimeout(() => {
+        setErrorMessage('')
+      }, 3000)
+    }
+    return () => clearTimeout(timeout)
+  }, [errorMessage])
 
   const handleImageState = ({ id, file, croppedBlobFile }) => {
     setPhotoValues({
@@ -71,9 +81,91 @@ const UploadForm = () => {
     setCroppedImageBlob(croppedBlobFile)
   }
 
-  const onSubmit = async (data) => {
-    console.log(data)
+  const submitActions = async (formData) => {
+    try {
+      const { url, fileFromStorage } = await firebaseUploadNftImage({
+        file: croppedImageBlob,
+        userId: currentUser.uid,
+      })
+      // firebaseGetNftImageUrl
+      console.log(fileFromStorage, 'fileFromStorage')
+      if (!url || !fileFromStorage) {
+        throw new Error('Failed to upload image')
+      }
+
+      const nftImageForMinting = firebaseGetNftImageUrl(
+        currentUser.uid,
+        fileFromStorage.metadata?.name,
+        'small',
+      )
+      const nftImageForDisplay = firebaseGetNftImageUrl(
+        currentUser.uid,
+        fileFromStorage.metadata?.name,
+        'medium',
+      )
+
+      const nftDataToFirebase = {
+        ...formData,
+        imageURL: nftImageForDisplay,
+        userId: currentUser.uid,
+        likes: 0,
+        artist: {
+          name: currentUser?.name || '',
+          profileImage: currentUser?.profileImage || '',
+          username: currentUser?.username || '',
+        },
+      }
+
+      const nftDataFromFirebase = await firebaseAddDoc(
+        'nfts',
+        nftDataToFirebase,
+      )
+      if (!nftDataFromFirebase) {
+        throw new Error('Failed occured while uploading the NFT')
+      }
+      console.log(nftDataFromFirebase, 'nftDataFromFirebase')
+
+      // const res = await mintNFT(nftData)
+      // if (res?.status === 'success') {
+      //   setIsSuccess(true)
+      //   setIsPending(false)
+      //   reset()
+      // } else {
+      //   throw new Error('Failed to mint NFT')
+      // }
+    } catch (error) {
+      console.log(error.message, 'hop')
+      if (error?.message) {
+        setIsError(true)
+        setErrorMessage(error.message)
+      }
+    }
   }
+
+  const onSubmit = async (formData) => {
+    try {
+      if (!photoValues?.nftImage) {
+        throw new Error('Please upload an image')
+      }
+      setIsPending(true)
+      await submitActions(formData)
+
+      setIsPending(false)
+    } catch (error) {
+      console.log(error.message)
+      if (error?.message) {
+        setIsError(true)
+        setErrorMessage(error.message)
+        setIsPending(false)
+      }
+    }
+    // if (isValid && photoValues.nftImage) {
+    //   console.log('hop')
+    //   // submitActions(formData)
+    // }
+  }
+
+  // console.log(first)
 
   // useEffect(() => {
   //   if (usdPrice) {
@@ -95,22 +187,28 @@ const UploadForm = () => {
             sublabel="This will be your NFT"
             htmlFor="nftImage"
           />
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
+          <div
+            className={twMerge(
+              'mt-1  sm:mt-0 sm:col-span-2',
+              isPending && 'pointer-events-none touch-none',
+            )}
+          >
             <ImageUploadDragAndDrop
-              attributes={inputAttributes}
+              attributes={imageInputAttributes}
               handleClear={() => setPhotoValues({})}
-              isSelected={!!photoValues[inputAttributes.id]}
+              isSelected={!!photoValues[imageInputAttributes.id]}
               setImageToState={handleImageState}
               photoValues={photoValues}
             />
-            {/* <div className="text-xs text-red-600 ">
-              {msg?.photoValidateMessage}
-            </div> */}
           </div>
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Artwork name" htmlFor="name" />
+          <InputMain.Label
+            label="Artwork name"
+            sublabel="This will be displayed on your artwork."
+            htmlFor="name"
+          />
           <Controller
             name="name"
             control={control}
@@ -118,11 +216,11 @@ const UploadForm = () => {
               return (
                 <InputMain.Input
                   id="name"
-                  sublabel="This will be displayed on your artwork."
                   className="sm:col-span-2"
                   placeholder="e.g. My artwork"
                   onChange={() => {}}
                   error={errors['name']?.message}
+                  disabled={isPending}
                   {...field}
                 />
               )
@@ -146,14 +244,19 @@ const UploadForm = () => {
                   name="description"
                   rows={3}
                   placeholder="Write a short description of your artwork."
-                  onChange={handleOnChange}
+                  onChange={() => {}}
                   error={errors['description']?.message}
+                  maxLength={DESC_MAX_LENGTH}
+                  disabled={isPending}
                   {...field}
                 />
               )}
             />
             <p className="mt-2 text-sm text-gray-500">
-              {DESC_MAX_LENGTH - formValues.description.length} characters left
+              {watch('description')
+                ? DESC_MAX_LENGTH - watch('description').length
+                : DESC_MAX_LENGTH}{' '}
+              characters left
             </p>
           </div>
         </InputMain>
@@ -161,21 +264,22 @@ const UploadForm = () => {
         <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Starting price"
-            sublabel="This is the collection where your item will appear."
-            htmlFor="price"
+            sublabel="The price shown on your artwork."
+            htmlFor="amount"
           />
           <Controller
-            name="price"
+            name="amount"
             control={control}
             render={({ field }) => {
               return (
                 <InputMain.Input
-                  name="price"
+                  name="amount"
                   type="number"
-                  id="price"
+                  id="amount"
                   autoComplete="given-name"
                   placeholder="e.g. $0.00"
-                  error={errors['price']?.message}
+                  error={errors['amount']?.message}
+                  disabled={isPending}
                   {...field}
                 />
               )
@@ -217,6 +321,7 @@ const UploadForm = () => {
                   }}
                   onChange={() => {}}
                   error={errors['supply']?.message}
+                  disabled={isPending}
                   {...field}
                 />
               )
@@ -225,11 +330,14 @@ const UploadForm = () => {
         </InputMain>
 
         <div className="flex flex-col items-center justify-end space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-          {/* {isSuccess && (
-                <span className="text-xs text-green-500">
-                  Profile successfully updated.{' '}
-                </span>
-              )} */}
+          {isSuccess && (
+            <span className="text-xs text-green-500">
+              NFT successfully uploaded!
+            </span>
+          )}
+          {isError && (
+            <span className="text-xs text-red-500">{errorMessage}</span>
+          )}
           <ButtonWLoading
             isError={isError}
             isPending={isPending}

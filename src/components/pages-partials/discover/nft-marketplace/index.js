@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { FilterIcon } from '@heroicons/react/solid'
 import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
@@ -15,6 +14,7 @@ const NFTMarketplace = ({
   currentUser,
   ...restProps
 }) => {
+  const toTopRef = useRef(null)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [favouriteNfts, setFavouriteNfts] = useState(null)
   const isDesktopOrLaptop = useMediaQuery({
@@ -46,8 +46,8 @@ const NFTMarketplace = ({
     >
       <Configure hitsPerPage={9} />
 
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="relative z-10 flex gap-4 pt-24 pb-6 ">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8" ref={toTopRef}>
+        <div className="relative z-10 flex gap-4 pt-24 pb-6">
           <NFTMarketplaceSearch />
         </div>
         {!isDesktopOrLaptop && (
@@ -70,7 +70,10 @@ const NFTMarketplace = ({
             )}
 
             <div className="lg:col-span-3">
-              <NFTMarketplaceProducts favouriteNfts={favouriteNfts} />
+              <NFTMarketplaceProducts
+                favouriteNfts={favouriteNfts}
+                toTopRef={toTopRef}
+              />
             </div>
           </div>
         </section>

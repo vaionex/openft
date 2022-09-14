@@ -50,6 +50,7 @@ import {
   getwalletDetails,
 } from '@/services/relysia-queries'
 import apiConfig from '@/config/relysiaApi'
+import { storageBucketUrl } from './config'
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -218,13 +219,13 @@ const firebaseResetPassword = async (user, newPassword) => {
   }
 }
 
-const firebaseUploadNftImage = async (file, uid) => {
+const firebaseUploadNftImage = async ({ file, userId }) => {
   try {
-    const imagePath = `nfts/${uid}.${ext}`
-    const fileRef = ref(firebaseStorage, `nfts/${uid}/${file.name}.${ext}`)
-    await uploadBytes(fileRef, file)
+    const imagePath = `nfts/${userId}/${file.name}`
+    const fileRef = ref(firebaseStorage, imagePath)
+    const fileFromStorage = await uploadBytes(fileRef, file)
     const url = await getDownloadURL(fileRef)
-    return url
+    return { url, fileFromStorage }
   } catch (error) {
     console.log(error)
     return { error: error.message }
@@ -417,16 +418,16 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
-const firebaseAddDoc = async (collectionName, id, obj) => {
+const firebaseAddDoc = async (collectionName, obj) => {
+  console.log(obj)
   try {
-    const docRef = doc(firebaseDb, collectionName, id)
-    await setDoc(docRef, { ...obj, timeStamp: Timestamp.now() })
-    if (collectionName === 'nfts') {
-      const counterRef = doc(firebaseDb, 'nftCounter', 'counter')
-      await updateDoc(counterRef, {
-        count: increment(1),
-      })
-    }
+    const docRef = collection(firebaseDb, collectionName)
+    const nftDoc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
+    await firebaseUpdateDoc(collectionName, nftDoc.id, {
+      id: nftDoc.id,
+    })
+
+    return nftDoc
   } catch (error) {
     console.error(error.message)
   }
@@ -445,12 +446,6 @@ const firebaseDeleteDoc = async (collectionName, id) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
     await deleteDoc(docRef)
-    if (collectionName === 'nfts') {
-      const counterRef = doc(firebaseDb, 'nftCounter', 'counter')
-      await updateDoc(counterRef, {
-        count: increment(-1),
-      })
-    }
   } catch (error) {
     console.error(error)
   }
@@ -492,6 +487,29 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 
+const firebaseGetNftImageUrl = (userId, fileName, size) => {
+  console.log(userId, fileName, size)
+  const extension = fileName.split('.').pop()
+  const fileNameWithoutExtension = fileName.replace(`.${extension}`, '')
+  const path = encodeURIComponent(
+    `nfts/${userId}/nft-assets/${fileNameWithoutExtension}`,
+  )
+  switch (size) {
+    case 'xsmall':
+      return `${storageBucketUrl}${path}_60x60.${extension}?alt=media`
+    case 'small':
+      return `${storageBucketUrl}${path}_250x250.${extension}?alt=media`
+    case 'medium':
+      return `${storageBucketUrl}${path}_600x600.${extension}?alt=media`
+    case 'large':
+      return `${storageBucketUrl}${path}_1500x1500.${extension}?alt=media`
+    case 'xlarge':
+      return `${storageBucketUrl}${path}_3000x3000.${extension}?alt=media`
+    default:
+      return `${storageBucketUrl}${path}_600x600.${extension}?alt=media`
+  }
+}
+
 export {
   firebaseLogin,
   firebaseRegister,
@@ -512,4 +530,5 @@ export {
   firebaseDeleteImage,
   firebaseOnIdTokenChange,
   firebaseUploadNftImage,
+  firebaseGetNftImageUrl,
 }

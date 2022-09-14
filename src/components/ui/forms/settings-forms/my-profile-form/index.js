@@ -30,8 +30,6 @@ const MyProfileForm = ({
     }
   }
 
-  console.log('formValues', formValues)
-
   const handleInputChange = (e) => {
     const { name, value, checked } = e.target
 
@@ -82,7 +80,7 @@ const MyProfileForm = ({
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Instagram" htmlFor="user-instagram" />
+          <InputMain.Label label="Instagram" htmlFor="instagram" />
 
           <InputMain.Input
             id="instagram"
@@ -100,6 +98,7 @@ const MyProfileForm = ({
           <InputMain.Label
             label="Your Photo"
             sublabel="This will be displayed on your profile."
+            htmlFor="avatar"
           />
           <div className="sm:col-span-2">
             <AvatarUpload
@@ -117,6 +116,7 @@ const MyProfileForm = ({
           <InputMain.Label
             label="Your Bio"
             sublabel="Write a short introduction."
+            htmlFor="bio"
           />
           <div className="mt-1 sm:mt-0 sm:col-span-2">
             <textarea

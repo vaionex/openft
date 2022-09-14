@@ -16,8 +16,6 @@ const SelectWImage = ({
   const [query, setQuery] = useState('')
   const [mounted, setMounted] = useState(false)
 
-  console.log(users)
-
   useEffect(() => {
     setMounted(true)
   }, [])

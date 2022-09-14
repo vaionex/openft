@@ -3,13 +3,15 @@ import React from 'react'
 import { connectPagination } from 'react-instantsearch-dom'
 import ReactPaginate from 'react-paginate'
 
-const NFTMarketplacePagination = ({ currentRefinement, nbPages, refine }) => {
+const NFTMarketplacePagination = ({
+  currentRefinement,
+  nbPages,
+  refine,
+  toTopRef,
+}) => {
   const handlePageClick = (data) => {
     refine(data.selected + 1)
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    toTopRef.current.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (

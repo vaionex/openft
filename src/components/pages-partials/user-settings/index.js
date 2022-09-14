@@ -52,6 +52,7 @@ const UserSettingsMain = () => {
         if (isExist) {
           setIsError(true)
           setErrorMessage('This username is already in use')
+          return false
         }
       }
       dispatch(

@@ -17,7 +17,7 @@ const ButtonWLoading = ({
         type={type}
         onClick={onClick}
         className={twMerge(
-          'w-full btn-primary transition-all duration-300 ease-in-out',
+          'w-full btn-primary cursor-pointer',
           isPending && 'cursor-not-allowed',
         )}
       >
@@ -34,13 +34,12 @@ const ButtonWLoading = ({
   return (
     <button
       type={type}
-      disabled={isError}
+      disabled={isPending}
       className={twMerge(
         'btn-primary py-2.5',
-        isError
+        isPending
           ? 'opacity-50 cursor-not-allowed pointer-events-none'
           : 'cursor-pointer',
-        isPending && 'pointer-events-none',
       )}
       onClick={onClick}
     >

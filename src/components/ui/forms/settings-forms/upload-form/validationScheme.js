@@ -10,7 +10,7 @@ const validationSchema = yup.object().shape({
     .typeError('Price must be a number')
     .required('Supply number is required')
     .moreThan(0, 'Supply number must be bigger then 0'),
-  price: yup
+  amount: yup
     .number()
     .typeError('Price must be a number')
     .required('Price is required')
