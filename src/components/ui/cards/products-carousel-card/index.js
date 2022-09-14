@@ -13,8 +13,6 @@ import userSelector from '@/redux/selectors/user'
 const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   const isInFirstThree = idx < 3
 
-  console.log(data)
-
   const { currentUser } = useSelector(userSelector)
   const [hasLike, setHasLike] = useState(false)
 

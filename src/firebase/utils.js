@@ -424,7 +424,7 @@ const firebaseAddDoc = async (collectionName, obj) => {
     const docRef = collection(firebaseDb, collectionName)
     const nftDoc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
     await firebaseUpdateDoc(collectionName, nftDoc.id, {
-      id: nftDoc.id,
+      uid: nftDoc.id,
     })
 
     return nftDoc
