@@ -47,7 +47,7 @@ const UploadForm = () => {
   const { control, handleSubmit, formState, reset, watch } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
-    // resolver,
+    resolver,
   })
 
   const { errors } = formState
