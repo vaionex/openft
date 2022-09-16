@@ -25,7 +25,7 @@ const UserSettingsMain = () => {
     if (currentUser) {
       setFormValues({
         username: currentUser?.username || '',
-        instagram: currentUser?.instagram || '',
+        instagram: currentUser?.socialLinks.instagram || '',
         jobTitle: currentUser?.jobTitle || '',
         bio: currentUser?.bio || '',
         showJobTitle: currentUser?.showJobTitle || false,

@@ -14,11 +14,15 @@ const inputAttributes = [
     type: 'password',
     placeholder: 'Choose a password',
     name: 'password',
+    title: 'Password',
+    required: true,
   },
   {
     type: 'password',
-    placeholder: 'Confirm password',
+    placeholder: 'Confirm your password',
     name: 'confirmPassword',
+    title: 'Confirm Password',
+    required: true,
   },
 ]
 
@@ -67,8 +71,14 @@ function RegistrationChoosePassword({ goToStep }) {
             {inputAttributes.map((inputAttribute) => (
               <InputMain
                 key={inputAttribute.name}
-                className="relative pb-0 border-none"
+                className="relative pb-0 border-none sm:gap-1"
               >
+                <InputMain.Label
+                  htmlFor={inputAttribute.name}
+                  className="text-sm font-medium text-gray-700"
+                  label={inputAttribute.title}
+                  required={inputAttribute.required}
+                />
                 <Controller
                   name={inputAttribute.name}
                   control={control}

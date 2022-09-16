@@ -2,11 +2,8 @@ import { useCallback, useState } from 'react'
 import Cropper from 'react-easy-crop'
 import ModalImgCropper from '../modal-img-cropper'
 import { v4 as uuidv4 } from 'uuid'
-
-import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { useDispatch } from 'react-redux'
-import { setPhotoValues } from '@/redux/slices/registration-form'
 
 const ImageCropper = ({
   id,
@@ -16,7 +13,6 @@ const ImageCropper = ({
   setIsCropping,
   setToState,
 }) => {
-  const dispatch = useDispatch()
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)

@@ -7,7 +7,7 @@ import AvatarWithName from '@/components/ui/avatars/avatar-w-name'
 import ImageCropper from '../image-cropper'
 import { checkValidation } from '@/utils/imageValidation'
 import getFileExt from '@/utils/getFileExt'
-import { firebaseDeleteImage, firebaseUploadImage } from '@/firebase/utils'
+import { firebaseDeleteImage, firebaseUploadUserImage } from '@/firebase/utils'
 import { useCallback } from 'react'
 import ModalConfirm from '../modal-confirm'
 import userSelector from '@/redux/selectors/user'
@@ -38,11 +38,10 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   const setImageState = async ({ id, file, croppedBlobFile }) => {
     setUploading(true)
     try {
-      await firebaseUploadImage({
+      await firebaseUploadUserImage({
         user: currentUser,
         imageFile: croppedBlobFile,
         imageType: id,
-        ext: file.ext,
       })
       setUploading(false)
     } catch (error) {
@@ -95,6 +94,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
                 className="rounded-box"
                 objectFit="cover"
                 layout="fill"
+                priority
               />
             ) : (
               <AvatarWithName name={currentUser?.name} />

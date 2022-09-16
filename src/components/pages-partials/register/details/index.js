@@ -9,10 +9,34 @@ import { UserCircleIcon } from '@/components/common/icons'
 import validationSchema from './validationScheme'
 
 const inputAttributes = [
-  { type: 'text', placeholder: 'Name', name: 'name' },
-  { type: 'text', placeholder: 'Username', name: 'username' },
-  { type: 'text', placeholder: 'Email', name: 'email' },
-  { type: 'text', placeholder: 'Role, e.g. Illustrator', name: 'role' },
+  {
+    type: 'text',
+    placeholder: 'e.g. John Smith',
+    name: 'name',
+    title: 'Name',
+    required: true,
+  },
+  {
+    type: 'text',
+    placeholder: 'e.g. johnsmith',
+    name: 'username',
+    title: 'Username',
+    required: true,
+  },
+  {
+    type: 'text',
+    placeholder: 'e.g. johnsmith@openft.com',
+    name: 'email',
+    title: 'Email',
+    required: true,
+  },
+  {
+    type: 'text',
+    placeholder: 'e.g. Illustrator',
+    name: 'role',
+    title: 'Role',
+    required: false,
+  },
 ]
 
 function RegistrationDetails({ goToStep }) {
@@ -51,8 +75,14 @@ function RegistrationDetails({ goToStep }) {
             {inputAttributes.map((inputAttribute) => (
               <InputMain
                 key={inputAttribute.name}
-                className="relative pb-0 border-none"
+                className="relative pb-0 border-none sm:gap-1"
               >
+                <InputMain.Label
+                  htmlFor={inputAttribute.name}
+                  className="text-sm font-medium text-gray-700 "
+                  label={inputAttribute.title}
+                  required={inputAttribute.required}
+                />
                 <Controller
                   name={inputAttribute.name}
                   control={control}
@@ -63,11 +93,15 @@ function RegistrationDetails({ goToStep }) {
                         placeholder={inputAttribute.placeholder}
                         className="mb-8 sm:mb-4"
                         type={inputAttribute.type}
+                        onInput={(e) => {
+                          e.target.value = e.target.value.replace(/\s/g, '')
+                        }}
                         {...field}
                       />
                     )
                   }}
                 />
+
                 <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
                   {errors[inputAttribute.name]?.message}
                 </span>
