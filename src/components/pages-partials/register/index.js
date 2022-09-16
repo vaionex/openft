@@ -57,54 +57,25 @@ const RegistrationFormMain = () => {
       ...socialsValues,
     }
 
-    await dispatch(
-      register({
-        dataForServer,
-        coverImageForUpload,
-        profileImageForUpload,
-      }),
-    )
+    try {
+      await dispatch(
+        register({
+          dataForServer,
+          coverImageForUpload,
+          profileImageForUpload,
+        }),
+      )
 
-    // await createwallet('default', dispatch)
-
-    dispatch(setPending(false))
-    document.body.style.pointerEvents = 'auto'
-    document.body.style.touchAction = 'auto'
-    router.push('/')
-
-    // .then(async ({ payload }) => {
-    //   const [coverImageURL, profileImageURL] = await Promise.all([
-    //     firebaseUploadUserImage({
-    //       user: payload,
-    //       imageFile: coverImageForUpload.file,
-    //       imageType: 'coverImage',
-    //       ext: photoValues.coverImage.ext,
-    //     }),
-    //     firebaseUploadUserImage({
-    //       user: payload,
-    //       imageFile: profileImageForUpload.file,
-    //       imageType: 'profileImage',
-    //       ext: photoValues.profileImage.ext,
-    //     }),
-    //   ])
-
-    //   console.log(coverImageURL, profileImageURL)
-
-    //   const wallet = await createwallet('default', dispatch)
-    //   if (!wallet) {
-    //     throw new Error('Failed to create wallet')
-    //   }
-
-    //   dispatch(setPending(false))
-    //   document.body.style.pointerEvents = 'auto'
-    //   document.body.style.touchAction = 'auto'
-    // })
-    // .catch((error) => {
-    //   dispatch(setPending(false))
-    //   document.body.style.pointerEvents = 'auto'
-    //   document.body.style.touchAction = 'auto'
-    //   alert(error.message)
-    // })
+      dispatch(setPending(false))
+      document.body.style.pointerEvents = 'auto'
+      document.body.style.touchAction = 'auto'
+      router.push('/')
+    } catch (error) {
+      console.alert(error.message)
+      dispatch(setPending(false))
+      document.body.style.pointerEvents = 'auto'
+      document.body.style.touchAction = 'auto'
+    }
   }
 
   /// registration end ///

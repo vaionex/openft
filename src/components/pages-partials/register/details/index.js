@@ -54,7 +54,6 @@ function RegistrationDetails({ goToStep }) {
   const { errors } = formState
 
   const onSubmit = (data) => {
-    console.log(data)
     dispatch(setDetailsValues(data))
     goToStep(2)
   }

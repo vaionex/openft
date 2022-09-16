@@ -42,7 +42,6 @@ function RegistrationAddSocials({ goToStep }) {
   })
 
   const onSubmit = async (data) => {
-    console.log(data)
     dispatch(setSocialsValues(data))
   }
 
