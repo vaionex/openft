@@ -20,6 +20,7 @@ const initialState = {
     instagram: '',
     website: '',
   },
+  readyToGo: false,
 }
 
 const registrationFormSlice = createSlice({
@@ -40,6 +41,7 @@ const registrationFormSlice = createSlice({
     },
     setSocialsValues: (state, action) => {
       state.socialsValues = action.payload
+      state.readyToGo = true
     },
 
     clearRegistrationForm: (state) => {

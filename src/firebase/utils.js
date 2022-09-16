@@ -96,7 +96,8 @@ const firebaseLogin = async ({ email, password, rememberMe }) => {
 }
 
 const firebaseRegister = async (data) => {
-  const { email, password, username, name } = data
+  const { coverImageForUpload, profileImageForUpload, dataForServer } = data
+  const { email, password, username, name } = dataForServer
   try {
     const response = await createUserWithEmailAndPassword(
       firebaseAuth,
@@ -126,9 +127,25 @@ const firebaseRegister = async (data) => {
       },
     }
     await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-    const createdUser = await firebaseGetUserInfoFromDb(user.uid)
+    const userFromDb = await firebaseGetUserInfoFromDb(user.uid).then(
+      async (user) => {
+        await firebaseUploadUserImage({
+          user,
+          imageFile: profileImageForUpload.file,
+          imageType: 'profileImage',
+        })
 
-    return createdUser
+        await firebaseUploadUserImage({
+          user,
+          imageFile: coverImageForUpload.file,
+          imageType: 'coverImage',
+        })
+      },
+    )
+
+    // console.log(profileImage, coverImage, 'images')
+
+    return userFromDb
   } catch (error) {
     console.log(error)
     return { error: error.message }
@@ -225,7 +242,7 @@ const firebaseUploadNftImage = async ({ file, userId }) => {
     const imagePath = `nfts/${userId}/${uuidv4()}`
     const fileRef = ref(firebaseStorage, imagePath)
     const metadata = {
-      contentType: file.ext,
+      contentType: `image/${file.ext}`,
     }
     const fileFromStorage = await uploadBytes(fileRef, file, metadata)
     const url = await getDownloadURL(fileRef)
@@ -236,20 +253,21 @@ const firebaseUploadNftImage = async ({ file, userId }) => {
   }
 }
 
-const firebaseUploadImage = async ({ user, imageFile, imageType, ext }) => {
-  if (user && imageFile) {
+const firebaseUploadUserImage = async ({ user, imageFile, imageType }) => {
+  if (!!user && !!imageFile) {
     const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
-    const imagePath = `${imageFolder}/${user.uid}.${ext}`
-    const storage = getStorage()
+    const imagePath = `${imageFolder}/${user.uid}`
     const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
     const userRef = doc(firebaseDb, 'users', user.uid)
-    const fileRef = ref(storage, imagePath)
-    const oldRef = ref(storage, userInfoFromDb[imageType])
+    const fileRef = ref(firebaseStorage, imagePath)
+    const oldRef = ref(firebaseStorage, userInfoFromDb[imageType])
 
     try {
       await uploadBytes(fileRef, imageFile)
 
-      const firebaseProfileURL = await getDownloadURL(ref(storage, imagePath))
+      const firebaseProfileURL = await getDownloadURL(
+        ref(firebaseStorage, imagePath),
+      )
       await updateProfile(user, { [imageType]: firebaseProfileURL })
 
       if (userInfoFromDb[imageType]) {
@@ -380,8 +398,6 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
   return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
 
-const firebaseGetNftProductsSearchResult = async (searchValue) => {}
-
 const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   const { minPrice, maxPrice } = priceRange
   const start = page > 1 && pageLimit * +page - pageLimit - 1
@@ -510,12 +526,11 @@ export {
   firebaseRegister,
   firebaseGetAuthorizedUser,
   firebaseLogout,
-  firebaseUploadImage,
+  firebaseUploadUserImage,
   firebaseUpdateProfile,
   firebaseLoginWithGoogle,
   firebaseGetUserInfoFromDb,
   firebaseGetNftProducts,
-  firebaseGetNftProductsSearchResult,
   firebaseGetFilteredNftProducts,
   firebaseIsUsernameExist,
   firebaseGetSingleDoc,

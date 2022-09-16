@@ -98,7 +98,7 @@ const Login = () => {
               layout="fill"
               quality={90}
               objectFit="cover"
-              priority={true}
+              priority
             />
             <LoginCarousel data={testimonials} />
           </div>

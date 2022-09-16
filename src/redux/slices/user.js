@@ -43,6 +43,7 @@ export const register = createAsyncThunk(
   async (request, thunkAPI) => {
     try {
       const user = await firebaseRegister(request)
+      console.log(user)
       if (user && !user?.error) return user
       else throw user?.error
     } catch (error) {
@@ -118,13 +119,11 @@ const userSlice = createSlice({
       state.isError = false
     },
     [register.rejected]: (state, action) => {
-      state.isPending = false
       state.isUserPending = false
       state.errorMessage = action.payload
       state.isError = true
     },
     [register.fulfilled]: (state, action) => {
-      state.isPending = false
       state.isUserPending = false
       state.currentUser = action.payload
     },

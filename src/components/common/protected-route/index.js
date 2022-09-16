@@ -2,6 +2,7 @@ import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import LoadingBars from '../loading-bars'
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isUserPending } = useSelector(userSelector)
@@ -28,7 +29,7 @@ const ProtectedRoute = ({ children }) => {
     (!isAuthenticated && routesWithAuth) ||
     (isAuthenticated && authRoute)
   ) {
-    return null
+    return <LoadingBars />
   }
 
   return <>{children}</>

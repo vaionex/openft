@@ -1,19 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable @next/next/no-img-element */
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '@/redux/slices/user'
 import { InputMain } from '@/components/ui/inputs'
 import { UsersCircleIcon } from '@/components/common/icons'
 import { Controller, useForm } from 'react-hook-form'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import { setSocialsValues } from '@/redux/slices/registration-form'
-import { firebaseUploadImage } from '@/firebase/utils'
-import getCroppedImg from '@/utils/cropImageUtils'
-import { twMerge } from 'tailwind-merge'
-import { createwallet } from '@/services/relysia-queries'
 import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '@/components/ui/button-w-loading'
 
@@ -42,65 +34,17 @@ const inputAttributes = [
 ]
 
 function RegistrationAddSocials({ goToStep }) {
-  const router = useRouter()
   const dispatch = useDispatch()
   const { isPending, isError } = useSelector(userSelector)
-  const registrationValues = useSelector(registrationFormSelector)
-  const { photoValues } = registrationValues
-  const { control, handleSubmit, formState } = useForm({
-    defaultValues: registrationValues.socialValues,
+  const { socialsValues } = useSelector(registrationFormSelector)
+  const { control, handleSubmit } = useForm({
+    defaultValues: socialsValues,
   })
 
   const onSubmit = async (data) => {
+    console.log(data)
     dispatch(setSocialsValues(data))
-
-    const dataForServer = {
-      ...registrationValues.detailsValues,
-      ...registrationValues.passwordValues,
-      ...data,
-    }
-
-    const coverImageForUpload = await getCroppedImg(
-      photoValues.coverImage,
-      photoValues.coverImage.croppedAreaPixels,
-    )
-    const profileImageForUpload = await getCroppedImg(
-      photoValues.profileImage,
-      photoValues.profileImage.croppedAreaPixels,
-    )
-
-    dispatch(register(dataForServer))
-      .then(async ({ payload }) => {
-        document.body.style.pointerEvents = 'auto'
-        document.body.style.touchAction = 'auto'
-        await firebaseUploadImage({
-          user: payload,
-          imageFile: coverImageForUpload.file,
-          imageType: 'coverImage',
-          ext: photoValues.coverImage.ext,
-        })
-        await firebaseUploadImage({
-          user: payload,
-          imageFile: profileImageForUpload.file,
-          imageType: 'profileImage',
-          ext: photoValues.profileImage.ext,
-        })
-        await createwallet('default', dispatch)
-      })
-      .catch((error) => {
-        alert(error.message)
-      })
-      .finally(() => {
-        router.push('/')
-      })
   }
-
-  useEffect(() => {
-    if (isPending) {
-      document.body.style.pointerEvents = 'none'
-      document.body.style.touchAction = 'none'
-    }
-  }, [isPending])
 
   return (
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
@@ -132,6 +76,9 @@ function RegistrationAddSocials({ goToStep }) {
                       placeholder={inputAttribute.placeholder}
                       className="mb-8 sm:mb-4"
                       type={inputAttribute.type}
+                      onInput={(e) => {
+                        e.target.value = e.target.value.replace(/\s/g, '')
+                      }}
                       {...field}
                     />
                   )}
