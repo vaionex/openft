@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     if (routesWithAuth && !isAuthenticated && !isUserPending) {
-      routesWithAuth && !isAuthenticated && router.push('/login')
+      router.push('/login')
     }
 
     if (authRoute && isAuthenticated && !isUserPending) {

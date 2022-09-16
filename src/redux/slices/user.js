@@ -131,6 +131,7 @@ const userSlice = createSlice({
       state.isPending = true
       state.errorMessage = null
       state.isError = false
+      state.isUserPending = true
     },
     [logout.rejected]: (state, action) => {
       state.isPending = false

@@ -476,11 +476,14 @@ const firebaseGetAuthorizedUser = () => {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
       store.dispatch(setUserData(user))
       store.dispatch(setAuthenticated(true))
+      store.dispatch(setUserPending(false))
     } else {
       console.log('not auth')
       store.dispatch(setAuthenticated(false))
+      setTimeout(() => {
+        store.dispatch(setUserPending(false))
+      }, 1000)
     }
-    store.dispatch(setUserPending(false))
   })
 
   return fn
