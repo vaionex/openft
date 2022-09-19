@@ -10,7 +10,9 @@ const ProtectedRoute = ({ children }) => {
   const router = useRouter()
 
   const authRoute =
-    router.pathname === '/register' || router.pathname === '/login'
+    router.pathname === '/register' ||
+    router.pathname === '/login' ||
+    router.pathname === '/reset-password'
 
   const routesWithAuth = router.pathname.includes('user-settings')
 

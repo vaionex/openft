@@ -36,6 +36,7 @@ import {
   setPersistence,
   browserLocalPersistence,
   browserSessionPersistence,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import store from '@/redux/store'
 import {
@@ -224,7 +225,7 @@ const firebaseLoginWithGoogle = async () => {
   }
 }
 
-const firebaseResetPassword = async (user, newPassword) => {
+const firebaseChangePassword = async (user, newPassword) => {
   try {
     await updatePassword(user, newPassword)
 
@@ -233,6 +234,17 @@ const firebaseResetPassword = async (user, newPassword) => {
     console.log(error)
     return {
       error: error.message,
+    }
+  }
+}
+
+const firebaseResetPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(firebaseAuth, email)
+    return { success: true, message: 'Password reset email sent.' }
+  } catch (error) {
+    return {
+      error: true,
     }
   }
 }
@@ -532,6 +544,8 @@ export {
   firebaseUploadUserImage,
   firebaseUpdateProfile,
   firebaseLoginWithGoogle,
+  firebaseChangePassword,
+  firebaseResetPassword,
   firebaseGetUserInfoFromDb,
   firebaseGetNftProducts,
   firebaseGetFilteredNftProducts,

@@ -43,7 +43,7 @@ function LoginForm() {
   }
 
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <div className="flex justify-center pt-2">
         {error && <Alert message={error} type="error" />}
       </div>
@@ -107,7 +107,7 @@ function LoginForm() {
         />
 
         <div className="text-sm">
-          <NextLink href="/forgot-password">
+          <NextLink href="/reset-password">
             <a className="font-medium text-blue-700">Forgot password</a>
           </NextLink>
         </div>
@@ -118,7 +118,7 @@ function LoginForm() {
           isError={error}
           isPending={isPending}
           text="Sign In"
-          onClick={handleSubmit}
+          type="submit"
           fullWidth
         />
       </div>

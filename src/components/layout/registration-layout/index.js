@@ -19,7 +19,7 @@ const RegistrationLayout = ({ children }) => {
           <div className="px-4 mx-auto md:hidden sm:px-6 lg:px-8">
             <NextLink href="/">
               <a className="inline-block mt-10">
-                <span className="sr-only">Workflow</span>
+                <span className="sr-only">Openft Logo</span>
                 <Logo />
               </a>
             </NextLink>
