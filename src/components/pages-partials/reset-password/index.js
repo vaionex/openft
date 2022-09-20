@@ -76,11 +76,11 @@ const ResetPasswordMain = () => {
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <UsersCircleIcon className="w-auto mx-auto rounded-full h-14" />
             <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-              Add your socials
+              Reset your password
             </h2>
             <p className="mt-4 text-center">
-              You are welcome to link to your own webpage <br /> with more
-              details.
+              Please enter your email address and we&apos;ll send you a magic
+              link to reset your password.
             </p>
           </div>
           <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
