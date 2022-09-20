@@ -1,4 +1,5 @@
 export { default as CopyDIcon } from './copy-d-icon'
+export { default as EmailSentIcon } from './email-sent-icon'
 export { default as GoogleIcon } from './google-icon'
 export { default as HomeIcon } from './home-icon'
 export { default as ImageUploadedIcon } from './image-uploaded-icon'
