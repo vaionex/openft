@@ -94,7 +94,11 @@ function RegistrationDetails({ goToStep }) {
                         className="mb-8 sm:mb-4"
                         type={inputAttribute.type}
                         onInput={(e) => {
-                          e.target.value = e.target.value.replace(/\s/g, '')
+                          console.log(e.target.name)
+                          const removeWhiteSpace = ['username', 'email']
+                          if (removeWhiteSpace.includes(e.target.name)) {
+                            e.target.value = e.target.value.replace(/\s/g, '')
+                          }
                         }}
                         {...field}
                       />

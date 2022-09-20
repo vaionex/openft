@@ -144,8 +144,6 @@ const firebaseRegister = async (data) => {
       },
     )
 
-    // console.log(profileImage, coverImage, 'images')
-
     return userFromDb
   } catch (error) {
     console.log(error)
