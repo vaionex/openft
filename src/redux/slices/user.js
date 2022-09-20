@@ -41,6 +41,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
 export const register = createAsyncThunk(
   'user/signupUser',
   async (request, thunkAPI) => {
+    console.log(request)
     try {
       const user = await firebaseRegister(request)
       if (user && !user?.error) {

@@ -122,9 +122,9 @@ const firebaseRegister = async (data) => {
       profileImage: null,
       coverImage: null,
       socialLinks: {
-        facebook: data.facebook || '',
-        instagram: data.instagram || '',
-        website: data.website || '',
+        facebook: dataForServer.facebook || '',
+        instagram: dataForServer.instagram || '',
+        website: dataForServer.website || '',
       },
     }
     await setDoc(doc(firebaseDb, 'users', user.uid), infos)
@@ -147,7 +147,7 @@ const firebaseRegister = async (data) => {
     return userFromDb
   } catch (error) {
     console.log(error)
-    return { error: error.message }
+    return error.message
   }
 }
 

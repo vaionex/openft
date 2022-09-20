@@ -17,7 +17,7 @@ const RegistrationFormMain = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const step = router.query.step ?? '1'
-  const { isPending, isError } = useSelector(userSelector)
+  const { isPending, isError, errorMessage } = useSelector(userSelector)
   const {
     detailsValues,
     socialsValues,
@@ -65,6 +65,11 @@ const RegistrationFormMain = () => {
           profileImageForUpload,
         }),
       )
+
+      if (isError) {
+        setPending(false)
+        throw new Error(errorMessage)
+      }
 
       dispatch(setPending(false))
       document.body.style.pointerEvents = 'auto'

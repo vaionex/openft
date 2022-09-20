@@ -9,11 +9,13 @@ const usernameRegex = /^[a-z0-9]+$/
 const validationSchema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .matches(nameRegex, 'Please enter only letters')
     .required('Name is required')
     .min(2, 'Name must be at least 2 characters long'),
   username: yup
     .string()
+    .trim()
     .matches(usernameRegex, 'Please enter only lowercase letters and numbers')
     .test({
       name: 'is-username-in-use',
@@ -33,6 +35,7 @@ const validationSchema = yup.object().shape({
     .required('Username is required'),
   email: yup
     .string()
+    .trim()
     .matches(emailRegex, 'Email is not valid')
     .test({
       name: 'is-email-in-use',
