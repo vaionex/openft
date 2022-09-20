@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import NextLink from 'next/link'
+import { KeyIcon } from '@heroicons/react/outline'
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
@@ -74,7 +75,7 @@ const ResetPasswordMain = () => {
       ) : (
         <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
-            <UsersCircleIcon className="w-auto mx-auto rounded-full h-14" />
+            <KeyIcon className="w-auto p-3 mx-auto text-blue-600 rounded-full bg-blue-50 h-14" />
             <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
               Reset your password
             </h2>
