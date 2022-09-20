@@ -111,7 +111,7 @@ const UploadForm = () => {
       const blockchainResponse = await uploadNFTFile(fileToChain)
       if (!blockchainResponse) {
         throw new Error(
-          'Failed to upload file to blockchain, please refresh the page and try again',
+          'Failed to upload file to blockchain, please press "Save" again',
         )
       }
       const {

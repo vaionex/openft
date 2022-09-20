@@ -252,7 +252,7 @@ const firebaseUploadNftImage = async ({ file, userId }) => {
     const imagePath = `nfts/${userId}/${uuidv4()}`
     const fileRef = ref(firebaseStorage, imagePath)
     const metadata = {
-      contentType: `image/${file.ext}`,
+      contentType: file.type,
     }
     const fileFromStorage = await uploadBytes(fileRef, file, metadata)
     const url = await getDownloadURL(fileRef)

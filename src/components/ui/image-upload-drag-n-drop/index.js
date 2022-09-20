@@ -48,7 +48,7 @@ const ImageUploadDragAndDrop = ({
     cleanUpState()
     const imageFile = files[0]
     const errorObjects = await validateImage(imageFile)
-    console.log(errorObjects)
+
     if (!errorObjects) {
       const createFileUrl = URL.createObjectURL(imageFile)
       setSelectedImage({
