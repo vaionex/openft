@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
-  { name: 'Contribute', href: '/contribute' },
+  { name: 'Contact', href: '/contact' },
 ]
 
 const Header = () => {
