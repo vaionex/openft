@@ -208,7 +208,7 @@ InputMain.Input = function InputMainInput(
 InputMain.Input = forwardRef(InputMain.Input)
 
 InputMain.Textarea = function InputMainTextarea(
-  { id, className, textareaClassName, row, error, ...props },
+  { id, className, textareaClassName, rows, error, ...props },
   ref,
 ) {
   return (
@@ -223,6 +223,7 @@ InputMain.Textarea = function InputMainTextarea(
             props.disabled && 'bg-gray-50',
           )}
           onChange={props.onChange}
+          rows={rows}
           ref={ref}
           {...props}
         />
