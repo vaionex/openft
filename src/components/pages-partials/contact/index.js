@@ -1,12 +1,12 @@
 import SharedLayout from '@/components/layout/shared-layout'
 import Form from './form'
 
-const ContributePageMain = () => {
+const ContactPageMain = () => {
   return (
-    <SharedLayout title="Contribute">
+    <SharedLayout title="Contact">
       <Form />
     </SharedLayout>
   )
 }
 
-export default ContributePageMain
+export default ContactPageMain
