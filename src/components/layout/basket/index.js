@@ -119,8 +119,8 @@ export default function Basket() {
                       <div className="py-6">
                         <div className="h-[1px] bg-gray-200"></div>
                       </div>
-                      <div className="mt-8 h-full">
-                        <div className="h-[50%] overflow-y-scroll">
+                      <div className="mt-8 ">
+                        <div className="overflow-y-scroll">
                           <ul
                             role="list"
                             className="flex flex-col space-y-3 divide-gray-200"
