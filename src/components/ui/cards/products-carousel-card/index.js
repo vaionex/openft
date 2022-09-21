@@ -7,14 +7,37 @@ import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import CardLikeButton from '../../card-like-button'
 import NextLink from 'next/link'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
+import { useRouter } from 'next/router'
+
+import { addBasket, setOpen } from '@/redux/slices/basket'
+import basketSelector from '@/redux/selectors/basket'
 
 const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   const isInFirstThree = idx < 3
-
+  const router = useRouter()
   const { currentUser } = useSelector(userSelector)
   const [hasLike, setHasLike] = useState(false)
+  const { basket } = useSelector(basketSelector)
+
+  const dispatch = useDispatch()
+
+  const updateBasket = () => {
+    if (currentUser) {
+      dispatch(
+        addBasket({
+          [data.objectID]: {
+            qty: 1,
+            ...data,
+          },
+        }),
+      )
+      dispatch(setOpen(true))
+    } else {
+      router.replace('/login')
+    }
+  }
 
   useEffect(() => {
     if (!favouriteNfts) return
@@ -92,11 +115,13 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
           </NextLink>
         </div>
         <div className="flex gap-1.5">
-          <NextLink href={`/discover/${data?.uid}`}>
-            <a className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal">
-              Buy now
-            </a>
-          </NextLink>
+          <button
+            onClick={updateBasket}
+            className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal"
+          >
+            Buy now
+          </button>
+
           <button className="p-3.5 rounded-md border border-gray-200">
             <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" />
           </button>
