@@ -14,11 +14,12 @@ import Spinner from '@/components/ui/spinner'
 
 const SecurityForm = () => {
   const [msg, setMsg] = useState(null)
+  const [buttonStatus, setButtonStatus] = useState(false)
   const auth = getAuth()
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, formState, reset } = useForm({
+  const { control, handleSubmit, formState, reset, getValues } = useForm({
     mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
     resolver,
   })
   const { isSubmitting, isValid, errors } = formState
@@ -28,6 +29,7 @@ const SecurityForm = () => {
       auth.currentUser.email,
       password,
     )
+
     await reauthenticateWithCredential(auth.currentUser, credential)
       .then(async () => {
         await updatePassword(auth.currentUser, newPassword)
@@ -47,6 +49,23 @@ const SecurityForm = () => {
         }),
       )
   }
+
+  const changeHandler = () => {
+    const newPassword = getValues('newPassword')
+    const confirmPassword = getValues('confirmPassword')
+    const passRegx = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+    const regex = new RegExp(passRegx)
+    if (
+      regex.test(newPassword) &&
+      regex.test(confirmPassword) &&
+      newPassword === confirmPassword
+    ) {
+      setButtonStatus(true)
+    } else {
+      setButtonStatus(false)
+    }
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -65,7 +84,6 @@ const SecurityForm = () => {
                   id="password"
                   className="sm:col-span-2"
                   placeholder="Enter your current password"
-                  onChange={() => {}}
                   {...field}
                 />
               )
@@ -87,8 +105,11 @@ const SecurityForm = () => {
                   inputType={'password'}
                   className="sm:col-span-2"
                   placeholder="Enter new password"
-                  onChange={() => {}}
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    changeHandler()
+                  }}
                 />
               )
             }}
@@ -116,8 +137,11 @@ const SecurityForm = () => {
                   inputType={'password'}
                   className="sm:col-span-2"
                   placeholder="Confirm new password"
-                  onChange={() => {}}
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    changeHandler()
+                  }}
                 />
               )
             }}
@@ -160,6 +184,7 @@ const SecurityForm = () => {
         </button>
         <button
           type="submit"
+          disabled={buttonStatus ? false : true}
           className={`py-2.5 font-semibold relative ${
             isSubmitting ? 'btn-secondary pr-10' : 'btn-primary'
           }`}
