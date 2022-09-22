@@ -22,7 +22,7 @@ const defaultProps = {
   indexName: 'nfts',
 }
 
-const debounceTime = 700
+const debounceTime = 1000
 export default function DiscoverPage(props) {
   const { page, seoProps, ...restProps } = props
   const router = useRouter()

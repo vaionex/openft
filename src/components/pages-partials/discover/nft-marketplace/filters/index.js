@@ -1,7 +1,18 @@
+import React from 'react'
 import NFTMarketplaceAmountFilter from './amounts'
 import NftMarketplaceArtistFilter from './artists'
+import { ClearRefinements } from 'react-instantsearch-dom'
+import CustomClearRefinements from './clear'
 
 const NFTMarketplaceFilters = () => {
+  const onArtistFilter = React.useRef()
+  const onAmountFilter = React.useRef()
+
+  const handleSubmit = () => {
+    onAmountFilter.current()
+    onArtistFilter.current()
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="relative hidden lg:block">
@@ -13,12 +24,27 @@ const NFTMarketplaceFilters = () => {
           <h3 className="px-3 font-medium text-gray-900 bg-white">Filters</h3>
         </div>
       </div>
-      <ul role="list" className="divide-y divide-gray-200">
-        <li className="pb-8">
-          <NftMarketplaceArtistFilter attribute="userId" />
+      <ul role="list" className="space-y-6 divide-y divide-gray-200">
+        <li>
+          <NftMarketplaceArtistFilter
+            attribute="userId"
+            onArtistFilter={onArtistFilter}
+          />
         </li>
-        <li className="pt-8">
-          <NFTMarketplaceAmountFilter attribute="amount" />
+        <li className="pt-6">
+          <NFTMarketplaceAmountFilter
+            attribute="amount"
+            onAmountFilter={onAmountFilter}
+          />
+        </li>
+        <li className="flex gap-4 leading-[12px] pt-6">
+          <CustomClearRefinements />
+          <button
+            className="py-2 text-sm font-semibold lg:w-full btn-primary"
+            onClick={handleSubmit}
+          >
+            Apply Filters
+          </button>
         </li>
       </ul>
     </div>

@@ -3,7 +3,12 @@ import { firebaseGetUserInfoFromDb } from '@/firebase/utils'
 import React, { useEffect, useState } from 'react'
 import { connectRefinementList } from 'react-instantsearch-dom'
 
-const NftMarketplaceArtistFilter = ({ items, refine }) => {
+const NftMarketplaceArtistFilter = ({
+  items,
+  refine,
+  onArtistFilter,
+  currentRefinement,
+}) => {
   const [artists, setArtists] = React.useState([])
   const [selectedUser, setSelectedUser] = React.useState(null)
 
@@ -12,10 +17,7 @@ const NftMarketplaceArtistFilter = ({ items, refine }) => {
     return user
   }
 
-  const clearSelectedUser = () => {
-    setSelectedUser(null)
-    refine([])
-  }
+  const clearSelectedUser = () => setSelectedUser(null)
 
   useEffect(() => {
     const getArtists = async () => {
@@ -25,6 +27,7 @@ const NftMarketplaceArtistFilter = ({ items, refine }) => {
             item.label,
           )
           return {
+            isRefined: item.isRefined,
             name,
             profileImage,
             username,
@@ -40,10 +43,23 @@ const NftMarketplaceArtistFilter = ({ items, refine }) => {
   }, [items])
 
   useEffect(() => {
-    if (selectedUser) {
-      refine(selectedUser.userId)
+    if (currentRefinement.length > 0 && !selectedUser) {
+      const selectedUserFromQuery = artists.filter((item) => item.isRefined)
+      setSelectedUser(selectedUserFromQuery[0])
     }
-  }, [selectedUser])
+
+    if (currentRefinement.length === 0 && selectedUser) {
+      clearSelectedUser()
+    }
+  }, [artists, currentRefinement])
+
+  useEffect(() => {
+    onArtistFilter.current = () => {
+      if (selectedUser) {
+        refine(selectedUser.userId)
+      }
+    }
+  }, [selectedUser, refine])
 
   return (
     <div className="flex flex-col gap-4">

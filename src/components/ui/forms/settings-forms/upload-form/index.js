@@ -121,7 +121,7 @@ const UploadForm = () => {
       const dataToMint = {
         name: formData.name,
         description: formData.description,
-        amount: formData.amount,
+        amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
       }
