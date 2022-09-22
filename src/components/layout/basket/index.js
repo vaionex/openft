@@ -14,9 +14,9 @@ export default function Basket() {
   const [total, setTotal] = useState(0)
   const dispatch = useDispatch()
 
-  const removeFromBasket = (objectID) => {
+  const removeFromBasket = (uid) => {
     const newItemList = Object.keys(basket).reduce((prev, current) => {
-      if (current !== objectID) {
+      if (current !== uid) {
         return { ...prev, [current]: basket[current] }
       } else {
         return { ...prev }
@@ -170,7 +170,7 @@ export default function Basket() {
                                       <div>
                                         <button
                                           onClick={() =>
-                                            removeFromBasket(product.objectID)
+                                            removeFromBasket(product.uid)
                                           }
                                           className="h-6 w-6"
                                         >

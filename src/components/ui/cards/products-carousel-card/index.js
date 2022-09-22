@@ -27,7 +27,7 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
     if (currentUser) {
       dispatch(
         addBasket({
-          [data.objectID]: {
+          [data.uid]: {
             qty: 1,
             ...data,
           },
