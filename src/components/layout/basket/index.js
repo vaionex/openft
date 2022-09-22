@@ -189,25 +189,28 @@ export default function Basket() {
                       </div>
                     </div>
 
-                    <div className="px-4 sm:px-6">
-                      <InputMain className="relative pb-0 border-none sm:gap-1">
+                    <div className="px-4 sm:px-6 flex ">
+                      <InputMain className="relative pb-0 border-none sm:gap-1 w-full">
                         <InputMain.Label
                           htmlFor={'discount'}
                           className="text-base font-medium text-gray-900"
                           label={'Discount code'}
                         />
-
-                        <InputMain.Input
-                          id={'discount'}
-                          placeholder={''}
-                          className="mb-8 sm:mb-4"
-                          type={'text'}
-                        />
-
-                        {/* <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
-                  {errors[inputAttribute.name]?.message}
-                </span> */}
+                        <div className="flex space-x-2">
+                          <InputMain.Input
+                            id={'discount'}
+                            placeholder={''}
+                            className="mb-8 sm:mb-4 w-full"
+                            type={'text'}
+                          />
+                          <button className="h-full text-base font-medium py-1.5 px-4 border-2 rounded-md border-blue-500 text-blue-600 transition duration-200 hover:bg-blue-500 hover:text-white">
+                            Apply
+                          </button>
+                        </div>
                       </InputMain>
+                    </div>
+                    <div className="py-4 px-4 sm:px-6">
+                      <div className="h-[1px] bg-gray-200"></div>
                     </div>
                     <div className="flex flex-col text-base font-medium text-gray-900 px-4 sm:px-6">
                       <div className="py-2 flex justify-between">
