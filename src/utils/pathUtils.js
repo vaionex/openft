@@ -8,10 +8,12 @@ const pathToSearchState = (path) => {
     : {}
 }
 
-const searchStateToURL = (location, searchState) => {
+const searchStateToURL = (router, searchState) => {
+  console.log(searchState, 'searchState')
+
   const { configure, ...restSearchState } = searchState
   return searchState
-    ? `${location.pathname}?${qs.stringify(restSearchState)}`
+    ? `${router.pathname}?${qs.stringify(restSearchState)}`
     : ''
 }
 

@@ -3,12 +3,8 @@ import { firebaseGetUserInfoFromDb } from '@/firebase/utils'
 import React, { useEffect, useState } from 'react'
 import { connectRefinementList } from 'react-instantsearch-dom'
 
-const NftMarketplaceArtistFilter = ({
-  items,
-  refine,
-  onArtistFilter,
-  currentRefinement,
-}) => {
+const NftMarketplaceArtistFilter = (props) => {
+  const { items, refine, onArtistFilter, currentRefinement } = props
   const [artists, setArtists] = React.useState([])
   const [selectedUser, setSelectedUser] = React.useState(null)
 

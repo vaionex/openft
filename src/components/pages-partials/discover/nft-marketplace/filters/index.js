@@ -1,7 +1,12 @@
 import React from 'react'
 import NFTMarketplaceAmountFilter from './amounts'
 import NftMarketplaceArtistFilter from './artists'
-import { ClearRefinements } from 'react-instantsearch-dom'
+import {
+  connectConfigure,
+  connectCurrentRefinements,
+  connectStateResults,
+  connectToggleRefinement,
+} from 'react-instantsearch-dom'
 import CustomClearRefinements from './clear'
 
 const NFTMarketplaceFilters = () => {
@@ -9,8 +14,11 @@ const NFTMarketplaceFilters = () => {
   const onAmountFilter = React.useRef()
 
   const handleSubmit = () => {
-    onAmountFilter.current()
     onArtistFilter.current()
+
+    setTimeout(() => {
+      onAmountFilter.current()
+    }, 500)
   }
 
   return (
