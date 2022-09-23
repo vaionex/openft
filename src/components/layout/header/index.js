@@ -1,15 +1,23 @@
 import NextLink from 'next/link'
 import { Popover } from '@headlessui/react'
-import { BellIcon, CogIcon, MenuIcon } from '@heroicons/react/outline'
+import {
+  BellIcon,
+  CogIcon,
+  MenuIcon,
+  ShoppingCartIcon,
+} from '@heroicons/react/outline'
 import MobileNav from '../mobile/nav'
 import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { UploadBoxIcon } from '@/components/common/icons'
-import { connect, useSelector } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
+import Basket from '../basket'
+import basketSelector from '@/redux/selectors/basket'
+import { setOpen } from '@/redux/slices/basket'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -19,6 +27,9 @@ const navigation = [
 
 const Header = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const { open } = useSelector(basketSelector)
+  const dispatch = useDispatch()
+
   const router = useRouter()
 
   return (
@@ -57,7 +68,7 @@ const Header = () => {
               ))}
             </div>
           </div>
-
+          <Basket open={open} setOpen={setOpen} />
           <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="/login">
@@ -85,6 +96,14 @@ const Header = () => {
                       <CogIcon className="w-6 h-6" aria-hidden="true" />
                     </a>
                   </NextLink>
+                </li>
+                <li className="inline-flex">
+                  <button
+                    onClick={() => dispatch(setOpen(true))}
+                    className="inline-block p-3 text-base font-medium hover:bg-gray-50 hover:text-gradient-primary-hover"
+                  >
+                    <ShoppingCartIcon className="w-6 h-6" aria-hidden="true" />
+                  </button>
                 </li>
                 <li className="inline-flex">
                   <NextLink href="/user-settings">
