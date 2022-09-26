@@ -158,68 +158,39 @@ const firebaseLogout = async () => {
 
 const firebaseLoginWithGoogle = async () => {
   try {
-    const firebaseGoogleProvider = new GoogleAuthProvider()
-    firebaseGoogleProvider.setCustomParameters({
-      prompt: 'select_account',
-    })
-    const userInfo = await signInWithPopup(firebaseAuth, firebaseGoogleProvider)
-      .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result)
-        const token = credential?.accessToken
-        // The signed-in user info.
-        const user = result.user
-        let fileRef = ref(
-          firebaseStorage,
-          `profiles/${user.uid}_256x256?alt=media`,
-        )
-        if (user.photoURL) {
-          await uploadBytes(fileRef, user.photoURL)
-        }
-        const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
-        if (!userInfoFromDb) {
-          const infos = {
-            displayName: user.displayName,
-            email: user.email,
-            uid: user.uid,
-            photoPATH: null,
-            createdAt: user.metadata.creationTime,
-          }
-
-          await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-          store.dispatch(
-            setUserData({
-              name: user.displayName,
-              uid: user.uid,
-              email: user.email,
-              photoURL: user.photoURL,
-            }),
-          )
-        } else {
-          store.dispatch(
-            setUserData({
-              name: user.displayName,
-              uid: user.uid,
-              email: user.email,
-              photoURL: user.photoURL,
-            }),
-          )
-        }
-        return { credential, token, user }
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code
-        const errorMessage = error.message
-        // The email of the user's account used.
-        const email = error.email
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error)
-        console.error({ errorCode, errorMessage, email, credential })
-      })
-    return userInfo?.user
+    const provider = new GoogleAuthProvider()
+    const { user } = await signInWithPopup(firebaseAuth, provider)
+    const userFromDb = await firebaseGetUserInfoFromDb(user.uid)
+    if (userFromDb) {
+      store.dispatch(setAuthenticated(!!user))
+      return userFromDb
+    } else {
+      const checkUsername = await firebaseIsUsernameExist(
+        user.email.split('@')[0],
+      )
+      const infos = {
+        displayName: user.displayName,
+        name: user.displayName,
+        email: user.email,
+        username: checkUsername ? '' : user.email.split('@')[0],
+        uid: user.uid,
+        createdAt: user.metadata.creationTime,
+        profileImage: user.photoURL,
+        coverImage: null,
+        bio: '',
+        jobTitle: '',
+        showJobTitle: false,
+        socialLinks: {
+          facebook: '',
+          instagram: '',
+          website: '',
+        },
+      }
+      await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+      return infos
+    }
   } catch (error) {
-    console.error(error)
+    return { error: 'Incorrect email or password.' }
   }
 }
 
@@ -451,12 +422,12 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
 const firebaseAddDoc = async (collectionName, obj) => {
   try {
     const docRef = collection(firebaseDb, collectionName)
-    const nftDoc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
-    await firebaseUpdateDoc(collectionName, nftDoc.id, {
-      uid: nftDoc.id,
+    const doc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
+    await firebaseUpdateDoc(collectionName, doc.id, {
+      uid: doc.id,
     })
 
-    return nftDoc
+    return doc
   } catch (error) {
     console.error(error.message)
   }
