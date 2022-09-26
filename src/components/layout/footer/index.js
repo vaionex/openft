@@ -2,11 +2,10 @@ import { Logo } from '@/components/common/svgs'
 import NextLink from 'next/link'
 
 const navigation = [
-  { name: 'Home', href: '#' },
-  { name: 'Discover', href: '#' },
-  { name: 'Contribute', href: '#' },
+  { name: 'Home', href: '/' },
+  { name: 'Discover', href: '/discover' },
   { name: 'FAQ', href: '#' },
-  { name: 'Contact', href: '#' },
+  { name: 'Contact', href: '/contact' },
   { name: 'Privacy', href: '#' },
 ]
 
