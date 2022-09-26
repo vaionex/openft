@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {
   firebaseLogin,
+  firebaseLoginWithGoogle,
   firebaseLogout,
   firebaseRegister,
   firebaseUpdateProfile,
@@ -48,6 +49,19 @@ export const register = createAsyncThunk(
         await createwallet()
         return user
       } else throw user?.error
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
+export const loginWithGoogle = createAsyncThunk(
+  'auth/loginWithGoogle',
+  async (_, thunkAPI) => {
+    try {
+      const user = await firebaseLoginWithGoogle()
+      if (user && !user?.error) return user
+      else throw user?.error
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -167,6 +181,22 @@ const userSlice = createSlice({
       state.isUserPending = false
       state.currentUser = action.payload
       state.isSuccess = true
+    },
+    [loginWithGoogle.pending]: (state) => {
+      state.isPending = true
+      state.errorMessage = null
+      state.isError = false
+    },
+    [loginWithGoogle.rejected]: (state, action) => {
+      state.isPending = false
+      state.isUserPending = false
+      state.errorMessage = action.payload
+      state.isError = true
+    },
+    [loginWithGoogle.fulfilled]: (state, action) => {
+      state.isPending = false
+      state.isUserPending = false
+      state.currentUser = action.payload
     },
   },
 })
