@@ -1,4 +1,8 @@
+export { default as BlockIcon } from './block-icon'
+export { default as CodeIcon } from './code-icon'
 export { default as CopyDIcon } from './copy-d-icon'
+export { default as DirectionIcon } from './direction-icon'
+export { default as DocIcon } from './doc-icon'
 export { default as EmailSentIcon } from './email-sent-icon'
 export { default as GoogleIcon } from './google-icon'
 export { default as HomeIcon } from './home-icon'
