@@ -110,8 +110,8 @@ const FAQMain = () => {
           aria-labelledby="faq-contact"
           className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
         >
-          <div className="relative overflow-hidden rounded-lg">
-            <div className="absolute inset-0">
+          <div className="relative overflow-hidden rounded-lg ">
+            <div className="absolute inset-0 bg-gray-900">
               <Image
                 src="/images/faq-bottom.jpg"
                 alt=""
