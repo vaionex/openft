@@ -9,6 +9,7 @@ const ButtonWLoading = ({
   onClick,
   fullWidth,
   type,
+  ...props
 }) => {
   if (fullWidth) {
     return (
@@ -20,6 +21,7 @@ const ButtonWLoading = ({
           'w-full btn-primary cursor-pointer',
           isPending && 'cursor-not-allowed',
         )}
+        {...props}
       >
         <span className="relative flex items-center">
           {text}
@@ -42,6 +44,7 @@ const ButtonWLoading = ({
           : 'cursor-pointer',
       )}
       onClick={onClick}
+      {...props}
     >
       {text}
       {isPending && (
