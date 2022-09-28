@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import NextLink from 'next/link'
 import { InputMain } from '@/components/ui/inputs'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { useForm, Controller } from 'react-hook-form'
@@ -9,16 +10,18 @@ import {
   EmailAuthProvider,
   getAuth,
 } from 'firebase/auth'
-import Alert from '@/components/ui/alert'
-import Spinner from '@/components/ui/spinner'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
 const SecurityForm = () => {
-  const [msg, setMsg] = useState(null)
+  const [msg, setMsg] = useState({
+    type: '',
+    content: '',
+  })
   const auth = getAuth()
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState, reset } = useForm({
     mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
     resolver,
   })
   const { isSubmitting, isValid, errors } = formState
@@ -28,6 +31,7 @@ const SecurityForm = () => {
       auth.currentUser.email,
       password,
     )
+
     await reauthenticateWithCredential(auth.currentUser, credential)
       .then(async () => {
         await updatePassword(auth.currentUser, newPassword)
@@ -43,17 +47,18 @@ const SecurityForm = () => {
       .catch((err) =>
         setMsg({
           type: 'error',
-          content: 'Please enter your previous password correctly',
+          content: 'Current password is incorrect',
         }),
       )
   }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-8 divide-y divide-gray-200"
     >
       <div className="py-6 border-b border-b-gray-200">
-        <InputMain className="border-none relative sm:grid-cols-1 sm:gap-2">
+        <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="Your password" htmlFor="password" />
           <Controller
             name={'password'}
@@ -65,17 +70,14 @@ const SecurityForm = () => {
                   id="password"
                   className="sm:col-span-2"
                   placeholder="Enter your current password"
-                  onChange={() => {}}
+                  error={errors.password?.message}
                   {...field}
                 />
               )
             }}
           />
-          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
-            {errors['password']?.message}
-          </span>
         </InputMain>
-        <InputMain className="border-none relative sm:grid-cols-1 sm:gap-2">
+        <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="New password" htmlFor="newPassword" />
           <Controller
             name={'newPassword'}
@@ -87,21 +89,19 @@ const SecurityForm = () => {
                   inputType={'password'}
                   className="sm:col-span-2"
                   placeholder="Enter new password"
-                  onChange={() => {}}
+                  error={errors.newPassword?.message}
                   {...field}
                 />
               )
             }}
           />
-          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
-            {errors['newPassword']?.message}
-          </span>
           <span className="text-sm text-gray-500">
-            Your new password must be more than 6 characters.
+            Your new password must be more than 8 characters and should contain
+            an alfa numeric, atleast one upper case character.
           </span>
         </InputMain>
 
-        <InputMain className="border-none relative sm:grid-cols-1 sm:gap-2">
+        <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label
             label="Confirm new password"
             htmlFor="confirmPassword"
@@ -116,15 +116,12 @@ const SecurityForm = () => {
                   inputType={'password'}
                   className="sm:col-span-2"
                   placeholder="Confirm new password"
-                  onChange={() => {}}
+                  error={errors.confirmPassword?.message}
                   {...field}
                 />
               )
             }}
           />
-          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
-            {errors['confirmPassword']?.message}
-          </span>
         </InputMain>
 
         <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
@@ -145,28 +142,20 @@ const SecurityForm = () => {
             in a safe place.
           </span>
         </InputMain>
-        {msg && <Alert message={msg.content} type={msg.type} />}
       </div>
-      <div className="flex justify-end gap-3 border-none">
-        <button
-          onClick={() => {
-            reset({ password: '', newPassword: '', confirmPassword: '' })
-            setMsg(null)
-          }}
-          type="button"
-          className="btn-secondary py-2.5"
-        >
-          Cancel
-        </button>
-        <button
+
+      <div className="flex items-center justify-end gap-3 border-none">
+        {msg.type === 'error' && (
+          <span className="text-xs text-red-500">{msg.content}</span>
+        )}
+        {msg.type === 'success' && (
+          <span className="text-xs text-green-500">{msg.content}</span>
+        )}
+        <ButtonWLoading
+          isPending={isSubmitting}
+          text="Update password"
           type="submit"
-          className={`py-2.5 font-semibold relative ${
-            isSubmitting ? 'btn-secondary pr-10' : 'btn-primary'
-          }`}
-        >
-          Update password
-          {isSubmitting && <Spinner size="w-5 h-5 absolute top-3 right-1" />}
-        </button>
+        />
       </div>
     </form>
   )
