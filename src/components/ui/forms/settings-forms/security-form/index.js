@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import NextLink from 'next/link'
 import { InputMain } from '@/components/ui/inputs'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { useForm, Controller } from 'react-hook-form'
@@ -11,13 +12,14 @@ import {
 } from 'firebase/auth'
 import Alert from '@/components/ui/alert'
 import Spinner from '@/components/ui/spinner'
+import ModalConfirm from '@/components/ui/modal-confirm'
 
 const SecurityForm = () => {
   const [msg, setMsg] = useState(null)
-  const [buttonStatus, setButtonStatus] = useState(false)
+  // const [isOpen, setIsOpen] = useState(true)
   const auth = getAuth()
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, formState, reset, getValues } = useForm({
+  const { control, handleSubmit, formState, reset } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     resolver,
@@ -48,22 +50,6 @@ const SecurityForm = () => {
           content: 'Please enter your previous password correctly',
         }),
       )
-  }
-
-  const changeHandler = () => {
-    const newPassword = getValues('newPassword')
-    const confirmPassword = getValues('confirmPassword')
-    const passRegx = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
-    const regex = new RegExp(passRegx)
-    if (
-      regex.test(newPassword) &&
-      regex.test(confirmPassword) &&
-      newPassword === confirmPassword
-    ) {
-      setButtonStatus(true)
-    } else {
-      setButtonStatus(false)
-    }
   }
 
   return (
@@ -106,19 +92,16 @@ const SecurityForm = () => {
                   className="sm:col-span-2"
                   placeholder="Enter new password"
                   {...field}
-                  onChange={(e) => {
-                    field.onChange(e)
-                    changeHandler()
-                  }}
                 />
               )
             }}
           />
-          <span className="absolute text-xs text-red-600 -bottom-1 left-2">
+          <div className="absolute -bottom-1 left-2 text-xs text-red-600 ">
             {errors['newPassword']?.message}
-          </span>
+          </div>
           <span className="text-sm text-gray-500">
-            Your new password must be more than 6 characters.
+            Your new password must be more than 8 characters and should contain
+            an alfa numeric, atleast one upper case character.
           </span>
         </InputMain>
 
@@ -138,10 +121,6 @@ const SecurityForm = () => {
                   className="sm:col-span-2"
                   placeholder="Confirm new password"
                   {...field}
-                  onChange={(e) => {
-                    field.onChange(e)
-                    changeHandler()
-                  }}
                 />
               )
             }}
@@ -171,20 +150,25 @@ const SecurityForm = () => {
         </InputMain>
         {msg && <Alert message={msg.content} type={msg.type} />}
       </div>
+      {/* <ModalConfirm
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        icon={true}
+        button2Text={'Close'}
+        title={'Password Updated!'}
+        text={
+          'Your password has been changed successfully. Use your new password to log in.'
+        }
+        deleteButton={false}
+      /> */}
       <div className="flex justify-end gap-3 border-none">
-        <button
-          onClick={() => {
-            reset({ password: '', newPassword: '', confirmPassword: '' })
-            setMsg(null)
-          }}
-          type="button"
-          className="btn-secondary py-2.5"
-        >
-          Cancel
-        </button>
+        <NextLink href="/">
+          <a type="button" className="btn-secondary py-2.5">
+            Cancel
+          </a>
+        </NextLink>
         <button
           type="submit"
-          disabled={buttonStatus ? false : true}
           className={`py-2.5 font-semibold relative ${
             isSubmitting ? 'btn-secondary pr-10' : 'btn-primary'
           }`}

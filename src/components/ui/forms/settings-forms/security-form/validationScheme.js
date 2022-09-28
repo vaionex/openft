@@ -8,7 +8,10 @@ const validationSchema = yup.object().shape({
   newPassword: yup
     .string()
     .required('Password is required')
-    .min(6, 'Password must be at least 6 characters'),
+    .min(8, 'Password must be at least 6 characters')
+    .matches(/^(?=.*?[A-Z])/, 'Password need upper case letter')
+    .matches(/(?=.*?[a-z])/, 'Password need lower case letter')
+    .matches(/(?=.*?[0-9])/, 'Password need number'),
   confirmPassword: yup
     .string()
     .required('Confirm password is required')

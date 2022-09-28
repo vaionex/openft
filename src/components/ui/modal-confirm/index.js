@@ -1,5 +1,6 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { CheckCircleIcon } from '@heroicons/react/outline'
 
 const ModalConfirm = ({
   isOpen,
@@ -9,6 +10,7 @@ const ModalConfirm = ({
   title,
   button1Text = 'Delete',
   button2Text = 'Cancel',
+  icon = false,
   cancelButton = true,
   deleteButton = true,
 }) => {
@@ -50,8 +52,14 @@ const ModalConfirm = ({
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
+                      className="text-lg font-medium leading-6 text-gray-900 flex flex-col justify-center items-center"
                     >
+                      {icon && (
+                        <CheckCircleIcon
+                          className="w-10 h-10 text-green-500"
+                          aria-hidden="true"
+                        />
+                      )}
                       {title}
                     </Dialog.Title>
                     <div className="mt-2">
