@@ -1,6 +1,7 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/outline'
+import { FeaturedIcon } from '@/components/common/icons'
 
 const ModalConfirm = ({
   isOpen,
@@ -20,7 +21,7 @@ const ModalConfirm = ({
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative z-30"
         initialFocus={cancelButtonRef}
         onClose={onClose}
       >
@@ -33,10 +34,10 @@ const ModalConfirm = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+          <div className="fixed inset-0 z-[30] transition-opacity bg-gray-500 bg-opacity-75" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="fixed inset-0 z-30 overflow-y-auto">
           <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -55,8 +56,8 @@ const ModalConfirm = ({
                       className="text-lg font-medium leading-6 text-gray-900 flex flex-col justify-center items-center"
                     >
                       {icon && (
-                        <CheckCircleIcon
-                          className="w-10 h-10 text-green-500"
+                        <FeaturedIcon
+                          className="w-12 h-12 text-green-500"
                           aria-hidden="true"
                         />
                       )}
