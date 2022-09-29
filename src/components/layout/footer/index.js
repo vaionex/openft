@@ -6,7 +6,7 @@ const navigation = [
   { name: 'Discover', href: '/discover' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
-  { name: 'Privacy', href: '#' },
+  { name: 'Privacy', href: '/privacy' },
 ]
 
 const Footer = ({ page }) => {
