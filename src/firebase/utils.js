@@ -244,29 +244,30 @@ const firebaseUploadUserImage = async ({ user, imageFile, imageType }) => {
     const oldRef = ref(firebaseStorage, userInfoFromDb[imageType])
 
     try {
+      if (userInfoFromDb[imageType]) {
+        await firebaseDeleteImage({ uid: user.uid, imageType })
+      }
+
       await uploadBytes(fileRef, imageFile)
 
       const firebaseProfileURL = await getDownloadURL(
         ref(firebaseStorage, imagePath),
       )
-      await updateProfile(user, { [imageType]: firebaseProfileURL })
+      if (firebaseProfileURL) {
+        await updateProfile(user, { [imageType]: firebaseProfileURL })
+        store.dispatch(
+          setUserData({
+            [imageType]: firebaseProfileURL,
+          }),
+        )
 
-      if (userInfoFromDb[imageType]) {
-        deleteObject(oldRef).catch((error) => console.log(error))
-      }
-
-      store.dispatch(
-        setUserData({
+        await updateDoc(userRef, {
+          ...userInfoFromDb,
           [imageType]: firebaseProfileURL,
-        }),
-      )
-
-      await updateDoc(userRef, {
-        ...userInfoFromDb,
-        [imageType]: firebaseProfileURL,
-      })
+        })
+      }
     } catch (error) {
-      console.log(error)
+      console.log('error', error.message)
     }
   }
   return { message: 'fail' }

@@ -27,10 +27,6 @@ const navigation = [
 
 const Header = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
-  const { open } = useSelector(basketSelector)
-  const dispatch = useDispatch()
-
-  const router = useRouter()
 
   return (
     <Popover as="header" className="relative">
@@ -96,14 +92,6 @@ const Header = () => {
                       <CogIcon className="w-6 h-6" aria-hidden="true" />
                     </a>
                   </NextLink>
-                </li>
-                <li className="inline-flex">
-                  <button
-                    onClick={() => dispatch(setOpen(true))}
-                    className="inline-block p-3 text-base font-medium hover:bg-gray-50 hover:text-gradient-primary-hover"
-                  >
-                    <ShoppingCartIcon className="w-6 h-6" aria-hidden="true" />
-                  </button>
                 </li>
                 <li className="inline-flex">
                   <NextLink href="/user-settings">
