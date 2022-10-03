@@ -12,7 +12,7 @@ const SharedLayout = ({ children, title, className }) => {
       </Head>
 
       <Header />
-      <main className={twMerge('min-h-[calc(100vh-(6rem+8rem))]', className)}>
+      <main className={twMerge('min-h-[calc(100vh-(6rem+8.3rem))]', className)}>
         {children}
       </main>
       <Footer />

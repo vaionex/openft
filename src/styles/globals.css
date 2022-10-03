@@ -29,7 +29,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-3 font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:bg-slate-300 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center px-4 py-3 font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 disabled:bg-slate-300 disabled:opacity-50 disabled:pointer-events-none;
   }
 
   .spinner-small {

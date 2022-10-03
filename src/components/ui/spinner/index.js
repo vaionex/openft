@@ -1,10 +1,16 @@
 import React from 'react'
+import { twMerge } from 'tailwind-merge'
 
-const Spinner = ({ size = 'w-5 h-5', color = 'fill-blue-600' }) => {
+const Spinner = ({ size = 'w-5 h-5', color = 'fill-blue-600', className }) => {
   return (
     <div role="status">
       <svg
-        className={`inline mr-2 ${size} text-gray-200 animate-spin ${color}`}
+        className={twMerge(
+          'inline mr-2 text-gray-200 animate-spin',
+          size,
+          color,
+          className,
+        )}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

@@ -20,13 +20,6 @@ const SelectWImage = ({
     setMounted(true)
   }, [])
 
-  const filteredUsers =
-    query === ''
-      ? users
-      : users.filter((user) => {
-          return user.name.toLowerCase().includes(query.toLowerCase())
-        })
-
   if (!mounted) return null
 
   return (
@@ -37,11 +30,10 @@ const SelectWImage = ({
       <div className="relative mt-1">
         <Combobox.Input
           className="w-full py-2 pl-3 pr-10 bg-white border border-gray-200 rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-          onChange={(event) => setQuery(event.target.value)}
           displayValue={(user) => user?.name}
           placeholder={placeholder}
         />
-        {selectedUser ? (
+        {selectedUser && clearSelectedUser ? (
           <div
             onClick={clearSelectedUser}
             className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 cursor-pointer rounded-r-md focus:outline-none"
@@ -67,9 +59,9 @@ const SelectWImage = ({
           </Combobox.Button>
         )}
 
-        {filteredUsers.length > 0 && (
+        {users.length > 0 && (
           <Combobox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredUsers.map((user) => (
+            {users.map((user) => (
               <span key={user.userId}>
                 <Combobox.Option
                   value={user}
@@ -116,7 +108,7 @@ const SelectWImage = ({
                         </div>
                       </div>
 
-                      {selectedUser && selectedUser.uid === user.uid && (
+                      {selectedUser?.userId === user.userId && (
                         <span
                           className={twMerge(
                             'absolute inset-y-0 right-0 flex items-center pr-4',

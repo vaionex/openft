@@ -13,10 +13,19 @@ exports.addToIndex = functions.firestore
     const data = snap.data()
     const objectID = snap.id
 
-    return index.saveObject({
-      ...data,
+    //filter indexable data
+    const indexableData = {
       objectID,
-    })
+      uid: data.uid,
+      name: data.name,
+      description: data.description,
+      imageURL: data.imageURL,
+      amount: data.amount,
+      artist: data.artist,
+      userId: data.userId,
+    }
+
+    return index.saveObject(indexableData)
   })
 
 exports.updateIndex = functions.firestore
@@ -25,10 +34,19 @@ exports.updateIndex = functions.firestore
     const newData = change.after.data()
     const objectID = change.after.id
 
-    return index.saveObject({
-      ...newData,
+    //filter indexable data
+    const indexableData = {
       objectID,
-    })
+      uid: newData.uid,
+      name: newData.name,
+      description: newData.description,
+      imageURL: newData.imageURL,
+      amount: newData.amount,
+      artist: newData.artist,
+      userId: newData.userId,
+    }
+
+    return index.saveObject(indexableData)
   })
 
 exports.deleteFromIndex = functions.firestore

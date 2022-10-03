@@ -22,7 +22,7 @@ const defaultProps = {
   indexName: 'nfts',
 }
 
-const debounceTime = 700
+const debounceTime = 500
 export default function DiscoverPage(props) {
   const { page, seoProps, ...restProps } = props
   const router = useRouter()
@@ -42,6 +42,8 @@ export default function DiscoverPage(props) {
       })
 
       setSearchState(nextSearchState)
+
+      clearTimeout(setStateId.current)
     }, debounceTime)
   }
 
