@@ -41,6 +41,7 @@ import {
 import store from '@/redux/store'
 import {
   setAuthenticated,
+  setNotifications,
   setUserData,
   setUserPending,
 } from '@/redux/slices/user'
@@ -53,6 +54,21 @@ import {
 import apiConfig from '@/config/relysiaApi'
 import { storageBucketUrl } from './config'
 import { v4 as uuidv4 } from 'uuid'
+
+const notificationObj = {
+  'app-notification': {
+    itemSold: false,
+    purchases: false,
+    priceChanges: false,
+    itemUpdates: false,
+  },
+  'email-notification': {
+    itemSoldEmail: false,
+    purchasesEmail: false,
+    priceChangesEmail: false,
+    itemUpdatesEmail: false,
+  },
+}
 
 const firebaseGetUserInfoFromDb = async (id) => {
   try {
@@ -85,11 +101,21 @@ const firebaseLogin = async ({ email, password, rememberMe }) => {
       rememberMe ? browserLocalPersistence : browserSessionPersistence,
     )
     const auth = await signInWithEmailAndPassword(firebaseAuth, email, password)
+    const user = await firebaseGetUserInfoFromDb(auth.user.uid)
+    const userNotifications = await firebaseGetSingleDoc(
+      'notifications',
+      auth.user.uid,
+    )
+
     return {
-      name: auth.user.displayName,
-      uid: auth.user.uid,
-      email: auth.user.email,
-      accessToken: auth.user.accessToken,
+      user: {
+        ...user,
+        accessToken: auth.user.accessToken,
+      },
+      userNotifications: {
+        'app-notification': userNotifications['app-notification'],
+        'email-notification': userNotifications['email-notification'],
+      },
     }
   } catch (error) {
     return { error: 'Incorrect email or password.' }
@@ -128,6 +154,7 @@ const firebaseRegister = async (data) => {
       },
     }
     await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+    await firebaseAddDocWithID('notifications', notificationObj, user.uid)
     const userFromDb = await firebaseGetUserInfoFromDb(user.uid).then(
       async (user) => {
         await firebaseUploadUserImage({
@@ -162,7 +189,17 @@ const firebaseLoginWithGoogle = async () => {
     const { user } = await signInWithPopup(firebaseAuth, provider)
     const userFromDb = await firebaseGetUserInfoFromDb(user.uid)
     if (userFromDb) {
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        user.uid,
+      )
       store.dispatch(setAuthenticated(!!user))
+      store.dispatch(
+        setNotifications({
+          'app-notification': userNotifications['app-notification'],
+          'email-notification': userNotifications['email-notification'],
+        }),
+      )
       return userFromDb
     } else {
       const checkUsername = await firebaseIsUsernameExist(
@@ -187,6 +224,7 @@ const firebaseLoginWithGoogle = async () => {
         },
       }
       await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+      await firebaseAddDocWithID('notifications', notificationObj, user.uid)
       return infos
     }
   } catch (error) {
@@ -420,6 +458,20 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
+const firebaseAddDocWithID = async (collectionName, obj, uid) => {
+  try {
+    const dc = await setDoc(doc(firebaseDb, collectionName, uid), {
+      ...obj,
+      timestamp: Timestamp.now(),
+    })
+      .then(() => true)
+      .catch(() => false)
+    return dc
+  } catch (error) {
+    console.log('Error creating document: ', error)
+  }
+}
+
 const firebaseAddDoc = async (collectionName, obj) => {
   try {
     const docRef = collection(firebaseDb, collectionName)
@@ -456,7 +508,17 @@ const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
       const user = await firebaseGetUserInfoFromDb(userResponse.uid)
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        userResponse.uid,
+      )
       store.dispatch(setUserData(user))
+      store.dispatch(
+        setNotifications({
+          'app-notification': userNotifications['app-notification'],
+          'email-notification': userNotifications['email-notification'],
+        }),
+      )
       store.dispatch(setAuthenticated(true))
       store.dispatch(setUserPending(false))
     } else {
@@ -522,6 +584,7 @@ export {
   firebaseIsUsernameExist,
   firebaseGetSingleDoc,
   firebaseAddDoc,
+  firebaseAddDocWithID,
   firebaseDeleteDoc,
   firebaseUpdateDoc,
   firebaseDeleteImage,
