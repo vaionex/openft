@@ -1,3 +1,4 @@
+import NextLink from 'next/link'
 import { InputMain } from '@/components/ui/inputs'
 import { Controller, useForm } from 'react-hook-form'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
@@ -190,13 +191,11 @@ export default function Form() {
                     >
                       You agree to our friendly{' '}
                     </label>
-                    <a
-                      id="privacy-policy"
-                      href="#"
-                      className="font-medium underline"
-                    >
-                      privacy policy.
-                    </a>
+                    <NextLink href="/privacy">
+                      <a id="privacy-policy" className="font-medium underline">
+                        privacy policy.
+                      </a>
+                    </NextLink>
                   </div>
                 </div>
 
