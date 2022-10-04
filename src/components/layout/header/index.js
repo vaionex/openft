@@ -27,7 +27,6 @@ const navigation = [
 
 const Header = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
-
   return (
     <Popover as="header" className="relative">
       <div className="bg-transparent">
@@ -94,7 +93,7 @@ const Header = () => {
                   </NextLink>
                 </li>
                 <li className="inline-flex">
-                  <NextLink href="/user-settings">
+                  <NextLink href="/user-settings/notifications">
                     <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">
                       <BellIcon className="w-6 h-6" aria-hidden="true" />
                     </a>

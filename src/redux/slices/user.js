@@ -10,6 +10,20 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   currentUser: null,
+  notificationObj: {
+    'app-notification': {
+      itemSold: false,
+      purchases: false,
+      priceChanges: false,
+      itemUpdates: false,
+    },
+    'email-notification': {
+      itemSoldEmail: false,
+      purchasesEmail: false,
+      priceChangesEmail: false,
+      itemUpdatesEmail: false,
+    },
+  },
   isPending: false,
   isUserPending: true,
   errorMessage: null,
@@ -111,6 +125,9 @@ const userSlice = createSlice({
     setUserPending: (state, action) => {
       state.isUserPending = action.payload
     },
+    setNotifications: (state, action) => {
+      state.notificationObj = action.payload
+    },
   },
   extraReducers: {
     [login.pending]: (state) => {
@@ -127,7 +144,8 @@ const userSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.isPending = false
       state.isUserPending = false
-      state.currentUser = action.payload
+      state.currentUser = action.payload.user
+      state.notificationObj = action.payload.userNotifications
     },
     [register.pending]: (state) => {
       state.isPending = true
@@ -206,6 +224,7 @@ export const {
   setUserData,
   setAuthenticated,
   setResetAuth,
+  setNotifications,
   setError,
   setSuccess,
   setPending,
