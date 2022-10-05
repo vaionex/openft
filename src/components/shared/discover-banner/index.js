@@ -26,7 +26,7 @@ const DiscoverBanner = ({ action, pages }) => {
           {action === 'default' && null}
           {action === 'button' && (
             <div className="mt-5 space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
-              <NextLink href="#">
+              <NextLink href="/discover">
                 <a className="bg-white border border-gray-200 hover:bg-opacity-10 btn-primary bg-opacity-20">
                   Discover
                 </a>

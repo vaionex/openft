@@ -3,7 +3,7 @@ import Checkbox from '@/components/ui/checkbox'
 import { InputMain } from '@/components/ui/inputs'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-
+ 
 const MyProfileForm = ({
   user,
   formValues,
@@ -68,9 +68,9 @@ const MyProfileForm = ({
           <InputMain.Label label="Username" htmlFor="username" />
           <InputMain.Input
             id="username"
-            name="username"
+            name="username" 
             variant="add-on"
-            addon="open.ft/"
+            addon="open.nft/"
             placeholder="username"
             className="sm:col-span-2"
             value={formValues.username}

@@ -15,20 +15,15 @@ import ModalConfirm from '../../modal-confirm'
 // import { addBasket, setOpen } from '@/redux/slices/basket'
 // import basketSelector from '@/redux/selectors/basket'
 
-const ProductsCarouselCard = ({
-  data,
-  type,
-  idx,
-  favouriteNfts,
-  isAuthenticated,
-}) => {
+const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
   const router = useRouter()
-  const { currentUser } = useSelector(userSelector)
   const [hasLike, setHasLike] = useState(false)
   // const { basket } = useSelector(basketSelector)
+
+  const { currentUser, isAuthenticated } = useSelector(userSelector)
 
   const dispatch = useDispatch()
 
@@ -117,8 +112,7 @@ const ProductsCarouselCard = ({
             onClick={() => {
               if (isAuthenticated) {
                 setIsOpen(true)
-              }
-              {
+              } else {
                 router.push('/login')
               }
             }}

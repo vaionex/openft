@@ -1,8 +1,12 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { NotificationsForm } from '@/components/ui/forms'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import NotificationList from '@/components/ui/lists/notification-list'
 import DropdownMinimal from '@/components/ui/dropdown-minimal'
+import { useSelector } from 'react-redux'
+import userSelector from '@/redux/selectors/user'
+import { doc, getDoc } from 'firebase/firestore'
+import { firebaseDb } from '@/firebase/init'
 
 const items = [
   {
@@ -32,6 +36,37 @@ const dropdownItems = [
 ]
 
 const UserSettingsNotificationSection = () => {
+  const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const [notificationSettingsFetched, setnotificationSettingsFetched] =
+    useState(false)
+  const [notificationSettings, setnotificationSettings] = useState({
+    in_app_itemSold: false,
+    in_app_successfulPurchase: false,
+    in_app_priceChange: false,
+    in_app_ownedItemUpdates: false,
+
+    email_notification_itemSold: false,
+    email_notification_successfulPurchase: false,
+    email_notification_priceChange: false,
+    email_notification_ownedItemUpdates: false,
+  })
+
+  useEffect(() => {
+    if (currentUser?.uid) {
+      getNotificationSettings()
+    }
+  }, [currentUser])
+
+  const getNotificationSettings = async () => {
+    const docRef = doc(firebaseDb, 'notificationsSettings', currentUser.uid)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists() && docSnap.data()) {
+      setnotificationSettings({ ...docSnap.data() })
+    }
+    setnotificationSettingsFetched(true)
+  }
+
   return (
     <UserSettingsLayout>
       <div>
@@ -46,7 +81,12 @@ const UserSettingsNotificationSection = () => {
               </span>
             </div>
 
-            <NotificationsForm />
+            {notificationSettingsFetched && (
+              <NotificationsForm
+                notificationSettings={notificationSettings}
+                currentUser={currentUser}
+              />
+            )}
           </div>
           <div className="md:col-span-4">
             <div className="relative sm:border-b sm:border-gray-200 sm:pb-5">
