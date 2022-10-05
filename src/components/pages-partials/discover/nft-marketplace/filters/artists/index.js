@@ -19,19 +19,22 @@ const NftMarketplaceArtistFilter = (props) => {
     const getArtists = async () => {
       const artists = await Promise.all(
         items.map(async (item) => {
-          const { name, profileImage, username, uid } = await getUser(
-            item.label,
-          )
-          return {
-            isRefined: item.isRefined,
-            name,
-            profileImage,
-            username,
-            userId: uid,
+          let userData = await getUser(item.label)
+          if (userData) {
+            const { name, profileImage, username, uid } = userData
+            return {
+              isRefined: item.isRefined,
+              name,
+              profileImage,
+              username,
+              userId: uid,
+            }
+          } else {
+            return null
           }
         }),
       )
-      setArtists(artists)
+      setArtists(artists.filter((x) => x))
     }
     if (items.length !== 0) {
       getArtists()

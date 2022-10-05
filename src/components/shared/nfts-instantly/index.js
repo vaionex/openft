@@ -1,8 +1,12 @@
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { twMerge } from 'tailwind-merge'
+import { useSelector } from 'react-redux'
+import userSelector from '@/redux/selectors/user'
 
 const NftsInstantly = () => {
+  const { isAuthenticated } = useSelector(userSelector)
+
   return (
     <div className="lg:pt-16 lg:pb-24 lg:overflow-hidden">
       <div className="mx-auto max-w-7xl lg:px-8">
@@ -26,14 +30,18 @@ const NftsInstantly = () => {
                   </NextLink>
                 </div>
                 <div className="rounded-md">
-                  <NextLink href="/register">
+                  <NextLink
+                    href={
+                      isAuthenticated ? '/user-settings/upload' : '/register'
+                    }
+                  >
                     <a
                       className={twMerge(
                         'btn-primary',
                         'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
                       )}
                     >
-                      Sign up
+                      {isAuthenticated ? 'Create' : 'Sign up'}
                     </a>
                   </NextLink>
                 </div>

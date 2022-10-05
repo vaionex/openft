@@ -73,6 +73,7 @@ PrevArrow.propTypes = {
 
 const ProductsCarousel = ({ data }) => {
   const { currentUser } = useSelector(userSelector)
+
   const [favouriteNfts, setFavouriteNfts] = useState(null)
 
   useEffect(() => {

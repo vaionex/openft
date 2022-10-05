@@ -83,19 +83,21 @@ const UploadForm = () => {
   }
 
   const onSubmit = async (formData) => {
+    console.log('submit call ')
     setIsPending(true)
 
     try {
       if (!photoValues?.nftImage) {
         throw new Error('Please upload an image')
       }
+
       const { url, fileFromStorage } = await firebaseUploadNftImage({
         file: croppedImageBlob,
         userId: currentUser.uid,
       })
       if (!url || !fileFromStorage) {
         throw new Error('Failed to upload image to server')
-      }
+      } 
 
       const nftImageForChain = await firebaseGetNftImageUrl(
         currentUser.uid,
@@ -107,6 +109,7 @@ const UploadForm = () => {
         fileUrl: nftImageForChain,
         fileName: formData.name,
       }
+      console.log('uploading image to bsv', fileToChain)
 
       const blockchainResponse = await uploadNFTFile(fileToChain)
       if (!blockchainResponse) {
@@ -114,6 +117,8 @@ const UploadForm = () => {
           'Failed to upload file to blockchain, please press "Save" again',
         )
       }
+      console.log('image uploaded')
+
       const {
         uploadObj: { txid, url: blockchainUrl },
       } = blockchainResponse
@@ -157,7 +162,7 @@ const UploadForm = () => {
         'nfts',
         nftDataToFirebase,
       )
-
+ 
       if (!nftDataFromFirebase) {
         throw new Error('Failed occured while uploading the NFT')
       }

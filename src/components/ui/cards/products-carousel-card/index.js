@@ -20,27 +20,12 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
   const router = useRouter()
-  const { currentUser } = useSelector(userSelector)
   const [hasLike, setHasLike] = useState(false)
   // const { basket } = useSelector(basketSelector)
 
-  const dispatch = useDispatch()
+  const { currentUser, isAuthenticated } = useSelector(userSelector)
 
-  // const updateBasket = () => {
-  //   if (currentUser) {
-  //     dispatch(
-  //       addBasket({
-  //         [data.uid]: {
-  //           qty: 1,
-  //           ...data,
-  //         },
-  //       }),
-  //     )
-  //     dispatch(setOpen(true))
-  //   } else {
-  //     router.replace('/login')
-  //   }
-  // }
+  const dispatch = useDispatch()
 
   const handleBuy = () => {
     setIsOpen(false)
@@ -124,7 +109,13 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
         </div>
         <div className="flex gap-1.5">
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              if (isAuthenticated) {
+                setIsOpen(true)
+              } else {
+                router.push('/login')
+              }
+            }}
             className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal"
           >
             Buy now

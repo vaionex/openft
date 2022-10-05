@@ -12,7 +12,6 @@ const UserSettingsMain = () => {
   const { currentUser, isPending, isSuccess } = useSelector(userSelector)
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
-
   const [formValues, setFormValues] = useState({
     username: '',
     instagram: '',
@@ -55,10 +54,20 @@ const UserSettingsMain = () => {
           return false
         }
       }
+      let updatedValues = {
+        username: formValues?.username || '',
+        socialLinks: {
+          ...currentUser.socialLinks,
+          instagram: formValues?.instagram || '',
+        },
+        jobTitle: formValues?.jobTitle || '',
+        bio: formValues?.bio || '',
+        showJobTitle: formValues?.showJobTitle || false,
+      }
       dispatch(
         updateUser({
           uid: currentUser.uid,
-          values: formValues,
+          values: updatedValues,
         }),
       )
     } catch (error) {

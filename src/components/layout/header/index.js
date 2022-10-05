@@ -83,10 +83,17 @@ const Header = () => {
               </NextLink>
             </li>
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
-              <button className="btn-secondary">
-                <UploadBoxIcon className="w-6 h-6 mr-2" aria-hidden="true" />
-                Mint
-              </button>
+              <NextLink href="/user-settings/upload" className="btn-secondary">
+                <a>
+                  <span className="btn-secondary">
+                    <UploadBoxIcon
+                      className="w-6 h-6 mr-2"
+                      aria-hidden="true"
+                    />
+                    Mint
+                  </span>
+                </a>
+              </NextLink>
             </li>
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <ul className="flex items-center gap-1">

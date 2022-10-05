@@ -128,6 +128,7 @@ export const getWalletAddressAndPaymail = async (walletId) => {
       return obj
     })
     .catch((err) => {
+      console.log('eeeeeeeeeeeer', err)
       return obj
     })
 }
