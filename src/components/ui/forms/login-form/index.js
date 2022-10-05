@@ -33,7 +33,7 @@ function LoginForm() {
     try {
       const user = await dispatch(login({ ...formData, rememberMe })).unwrap()
       if (user && !user?.error) {
-        dispatch(setAuthenticated())
+        dispatch(setAuthenticated(true))
         router.replace('/')
       }
     } catch (e) {

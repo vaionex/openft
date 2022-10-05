@@ -1,50 +1,60 @@
 import Checkbox from '@/components/ui/checkbox'
-import React, { useState, useEffect } from 'react'
-import ButtonWLoading from '@/components/ui/button-w-loading'
+import userSelector from '@/redux/selectors/user'
+import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
-import { firebaseUpdateDoc } from '@/firebase/utils'
-import { async } from '@firebase/util'
-import { firebaseDb } from '@/firebase/init'
-import { setDoc, doc, Timestamp } from 'firebase/firestore'
+import React from 'react'
+import Alert from '@/components/ui/alert'
+import { firebaseAddDocWithID } from '@/firebase/utils'
+import { useState } from 'react'
 
-const NotificationsForm = ({ currentUser, notificationSettings }) => {
-  const [isSuccess, setisSuccess] = useState(false)
-
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm({
-    defaultValues: notificationSettings,
+const NotificationsForm = () => {
+  const { currentUser, notificationObj } = useSelector(userSelector)
+  const [resStatus, setResStatus] = useState(false)
+  const { control, handleSubmit, formState, getValues } = useForm({
+    mode: 'onSubmit',
+    defaultValues: {
+      ...notificationObj['app-notification'],
+      ...notificationObj['email-notification'],
+    },
+    reValidateMode: 'onChange',
   })
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => {
-        setisSuccess(false)
-      }, 3000)
+  const onSubmit = async ({
+    itemSold,
+    purchases,
+    priceChanges,
+    itemUpdates,
+    itemSoldEmail,
+    purchasesEmail,
+    priceChangesEmail,
+    itemUpdatesEmail,
+  }) => {
+    const notificationValues = {
+      'app-notification': {
+        itemSold,
+        purchases,
+        priceChanges,
+        itemUpdates,
+      },
+      'email-notification': {
+        itemSoldEmail,
+        purchasesEmail,
+        priceChangesEmail,
+        itemUpdatesEmail,
+      },
     }
-  }, [isSuccess])
 
-  const onSubmit = async (data) => {
-    try {
-      const docRef = doc(firebaseDb, 'notificationsSettings', currentUser.uid)
-      const docDb = await setDoc(docRef, {
-        ...data,
-        timestamp: Timestamp.now(),
-      })
-
-      setisSuccess(true)
-    } catch (err) {
-      console.log('err', err)
-      throw new Error('Error occured while updating the notification settings.')
-    }
+    const res = await firebaseAddDocWithID(
+      'notifications',
+      notificationValues,
+      currentUser.uid,
+    )
+    setResStatus(res)
   }
 
   return (
     <form
-      className="space-y-6 divide-y divide-gray-200"
       onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 divide-y divide-gray-200"
     >
       <div className="space-y-6 divide-y divide-gray-200">
         <div className="py-6 border-b border-b-gray-200">
@@ -62,66 +72,70 @@ const NotificationsForm = ({ currentUser, notificationSettings }) => {
             <div className="mt-4 space-y-4">
               <div className="relative flex items-start">
                 <Controller
-                  name="in_app_itemSold"
+                  name={'itemSold'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="itemSold"
-                      text="Item Sold"
-                      subtext="When someone purchased one of your items"
-                      defaultChecked={notificationSettings.in_app_itemSold}
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="itemSold"
+                        text="Item Sold"
+                        defaultChecked={getValues('itemSold')}
+                        subtext="When someone purchased one of your items"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex items-start">
                 <Controller
-                  name="in_app_successfulPurchase"
+                  name={'purchases'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="purchases"
-                      text="Successful Purchase"
-                      subtext="When you successfully buy an item"
-                      defaultChecked={
-                        notificationSettings.in_app_successfulPurchase
-                      }
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="purchases"
+                        text="Successful Purchase"
+                        defaultChecked={getValues('purchases')}
+                        subtext="When you successfully buy an item"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex items-start">
                 <Controller
-                  name="in_app_priceChange"
+                  name={'priceChanges'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="priceChanges"
-                      text="Price Change"
-                      subtext="When an item you made an offer on changes in price"
-                      defaultChecked={notificationSettings.in_app_priceChange}
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="priceChanges"
+                        text="Price Change"
+                        defaultChecked={getValues('priceChanges')}
+                        subtext="When an item you made an offer on changes in price"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex items-start">
                 <Controller
-                  name="in_app_ownedItemUpdates"
+                  name={'itemUpdates'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="itemUpdates"
-                      text="Owned Item Updates"
-                      subtext="When a significant update occurs for one of the items you have purchased"
-                      defaultChecked={
-                        notificationSettings.in_app_ownedItemUpdates
-                      }
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="itemUpdates"
+                        text="Owned Item Updates"
+                        defaultChecked={getValues('itemUpdates')}
+                        subtext="When a significant update occurs for one of the items you have purchased"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
             </div>
@@ -140,94 +154,85 @@ const NotificationsForm = ({ currentUser, notificationSettings }) => {
             <div className="mt-4 space-y-4">
               <div className="relative flex items-start">
                 <Controller
-                  name="email_notification_itemSold"
+                  name={'itemSoldEmail'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="itemSoldEmail"
-                      text="Item Sold"
-                      subtext="When someone purchased one of your items"
-                      defaultChecked={
-                        notificationSettings.email_notification_itemSold
-                      }
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="itemSoldEmail"
+                        text="Item Sold"
+                        defaultChecked={getValues('itemSoldEmail')}
+                        subtext="When someone purchased one of your items"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex items-start">
                 <Controller
-                  name="email_notification_successfulPurchase"
+                  name={'purchasesEmail'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="purchasesEmail"
-                      text="Successful Purchase"
-                      subtext="When you successfully buy an item"
-                      defaultChecked={
-                        notificationSettings.email_notification_successfulPurchase
-                      }
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="purchasesEmail"
+                        text="Successful Purchase"
+                        defaultChecked={getValues('purchasesEmail')}
+                        subtext="When you successfully buy an item"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex items-start">
                 <Controller
-                  name="email_notification_priceChange"
+                  name={'priceChangesEmail'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="priceChangesEmail"
-                      text="Price Change"
-                      subtext="When an item you made an offer on changes in price"
-                      defaultChecked={
-                        notificationSettings.email_notification_priceChange
-                      }
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="priceChangesEmail"
+                        text="Price Change"
+                        defaultChecked={getValues('priceChangesEmail')}
+                        subtext="When an item you made an offer on changes in price"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex items-start">
                 <Controller
-                  name="email_notification_ownedItemUpdates"
+                  name={'itemUpdatesEmail'}
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id="itemUpdatesEmail"
-                      text="Owned Item Updates"
-                      subtext="When a significant update occurs for one of the items you have purchased"
-                      defaultChecked={
-                        notificationSettings.email_notification_ownedItemUpdates
-                      }
-                      {...field}
-                    />
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <Checkbox
+                        id="itemUpdatesEmail"
+                        text="Owned Item Updates"
+                        defaultChecked={getValues('itemUpdatesEmail')}
+                        subtext="When a significant update occurs for one of the items you have purchased"
+                        {...field}
+                      />
+                    )
+                  }}
                 />
               </div>
             </div>
           </fieldset>
         </div>
-        <div className="border-none">
-          <div className="flex justify-end gap-3 border-none">
-            <button type="button" className="btn-secondary py-2.5">
-              Cancel
-            </button>
-
-            <ButtonWLoading
-              isPending={isSubmitting}
-              text="Save"
-              type="submit"
-            />
-          </div>
-          {isSuccess && (
-            <div className="flex justify-end border-none mt-3">
-              <span className="text-xs text-green-500 text-right w-100">
-                Settings successfully updated.
-              </span>
-            </div>
-          )}{' '}
+        {resStatus && (
+          <Alert message={'Notifications has been updated'} type="success" />
+        )}
+        <div className="flex justify-end gap-3 border-none">
+          <button type="button" className="btn-secondary py-2.5">
+            Cancel
+          </button>
+          <button type="submit" className="btn-primary py-2.5">
+            Save
+          </button>
         </div>
       </div>
     </form>
