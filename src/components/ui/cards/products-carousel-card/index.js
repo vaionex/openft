@@ -15,7 +15,13 @@ import ModalConfirm from '../../modal-confirm'
 // import { addBasket, setOpen } from '@/redux/slices/basket'
 // import basketSelector from '@/redux/selectors/basket'
 
-const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
+const ProductsCarouselCard = ({
+  data,
+  type,
+  idx,
+  favouriteNfts,
+  isAuthenticated,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
@@ -25,22 +31,6 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   // const { basket } = useSelector(basketSelector)
 
   const dispatch = useDispatch()
-
-  // const updateBasket = () => {
-  //   if (currentUser) {
-  //     dispatch(
-  //       addBasket({
-  //         [data.uid]: {
-  //           qty: 1,
-  //           ...data,
-  //         },
-  //       }),
-  //     )
-  //     dispatch(setOpen(true))
-  //   } else {
-  //     router.replace('/login')
-  //   }
-  // }
 
   const handleBuy = () => {
     setIsOpen(false)
@@ -124,7 +114,14 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
         </div>
         <div className="flex gap-1.5">
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              if (isAuthenticated) {
+                setIsOpen(true)
+              }
+              {
+                router.push('/login')
+              }
+            }}
             className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal"
           >
             Buy now

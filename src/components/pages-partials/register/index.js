@@ -76,7 +76,7 @@ const RegistrationFormMain = () => {
       document.body.style.touchAction = 'auto'
       router.push('/')
     } catch (error) {
-      console.alert(error.message)
+      console.log(error.message)
       dispatch(setPending(false))
       document.body.style.pointerEvents = 'auto'
       document.body.style.touchAction = 'auto'

@@ -6,7 +6,7 @@ import LoadingBars from '../loading-bars'
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isUserPending } = useSelector(userSelector)
-
+    
   const router = useRouter()
 
   const authRoute =

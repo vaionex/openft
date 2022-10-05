@@ -12,7 +12,7 @@ const HomePageMain = ({ nftsData }) => {
       <CompaniesSection />
       <CollectionsSection nftsData={nftsData} />
       <CtaMidSection />
-      <BannerSection />
+      <BannerSection /> 
     </SharedLayout>
   )
 }

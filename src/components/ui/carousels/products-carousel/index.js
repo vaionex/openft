@@ -72,7 +72,8 @@ PrevArrow.propTypes = {
 }
 
 const ProductsCarousel = ({ data }) => {
-  const { currentUser } = useSelector(userSelector)
+  const { currentUser, isAuthenticated } = useSelector(userSelector)
+
   const [favouriteNfts, setFavouriteNfts] = useState(null)
 
   useEffect(() => {
@@ -123,6 +124,7 @@ const ProductsCarousel = ({ data }) => {
     ],
   }
 
+  console.log('///////////', currentUser, isAuthenticated)
   return (
     <span className="relative overflow-hidden carousel-main">
       <Slider {...settings}>
@@ -133,6 +135,7 @@ const ProductsCarousel = ({ data }) => {
               data={item}
               favouriteNfts={favouriteNfts}
               type="carousel"
+              isAuthenticated={isAuthenticated}
             />
           ))}
       </Slider>
