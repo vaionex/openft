@@ -5,12 +5,20 @@ import { useForm, Controller } from 'react-hook-form'
 import React from 'react'
 import Alert from '@/components/ui/alert'
 import { firebaseAddDocWithID } from '@/firebase/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import ButtonWLoading from '@/components/ui/button-w-loading'
+import store from '@/redux/store'
+import { setNotifications } from '@/redux/slices/user'
 
 const NotificationsForm = () => {
   const { currentUser, notificationObj } = useSelector(userSelector)
-  const [resStatus, setResStatus] = useState(false)
-  const { control, handleSubmit, formState, getValues } = useForm({
+  const [resStatus, setResStatus] = useState(null)
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+    getValues,
+  } = useForm({
     mode: 'onSubmit',
     defaultValues: {
       ...notificationObj['app-notification'],
@@ -18,6 +26,15 @@ const NotificationsForm = () => {
     },
     reValidateMode: 'onChange',
   })
+
+  useEffect(() => {
+    if (resStatus) {
+      setTimeout(() => {
+        setResStatus(null)
+      }, 3000)
+    }
+  }, [resStatus])
+
   const onSubmit = async ({
     itemSold,
     purchases,
@@ -30,16 +47,16 @@ const NotificationsForm = () => {
   }) => {
     const notificationValues = {
       'app-notification': {
-        itemSold,
-        purchases,
-        priceChanges,
-        itemUpdates,
+        itemSold: itemSold ? itemSold : false,
+        purchases: purchases ? purchases : false,
+        priceChanges: priceChanges ? priceChanges : false,
+        itemUpdates: itemUpdates ? itemUpdates : false,
       },
       'email-notification': {
-        itemSoldEmail,
-        purchasesEmail,
-        priceChangesEmail,
-        itemUpdatesEmail,
+        itemSoldEmail: itemSoldEmail ? itemSoldEmail : false,
+        purchasesEmail: purchasesEmail ? purchasesEmail : false,
+        priceChangesEmail: priceChangesEmail ? priceChangesEmail : false,
+        itemUpdatesEmail: itemUpdatesEmail ? itemUpdatesEmail : false,
       },
     }
 
@@ -49,6 +66,9 @@ const NotificationsForm = () => {
       currentUser.uid,
     )
     setResStatus(res)
+
+    //updating reduxs state
+    store.dispatch(setNotifications({ ...notificationValues }))
   }
 
   return (
@@ -230,9 +250,8 @@ const NotificationsForm = () => {
           <button type="button" className="btn-secondary py-2.5">
             Cancel
           </button>
-          <button type="submit" className="btn-primary py-2.5">
-            Save
-          </button>
+
+          <ButtonWLoading isPending={isSubmitting} text="Save" type="submit" />
         </div>
       </div>
     </form>
