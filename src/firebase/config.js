@@ -19,7 +19,7 @@ if (envMODE === 'DEV') {
 
   apiConfig.defaults.headers.common['serviceId'] =
     '2b14f353-6695-4017-8474-9c58f5e71e35'
-} 
+}
 
 export default config
 export const storageBucketUrl = storageBucket

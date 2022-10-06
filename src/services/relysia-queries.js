@@ -150,24 +150,40 @@ export const createwallet = async (name, dispatch) => {
 }
 
 // nft upload file
-
 export const uploadNFTFile = async (formData, walletId) => {
   if (walletId) {
     apiConfig.defaults.headers.common['walletID'] = walletId
   }
 
   try {
-    const res = await apiConfig.post('/upload', formData)
+    const axiosRetry = require('axios-retry')
+
+    let retryApiConfig = apiConfig
+    await axiosRetry(apiConfig, {
+      retries: 10, // number of retries
+      retryDelay: (retryCount) => {
+        console.log(`retry attempt: ${retryCount}`)
+        return 5000 // time interval between retries
+      },
+      retryCondition: (error) => {
+        console.log('retry error call', error.message, error.response.data)
+        // if retry condition is not specified, by default idempotent requests are retried
+        return true
+      },
+    })
+
+    const res = await retryApiConfig.post('/upload', formData)
+
+    // const res = await apiConfig.post('/upload', formData)
 
     return res.data.data
   } catch (err) {
-    console.log('upload error', err)
+    console.log('upload error', err, err.response.data)
     return false
   }
 }
 
 //minting
-
 export const mintNFT = async (nftDetails) => {
   const { url, description, name, supply, amount, txid } = nftDetails
 
@@ -214,6 +230,31 @@ export const mintNFT = async (nftDetails) => {
 
   try {
     const response = await apiConfig.post('/v1/issue', parameters)
+
+    return response.data.data
+  } catch (error) {
+    console.log('error', error)
+    return false
+  }
+}
+
+//create atomic swap offer
+export const createAtomicSwapOffer = async (offerDetails) => {
+  const { tokenId, amount, sn } = offerDetails
+
+  const parameters = {
+    dataArray: [
+      {
+        amount: amount,
+        type: 'BSV',
+        tokenId: tokenId,
+        sn: sn,
+      },
+    ],
+  }
+
+  try {
+    const response = await apiConfig.post('/v1/offer', parameters)
 
     return response.data.data
   } catch (error) {
