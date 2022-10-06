@@ -6,16 +6,17 @@ let storageBucket = ''
 
 if (envMODE === 'DEV') {
   config = {
-    apiKey: 'AIzaSyBNb6ZPNHZ_7CnuWoX6w8N9Afy7eBWD-zs',
-    authDomain: 'relysia-20954105.firebaseapp.com',
-    projectId: 'relysia-20954105',
-    storageBucket: 'relysia-20954105.appspot.com',
-    messagingSenderId: '563060461488',
-    appID: '1:563060461488:web:9400c0335290def7e11075',
+    apiKey: 'AIzaSyBm1PRFUgyethkZdRHCkjZ2IJh5PQiD0hg',
+    authDomain: 'openft-98e94.firebaseapp.com',
+    projectId: 'openft-98e94',
+    storageBucket: 'openft-98e94.appspot.com',
+    messagingSenderId: '635036232353',
+    appId: '1:635036232353:web:53d0930c0a1a309f801ee0',
+    measurementId: 'G-NRVT06LPJT',
   }
 
   storageBucket =
-    'https://firebasestorage.googleapis.com/v0/b/relysia-20954105.appspot.com/o/'
+    'https://firebasestorage.googleapis.com/v0/b/openft-98e94.appspot.com/o/'
 
   apiConfig.defaults.headers.common['serviceId'] =
     '2b14f353-6695-4017-8474-9c58f5e71e35'
