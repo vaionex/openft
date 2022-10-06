@@ -113,8 +113,14 @@ const firebaseLogin = async ({ email, password, rememberMe }) => {
         accessToken: auth.user.accessToken,
       },
       userNotifications: {
-        'app-notification': userNotifications['app-notification'],
-        'email-notification': userNotifications['email-notification'],
+        'app-notification':
+          userNotifications && userNotifications['app-notification']
+            ? userNotifications['app-notification']
+            : null,
+        'email-notification':
+          userNotifications && userNotifications['email-notification']
+            ? userNotifications['email-notification']
+            : null,
       },
     }
   } catch (error) {
@@ -196,8 +202,14 @@ const firebaseLoginWithGoogle = async () => {
       store.dispatch(setAuthenticated(!!user))
       store.dispatch(
         setNotifications({
-          'app-notification': userNotifications['app-notification'],
-          'email-notification': userNotifications['email-notification'],
+          'app-notification':
+            userNotifications && userNotifications['app-notification']
+              ? userNotifications['app-notification']
+              : null,
+          'email-notification':
+            userNotifications && userNotifications['email-notification']
+              ? userNotifications['email-notification']
+              : null,
         }),
       )
       return userFromDb
@@ -513,10 +525,17 @@ const firebaseGetAuthorizedUser = () => {
         userResponse.uid,
       )
       store.dispatch(setUserData(user))
+      console.log('33333333333333333')
       store.dispatch(
         setNotifications({
-          'app-notification': userNotifications['app-notification'],
-          'email-notification': userNotifications['email-notification'],
+          'app-notification':
+            userNotifications && userNotifications['app-notification']
+              ? userNotifications['app-notification']
+              : null,
+          'email-notification':
+            userNotifications && userNotifications['email-notification']
+              ? userNotifications['email-notification']
+              : null,
         }),
       )
       store.dispatch(setAuthenticated(true))
