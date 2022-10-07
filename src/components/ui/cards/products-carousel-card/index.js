@@ -8,7 +8,8 @@ import {
   doc,
   Timestamp,
 } from 'firebase/firestore'
-import { firbaseAddDoc, firbaseUpdateDoc } from '@/firebase/utils'
+import { firebaseAddDoc, firebaseUpdateDoc } from '@/firebase/utils'
+
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
@@ -35,7 +36,6 @@ const ProductsCarouselCard = ({
   usdBalance,
   setFavouriteNfts,
 }) => {
-  const nftID = data && (data?.id || data?.uid)
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
@@ -122,7 +122,8 @@ const ProductsCarouselCard = ({
 
   useEffect(() => {
     if (!favouriteNfts) return
-    const isLike = favouriteNfts?.findIndex((like) => like === nftID) !== -1
+    const isLike =
+      favouriteNfts?.findIndex((like) => like === data?.tokenId) !== -1
     setHasLike(isLike)
   }, [favouriteNfts])
 
@@ -131,20 +132,24 @@ const ProductsCarouselCard = ({
     if (hasLike) {
       setHasLike(false)
       await firebaseUpdateDoc('favourites', currentUser?.uid, {
-        nfts: arrayRemove(nftID),
+        nfts: arrayRemove(data?.tokenId),
       })
-      setFavouriteNfts((state) => {
-        const newState = state.filter((s) => s !== nftID)
-        return [...newState]
-      })
-      await firebaseUpdateDoc('nfts', nftID, { likes: increment(-1) })
+      if (setFavouriteNfts) {
+        setFavouriteNfts((state) => {
+          const newState = state.filter((s) => s !== data?.tokenId)
+          return [...newState]
+        })
+      }
+      await firebaseUpdateDoc('nfts', data?.tokenId, { likes: increment(-1) })
     } else {
       setHasLike(true)
 
       const updateFav = { nfts: arrayUnion(data?.tokenId) }
       if (favouriteNfts) {
         await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
-        setFavouriteNfts((state) => [...state, data?.tokenId])
+        if (setFavouriteNfts) {
+          setFavouriteNfts((state) => [...state, data?.tokenId])
+        }
       } else {
         await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
       }

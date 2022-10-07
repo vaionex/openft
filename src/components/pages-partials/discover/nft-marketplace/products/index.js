@@ -22,6 +22,7 @@ const NFTMarketplaceProducts = ({
                 setFavouriteNfts={setFavouriteNfts}
                 key={hit.objectID}
                 data={hit}
+                usdBalance={usdBalance}
                 type="list"
               />
             ))}
