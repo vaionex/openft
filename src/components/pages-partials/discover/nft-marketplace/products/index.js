@@ -3,7 +3,12 @@ import { connectHits } from 'react-instantsearch-dom'
 import NFTMarketplacePagination from '../pagination'
 import usePriceConverter from '@/hooks/usePriceConverter'
 
-const NFTMarketplaceProducts = ({ hits, favouriteNfts, toTopRef }) => {
+const NFTMarketplaceProducts = ({
+  hits,
+  favouriteNfts,
+  toTopRef,
+  setFavouriteNfts,
+}) => {
   const usdBalance = usePriceConverter()
 
   return (
@@ -14,6 +19,7 @@ const NFTMarketplaceProducts = ({ hits, favouriteNfts, toTopRef }) => {
             {hits.map((hit) => (
               <ProductsCarouselCard
                 favouriteNfts={favouriteNfts}
+                setFavouriteNfts={setFavouriteNfts}
                 key={hit.objectID}
                 data={hit}
                 type="list"

@@ -133,6 +133,7 @@ const ProductsCarousel = ({ data }) => {
               key={item.id}
               data={item}
               favouriteNfts={favouriteNfts}
+              setFavouriteNfts={setFavouriteNfts}
               type="carousel"
             />
           ))}

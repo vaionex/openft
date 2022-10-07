@@ -13,8 +13,14 @@ import { useRouter } from 'next/router'
 import ModalConfirm from '../../modal-confirm'
 import useArtistData from '@/hooks/useArtistData'
 
-
-const ProductsCarouselCard = ({ data, type, idx, favouriteNfts, usdBalance }) => {
+const ProductsCarouselCard = ({
+  data,
+  type,
+  idx,
+  favouriteNfts,
+  usdBalance,
+  setFavouriteNfts,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
@@ -47,9 +53,12 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts, usdBalance }) =>
     } else {
       setHasLike(true)
       const updateFav = { nfts: arrayUnion(data?.uid) }
-      favouriteNfts
-        ? await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
-        : await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
+      if (favouriteNfts) {
+        await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
+        setFavouriteNfts((state) => [...state, data?.uid])
+      } else {
+        await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
+      }
       await firebaseUpdateDoc('nfts', data?.uid, { likes: increment(1) })
     }
   }
