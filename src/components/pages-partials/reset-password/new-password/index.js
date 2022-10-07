@@ -20,6 +20,10 @@ const validationSchema = yup.object().shape({
     .matches(/^(?=.*?[A-Z])/, 'Password need upper case letter')
     .matches(/(?=.*?[a-z])/, 'Password need lower case letter')
     .matches(/(?=.*?[0-9])/, 'Password need number'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
 })
 
 const ResetNewPassword = () => {
@@ -125,6 +129,29 @@ const ResetNewPassword = () => {
                           className="sm:col-span-2"
                           placeholder="Enter your current password"
                           error={errors.password?.message}
+                          {...field}
+                        />
+                      )
+                    }}
+                  />
+                </InputMain>
+
+                <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
+                  <InputMain.Label
+                    label="Confirm new password"
+                    htmlFor="confirmPassword"
+                  />
+                  <Controller
+                    name={'confirmPassword'}
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <InputMain.Input
+                          id="confirmPassword"
+                          inputType={'password'}
+                          className="sm:col-span-2"
+                          placeholder="Confirm new password"
+                          error={errors.confirmPassword?.message}
                           {...field}
                         />
                       )
