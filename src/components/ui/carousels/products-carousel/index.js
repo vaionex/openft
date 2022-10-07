@@ -7,6 +7,7 @@ import { ProductsCarouselCard } from '../../cards'
 import { useSelector } from 'react-redux'
 import { firebaseGetSingleDoc } from '@/firebase/utils'
 import userSelector from '@/redux/selectors/user'
+import usePriceConverter from '@/hooks/usePriceConverter'
 
 const mainSettings = {
   dots: false,
@@ -73,6 +74,7 @@ PrevArrow.propTypes = {
 
 const ProductsCarousel = ({ data }) => {
   const { currentUser } = useSelector(userSelector)
+  const usdBalance = usePriceConverter()
 
   const [favouriteNfts, setFavouriteNfts] = useState(null)
 
@@ -134,6 +136,7 @@ const ProductsCarousel = ({ data }) => {
               data={item}
               favouriteNfts={favouriteNfts}
               type="carousel"
+              usdBalance={usdBalance}
             />
           ))}
       </Slider>

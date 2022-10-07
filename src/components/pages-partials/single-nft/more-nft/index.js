@@ -1,4 +1,5 @@
 import { ProductsCarouselCard } from '@/components/ui/cards'
+import usePriceConverter from '@/hooks/usePriceConverter'
 
 const products = [
   {
@@ -94,6 +95,8 @@ const products = [
 ]
 
 export default function MoreNft() {
+  const usdBalance = usePriceConverter()
+
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
       <section aria-labelledby="products-heading" className="pt-6 pb-24">
@@ -103,7 +106,11 @@ export default function MoreNft() {
           <div className="h-full">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
               {products.map((item) => (
-                <ProductsCarouselCard key={item.id} data={item} />
+                <ProductsCarouselCard
+                  key={item.id}
+                  data={item}
+                  usdBalance={usdBalance}
+                />
               ))}
             </div>
           </div>
