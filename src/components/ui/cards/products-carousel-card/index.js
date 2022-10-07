@@ -134,12 +134,14 @@ const ProductsCarouselCard = ({
       await firebaseUpdateDoc('favourites', currentUser?.uid, {
         nfts: arrayRemove(data?.tokenId),
       })
-      if (setFavouriteNfts) {
-        setFavouriteNfts((state) => {
+      setFavouriteNfts((state) => {
+        if(state) {
           const newState = state.filter((s) => s !== data?.tokenId)
-          return [...newState]
-        })
-      }
+        return [...newState]
+        } else {
+          return state
+        }
+      })
       await firebaseUpdateDoc('nfts', data?.tokenId, { likes: increment(-1) })
     } else {
       setHasLike(true)

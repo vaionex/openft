@@ -58,7 +58,7 @@ const RegistrationFormMain = () => {
     }
 
     try {
-      await dispatch(
+      dispatch(
         register({
           dataForServer,
           coverImageForUpload,
