@@ -1,4 +1,5 @@
 import Checkbox from '@/components/ui/checkbox'
+import NextLink from 'next/link'
 import userSelector from '@/redux/selectors/user'
 import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
@@ -247,9 +248,9 @@ const NotificationsForm = () => {
           <Alert message={'Notifications has been updated'} type="success" />
         )}
         <div className="flex justify-end gap-3 border-none">
-          <button type="button" className="btn-secondary py-2.5">
-            Cancel
-          </button>
+          <NextLink href={'/'}>
+            <a className="btn-secondary py-2.5">Cancel</a>
+          </NextLink>
 
           <ButtonWLoading isPending={isSubmitting} text="Save" type="submit" />
         </div>
