@@ -13,10 +13,10 @@ const NFTMarketplaceProducts = ({ hits, favouriteNfts, toTopRef }) => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {hits.map((hit) => (
               <ProductsCarouselCard
+                favouriteNfts={favouriteNfts}
                 key={hit.objectID}
                 data={hit}
                 type="list"
-                usdBalance={usdBalance}
               />
             ))}
           </div>

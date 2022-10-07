@@ -15,7 +15,7 @@ import ButtonWLoading from '@/components/ui/button-w-loading'
 import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
 import {
-  firebaseAddDoc,
+  firebaseAddDocWithRandomID,
   firebaseGetNftImageUrl,
   firebaseUploadNftImage,
 } from '@/firebase/utils'
@@ -191,7 +191,7 @@ const UploadForm = () => {
           : null,
       }
 
-      const nftDataFromFirebase = await firebaseAddDoc(
+      const nftDataFromFirebase = await firebaseAddDocWithRandomID(
         'nfts',
         nftDataToFirebase,
       )

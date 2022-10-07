@@ -470,6 +470,20 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
+const firebaseAddDocWithRandomID = async (collectionName, obj) => {
+  try {
+    const docRef = collection(firebaseDb, collectionName)
+    const dc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
+    await firebaseUpdateDoc(collectionName, dc.id, {
+      uid: dc.id,
+    })
+
+    return dc
+  } catch (error) {
+    console.error(error.message)
+  }
+}
+
 const firebaseAddDocWithID = async (collectionName, obj, uid) => {
   try {
     const dc = await setDoc(doc(firebaseDb, collectionName, uid), {
@@ -484,15 +498,13 @@ const firebaseAddDocWithID = async (collectionName, obj, uid) => {
   }
 }
 
-const firebaseAddDoc = async (collectionName, obj) => {
+const firebaseAddDoc = async (collectionName, uid, obj) => {
   try {
-    const docRef = collection(firebaseDb, collectionName)
-    const doc = await addDoc(docRef, { ...obj, timestamp: Timestamp.now() })
-    await firebaseUpdateDoc(collectionName, doc.id, {
-      uid: doc.id,
+    const dc = await setDoc(doc(firebaseDb, collectionName, uid), {
+      ...obj,
+      timestamp: Timestamp.now(),
     })
-
-    return doc
+    return dc
   } catch (error) {
     console.error(error.message)
   }
@@ -604,6 +616,7 @@ export {
   firebaseGetSingleDoc,
   firebaseAddDoc,
   firebaseAddDocWithID,
+  firebaseAddDocWithRandomID,
   firebaseDeleteDoc,
   firebaseUpdateDoc,
   firebaseDeleteImage,
