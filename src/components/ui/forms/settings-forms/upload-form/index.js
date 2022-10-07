@@ -11,7 +11,7 @@ import ButtonWLoading from '@/components/ui/button-w-loading'
 import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
 import {
-  firebaseAddDoc,
+  firebaseAddDocWithRandomID,
   firebaseGetNftImageUrl,
   firebaseUploadNftImage,
 } from '@/firebase/utils'
@@ -97,7 +97,7 @@ const UploadForm = () => {
       })
       if (!url || !fileFromStorage) {
         throw new Error('Failed to upload image to server')
-      } 
+      }
 
       const nftImageForChain = await firebaseGetNftImageUrl(
         currentUser.uid,
@@ -158,11 +158,11 @@ const UploadForm = () => {
         },
       }
 
-      const nftDataFromFirebase = await firebaseAddDoc(
+      const nftDataFromFirebase = await firebaseAddDocWithRandomID(
         'nfts',
         nftDataToFirebase,
       )
- 
+
       if (!nftDataFromFirebase) {
         throw new Error('Failed occured while uploading the NFT')
       }

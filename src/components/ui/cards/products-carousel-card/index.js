@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ShareIcon } from '@heroicons/react/outline'
 import { increment, arrayUnion, arrayRemove } from 'firebase/firestore'
-import { firbaseAddDoc, firbaseUpdateDoc } from '@/firebase/utils'
+import { firebaseAddDoc, firebaseUpdateDoc } from '@/firebase/utils'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
@@ -12,16 +12,12 @@ import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
 import ModalConfirm from '../../modal-confirm'
 
-// import { addBasket, setOpen } from '@/redux/slices/basket'
-// import basketSelector from '@/redux/selectors/basket'
-
 const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
   const router = useRouter()
   const [hasLike, setHasLike] = useState(false)
-  // const { basket } = useSelector(basketSelector)
 
   const { currentUser, isAuthenticated } = useSelector(userSelector)
 
@@ -34,7 +30,7 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
 
   useEffect(() => {
     if (!favouriteNfts) return
-    const isLike = favouriteNfts?.findIndex((like) => like === data?.id) !== -1
+    const isLike = favouriteNfts?.findIndex((like) => like === data?.uid) !== -1
     setHasLike(isLike)
   }, [favouriteNfts])
 
@@ -42,17 +38,17 @@ const ProductsCarouselCard = ({ data, type, idx, favouriteNfts }) => {
     if (!currentUser) return
     if (hasLike) {
       setHasLike(false)
-      await firbaseUpdateDoc('favourites', currentUser?.uid, {
-        nfts: arrayRemove(data?.id),
+      await firebaseUpdateDoc('favourites', currentUser?.uid, {
+        nfts: arrayRemove(data?.uid),
       })
-      await firbaseUpdateDoc('nfts', data?.id, { likes: increment(-1) })
+      await firebaseUpdateDoc('nfts', data?.uid, { likes: increment(-1) })
     } else {
       setHasLike(true)
-      const updateFav = { nfts: arrayUnion(data?.id) }
+      const updateFav = { nfts: arrayUnion(data?.uid) }
       favouriteNfts
-        ? await firbaseUpdateDoc('favourites', currentUser?.uid, updateFav)
-        : await firbaseAddDoc('favourites', currentUser?.uid, updateFav)
-      await firbaseUpdateDoc('nfts', data?.id, { likes: increment(1) })
+        ? await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
+        : await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
+      await firebaseUpdateDoc('nfts', data?.uid, { likes: increment(1) })
     }
   }
 

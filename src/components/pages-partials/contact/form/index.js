@@ -27,7 +27,7 @@ export default function Form() {
     reset({ 'first-name': '', 'last-name': '', email: '', company: '' })
     textAreaRef.current.value = ''
     setMessage({
-      msg: 'Success! 🎉 Thank you for contacting us!',
+      msg: 'Thanks for reaching out 🎉. One of our representative will reach out to you shortly',
       type: 'success',
     })
   }
