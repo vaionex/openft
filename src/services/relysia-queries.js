@@ -163,7 +163,7 @@ export const uploadNFTFile = async (formData, walletId) => {
       retries: 10, // number of retries
       retryDelay: (retryCount) => {
         console.log(`retry attempt: ${retryCount}`)
-        return 5000 // time interval between retries
+        return 3000 // time interval between retries
       },
       retryCondition: (error) => {
         console.log('retry error call', error.message, error.response.data)
@@ -187,10 +187,13 @@ export const uploadNFTFile = async (formData, walletId) => {
 export const mintNFT = async (nftDetails) => {
   const { url, description, name, supply, amount, txid } = nftDetails
 
+  const nanoid = require('nanoid').nanoid
+  let nanoidPreSymbol = nanoid(6)
+
   const parameters = {
     name,
     protocolId: 'STAS',
-    symbol: 'SBP',
+    symbol: nanoidPreSymbol,
     description,
     image: url,
     tokenSupply: supply,
@@ -260,5 +263,32 @@ export const createAtomicSwapOffer = async (offerDetails) => {
   } catch (error) {
     console.log('error', error)
     return false
+  }
+}
+
+//swaping nft
+export const swapNft = async (swapHex) => {
+  const parameters = {
+    dataArray: [
+      {
+        swapHex: swapHex,
+      },
+    ],
+  }
+
+  try {
+    const response = await apiConfig.post('/v1/swap', parameters)
+
+    return response.data.data
+  } catch (error) {
+    console.log('swap error', error)
+    console.log('err.response', error.response.data, error.message)
+
+    return {
+      status: 'error',
+      msg: error?.response?.data?.msg
+        ? error.response.data.msg
+        : 'An error occured, please try later!',
+    }
   }
 }

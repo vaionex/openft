@@ -2,11 +2,13 @@ import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/outline'
 import { FeaturedIcon } from '@/components/common/icons'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
 const ModalConfirm = ({
   isOpen,
   onClose,
   onConfirm,
+  isLoadingConfirmBtn = false,
   text,
   title,
   button1Text = 'Delete',
@@ -76,13 +78,13 @@ const ModalConfirm = ({
                   }`}
                 >
                   {deleteButton && (
-                    <button
+                    <ButtonWLoading
+                      isPending={isLoadingConfirmBtn}
+                      text={button1Text}
                       type="button"
                       className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
                       onClick={onConfirm}
-                    >
-                      {button1Text}
-                    </button>
+                    />
                   )}
                   {cancelButton && (
                     <button
