@@ -276,10 +276,10 @@ const firebaseUploadNftImage = async ({ file, userId }) => {
       contentType: file.type,
     }
     const fileFromStorage = await uploadBytes(fileRef, file, metadata)
-    const url = await getDownloadURL(fileRef)
-    return { url, fileFromStorage }
+    // const url = await getDownloadURL(fileRef)
+    return { fileFromStorage }
   } catch (error) {
-    console.log(error)
+    console.log('firebaseUploadNftImage error', error)
     return { error: error.message }
   }
 }
@@ -510,6 +510,17 @@ const firebaseAddDoc = async (collectionName, uid, obj) => {
   }
 }
 
+const firebaseSetDoc = async (collection, id, obj) => {
+  try {
+    const docRef = doc(firebaseDb, collection, id)
+    await setDoc(docRef, { ...obj, timestamp: Timestamp.now() })
+    return true
+  } catch (error) {
+    console.error('firebaseSetDoc err', error.message)
+    return null
+  }
+}
+
 const firebaseUpdateDoc = async (collectionName, id, obj) => {
   try {
     const docRef = doc(firebaseDb, collectionName, id)
@@ -571,6 +582,7 @@ const firebaseOnIdTokenChange = async () => {
 
   firebaseAuth.onIdTokenChanged(async (user) => {
     if (user) {
+      console.log('user.accessToken', user.accessToken)
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       if (!paymail && !address) {
         const walletData = await getWalletAddressAndPaymail(walletId)
@@ -615,6 +627,7 @@ export {
   firebaseIsUsernameExist,
   firebaseGetSingleDoc,
   firebaseAddDoc,
+  firebaseSetDoc,
   firebaseAddDocWithID,
   firebaseAddDocWithRandomID,
   firebaseDeleteDoc,

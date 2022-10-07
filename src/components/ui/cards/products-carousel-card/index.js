@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { ShareIcon } from '@heroicons/react/outline'
-import { increment, arrayUnion, arrayRemove } from 'firebase/firestore'
+import {
+  increment,
+  arrayUnion,
+  arrayRemove,
+  writeBatch,
+  doc,
+  Timestamp,
+} from 'firebase/firestore'
 import { firebaseAddDoc, firebaseUpdateDoc } from '@/firebase/utils'
+
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
@@ -12,6 +20,13 @@ import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
 import ModalConfirm from '../../modal-confirm'
 import useArtistData from '@/hooks/useArtistData'
+import walletSelector from '@/redux/selectors/wallet'
+import Alert from '@/components/ui/alert'
+import { swapNft } from '@/services/relysia-queries'
+import { firebaseDb } from '@/firebase/init'
+import { v4 as uuidv4 } from 'uuid'
+
+// import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
 const ProductsCarouselCard = ({
   data,
@@ -21,7 +36,6 @@ const ProductsCarouselCard = ({
   usdBalance,
   setFavouriteNfts,
 }) => {
-  const nftID = data && (data?.id || data?.uid)
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
@@ -29,17 +43,87 @@ const ProductsCarouselCard = ({
   const [hasLike, setHasLike] = useState(false)
   const artistData = useArtistData(data?.ownerId)
   const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const { paymail, address, balance } = useSelector(walletSelector)
+  const [loadingPurchaseBtn, setloadingPurchaseBtn] = useState(false)
+  const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
 
   const dispatch = useDispatch()
 
-  const handleBuy = () => {
-    setIsOpen(false)
-    setIsSuccess(true)
+  useEffect(() => {
+    if (dialogErrorMsg) {
+      setTimeout(() => {
+        setdialogErrorMsg(null)
+      }, 3000)
+    }
+  }, [dialogErrorMsg])
+
+  const handleBuyNft = async () => {
+    try {
+      setloadingPurchaseBtn(true)
+
+      //checking wallet balance
+      let nftPriceInBSV = Number((data.amount / usdBalance).toFixed(8))
+      if (balance < nftPriceInBSV) {
+        setdialogErrorMsg('Insufficient balance in wallet')
+
+        setloadingPurchaseBtn(false)
+        return null
+      }
+
+      //swaping nft
+      if (!data.offerHex) {
+        setdialogErrorMsg('NFT is not available for sale any more!')
+        setloadingPurchaseBtn(false)
+        return null
+      }
+      // const swapNftRes = await swapNft(data.offerHex)
+
+      // console.log('swapNftRes', swapNftRes)
+      // if (swapNftRes && swapNftRes.status === 'error') {
+      //   setdialogErrorMsg(swapNftRes.msg)
+      //   setloadingPurchaseBtn(false)
+      //   return null
+      // }
+
+      // //updating database
+      // const batch = writeBatch(firebaseDb)
+      // const tokenRef = doc(firebaseDb, 'nft', data.tokenId)
+
+      // let tokenObj = {
+      //   ownerId: currentUser.uid,
+      // }
+      // batch.update(tokenRef, tokenObj)
+
+      // //nft history
+      // let nftHisId = uuidv4()
+      // const hisRef = doc(
+      //   firebaseDb,
+      //   'nft',
+      //   data.tokenId,
+      //   'nftHistory',
+      //   nftHisId,
+      // )
+      // let hisObj = {
+      //   type: 'PURCHASE',
+      //   sn: 1,
+      //   timestamp: Timestamp.now(),
+      // }
+      // batch.set(hisRef, hisObj)
+      // // await batch.commit();
+
+      setloadingPurchaseBtn(false)
+      setIsOpen(false)
+      setIsSuccess(true)
+    } catch (err) {
+      console.log('buy func error', error)
+      setloadingPurchaseBtn(false)
+    }
   }
 
   useEffect(() => {
     if (!favouriteNfts) return
-    const isLike = favouriteNfts?.findIndex((like) => like === nftID) !== -1
+    const isLike =
+      favouriteNfts?.findIndex((like) => like === data?.tokenId) !== -1
     setHasLike(isLike)
   }, [favouriteNfts])
 
@@ -48,31 +132,32 @@ const ProductsCarouselCard = ({
     if (hasLike) {
       setHasLike(false)
       await firebaseUpdateDoc('favourites', currentUser?.uid, {
-        nfts: arrayRemove(nftID),
+        nfts: arrayRemove(data?.tokenId),
       })
       setFavouriteNfts((state) => {
         if(state) {
-          const newState = state.filter((s) => s !== nftID)
+          const newState = state.filter((s) => s !== data?.tokenId)
         return [...newState]
         } else {
           return state
         }
       })
-      await firebaseUpdateDoc('nfts', nftID, { likes: increment(-1) })
+      await firebaseUpdateDoc('nfts', data?.tokenId, { likes: increment(-1) })
     } else {
       setHasLike(true)
-      const updateFav = { nfts: arrayUnion(nftID) }
+
+      const updateFav = { nfts: arrayUnion(data?.tokenId) }
       if (favouriteNfts) {
         await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
-        setFavouriteNfts((state) => [...state, nftID])
+        if (setFavouriteNfts) {
+          setFavouriteNfts((state) => [...state, data?.tokenId])
+        }
       } else {
         await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
       }
-      await firebaseUpdateDoc('nfts', nftID, { likes: increment(1) })
+      await firebaseUpdateDoc('nfts', data?.tokenId, { likes: increment(1) })
     }
   }
-
-  // console.log('artistData', data, artistData)
 
   return (
     <div
@@ -84,7 +169,7 @@ const ProductsCarouselCard = ({
     >
       <div className="relative">
         <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
-          <NextLink href={`/discover/${data?.uid}`}>
+          <NextLink href={`/discover/${data?.tokenId}`}>
             <a className="cursor-pointer">
               {data?.imageURL ? (
                 <>
@@ -119,7 +204,7 @@ const ProductsCarouselCard = ({
           </p>
         </div>
         <div className="flex-1 my-6">
-          <NextLink href={`/discover/${data?.uid}`}>
+          <NextLink href={`/discover/${data?.tokenId}`}>
             <a className="cursor-pointer">
               <h3 className="text-sm text-blue-700 min-h-[20px]">
                 {artistData?.name}
@@ -151,9 +236,16 @@ const ProductsCarouselCard = ({
         button1Text={'Confirm'}
         button2Text={'Cancel'}
         title={'Are you sure you want to buy this NFT?'}
-        text={<Card data={data} />}
+        text={
+          <Card
+            data={data}
+            usdBalance={usdBalance}
+            dialogErrorMsg={dialogErrorMsg}
+          />
+        }
         onClose={() => setIsOpen(false)}
-        onConfirm={handleBuy}
+        onConfirm={handleBuyNft}
+        isLoadingConfirmBtn={loadingPurchaseBtn}
       />
       <ModalConfirm
         isOpen={isSuccess}
@@ -186,53 +278,58 @@ ProductsCarouselCard.propTypes = {
 
 export default ProductsCarouselCard
 
-const Card = ({ data }) => {
+const Card = ({ data, usdBalance, dialogErrorMsg }) => {
   return (
-    <div
-      className={twMerge(
-        'relative border border-gray-200 group rounded-xl flex flex-col',
-      )}
-    >
-      <div className="relative">
-        <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
-          <NextLink href={`/discover/${data?.uid}`}>
-            <a className="cursor-pointer">
-              {data?.imageURL ? (
-                <>
-                  <Image
-                    src={data?.imageURL || ''}
-                    alt={data?.name}
-                    layout="fill"
-                    className="absolute inset-0 object-cover object-center w-full h-full"
-                    quality={70}
-                  />
-                  <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
-                </>
-              ) : (
-                <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
-              )}
-            </a>
-          </NextLink>
+    <div>
+      <div
+        className={twMerge(
+          'relative border border-gray-200 group rounded-xl flex flex-col',
+        )}
+      >
+        <div className="relative">
+          <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
+            {data?.imageURL ? (
+              <>
+                <Image
+                  src={data?.imageURL || ''}
+                  alt={data?.name}
+                  layout="fill"
+                  className="absolute inset-0 object-cover object-center w-full h-full"
+                  quality={70}
+                />
+                <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
+              </>
+            ) : (
+              <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col flex-1 px-4 py-5">
+          <div className="flex items-center justify-between">
+            <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
+            <p className="text-xl font-medium text-gray-900">
+              <span className="mr-2">${data?.amount}</span> BSV{' '}
+              <span>
+                {data?.amount && Number((data.amount / usdBalance).toFixed(4))}
+              </span>
+            </p>
+          </div>
+          <div className="flex-1 my-6">
+            <h3 className="text-sm text-start text-blue-700 min-h-[20px]">
+              {data?.artist?.name}
+            </h3>
+            <p className="mt-1 text-lg text-start text-gray-800">
+              {data?.name}
+            </p>
+            {/* <p className="mt-1 text-lg text-start text-gray-800">
+            Wallet Balance
+          </p> */}
+          </div>
         </div>
       </div>
-      <div className="flex flex-col flex-1 px-4 py-5">
-        <div className="flex items-center justify-between">
-          <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
-          <p className="text-xl font-medium text-gray-900">
-            ${data?.amount} BSV 1
-          </p>
-        </div>
-        <div className="flex-1 my-6">
-          <NextLink href={`/discover/${data?.uid}`}>
-            <a className="cursor-pointer">
-              <h3 className="text-sm text-start text-blue-700 min-h-[20px]">
-                {data?.artist?.name}
-              </h3>
-              <p className="mt-1 text-lg text-start text-gray-800">
-                {data?.name}
-              </p>
-            </a>
-          </NextLink>
+      <div className="flex justify-center mt-1">
+        <div>
+          {dialogErrorMsg && <Alert message={dialogErrorMsg} type="error" />}{' '}
         </div>
       </div>
     </div>

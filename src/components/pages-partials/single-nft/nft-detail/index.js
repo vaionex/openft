@@ -5,12 +5,10 @@ import { ProductsCarouselCard } from '@/components/ui/cards'
 import { useRouter } from 'next/router'
 import { doc, getDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
+import usePriceConverter from '@/hooks/usePriceConverter'
+import useArtistData from '@/hooks/useArtistData'
+import NextLink from 'next/link'
 
-const product = {
-  name: 'Little ghost',
-  description:
-    'The Little Ghost lives in the castle Eulenstein. Its best friend is an eagle-owl Schuhu. By shaking its bunch of keys, the Little Ghost can open everything that it wants, either a door or a treasure chest, without touching it. The biggest wish of the Little Ghost is to see the world during daylight.',
-}
 const transactionData = {
   protocol: {
     name: 'Protocol',
@@ -44,17 +42,6 @@ const purchaseData = [
   },
 ]
 
-const nftDataStatic = {
-  id: 6,
-  name: 'Basic Tee',
-  href: '5',
-  imageSrc: '/images/mock-carousel/Image_1.png',
-  imageAlt: "Front of men's Basic Tee in black.",
-  price: '$35',
-  priceType: 'BSV 1',
-  color: 'Black',
-}
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -63,6 +50,8 @@ export default function NftDetail() {
   const router = useRouter()
   const { slug } = router.query
   const [nftData, setnftData] = useState(null)
+  const usdBalance = usePriceConverter()
+  const artistData = useArtistData(nftData?.ownerId)
 
   useEffect(() => {
     if (slug) {
@@ -80,6 +69,7 @@ export default function NftDetail() {
     }
   }
 
+  console.log('77777artistData', artistData)
   return (
     <div className="bg-white">
       <div className="px-4 py-8 mx-auto mb-12 lg:mb-0 lg:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -87,11 +77,11 @@ export default function NftDetail() {
         <div className="lg:grid lg:grid-rows-1 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-10 ">
           {/* Product image */}
           <div className="lg:row-end-1 lg:col-span-5">
-            <ProductsCarouselCard data={nftData} />
+            <ProductsCarouselCard data={nftData} usdBalance={usdBalance} />
           </div>
 
           {/* Product details */}
-          <div className="max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
+          <div className="w-full  max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
             <div className="flex flex-col">
               <div>
                 <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-500">
@@ -99,16 +89,26 @@ export default function NftDetail() {
                   Verified
                 </span>
               </div>
+
               <div className="flex items-center py-3 mt-3 space-x-4">
-                <img
-                  src={'/images/mini-vaionex.webp'}
-                  alt="vaionex-mini-icon"
-                  className="w-8 h-8 bg-gray-100 rounded-full"
-                />
-                <span className="text-lg font-medium text-blue-600">
-                  Vaionex Art
-                </span>
+                <NextLink href={`/user/${artistData?.username}`}>
+                  <a>
+                    <img
+                      src={artistData?.profileImage}
+                      alt="vaionex-mini-icon"
+                      className="w-8 h-8 bg-gray-100 rounded-full"
+                    />
+                  </a>
+                </NextLink>
+                <NextLink href={`/user/${artistData?.username}`}>
+                  <a>
+                    <span className="text-lg font-medium text-blue-600">
+                      {artistData?.name}
+                    </span>
+                  </a>
+                </NextLink>
               </div>
+
               <div className="mt-4">
                 <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
                   {nftData?.name}

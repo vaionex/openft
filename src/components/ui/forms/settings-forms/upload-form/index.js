@@ -15,6 +15,7 @@ import ButtonWLoading from '@/components/ui/button-w-loading'
 import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
 import {
+  firebaseSetDoc,
   firebaseAddDocWithRandomID,
   firebaseGetNftImageUrl,
   firebaseUploadNftImage,
@@ -36,7 +37,7 @@ const imageInputAttributes = {
 
 const UploadForm = () => {
   const { currentUser } = useSelector(userSelector)
-  const DESC_MAX_LENGTH = 40
+  const DESC_MAX_LENGTH = 200
   const usdBalance = usePriceConverter()
   const [photoValues, setPhotoValues] = useState({})
   const [bsvPrice, setBsvPrice] = useState('')
@@ -80,7 +81,7 @@ const UploadForm = () => {
       amount: '',
       description: '',
       name: '',
-      supply: '',
+      // supply: '',
     })
     setPhotoValues({})
     setCroppedImageBlob(null)
@@ -88,8 +89,6 @@ const UploadForm = () => {
 
   const onSubmit = async (formData) => {
     console.log('submit call ')
-    console.log('formData', formData)
-
     setIsPending(true)
 
     try {
@@ -97,15 +96,17 @@ const UploadForm = () => {
         throw new Error('Please upload an image')
       }
 
-      const { url, fileFromStorage } = await firebaseUploadNftImage({
+      //uploading image to firebase storage
+      console.log('uploading image to Firebase storage')
+
+      const { fileFromStorage } = await firebaseUploadNftImage({
         file: croppedImageBlob,
         userId: currentUser.uid,
       })
-      if (!url || !fileFromStorage) {
+      if (!fileFromStorage) {
         throw new Error('Failed to upload image to server')
       }
 
-      console.log('url, fileFromStorage ', url, fileFromStorage)
       const nftImageForChain = await firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
@@ -116,20 +117,20 @@ const UploadForm = () => {
         fileUrl: nftImageForChain,
         fileName: formData.name,
       }
-      console.log('uploading image to bsv', fileToChain)
 
+      console.log('uploading image to BSV network')
       const blockchainResponse = await uploadNFTFile(fileToChain)
       if (!blockchainResponse) {
         throw new Error(
           'Failed to upload file to blockchain, please press "Save" again',
         )
       }
-      console.log('image uploaded')
-
       const {
         uploadObj: { txid, url: blockchainUrl },
       } = blockchainResponse
 
+      //minting nft
+      console.log('minting NFT')
       const dataToMint = {
         name: formData.name,
         description: formData.description,
@@ -137,15 +138,11 @@ const UploadForm = () => {
         supply: +formData.supply || 1,
         txid,
       }
-
       const mintResponse = await mintNFT(dataToMint)
-
       if (!mintResponse) {
         throw new Error('Failed to mint NFT')
       }
-
       const { tokenId, tokenObj } = mintResponse
-      console.log('tokenObj', tokenObj)
       const nftImageForDisplay = await firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
@@ -153,6 +150,7 @@ const UploadForm = () => {
       )
 
       //creating atomic swap offer
+      console.log('creating offer hex')
       let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId,
@@ -171,6 +169,7 @@ const UploadForm = () => {
       }
 
       //saving data to database
+      console.log('saving data to database')
       const nftDataToFirebase = {
         ...formData,
         amountInBSV: amountInBSV,
@@ -190,9 +189,11 @@ const UploadForm = () => {
           ? atomicSwapOffer.contents[0]
           : null,
       }
+      console.log('tokenId', tokenId)
+      const nftDataFromFirebase = await firebaseSetDoc(
 
-      const nftDataFromFirebase = await firebaseAddDocWithRandomID(
         'nfts',
+        tokenId,
         nftDataToFirebase,
       )
 
@@ -349,7 +350,7 @@ const UploadForm = () => {
           />
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        {/* <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Supply"
             sublabel="The number of copies minted artwork."
@@ -378,7 +379,7 @@ const UploadForm = () => {
               )
             }}
           />
-        </InputMain>
+        </InputMain> */}
 
         <div className="flex flex-col items-center justify-end space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
           {isSuccess && (

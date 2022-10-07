@@ -16,13 +16,16 @@ exports.addToIndex = functions.firestore
     //filter indexable data
     const indexableData = {
       objectID,
-      uid: data.uid,
+      tokenId: data.tokenId,
       name: data.name,
       description: data.description,
       imageURL: data.imageURL,
       amount: data.amount,
-      artist: data.artist,
-      userId: data.userId,
+      ownerId: data.ownerId,
+      minterId: data.minterId,
+      offerHex: data.offerHex,
+      likes: data.likes,
+      timestamp: data.timestamp,
     }
 
     return index.saveObject(indexableData)
@@ -37,13 +40,16 @@ exports.updateIndex = functions.firestore
     //filter indexable data
     const indexableData = {
       objectID,
-      uid: newData.uid,
+      tokenId: newData.tokenId,
       name: newData.name,
       description: newData.description,
       imageURL: newData.imageURL,
       amount: newData.amount,
-      artist: newData.artist,
-      userId: newData.userId,
+      ownerId: newData.ownerId,
+      minterId: newData.minterId,
+      offerHex: newData.offerHex,
+      likes: newData.likes,
+      timestamp: newData.timestamp,
     }
 
     return index.saveObject(indexableData)
@@ -52,3 +58,6 @@ exports.updateIndex = functions.firestore
 exports.deleteFromIndex = functions.firestore
   .document('nfts/{nftId}')
   .onDelete((snap) => index.deleteObject(snap.id))
+
+//deploy only specific function
+//firebase deploy --only functions:addToIndex,
