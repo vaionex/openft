@@ -60,7 +60,11 @@ export default function Form() {
               >
                 <div>
                   <InputMain className="relative pb-2 border-none sm:gap-1">
-                    <InputMain.Label label="First name" htmlFor="first-name" />
+                    <InputMain.Label
+                      label="First name"
+                      htmlFor="first-name"
+                      required
+                    />
                     <Controller
                       name={'first-name'}
                       control={control}
@@ -81,7 +85,11 @@ export default function Form() {
                 </div>
                 <div>
                   <InputMain className="relative border-none sm:pb-2 sm:gap-1">
-                    <InputMain.Label label="Last name" htmlFor="last-name" />
+                    <InputMain.Label
+                      label="Last name"
+                      htmlFor="last-name"
+                      required
+                    />
                     <Controller
                       name={'last-name'}
                       control={control}
@@ -102,7 +110,7 @@ export default function Form() {
                 </div>
                 <div className="sm:col-span-2">
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
-                    <InputMain.Label label="Email" htmlFor="email" />
+                    <InputMain.Label label="Email" htmlFor="email" required />
                     <Controller
                       name={'email'}
                       control={control}
@@ -123,7 +131,11 @@ export default function Form() {
                 </div>
                 <div className="sm:col-span-2">
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
-                    <InputMain.Label label="Company" htmlFor="company" />
+                    <InputMain.Label
+                      label="Company"
+                      htmlFor="company"
+                      required
+                    />
                     <Controller
                       name={'company'}
                       control={control}
@@ -144,7 +156,11 @@ export default function Form() {
                 </div>
                 <div className="sm:col-span-2">
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
-                    <InputMain.Label label="Ask everything" htmlFor="message" />
+                    <InputMain.Label
+                      label="Ask everything"
+                      htmlFor="message"
+                      required
+                    />
                     <Controller
                       name={'message'}
                       control={control}

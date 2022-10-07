@@ -111,7 +111,7 @@ InputMain.Input = function InputMainInput(
             />
           </div>
           {error && (
-            <div className="mt-2 text-xs text-red-600 ">
+            <div className="mt-2 text-xs text-red-600 text-start">
               <span className="text-xs text-red-600 ">{error}</span>
             </div>
           )}
@@ -194,7 +194,7 @@ InputMain.Input = function InputMainInput(
             )}
           </div>
           {error && (
-            <div className="mt-2 text-xs text-red-600 ">
+            <div className="mt-2 text-xs text-red-600 text-start">
               <span className="text-xs text-red-600 ">{error}</span>
             </div>
           )}
@@ -229,7 +229,7 @@ InputMain.Textarea = function InputMainTextarea(
         />
       </div>
       {error && (
-        <div className="mt-2 text-xs text-red-600 ">
+        <div className="mt-2 text-xs text-red-600 text-start">
           <span className="text-xs text-red-600 ">{error}</span>
         </div>
       )}

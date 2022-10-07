@@ -159,7 +159,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
           text="Are you sure you want to delete the photo?"
         />
       </div>
-      <div className="mt-2 text-xs text-red-600 ">
+      <div className="mt-2 text-xs text-red-600 text-start">
         <span className="text-xs text-red-600 ">{errorMap?.message}</span>
       </div>
     </>
