@@ -27,22 +27,20 @@ import { v4 as uuidv4 } from 'uuid'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
-// import { addBasket, setOpen } from '@/redux/slices/basket'
-// import basketSelector from '@/redux/selectors/basket'
-
 const ProductsCarouselCard = ({
   data,
   type,
   idx,
   favouriteNfts,
   usdBalance,
+  setFavouriteNfts,
 }) => {
+  const nftID = data && (data?.id || data?.uid)
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
   const router = useRouter()
   const [hasLike, setHasLike] = useState(false)
-  // const { basket } = useSelector(basketSelector)
   const artistData = useArtistData(data?.ownerId)
   const { currentUser, isAuthenticated } = useSelector(userSelector)
   const { paymail, address, balance } = useSelector(walletSelector)
@@ -124,7 +122,7 @@ const ProductsCarouselCard = ({
 
   useEffect(() => {
     if (!favouriteNfts) return
-    const isLike = favouriteNfts?.findIndex((like) => like === data?.id) !== -1
+    const isLike = favouriteNfts?.findIndex((like) => like === nftID) !== -1
     setHasLike(isLike)
   }, [favouriteNfts])
 
@@ -132,17 +130,25 @@ const ProductsCarouselCard = ({
     if (!currentUser) return
     if (hasLike) {
       setHasLike(false)
-      await firbaseUpdateDoc('favourites', currentUser?.uid, {
-        nfts: arrayRemove(data?.id),
+      await firebaseUpdateDoc('favourites', currentUser?.uid, {
+        nfts: arrayRemove(nftID),
       })
-      await firbaseUpdateDoc('nfts', data?.id, { likes: increment(-1) })
+      setFavouriteNfts((state) => {
+        const newState = state.filter((s) => s !== nftID)
+        return [...newState]
+      })
+      await firebaseUpdateDoc('nfts', nftID, { likes: increment(-1) })
     } else {
       setHasLike(true)
-      const updateFav = { nfts: arrayUnion(data?.id) }
-      favouriteNfts
-        ? await firbaseUpdateDoc('favourites', currentUser?.uid, updateFav)
-        : await firbaseAddDoc('favourites', currentUser?.uid, updateFav)
-      await firbaseUpdateDoc('nfts', data?.tokenId, { likes: increment(1) })
+
+      const updateFav = { nfts: arrayUnion(data?.tokenId) }
+      if (favouriteNfts) {
+        await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
+        setFavouriteNfts((state) => [...state, data?.tokenId])
+      } else {
+        await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
+      }
+      await firebaseUpdateDoc('nfts', data?.tokenId, { likes: increment(1) })
     }
   }
 

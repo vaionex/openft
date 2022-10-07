@@ -16,6 +16,7 @@ import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
 import {
   firebaseSetDoc,
+  firebaseAddDocWithRandomID,
   firebaseGetNftImageUrl,
   firebaseUploadNftImage,
 } from '@/firebase/utils'
@@ -190,6 +191,7 @@ const UploadForm = () => {
       }
       console.log('tokenId', tokenId)
       const nftDataFromFirebase = await firebaseSetDoc(
+
         'nfts',
         tokenId,
         nftDataToFirebase,

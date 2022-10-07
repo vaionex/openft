@@ -16,7 +16,7 @@ const NFTMarketplace = ({
 }) => {
   const toTopRef = useRef(null)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [favouriteNfts, setFavouriteNfts] = useState(null)
+  const [favouriteNfts, setFavouriteNfts] = useState()
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1024px)',
   })
@@ -32,7 +32,6 @@ const NFTMarketplace = ({
     }
     setFavorites()
   }, [currentUser])
-
   return (
     <InstantSearch
       indexName={indexName}
@@ -72,6 +71,7 @@ const NFTMarketplace = ({
             <div className="lg:col-span-3">
               <NFTMarketplaceProducts
                 favouriteNfts={favouriteNfts}
+                setFavouriteNfts={setFavouriteNfts}
                 toTopRef={toTopRef}
               />
             </div>
