@@ -6,7 +6,11 @@ import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { useForm, Controller } from 'react-hook-form'
 import usePriceConverter from '@/hooks/usePriceConverter'
 import userSelector from '@/redux/selectors/user'
-import { mintNFT, uploadNFTFile } from '@/services/relysia-queries'
+import {
+  mintNFT,
+  uploadNFTFile,
+  createAtomicSwapOffer,
+} from '@/services/relysia-queries'
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
@@ -84,6 +88,8 @@ const UploadForm = () => {
 
   const onSubmit = async (formData) => {
     console.log('submit call ')
+    console.log('formData', formData)
+
     setIsPending(true)
 
     try {
@@ -99,6 +105,7 @@ const UploadForm = () => {
         throw new Error('Failed to upload image to server')
       }
 
+      console.log('url, fileFromStorage ', url, fileFromStorage)
       const nftImageForChain = await firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
@@ -138,24 +145,50 @@ const UploadForm = () => {
       }
 
       const { tokenId, tokenObj } = mintResponse
+      console.log('tokenObj', tokenObj)
       const nftImageForDisplay = await firebaseGetNftImageUrl(
         currentUser.uid,
         fileFromStorage.metadata?.name,
         'normal',
       )
 
+      //creating atomic swap offer
+      let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
+      const atomicSwapOffer = await createAtomicSwapOffer({
+        tokenId,
+        amount: amountInBSV,
+        sn: 1,
+      })
+
+      if (
+        !atomicSwapOffer ||
+        (atomicSwapOffer && !atomicSwapOffer.contents) ||
+        (atomicSwapOffer &&
+          atomicSwapOffer.contents &&
+          !atomicSwapOffer.contents[0])
+      ) {
+        throw new Error('Failed to create Offer')
+      }
+
+      //saving data to database
       const nftDataToFirebase = {
         ...formData,
+        amountInBSV: amountInBSV,
         imageURL: nftImageForDisplay,
-        userId: currentUser.uid,
+        ownerId: currentUser.uid,
+        minterId: currentUser.uid,
         likes: 0,
         tokenId,
-        txId: tokenObj.issueTxid,
-        artist: {
-          name: currentUser?.name || '',
-          profileImage: currentUser?.profileImage || '',
-          username: currentUser?.username || '',
-        },
+        contractTxid: tokenObj.contractTxid,
+        issueTxid: tokenObj.issueTxid,
+        // artist: {
+        //   name: currentUser?.name || '',
+        //   profileImage: currentUser?.profileImage || '',
+        //   username: currentUser?.username || '',
+        // },
+        offerHex: atomicSwapOffer?.contents[0]
+          ? atomicSwapOffer.contents[0]
+          : null,
       }
 
       const nftDataFromFirebase = await firebaseAddDocWithRandomID(
@@ -350,7 +383,7 @@ const UploadForm = () => {
         <div className="flex flex-col items-center justify-end space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
           {isSuccess && (
             <span className="text-xs text-green-500">
-              NFT successfully uploaded!
+              NFT successfully created!
             </span>
           )}
           {isError && (

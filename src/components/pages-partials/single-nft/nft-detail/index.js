@@ -1,7 +1,10 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import { Tab } from '@headlessui/react'
 import { ProductsCarouselCard } from '@/components/ui/cards'
+import { useRouter } from 'next/router'
+import { doc, getDoc } from 'firebase/firestore'
+import { firebaseDb } from '@/firebase/init'
 
 const product = {
   name: 'Little ghost',
@@ -9,14 +12,6 @@ const product = {
     'The Little Ghost lives in the castle Eulenstein. Its best friend is an eagle-owl Schuhu. By shaking its bunch of keys, the Little Ghost can open everything that it wants, either a door or a treasure chest, without touching it. The biggest wish of the Little Ghost is to see the world during daylight.',
 }
 const transactionData = {
-  contract: {
-    name: 'Contract Transaction ID',
-    content: '8ecd4701a77fe22d4e9063dc3c929fb718b29487d2bc36dc512c1dd580a42558',
-  },
-  issuance: {
-    name: 'Issuance Transaction ID',
-    content: '8065f715378075668e4915a9afc9b2752cd6b0e7520be950bfd8fb3c2f467279',
-  },
   protocol: {
     name: 'Protocol',
     content: 'STAS',
@@ -49,7 +44,7 @@ const purchaseData = [
   },
 ]
 
-const nftData = {
+const nftDataStatic = {
   id: 6,
   name: 'Basic Tee',
   href: '5',
@@ -65,6 +60,26 @@ function classNames(...classes) {
 }
 
 export default function NftDetail() {
+  const router = useRouter()
+  const { slug } = router.query
+  const [nftData, setnftData] = useState(null)
+
+  useEffect(() => {
+    if (slug) {
+      getNftData()
+    }
+  }, [slug])
+
+  const getNftData = async () => {
+    const docRef = doc(firebaseDb, 'nfts', slug)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists() && docSnap.data()) {
+      console.log('Document data:', docSnap.data())
+      setnftData(docSnap.data())
+    }
+  }
+
   return (
     <div className="bg-white">
       <div className="px-4 py-8 mx-auto mb-12 lg:mb-0 lg:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -96,7 +111,7 @@ export default function NftDetail() {
               </div>
               <div className="mt-4">
                 <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-                  {product.name}
+                  {nftData?.name}
                 </h1>
 
                 <h2 id="information-heading" className="sr-only">
@@ -105,7 +120,7 @@ export default function NftDetail() {
               </div>
             </div>
 
-            <p className="mt-6 text-gray-500">{product.description}</p>
+            <p className="mt-6 text-gray-500">{nftData?.description}</p>
             <div className="mt-3">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
@@ -141,17 +156,32 @@ export default function NftDetail() {
                     <h3 className="sr-only">Transactions Information</h3>
 
                     <dl className="flex flex-col text-sm font-medium text-gray-500 break-all mt-7">
-                      <dt className="text-gray-700">
-                        {transactionData.contract.name}
-                      </dt>
+                      <dt className="text-gray-700">Contract Transaction ID</dt>
                       <dd className="mb-5">
-                        {transactionData.contract.content}
+                        <a
+                          href={
+                            'https://whatsonchain.com/tx/' +
+                            nftData?.contractTxid
+                          }
+                          target="_blank"
+                          class="hover:underline hover:text-blue-600"
+                          rel="noopener noreferrer"
+                        >
+                          {nftData?.contractTxid}
+                        </a>
                       </dd>
-                      <dt className="text-gray-700">
-                        {transactionData.issuance.name}
-                      </dt>
+                      <dt className="text-gray-700">Issuance Transaction ID</dt>
                       <dd className="mb-5">
-                        {transactionData.issuance.content}
+                        <a
+                          href={
+                            'https://whatsonchain.com/tx/' + nftData?.issueTxid
+                          }
+                          class="hover:underline hover:text-blue-600"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {nftData?.issueTxid}
+                        </a>
                       </dd>
                       <dt className="text-gray-700">
                         {transactionData.protocol.name}
