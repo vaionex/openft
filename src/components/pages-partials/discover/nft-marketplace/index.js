@@ -32,7 +32,6 @@ const NFTMarketplace = ({
     }
     setFavorites()
   }, [currentUser])
-
   return (
     <InstantSearch
       indexName={indexName}
@@ -72,6 +71,7 @@ const NFTMarketplace = ({
             <div className="lg:col-span-3">
               <NFTMarketplaceProducts
                 favouriteNfts={favouriteNfts}
+                setFavouriteNfts={setFavouriteNfts}
                 toTopRef={toTopRef}
               />
             </div>

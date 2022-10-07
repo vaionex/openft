@@ -2,7 +2,12 @@ import { ProductsCarouselCard } from '@/components/ui/cards'
 import { connectHits } from 'react-instantsearch-dom'
 import NFTMarketplacePagination from '../pagination'
 
-const NFTMarketplaceProducts = ({ hits, favouriteNfts, toTopRef }) => {
+const NFTMarketplaceProducts = ({
+  hits,
+  favouriteNfts,
+  toTopRef,
+  setFavouriteNfts,
+}) => {
   return (
     <>
       {hits.length > 0 ? (
@@ -11,6 +16,7 @@ const NFTMarketplaceProducts = ({ hits, favouriteNfts, toTopRef }) => {
             {hits.map((hit) => (
               <ProductsCarouselCard
                 favouriteNfts={favouriteNfts}
+                setFavouriteNfts={setFavouriteNfts}
                 key={hit.objectID}
                 data={hit}
                 type="list"
