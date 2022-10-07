@@ -106,7 +106,7 @@ const ImageUploadDragAndDrop = ({
                 {subinfo && <p className="text-xs text-gray-500">{subinfo}</p>}
               </div>
             </div>
-            <div className="mt-2 text-xs text-red-600 ">
+            <div className="mt-2 text-xs text-red-600 text-start">
               <span className="text-xs text-red-600 ">{errorMap?.message}</span>
             </div>
 
