@@ -1,6 +1,7 @@
 import { ProductsCarouselCard } from '@/components/ui/cards'
 import { connectHits } from 'react-instantsearch-dom'
 import NFTMarketplacePagination from '../pagination'
+import usePriceConverter from '@/hooks/usePriceConverter'
 
 const NFTMarketplaceProducts = ({
   hits,
@@ -8,6 +9,8 @@ const NFTMarketplaceProducts = ({
   toTopRef,
   setFavouriteNfts,
 }) => {
+  const usdBalance = usePriceConverter()
+
   return (
     <>
       {hits.length > 0 ? (
