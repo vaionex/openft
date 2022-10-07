@@ -165,7 +165,7 @@ export default function NftDetail() {
                           }
                           target="_blank"
                           class="hover:underline hover:text-blue-600"
-                          rel="noopener"
+                          rel="noopener noreferrer"
                         >
                           {nftData?.contractTxid}
                         </a>
@@ -178,7 +178,7 @@ export default function NftDetail() {
                           }
                           class="hover:underline hover:text-blue-600"
                           target="_blank"
-                          rel="noopener"
+                          rel="noopener noreferrer"
                         >
                           {nftData?.issueTxid}
                         </a>
