@@ -1,5 +1,6 @@
 import { RegisterLogo } from '@/components/common/svgs'
 import NextLink from 'next/link'
+import RegistrationSteps from '../steps'
 
 const ResetPasswordSide = () => {
   return (
@@ -12,6 +13,9 @@ const ResetPasswordSide = () => {
               <RegisterLogo />
             </a>
           </NextLink>
+          <div className="flex-1 mt-20">
+            <RegistrationSteps stepsType="circle" />
+          </div>
           <div className="flex justify-between gap-2 text-blue-200">
             <span>© Vaionex 2022</span>
             <span>

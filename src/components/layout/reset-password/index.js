@@ -3,6 +3,7 @@ import React from 'react'
 import ResetPasswordSide from './side'
 import NextLink from 'next/link'
 import { Logo } from '@/components/common/svgs'
+import ResetPasswordSteps from './steps'
 
 const ResetPasswordLayout = ({ children }) => {
   return (
@@ -23,8 +24,14 @@ const ResetPasswordLayout = ({ children }) => {
               </a>
             </NextLink>
           </div>
+
           <div className="flex flex-col h-full py-12 sm:gap-8 sm:px-6 lg:px-8">
+            <ResetPasswordSteps stepsType="box" />
+
             {children}
+            <div className="flex flex-col justify-end pt-10 sm:pt-0">
+              <ResetPasswordSteps stepsType="line" />
+            </div>
           </div>
         </div>
       </div>

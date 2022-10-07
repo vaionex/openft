@@ -51,8 +51,12 @@ const ProductsCarouselCard = ({
         nfts: arrayRemove(nftID),
       })
       setFavouriteNfts((state) => {
-        const newState = state.filter((s) => s !== nftID)
+        if(state) {
+          const newState = state.filter((s) => s !== nftID)
         return [...newState]
+        } else {
+          return state
+        }
       })
       await firebaseUpdateDoc('nfts', nftID, { likes: increment(-1) })
     } else {

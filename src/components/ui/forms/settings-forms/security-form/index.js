@@ -11,8 +11,11 @@ import {
   getAuth,
 } from 'firebase/auth'
 import ButtonWLoading from '@/components/ui/button-w-loading'
+import { useSelector } from 'react-redux'
+import walletSelector from '@/redux/selectors/wallet'
 
 const SecurityForm = () => {
+  const { mnemonic } = useSelector(walletSelector)
   const [msg, setMsg] = useState({
     type: '',
     content: '',
@@ -130,9 +133,7 @@ const SecurityForm = () => {
             className="w-full text-gray-500 border border-gray-300 rounded-md shadow-sm resize-none disabled:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             rows={3}
             id="mnemonic"
-            defaultValue={
-              'gravity stable govern write bacon labor slide gauge meat broom swarm tomato'
-            }
+            defaultValue={mnemonic}
             disabled
             placeholder=""
           />

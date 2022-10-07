@@ -32,7 +32,6 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
   }
 
   if (!mounted) return null
-
   return (
     <form
       onSubmit={(e) => handleSubmit(e, searchState)}
