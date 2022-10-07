@@ -16,7 +16,7 @@ const NFTMarketplace = ({
 }) => {
   const toTopRef = useRef(null)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [favouriteNfts, setFavouriteNfts] = useState(null)
+  const [favouriteNfts, setFavouriteNfts] = useState()
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1024px)',
   })

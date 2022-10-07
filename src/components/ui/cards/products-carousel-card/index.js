@@ -21,6 +21,7 @@ const ProductsCarouselCard = ({
   usdBalance,
   setFavouriteNfts,
 }) => {
+  const nftID = data && (data?.id || data?.uid)
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const isInFirstThree = idx < 3
@@ -38,7 +39,7 @@ const ProductsCarouselCard = ({
 
   useEffect(() => {
     if (!favouriteNfts) return
-    const isLike = favouriteNfts?.findIndex((like) => like === data?.uid) !== -1
+    const isLike = favouriteNfts?.findIndex((like) => like === nftID) !== -1
     setHasLike(isLike)
   }, [favouriteNfts])
 
@@ -47,19 +48,23 @@ const ProductsCarouselCard = ({
     if (hasLike) {
       setHasLike(false)
       await firebaseUpdateDoc('favourites', currentUser?.uid, {
-        nfts: arrayRemove(data?.uid),
+        nfts: arrayRemove(nftID),
       })
-      await firebaseUpdateDoc('nfts', data?.uid, { likes: increment(-1) })
+      setFavouriteNfts((state) => {
+        const newState = state.filter((s) => s !== nftID)
+        return [...newState]
+      })
+      await firebaseUpdateDoc('nfts', nftID, { likes: increment(-1) })
     } else {
       setHasLike(true)
-      const updateFav = { nfts: arrayUnion(data?.uid) }
+      const updateFav = { nfts: arrayUnion(nftID) }
       if (favouriteNfts) {
         await firebaseUpdateDoc('favourites', currentUser?.uid, updateFav)
-        setFavouriteNfts((state) => [...state, data?.uid])
+        setFavouriteNfts((state) => [...state, nftID])
       } else {
         await firebaseAddDoc('favourites', currentUser?.uid, updateFav)
       }
-      await firebaseUpdateDoc('nfts', data?.uid, { likes: increment(1) })
+      await firebaseUpdateDoc('nfts', nftID, { likes: increment(1) })
     }
   }
 
