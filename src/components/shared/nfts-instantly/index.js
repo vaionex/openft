@@ -23,9 +23,9 @@ const NftsInstantly = () => {
               </p>
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
                 <div className="my-3 rounded-md sm:my-0">
-                  <NextLink href="#">
+                  <NextLink href="/discover">
                     <a className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                      Learn More
+                      Discover
                     </a>
                   </NextLink>
                 </div>
