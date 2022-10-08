@@ -79,7 +79,7 @@ const ResetNewPassword = () => {
           })
         })
     } else {
-      router.replace('/')
+      // router.replace('/')
     }
   }, [])
 
@@ -101,7 +101,7 @@ const ResetNewPassword = () => {
             </p>
           </div>
         </div>
-      ) : apiKey && code ? (
+      ) : !apiKey && !code ? (
         <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <KeyIcon className="w-auto p-3 mx-auto text-blue-600 rounded-full bg-blue-50 h-14" />
@@ -117,7 +117,10 @@ const ResetNewPassword = () => {
             <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
-                  <InputMain.Label label="Your password" htmlFor="password" />
+                  <InputMain.Label
+                    label="Your new password"
+                    htmlFor="password"
+                  />
                   <Controller
                     name={'password'}
                     control={control}
@@ -127,7 +130,7 @@ const ResetNewPassword = () => {
                           inputType={'password'}
                           id="password"
                           className="sm:col-span-2"
-                          placeholder="Enter your current password"
+                          placeholder="Enter your new password"
                           error={errors.password?.message}
                           {...field}
                         />
