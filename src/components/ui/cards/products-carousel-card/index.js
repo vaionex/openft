@@ -22,7 +22,7 @@ import ModalConfirm from '../../modal-confirm'
 import useArtistData from '@/hooks/useArtistData'
 import walletSelector from '@/redux/selectors/wallet'
 import Alert from '@/components/ui/alert'
-import { swapNft } from '@/services/relysia-queries'
+import { swapNft, createAtomicSwapOffer } from '@/services/relysia-queries'
 import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -35,6 +35,7 @@ const ProductsCarouselCard = ({
   favouriteNfts,
   usdBalance,
   setFavouriteNfts,
+  setData,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -61,6 +62,14 @@ const ProductsCarouselCard = ({
     try {
       setloadingPurchaseBtn(true)
 
+      //checking if user own this nft
+      if (data?.ownerId === currentUser?.uid) {
+        setdialogErrorMsg('You own this NFT')
+
+        setloadingPurchaseBtn(false)
+        return null
+      }
+
       //checking wallet balance
       let nftPriceInBSV = Number((data.amount / usdBalance).toFixed(8))
       if (balance < nftPriceInBSV) {
@@ -71,45 +80,92 @@ const ProductsCarouselCard = ({
       }
 
       //swaping nft
+      console.log('swaping nft')
       if (!data.offerHex) {
         setdialogErrorMsg('NFT is not available for sale any more!')
         setloadingPurchaseBtn(false)
         return null
       }
-      // const swapNftRes = await swapNft(data.offerHex)
+      const swapNftRes = await swapNft(data.offerHex)
 
-      // console.log('swapNftRes', swapNftRes)
-      // if (swapNftRes && swapNftRes.status === 'error') {
-      //   setdialogErrorMsg(swapNftRes.msg)
-      //   setloadingPurchaseBtn(false)
-      //   return null
-      // }
+      console.log('swapNftRes', swapNftRes)
+      if (swapNftRes && swapNftRes.status === 'error') {
+        setdialogErrorMsg(swapNftRes.msg)
+        setloadingPurchaseBtn(false)
+        return null
+      }
 
-      // //updating database
-      // const batch = writeBatch(firebaseDb)
-      // const tokenRef = doc(firebaseDb, 'nft', data.tokenId)
+      //creating atomic swap offer
+      console.log('creating offer hex')
+      const atomicSwapOffer = await createAtomicSwapOffer({
+        tokenId: data.tokenId,
+        amount: data.amountInBSV,
+        sn: 1,
+      })
 
-      // let tokenObj = {
-      //   ownerId: currentUser.uid,
-      // }
-      // batch.update(tokenRef, tokenObj)
+      if (
+        !atomicSwapOffer ||
+        (atomicSwapOffer && !atomicSwapOffer.contents) ||
+        (atomicSwapOffer &&
+          atomicSwapOffer.contents &&
+          !atomicSwapOffer.contents[0])
+      ) {
+        throw new Error('Failed to create Offer')
+      }
+      let swapId =
+        atomicSwapOffer &&
+        atomicSwapOffer.data &&
+        atomicSwapOffer.data.txIds &&
+        atomicSwapOffer.data.txIds[0]
+          ? atomicSwapOffer.data.txIds[0]
+          : '-'
 
-      // //nft history
-      // let nftHisId = uuidv4()
-      // const hisRef = doc(
-      //   firebaseDb,
-      //   'nft',
-      //   data.tokenId,
-      //   'nftHistory',
-      //   nftHisId,
-      // )
-      // let hisObj = {
-      //   type: 'PURCHASE',
-      //   sn: 1,
-      //   timestamp: Timestamp.now(),
-      // }
-      // batch.set(hisRef, hisObj)
-      // // await batch.commit();
+      //updating database
+      console.log('updating database')
+
+      const batch = writeBatch(firebaseDb)
+      const tokenRef = doc(firebaseDb, 'nft', data.tokenId)
+
+      let tokenObj = {
+        ownerId: currentUser.uid,
+        offerHex: atomicSwapOffer?.contents[0]
+          ? atomicSwapOffer.contents[0]
+          : null,
+      }
+      batch.update(tokenRef, tokenObj)
+
+      //nft history
+      let nftHisId = uuidv4()
+      const hisRef = doc(
+        firebaseDb,
+        'nft',
+        data.tokenId,
+        'nftHistory',
+        nftHisId,
+      )
+      let hisObj = {
+        type: 'PURCHASE',
+        sn: 1,
+        timestamp: Timestamp.now(),
+        amount: data.amount,
+        amountInBSV: amountInBSV,
+        purchaserId: currentUser.uid,
+        sellerId: data.ownerId,
+        txid: swapId,
+      }
+      batch.set(hisRef, hisObj)
+      await batch.commit()
+
+      //updaing nft data locally
+      if (setData) {
+        setData((prev) => ({
+          ...prev,
+          ownerId: currentUser.uid,
+          offerHex: atomicSwapOffer?.contents[0]
+            ? atomicSwapOffer.contents[0]
+            : null,
+        }))
+      }
 
       setloadingPurchaseBtn(false)
       setIsOpen(false)
@@ -135,9 +191,9 @@ const ProductsCarouselCard = ({
         nfts: arrayRemove(data?.tokenId),
       })
       setFavouriteNfts((state) => {
-        if(state) {
+        if (state) {
           const newState = state.filter((s) => s !== data?.tokenId)
-        return [...newState]
+          return [...newState]
         } else {
           return state
         }
