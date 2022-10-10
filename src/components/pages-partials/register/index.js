@@ -6,17 +6,20 @@ import { register, setPending } from '@/redux/slices/user'
 import { createwallet } from '@/services/relysia-queries'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import RegistrationAddSocials from './add-socials'
 import RegistrationChoosePassword from './choose-password'
 import RegistrationDetails from './details'
 import RegistrationUploadPhoto from './upload-photo'
+import walletSelector from '@/redux/selectors/wallet'
 
 const RegistrationFormMain = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const [mnemonicStatus, setMnemonicStatus] = useState(false)
   const step = router.query.step ?? '1'
+  const { mnemonic } = useSelector(walletSelector)
   const { isPending, isError, errorMessage } = useSelector(userSelector)
   const {
     detailsValues,
@@ -72,9 +75,11 @@ const RegistrationFormMain = () => {
       }
 
       dispatch(setPending(false))
+      setMnemonicStatus(true)
       document.body.style.pointerEvents = 'auto'
       document.body.style.touchAction = 'auto'
-      router.push('/')
+
+      //router.push('/')
     } catch (error) {
       console.log(error.message)
       dispatch(setPending(false))
@@ -93,7 +98,15 @@ const RegistrationFormMain = () => {
     if (step === '1') return <RegistrationDetails goToStep={goToStep} />
     if (step === '2') return <RegistrationChoosePassword goToStep={goToStep} />
     if (step === '3') return <RegistrationUploadPhoto goToStep={goToStep} />
-    if (step === '4') return <RegistrationAddSocials goToStep={goToStep} />
+    if (step === '4')
+      return (
+        <RegistrationAddSocials
+          goToStep={goToStep}
+          mnemonicStatus={mnemonicStatus}
+          setMnemonicStatus={setMnemonicStatus}
+          mnemonic={mnemonic}
+        />
+      )
 
     router.push('/')
   }

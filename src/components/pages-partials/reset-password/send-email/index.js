@@ -18,7 +18,7 @@ const validationSchema = yup.object().shape({
     .required('Email is required'),
 })
 
-const ResetSendEmail = ({ goToStep }) => {
+const ResetSendEmail = () => {
   const [isPending, setIsPending] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorFromServer, setErrorFromServer] = useState('')

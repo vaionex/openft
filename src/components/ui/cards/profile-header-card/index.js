@@ -219,7 +219,7 @@ const ProfileHeaderCard = ({
         onConfirm={handleOnDelete}
         isOpen={isDeleteModalOpen}
         title="Delete Cover Image"
-        text="Are you sure you want to delete cover image?"
+        content="Are you sure you want to delete cover image?"
       />
     </div>
   )

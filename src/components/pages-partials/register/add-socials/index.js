@@ -8,6 +8,9 @@ import registrationFormSelector from '@/redux/selectors/registration-form'
 import { setSocialsValues } from '@/redux/slices/registration-form'
 import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '@/components/ui/button-w-loading'
+import ModalConfirm from '@/components/ui/modal-confirm'
+import { WalletIcon, WarningIcon } from '@/components/common/icons'
+import { setMnemonicPopup } from '@/redux/slices/user'
 
 const inputAttributes = [
   {
@@ -33,7 +36,14 @@ const inputAttributes = [
   },
 ]
 
-function RegistrationAddSocials({ goToStep }) {
+const defaultMnemonics = ['', '', '', '', '', '', '', '', '', '', '', '']
+
+function RegistrationAddSocials({
+  goToStep,
+  mnemonicStatus,
+  setMnemonicStatus,
+  mnemonic,
+}) {
   const dispatch = useDispatch()
   const { isPending, isError } = useSelector(userSelector)
   const { socialsValues } = useSelector(registrationFormSelector)
@@ -104,6 +114,75 @@ function RegistrationAddSocials({ goToStep }) {
           </form>
         </div>
       </div>
+      <ModalConfirm
+        isOpen={mnemonicStatus}
+        isLoadingConfirmBtn={mnemonic ? false : true}
+        onClose={() => {
+          setMnemonicStatus(false)
+          dispatch(setMnemonicPopup(false))
+          console.log('sa')
+        }}
+        onConfirm={() => {
+          setMnemonicStatus(false)
+          dispatch(setMnemonicPopup(false))
+        }}
+        button1Text={"I've already backed it up"}
+        cancelButton={false}
+        icon={
+          <WalletIcon className="w-12 h-12 text-green-500" aria-hidden="true" />
+        }
+        title={'Congratulatuions!'}
+        content={
+          <>
+            <div>
+              Your <strong>account and wallet</strong> are created. Here is your
+              secret phrase. Write down or copy these words in the right order
+              and save them somewhere safe.
+            </div>
+            <div className="mt-5 grid grid-cols-3 gap-4">
+              {(mnemonic?.split(' ') ?? defaultMnemonics).map((mnc, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    className="col-span-1 bg-gray-200 rounded-xl py-3 flex"
+                  >
+                    <div className="w-4 pl-1">{idx + 1}</div>
+                    <div className="flex justify-center items-center flex-1 text-gray-700">
+                      {mnc}
+                      {!mnemonic && (
+                        <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
+                          <div class="flex justify-center space-x-2 animate-pulse">
+                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                          </div>
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="mt-10 text-start border-2 p-4 rounded-2xl">
+              <WarningIcon
+                className="w-12 h-12 text-red-500"
+                aria-hidden="true"
+              />
+
+              <div className="ml-1">
+                <h3 className="text-gray-700 font-medium text-lg mt-2">
+                  Do not share your secret phrase!
+                </h3>
+                <p className="mt-3">
+                  If someone has your secret phrase they will have full control
+                  of your wallet.
+                </p>
+              </div>
+            </div>
+          </>
+        }
+      />
     </div>
   )
 }

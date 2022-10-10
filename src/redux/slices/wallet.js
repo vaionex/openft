@@ -4,7 +4,7 @@ const initialState = {
   balance: null,
   address: '',
   addressPath0: '',
-  mnemonic: '',
+  mnemonic: null,
   wallethistory: [],
   walletid: '00000000-0000-0000-0000-000000000000',
   paymail: '',
@@ -21,7 +21,7 @@ const walletSlice = createSlice({
       state.balance = null
       state.address = ''
       state.addressPath0 = ''
-      state.mnemonic = ''
+      state.mnemonic = null
       state.wallethistory = []
       state.walletid = '00000000-0000-0000-0000-000000000000'
       state.paymail = ''

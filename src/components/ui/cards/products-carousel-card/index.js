@@ -22,6 +22,7 @@ import ModalConfirm from '../../modal-confirm'
 import useArtistData from '@/hooks/useArtistData'
 import walletSelector from '@/redux/selectors/wallet'
 import Alert from '@/components/ui/alert'
+import { FeaturedIcon } from '@/components/common/icons'
 import { swapNft, createAtomicSwapOffer } from '@/services/relysia-queries'
 import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
@@ -292,7 +293,7 @@ const ProductsCarouselCard = ({
         button1Text={'Confirm'}
         button2Text={'Cancel'}
         title={'Are you sure you want to buy this NFT?'}
-        text={
+        content={
           <Card
             data={data}
             usdBalance={usdBalance}
@@ -306,10 +307,15 @@ const ProductsCarouselCard = ({
       <ModalConfirm
         isOpen={isSuccess}
         button1Text={'Confirm'}
-        icon
+        icon={
+          <FeaturedIcon
+            className="w-12 h-12 text-green-500"
+            aria-hidden="true"
+          />
+        }
         cancelButton={false}
         title={'Success'}
-        text={
+        content={
           <div>
             You have successfully purchased <br /> &apos;Little Ghost&apos; NFT.{' '}
             <br /> Tx id: bduh2e8aysd78vc782a

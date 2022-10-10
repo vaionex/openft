@@ -30,6 +30,7 @@ const initialState = {
   isError: false,
   isAuthenticated: false,
   isSuccess: false,
+  mnemonicPopup: false,
 }
 
 export const login = createAsyncThunk(
@@ -127,6 +128,9 @@ const userSlice = createSlice({
     },
     setNotifications: (state, action) => {
       state.notificationObj = action.payload
+    },
+    setMnemonicPopup: (state, action) => {
+      state.mnemonicPopup = action.payload
     },
   },
   extraReducers: {
@@ -229,4 +233,5 @@ export const {
   setSuccess,
   setPending,
   setUserPending,
+  setMnemonicPopup,
 } = userSlice.actions
