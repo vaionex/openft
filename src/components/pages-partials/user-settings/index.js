@@ -15,6 +15,8 @@ const UserSettingsMain = () => {
   const [formValues, setFormValues] = useState({
     username: '',
     instagram: '',
+    facebook: '',
+    website: '',
     bio: '',
     jobTitle: '',
     showJobTitle: false,
@@ -25,6 +27,8 @@ const UserSettingsMain = () => {
       setFormValues({
         username: currentUser?.username || '',
         instagram: currentUser?.socialLinks?.instagram || '',
+        facebook: currentUser?.socialLinks?.facebook || '',
+        website: currentUser?.socialLinks?.website || '',
         jobTitle: currentUser?.jobTitle || '',
         bio: currentUser?.bio || '',
         showJobTitle: currentUser?.showJobTitle || false,
@@ -57,7 +61,8 @@ const UserSettingsMain = () => {
       let updatedValues = {
         username: formValues?.username || '',
         socialLinks: {
-          ...currentUser.socialLinks,
+          facebook: formValues?.facebook || '',
+          website: formValues?.website || '',
           instagram: formValues?.instagram || '',
         },
         jobTitle: formValues?.jobTitle || '',
