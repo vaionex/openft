@@ -22,7 +22,6 @@ const ImageUploadDragAndDrop = ({
   const [errorMap, setErrorMap] = useState(null)
 
   const { id, title, text, subinfo, limits, aspect } = attributes
-
   const cleanUpState = () => {
     setSelectedImage(null)
     setErrorMap(null)
@@ -101,7 +100,7 @@ const ImageUploadDragAndDrop = ({
                   <p className="pl-1">or drag and drop</p>
                 </div>
                 <p className="text-xs text-gray-500">
-                  File types supported: JPG, PNG, WEBP
+                  File types supported: {acceptableFileTypes.toString()}
                 </p>
                 {subinfo && <p className="text-xs text-gray-500">{subinfo}</p>}
               </div>
@@ -138,6 +137,7 @@ ImageUploadDragAndDrop.propTypes = {
   text: PropTypes.string,
   subinfo: PropTypes.node,
   id: PropTypes.string || PropTypes.number,
+  acceptableFileTypes: PropTypes.array,
   aspect: PropTypes.number,
   limits: PropTypes.shape({
     maxHeight: PropTypes.number.isRequired,

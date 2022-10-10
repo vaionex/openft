@@ -25,7 +25,7 @@ const imageInputAttributes = {
   id: 'nftImage',
   name: 'nftImage',
   title: 'NFT Image',
-  text: 'Click to upload cover photo',
+  text: 'Click to upload',
   subinfo: 'Max Resolution: 600x600. Max size:4 MB',
   limits: {
     maxWidth: 600,
@@ -240,6 +240,7 @@ const UploadForm = () => {
           >
             <ImageUploadDragAndDrop
               attributes={imageInputAttributes}
+              acceptableFileTypes= {['JPG', 'PNG', 'GIF', 'SVG', 'WEBP']}
               handleClear={() => setPhotoValues({})}
               isSelected={!!photoValues[imageInputAttributes.id]}
               setImageToState={handleImageState}
