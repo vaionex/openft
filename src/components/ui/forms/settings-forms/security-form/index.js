@@ -133,7 +133,7 @@ const SecurityForm = () => {
             className="w-full text-gray-500 border border-gray-300 rounded-md shadow-sm resize-none disabled:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             rows={3}
             id="mnemonic"
-            defaultValue={mnemonic}
+            defaultValue={mnemonic || ''}
             disabled
             placeholder=""
           />

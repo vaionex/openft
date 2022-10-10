@@ -41,6 +41,7 @@ import {
 import store from '@/redux/store'
 import {
   setAuthenticated,
+  setMnemonicPopup,
   setNotifications,
   setUserData,
   setUserPending,
@@ -141,6 +142,7 @@ const firebaseRegister = async (data) => {
     const { user } = response
 
     if (user) {
+      store.dispatch(setMnemonicPopup(true))
       store.dispatch(setAuthenticated(!!user))
     }
 

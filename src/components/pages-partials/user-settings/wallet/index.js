@@ -244,7 +244,7 @@ const UserSettingsWalletSection = () => {
                     }}
                     title={'Transfer'}
                     deleteButton={false}
-                    text={
+                    content={
                       <div className="flex flex-col justify-center items-center space-y-4">
                         <form
                           className="space-y-6 w-full max-w-xs"
@@ -307,7 +307,7 @@ const UserSettingsWalletSection = () => {
                     onClose={() => setIsDeposit(false)}
                     title={'Add Funds.'}
                     deleteButton={false}
-                    text={
+                    content={
                       <div className="flex flex-col justify-center items-center space-y-4">
                         <p>Use your QR scan to add money to your wallet.</p>
                         <QRCodeSVG value={'bitcoin:' + address + '?sv'} />

@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux'
 import LoadingBars from '../loading-bars'
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isUserPending } = useSelector(userSelector)
-    
+  const { isAuthenticated, isUserPending, mnemonicPopup } =
+    useSelector(userSelector)
+
   const router = useRouter()
 
   const authRoute =
@@ -21,15 +22,15 @@ const ProtectedRoute = ({ children }) => {
       router.push('/login')
     }
 
-    if (authRoute && isAuthenticated && !isUserPending) {
+    if (authRoute && isAuthenticated && !isUserPending && !mnemonicPopup) {
       router.push('/')
     }
-  }, [isUserPending, router])
+  }, [isUserPending, router, isAuthenticated, mnemonicPopup])
 
   if (
     isUserPending ||
     (!isAuthenticated && routesWithAuth) ||
-    (isAuthenticated && authRoute)
+    (isAuthenticated && authRoute && !mnemonicPopup)
   ) {
     return <LoadingBars />
   }

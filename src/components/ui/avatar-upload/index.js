@@ -156,7 +156,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
           onConfirm={handleOnDelete}
           isOpen={isDeleteModalOpen}
           title="Delete Profile Image"
-          text="Are you sure you want to delete the photo?"
+          content="Are you sure you want to delete the photo?"
         />
       </div>
       <div className="mt-2 text-xs text-red-600 text-start">
