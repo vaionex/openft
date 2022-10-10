@@ -101,7 +101,7 @@ const ResetNewPassword = () => {
             </p>
           </div>
         </div>
-      ) : !apiKey && !code ? (
+      ) : apiKey && code ? (
         <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <KeyIcon className="w-auto p-3 mx-auto text-blue-600 rounded-full bg-blue-50 h-14" />

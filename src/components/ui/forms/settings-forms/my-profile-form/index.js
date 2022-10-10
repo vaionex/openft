@@ -3,7 +3,7 @@ import Checkbox from '@/components/ui/checkbox'
 import { InputMain } from '@/components/ui/inputs'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
- 
+
 const MyProfileForm = ({
   user,
   formValues,
@@ -61,6 +61,7 @@ const MyProfileForm = ({
     }
   }
 
+  console.log(formValues)
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
@@ -68,7 +69,7 @@ const MyProfileForm = ({
           <InputMain.Label label="Username" htmlFor="username" />
           <InputMain.Input
             id="username"
-            name="username" 
+            name="username"
             variant="add-on"
             addon="open.nft/"
             placeholder="username"
@@ -76,6 +77,36 @@ const MyProfileForm = ({
             value={formValues.username}
             onChange={handleInputChange}
             error={errorMessage}
+          />
+        </InputMain>
+
+        <InputMain className="sm:grid-cols-3">
+          <InputMain.Label label="Instagram" htmlFor="instagram" />
+
+          <InputMain.Input
+            id="instagram"
+            name="instagram"
+            variant="add-on"
+            addon="https://instagram.com/"
+            placeholder="username"
+            className="sm:col-span-2"
+            value={formValues.instagram}
+            onChange={handleInputChange}
+          />
+        </InputMain>
+
+        <InputMain className="sm:grid-cols-3">
+          <InputMain.Label label="Instagram" htmlFor="instagram" />
+
+          <InputMain.Input
+            id="instagram"
+            name="instagram"
+            variant="add-on"
+            addon="https://instagram.com/"
+            placeholder="username"
+            className="sm:col-span-2"
+            value={formValues.instagram}
+            onChange={handleInputChange}
           />
         </InputMain>
 
