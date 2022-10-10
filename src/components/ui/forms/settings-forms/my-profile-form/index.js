@@ -61,7 +61,6 @@ const MyProfileForm = ({
     }
   }
 
-  console.log(formValues)
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
@@ -96,29 +95,29 @@ const MyProfileForm = ({
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Instagram" htmlFor="instagram" />
+          <InputMain.Label label="Facebook" htmlFor="facebook" />
 
           <InputMain.Input
-            id="instagram"
-            name="instagram"
+            id="facebook"
+            name="facebook"
             variant="add-on"
-            addon="https://instagram.com/"
+            addon="https://facebook.com/"
             placeholder="username"
             className="sm:col-span-2"
-            value={formValues.instagram}
+            value={formValues.facebook}
             onChange={handleInputChange}
           />
         </InputMain>
 
         <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Instagram" htmlFor="instagram" />
+          <InputMain.Label label="Website" htmlFor="website" />
 
           <InputMain.Input
-            id="instagram"
-            name="instagram"
+            id="website"
+            name="website"
             variant="add-on"
-            addon="https://instagram.com/"
-            placeholder="username"
+            addon="https://"
+            placeholder="yourwebsite.com"
             className="sm:col-span-2"
             value={formValues.instagram}
             onChange={handleInputChange}
