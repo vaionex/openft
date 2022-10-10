@@ -191,7 +191,6 @@ const UploadForm = () => {
       }
       console.log('tokenId', tokenId)
       const nftDataFromFirebase = await firebaseSetDoc(
-
         'nfts',
         tokenId,
         nftDataToFirebase,
