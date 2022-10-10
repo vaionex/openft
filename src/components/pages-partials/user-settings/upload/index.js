@@ -13,7 +13,7 @@ const UserSettingsUploadSection = () => {
         <span className="block text-lg font-medium text-gray-700">
           Upload Artwork
           <span className="block text-sm font-normal text-gray-500">
-            This will be displayed on your profile.
+            Upload your artwork and its details here.
           </span>
         </span>
       </div>
