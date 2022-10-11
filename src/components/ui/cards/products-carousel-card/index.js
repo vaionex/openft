@@ -266,7 +266,7 @@ const ProductsCarouselCard = ({
               <h3 className="text-sm text-blue-700 min-h-[20px]">
                 {artistData?.name}
               </h3>
-              <p className="mt-1 text-lg text-gray-800">{data?.name}</p>
+              <p className="mt-1 text-lg text-gray-800 h-10">{data?.name}</p>
             </a>
           </NextLink>
         </div>

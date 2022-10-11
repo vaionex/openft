@@ -121,6 +121,7 @@ const ProductsCarousel = ({ data }) => {
         breakpoint: 640,
         settings: {
           slidesToShow: cardsToShow.mobile,
+          slidesToScroll: 1,
         },
       },
     ],
