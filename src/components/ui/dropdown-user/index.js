@@ -6,6 +6,55 @@ import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import { Avatar, AvatarWithName } from '../avatars'
 import { useRouter } from 'next/router'
+import {
+  UploadBoxIcon,
+  WalletOutlineIcon,
+  SecurityIcon,
+  ProfileOutlineIcon,
+  BellIcon,
+  LifeBuoyIcon,
+  LogOutIcon,
+} from '@/components/common/icons'
+import NextLink from 'next/link'
+
+const dropdownRoutes = [
+  {
+    url: '/user-settings',
+    name: 'Profile',
+    icon: ProfileOutlineIcon,
+    desc: 'Change your profile details.',
+  },
+  {
+    url: '/user-settings/upload',
+    name: 'Upload',
+    icon: UploadBoxIcon,
+    desc: 'Upload your artwork and its details here.',
+  },
+  {
+    url: '/user-settings/security',
+    name: 'Security',
+    icon: SecurityIcon,
+    desc: 'Your password and mnemonic phrase.',
+  },
+  {
+    url: '/user-settings/notifications',
+    name: 'Notifications',
+    icon: BellIcon,
+    desc: "Manage when you'll receive notifications.",
+  },
+  {
+    url: '/user-settings/wallet',
+    name: 'Wallet',
+    icon: WalletOutlineIcon,
+    desc: 'A place where you can check your balance.',
+  },
+  {
+    url: '/contact',
+    name: 'Help and support',
+    icon: LifeBuoyIcon,
+    desc: 'Fix a problem, and get answers to your questions.',
+  },
+]
 
 const DropdownUser = ({ user }) => {
   const dispatch = useDispatch()
@@ -48,22 +97,38 @@ const DropdownUser = ({ user }) => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={twMerge(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  )}
-                >
-                  Support
-                </a>
-              )}
-            </Menu.Item>
+          <div className="py-1 px-1">
+            {dropdownRoutes.map((route) => {
+              return (
+                <Menu.Item key={route.url}>
+                  {({ active }) => (
+                    <NextLink href={route.url}>
+                      <a
+                        className={twMerge(
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'px-4 py-2 text-sm hover:bg-gray-100 rounded-md flex ',
+                        )}
+                      >
+                        <div className="shrink-0">
+                          <route.icon
+                            className="w-6 h-6 mr-2 stroke-blue-600"
+                            aria-hidden="true"
+                          />
+                        </div>
 
-            <form>
+                        <div className="flex flex-col">
+                          <span className="font-semibold">{route.name}</span>
+                          <p className="mt-1 text-xs">{route.desc}</p>
+                        </div>
+                      </a>
+                    </NextLink>
+                  )}
+                </Menu.Item>
+              )
+            })}
+            <form className="py-3">
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -73,11 +138,20 @@ const DropdownUser = ({ user }) => {
                       router.push('/')
                     }}
                     className={twMerge(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block w-full text-left px-4 py-2 text-sm',
+                      active ? 'bg-gray-100 text-blue-800' : 'text-blue-600 ',
+                      'flex justify-center items-center space-x-4 w-full px-4 py-5 font-semibold',
                     )}
                   >
-                    Sign out
+                    <div className="flex flex-col">
+                      <span className="font-semibold">Log out</span>
+                    </div>
+
+                    <div className="shrink-0">
+                      <LogOutIcon
+                        className="w-6 h-6 mr-2 stroke-blue-600"
+                        aria-hidden="true"
+                      />
+                    </div>
                   </button>
                 )}
               </Menu.Item>
