@@ -13,21 +13,40 @@ import {
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import { useSelector } from 'react-redux'
 import walletSelector from '@/redux/selectors/wallet'
+import Spinner from '@/components/ui/spinner'
 
 const SecurityForm = () => {
   const { mnemonic } = useSelector(walletSelector)
+  const [buttonStatus, setButtonStatus] = useState(false)
   const [msg, setMsg] = useState({
     type: '',
     content: '',
   })
   const auth = getAuth()
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, formState, reset } = useForm({
+  const { control, handleSubmit, formState, reset, getValues } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     resolver,
   })
   const { isSubmitting, isValid, errors } = formState
+
+  const changeHandler = () => {
+    const newPassword = getValues('newPassword')
+    const confirmPassword = getValues('confirmPassword')
+    const passRegx = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+    const regex = new RegExp(passRegx)
+    if (
+      regex.test(newPassword) &&
+      regex.test(confirmPassword) &&
+      newPassword === confirmPassword
+    ) {
+      setButtonStatus(true)
+    } else {
+      setButtonStatus(false)
+    }
+  }
+
   const onSubmit = async (data) => {
     const { password, newPassword } = data
     const credential = EmailAuthProvider.credential(
@@ -41,6 +60,7 @@ const SecurityForm = () => {
           .then(() => {
             reset({ password: '', newPassword: '', confirmPassword: '' })
             setMsg({ type: 'success', content: 'Password updated' })
+            setButtonStatus(false)
           })
           .catch((error) => {
             setMsg({ type: 'error', content: 'Something went wrong' })
@@ -94,6 +114,10 @@ const SecurityForm = () => {
                   placeholder="Enter new password"
                   error={errors.newPassword?.message}
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    changeHandler()
+                  }}
                 />
               )
             }}
@@ -121,6 +145,10 @@ const SecurityForm = () => {
                   placeholder="Confirm new password"
                   error={errors.confirmPassword?.message}
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    changeHandler()
+                  }}
                 />
               )
             }}
@@ -152,11 +180,21 @@ const SecurityForm = () => {
         {msg.type === 'success' && (
           <span className="text-xs text-green-500">{msg.content}</span>
         )}
-        <ButtonWLoading
+        <button
+          type="submit"
+          disabled={buttonStatus ? false : true}
+          className={`py-2.5 font-semibold relative ${
+            isSubmitting ? 'btn-secondary pr-10' : 'btn-primary'
+          }`}
+        >
+          Update password
+          {isSubmitting && <Spinner size="w-5 h-5 absolute top-3 right-1" />}
+        </button>
+        {/* <ButtonWLoading
           isPending={isSubmitting}
           text="Update password"
           type="submit"
-        />
+        /> */}
       </div>
     </form>
   )
