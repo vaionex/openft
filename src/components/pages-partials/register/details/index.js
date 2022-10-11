@@ -35,7 +35,7 @@ const inputAttributes = [
     placeholder: 'e.g. Illustrator',
     name: 'role',
     title: 'Role',
-    required: false,
+    required: true,
   },
 ]
 
