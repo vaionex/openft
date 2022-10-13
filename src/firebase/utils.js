@@ -472,6 +472,24 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
+const firebaseGetNftByUsername = async (username) => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(nftsRef, where('username', '==', username))
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return {
+    nftsData: JSON.parse(JSON.stringify(nfts)),
+    collectionSize: documentSnapshots.docs.length,
+  }
+}
+
 const firebaseAddDocWithRandomID = async (collectionName, obj) => {
   try {
     const docRef = collection(firebaseDb, collectionName)
@@ -637,5 +655,6 @@ export {
   firebaseDeleteImage,
   firebaseOnIdTokenChange,
   firebaseUploadNftImage,
+  firebaseGetNftByUsername,
   firebaseGetNftImageUrl,
 }

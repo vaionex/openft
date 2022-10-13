@@ -87,6 +87,7 @@ const UploadForm = () => {
     setCroppedImageBlob(null)
   }
 
+  console.log(currentUser)
   const onSubmit = async (formData) => {
     console.log('submit call ')
     setIsPending(true)
@@ -175,16 +176,13 @@ const UploadForm = () => {
         amountInBSV: amountInBSV,
         imageURL: nftImageForDisplay,
         ownerId: currentUser.uid,
+        ownerImg: currentUser?.profileImage || null,
         minterId: currentUser.uid,
         likes: 0,
         tokenId,
         contractTxid: tokenObj.contractTxid,
         issueTxid: tokenObj.issueTxid,
-        // artist: {
-        //   name: currentUser?.name || '',
-        //   profileImage: currentUser?.profileImage || '',
-        //   username: currentUser?.username || '',
-        // },
+        username: currentUser?.username || '',
         offerHex: atomicSwapOffer?.contents[0]
           ? atomicSwapOffer.contents[0]
           : null,
@@ -240,7 +238,7 @@ const UploadForm = () => {
           >
             <ImageUploadDragAndDrop
               attributes={imageInputAttributes}
-              acceptableFileTypes= {['JPG', 'PNG', 'GIF', 'SVG', 'WEBP']}
+              acceptableFileTypes={['JPG', 'JPEG', 'PNG', 'GIF', 'SVG', 'WEBP']}
               handleClear={() => setPhotoValues({})}
               isSelected={!!photoValues[imageInputAttributes.id]}
               setImageToState={handleImageState}
