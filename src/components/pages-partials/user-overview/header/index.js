@@ -84,7 +84,6 @@ const profile = {
 }
 
 export default function Header({ nftInfo }) {
-  console.log(nftInfo)
   return (
     <div>
       <div className="relative h-44 w-full object-cover sm:h-64 ">

@@ -16,7 +16,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Content({ nftInfo }) {
+export default function Content({ nftInfo, userFavList }) {
   const usdBalance = usePriceConverter()
   const { currentUser } = useSelector(userSelector)
   const router = useRouter()
@@ -62,7 +62,7 @@ export default function Content({ nftInfo }) {
 
       setTabs(newTabs)
     }
-  }, [router.query?.current])
+  }, [router.query])
 
   return (
     <div className="px-4 sm:px-6 lg:max-w-7xl lg:px-8 mx-auto">
@@ -139,14 +139,6 @@ export default function Content({ nftInfo }) {
               inputClassName="pl-10 h-[36px]"
               //onChange={handleChange}
             />
-            {/* {searchState && (
-              <div
-                //onClick={handleClear}
-                className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 cursor-pointer rounded-r-md focus:outline-none"
-              >
-                <XCircleIcon className="w-5 h-5 text-gray-400" />
-              </div>
-            )} */}
           </InputMain>
           <button className="p-3 rounded-md btn-primary">
             <span className="sr-only">Search Button</span>
@@ -160,14 +152,11 @@ export default function Content({ nftInfo }) {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 cursor">
-          {/* {isDesktopOrLaptop && (
-                <div className="hidden lg:block">
-                  <NFTMarketplaceFilters />
-                </div>
-              )} */}
-
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
-            {nftInfo.nftsData.map((hit) => (
+            {(router.query.current == 'liked-artworks' && userFavList
+              ? userFavList.nftsData
+              : nftInfo.nftsData
+            ).map((hit) => (
               <ProductsCarouselCard
                 favouriteNfts={favouriteNfts}
                 setFavouriteNfts={setFavouriteNfts}
