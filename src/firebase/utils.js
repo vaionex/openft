@@ -71,13 +71,31 @@ const notificationObj = {
   },
 }
 
-const firebaseGetUserInfoFromDb = async (id) => {
+const firebaseGetUserInfoFromDb = async (id, collection) => {
   try {
-    const docRef = doc(firebaseDb, 'users', id)
+    const docRef = doc(firebaseDb, collection, id)
     const docSnap = await getDoc(docRef)
     return docSnap.data()
   } catch (error) {
     console.error(error)
+  }
+}
+
+const fireGetNftsFromFavList = async (favArray) => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(nftsRef, where('tokenId', 'in', [...favArray]))
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return {
+    nftsData: JSON.parse(JSON.stringify(nfts)),
+    collectionSize: documentSnapshots.docs.length,
   }
 }
 
@@ -102,7 +120,7 @@ const firebaseLogin = async ({ email, password, rememberMe }) => {
       rememberMe ? browserLocalPersistence : browserSessionPersistence,
     )
     const auth = await signInWithEmailAndPassword(firebaseAuth, email, password)
-    const user = await firebaseGetUserInfoFromDb(auth.user.uid)
+    const user = await firebaseGetUserInfoFromDb(auth.user.uid, 'users')
     const userNotifications = await firebaseGetSingleDoc(
       'notifications',
       auth.user.uid,
@@ -163,7 +181,7 @@ const firebaseRegister = async (data) => {
     }
     await setDoc(doc(firebaseDb, 'users', user.uid), infos)
     await firebaseAddDocWithID('notifications', notificationObj, user.uid)
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid).then(
+    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
       async (user) => {
         await firebaseUploadUserImage({
           user,
@@ -195,7 +213,7 @@ const firebaseLoginWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider()
     const { user } = await signInWithPopup(firebaseAuth, provider)
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid)
+    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
     if (userFromDb) {
       const userNotifications = await firebaseGetSingleDoc(
         'notifications',
@@ -290,7 +308,7 @@ const firebaseUploadUserImage = async ({ user, imageFile, imageType }) => {
   if (!!user && !!imageFile) {
     const imageFolder = imageType === 'profileImage' ? 'profiles' : 'banners'
     const imagePath = `${imageFolder}/${user.uid}`
-    const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid)
+    const userInfoFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
     const userRef = doc(firebaseDb, 'users', user.uid)
     const fileRef = ref(firebaseStorage, imagePath)
     const oldRef = ref(firebaseStorage, userInfoFromDb[imageType])
@@ -327,7 +345,7 @@ const firebaseUploadUserImage = async ({ user, imageFile, imageType }) => {
 
 const firebaseDeleteImage = async ({ uid, imageType }) => {
   const storage = getStorage()
-  const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+  const userInfoFromDb = await firebaseGetUserInfoFromDb(uid, 'users')
   const imgRef = ref(storage, userInfoFromDb[imageType])
   const userRef = doc(firebaseDb, 'users', uid)
 
@@ -345,7 +363,7 @@ const firebaseDeleteImage = async ({ uid, imageType }) => {
 
 const firebaseUpdateProfile = async ({ uid, values }) => {
   try {
-    const userInfoFromDb = await firebaseGetUserInfoFromDb(uid)
+    const userInfoFromDb = await firebaseGetUserInfoFromDb(uid, 'users')
     const mergedValues = { ...userInfoFromDb, ...values }
     const userRef = doc(firebaseDb, 'users', uid)
     await updateDoc(userRef, mergedValues, uid)
@@ -472,6 +490,24 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
+const firebaseGetNftByUsername = async (username) => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(nftsRef, where('username', '==', username))
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return {
+    nftsData: JSON.parse(JSON.stringify(nfts)),
+    collectionSize: documentSnapshots.docs.length,
+  }
+}
+
 const firebaseAddDocWithRandomID = async (collectionName, obj) => {
   try {
     const docRef = collection(firebaseDb, collectionName)
@@ -544,7 +580,7 @@ const firebaseDeleteDoc = async (collectionName, id) => {
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
-      const user = await firebaseGetUserInfoFromDb(userResponse.uid)
+      const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
       const userNotifications = await firebaseGetSingleDoc(
         'notifications',
         userResponse.uid,
@@ -637,5 +673,7 @@ export {
   firebaseDeleteImage,
   firebaseOnIdTokenChange,
   firebaseUploadNftImage,
+  firebaseGetNftByUsername,
   firebaseGetNftImageUrl,
+  fireGetNftsFromFavList,
 }

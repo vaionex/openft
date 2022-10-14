@@ -9,7 +9,7 @@ const NftMarketplaceArtistFilter = (props) => {
   const [selectedUser, setSelectedUser] = React.useState(null)
 
   const getUser = async (userId) => {
-    const user = await firebaseGetUserInfoFromDb(userId)
+    const user = await firebaseGetUserInfoFromDb(userId, 'users')
     return user
   }
 

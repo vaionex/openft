@@ -35,6 +35,7 @@ const ImageUploadDragAndDrop = ({
   }
 
   const validateImage = async (file) => {
+    console.log(IMAGE_RESOLUTION_LIMIT)
     return await checkValidation(
       file,
       acceptableFileTypes,
