@@ -16,8 +16,10 @@ const UserOverviewPage = ({ nftInfo }) => {
           nftInfo.nftsData[0].ownerId,
           'favourites',
         )
-        const nfts = await fireGetNftsFromFavList(favIdList.nfts)
-        setUserFavList(nfts)
+        if (favIdList) {
+          const nfts = await fireGetNftsFromFavList(favIdList.nfts)
+          setUserFavList(nfts)
+        }
       })()
     }
   }, [])

@@ -153,19 +153,30 @@ export default function Content({ nftInfo, userFavList }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 cursor">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
-            {(router.query.current == 'liked-artworks' && userFavList
-              ? userFavList.nftsData
-              : nftInfo.nftsData
-            ).map((hit) => (
-              <ProductsCarouselCard
-                favouriteNfts={favouriteNfts}
-                setFavouriteNfts={setFavouriteNfts}
-                key={hit.objectID}
-                data={hit}
-                usdBalance={usdBalance}
-                type="list"
-              />
-            ))}
+            {router.query.current == 'liked-artworks' &&
+              userFavList &&
+              userFavList.nftsData.map((hit) => (
+                <ProductsCarouselCard
+                  favouriteNfts={favouriteNfts}
+                  setFavouriteNfts={setFavouriteNfts}
+                  key={hit.objectID}
+                  data={hit}
+                  usdBalance={usdBalance}
+                  type="list"
+                />
+              ))}
+            {!router.query.current ||
+              (router.query.current == 'artworks' &&
+                nftInfo.nftsData.map((hit) => (
+                  <ProductsCarouselCard
+                    favouriteNfts={favouriteNfts}
+                    setFavouriteNfts={setFavouriteNfts}
+                    key={hit.objectID}
+                    data={hit}
+                    usdBalance={usdBalance}
+                    type="list"
+                  />
+                )))}
           </div>
         </div>
       </section>
