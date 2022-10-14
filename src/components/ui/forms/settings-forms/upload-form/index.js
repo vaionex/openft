@@ -176,7 +176,6 @@ const UploadForm = () => {
         amountInBSV: amountInBSV,
         imageURL: nftImageForDisplay,
         ownerId: currentUser.uid,
-        ownerImg: currentUser?.profileImage || null,
         minterId: currentUser.uid,
         likes: 0,
         tokenId,

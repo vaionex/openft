@@ -83,7 +83,7 @@ const profile = {
   ],
 }
 
-export default function Header({ nftInfo }) {
+export default function Header({ userInfo }) {
   return (
     <div>
       <div className="relative h-44 w-full object-cover sm:h-64 ">
@@ -114,7 +114,7 @@ export default function Header({ nftInfo }) {
               className="rounded-xl"
               objectFit="cover"
               layout="fill"
-              src={nftInfo?.nftsData[0]?.ownerImg ?? profile.avatar}
+              src={userInfo?.profileImage ?? profile.avatar}
               alt=""
             />
           </div>
@@ -122,7 +122,7 @@ export default function Header({ nftInfo }) {
         <div className="mt-6 min-w-0 flex-1 flex justify-center flex-col items-center">
           <div>3d illustrator</div>
           <h2 className="truncate text-2xl py-2 font-bold text-gray-900">
-            {nftInfo?.nftsData[0]?.username}
+            {userInfo?.name}
           </h2>
           <p className="max-w-3xl">
             Molestias repudiandae magni eos qui voluptatem aut. Non soluta

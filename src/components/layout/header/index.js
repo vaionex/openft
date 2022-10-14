@@ -73,7 +73,7 @@ const Header = () => {
               </NextLink>
             </li>
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
-              <NextLink href="register">
+              <NextLink href="/register">
                 <a className="btn-primary">Sign up</a>
               </NextLink>
             </li>
