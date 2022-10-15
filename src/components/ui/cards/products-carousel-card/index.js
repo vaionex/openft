@@ -26,6 +26,7 @@ import { FeaturedIcon } from '@/components/common/icons'
 import { swapNft, createAtomicSwapOffer } from '@/services/relysia-queries'
 import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
+import Social from '../../popover'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -283,8 +284,9 @@ const ProductsCarouselCard = ({
           >
             Buy now
           </button>
-          <button className="p-3.5 rounded-md border border-gray-200">
-            <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" />
+          <button className="rounded-md border border-gray-200">
+            {/* <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" /> */}
+            <Social path={`/discover/${data?.tokenId}`} />
           </button>
         </div>
       </div>
