@@ -56,16 +56,23 @@ const SecurityForm = () => {
 
     await reauthenticateWithCredential(auth.currentUser, credential)
       .then(async () => {
-        await updatePassword(auth.currentUser, newPassword)
-          .then(() => {
-            reset({ password: '', newPassword: '', confirmPassword: '' })
-            setMsg({ type: 'success', content: 'Password updated' })
-            setButtonStatus(false)
+        if (newPassword !== password) {
+          await updatePassword(auth.currentUser, newPassword)
+            .then(() => {
+              reset({ password: '', newPassword: '', confirmPassword: '' })
+              setMsg({ type: 'success', content: 'Password updated' })
+              setButtonStatus(false)
+            })
+            .catch((error) => {
+              setMsg({ type: 'error', content: 'Something went wrong' })
+              console.log(error)
+            })
+        } else {
+          setMsg({
+            type: 'error',
+            content: 'New password cannot be the same as your old password.',
           })
-          .catch((error) => {
-            setMsg({ type: 'error', content: 'Something went wrong' })
-            console.log(error)
-          })
+        }
       })
       .catch((err) =>
         setMsg({
@@ -76,10 +83,7 @@ const SecurityForm = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8 divide-y divide-gray-200"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 ">
       <div className="py-6 border-b border-b-gray-200">
         <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="Your password" htmlFor="password" />
@@ -173,28 +177,23 @@ const SecurityForm = () => {
         </InputMain>
       </div>
 
-      <div className="flex items-center justify-end gap-3 border-none">
-        {msg.type === 'error' && (
-          <span className="text-xs text-red-500">{msg.content}</span>
-        )}
-        {msg.type === 'success' && (
-          <span className="text-xs text-green-500">{msg.content}</span>
-        )}
-        <button
-          type="submit"
-          disabled={buttonStatus ? false : true}
-          className={`py-2.5 font-semibold relative ${
-            isSubmitting ? 'btn-secondary pr-10' : 'btn-primary'
-          }`}
-        >
-          Update password
-          {isSubmitting && <Spinner size="w-5 h-5 absolute top-3 right-1" />}
-        </button>
-        {/* <ButtonWLoading
+      {msg.type === 'error' && (
+        <span className="text-xs text-red-500">{msg.content}</span>
+      )}
+      {msg.type === 'success' && (
+        <span className="text-xs text-green-500">{msg.content}</span>
+      )}
+
+      <div className="flex justify-end gap-3 border-none">
+        <NextLink href={'/'}>
+          <a className="btn-secondary py-2.5">Cancel</a>
+        </NextLink>
+        <ButtonWLoading
           isPending={isSubmitting}
+          disabled={buttonStatus ? false : true}
           text="Update password"
           type="submit"
-        /> */}
+        />
       </div>
     </form>
   )
