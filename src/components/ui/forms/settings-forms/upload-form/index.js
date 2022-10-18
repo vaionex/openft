@@ -342,7 +342,6 @@ const UploadForm = () => {
             value={bsvPrice}
             className="mt-2 text-gray-500 sm:mt-0"
             placeholder="1 BSV"
-            onChange={() => {}}
             tooltip={{
               text: 'This conversion is based on coinmarketcap.',
             }}

@@ -120,6 +120,7 @@ const ProductsCarouselCard = ({
           ? atomicSwapOffer.data.txIds[0]
           : '-'
 
+          
       //updating database
       console.log('updating database')
 
@@ -222,7 +223,7 @@ const ProductsCarouselCard = ({
         'relative border border-gray-200 group rounded-xl flex flex-col',
         type === 'carousel' ? 'sm:mr-5' : '',
       )}
-    >
+    > 
       <div className="relative">
         <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
           <NextLink href={`/discover/${data?.tokenId}`}>
