@@ -163,6 +163,7 @@ export default function Content({ nftInfo, userFavList }) {
                   data={hit}
                   usdBalance={usdBalance}
                   type="list"
+                  view="product"
                 />
               ))}
             {(router.query.current === undefined ||
@@ -175,6 +176,7 @@ export default function Content({ nftInfo, userFavList }) {
                   data={hit}
                   usdBalance={usdBalance}
                   type="list"
+                  view="product"
                 />
               ))}
           </div>

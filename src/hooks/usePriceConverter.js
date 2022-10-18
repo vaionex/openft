@@ -19,7 +19,7 @@ const usePriceConverter = () => {
 
       setUsdBalance(parseFloat(data.balance) * 100000000)
     } catch (error) {
-      console.log(error)
+      console.log('error usd hook', error)
     }
   }
 

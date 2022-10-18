@@ -10,7 +10,7 @@ import {
 export default function Social({ path }) {
   const [status, setStatus] = useState(false)
   const uri = encodeURIComponent(path)
-  console.log(status)
+
   const copyToClipboard = () => {
     setStatus(true)
     navigator.clipboard.writeText(`https://openft.vercel.app${path}`)

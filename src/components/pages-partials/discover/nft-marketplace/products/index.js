@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react'
 import { ProductsCarouselCard } from '@/components/ui/cards'
 import { connectHits } from 'react-instantsearch-dom'
 import NFTMarketplacePagination from '../pagination'
@@ -10,13 +11,17 @@ const NFTMarketplaceProducts = ({
   setFavouriteNfts,
 }) => {
   const usdBalance = usePriceConverter()
+  const [productsArr, setproductsArr] = useState([])
 
+  useEffect(() => {
+    setproductsArr(hits)
+  }, [hits])
   return (
     <>
-      {hits.length > 0 ? (
+      {productsArr.length > 0 ? (
         <>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {hits.map((hit) => (
+            {productsArr.map((hit, index) => (
               <ProductsCarouselCard
                 favouriteNfts={favouriteNfts}
                 setFavouriteNfts={setFavouriteNfts}
@@ -24,6 +29,9 @@ const NFTMarketplaceProducts = ({
                 data={hit}
                 usdBalance={usdBalance}
                 type="list"
+                view="product"
+                index={index}
+                setDataArr={setproductsArr}
               />
             ))}
           </div>
