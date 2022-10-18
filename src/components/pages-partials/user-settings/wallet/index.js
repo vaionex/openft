@@ -19,6 +19,7 @@ import {
 
 import validationSchema from './validationScheme'
 import Alert from '@/components/ui/alert'
+import usePriceConverter from '@/hooks/usePriceConverter'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -26,6 +27,7 @@ const inputAttributes = [
 ]
 
 const UserSettingsWalletSection = () => {
+  const bsvRate = usePriceConverter()
   const [loading, setLoading] = useState(true)
   const [isDeposit, setIsDeposit] = useState(false)
   const [isSend, setIsSend] = useState(false)
@@ -105,27 +107,16 @@ const UserSettingsWalletSection = () => {
   }
 
   useEffect(() => {
-    if (balance !== null) {
+    if (balance !== null && bsvRate) {
       if (balance > 0) {
-        ;(async () => {
-          await apiConfig
-            .get('/v1/currencyConversion', {
-              headers: {
-                satoshis: `${balance}`,
-                currency: 'USD',
-              },
-            })
-            .then((res) => {
-              setUsdBalance(res.data.data.balance)
-              setLoading(false)
-            })
-            .catch(() => setLoading(false))
-        })()
+        setUsdBalance((balance * bsvRate).toFixed(2))
+        setLoading(false)
       } else {
         setLoading(false)
       }
     }
-  }, [balance])
+  }, [balance, bsvRate])
+
   return (
     <UserSettingsLayout>
       <div>
@@ -164,7 +155,7 @@ const UserSettingsWalletSection = () => {
                 <div className="flex items-end justify-center flex-1 md:relative md:justify-end">
                   <span className="text-xs text-amber-400 bg-amber-50 truncate font-medium p-y1 px-2.5 rounded-full">
                     {!loading ? (
-                      balance + ' ' + 'BSV'
+                      `${balance ? balance.toFixed(8) : 0} BSV`
                     ) : (
                       <Spinner size="w-4 h-4" />
                     )}
