@@ -55,6 +55,14 @@
     }
   }
 
+  .user-overview-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(21, 21, 21, 0) 75.64%,
+      #151515 100%
+    );
+  }
+
   .pale-gradient {
     background: linear-gradient(
       180deg,

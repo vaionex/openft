@@ -17,6 +17,14 @@ class MyDocument extends Document {
             rel="stylesheet"
             data-optimized-fonts="true"
           />
+          <div id="fb-root"></div>
+          <script
+            async
+            defer
+            crossorigin="anonymous"
+            src="https://connect.facebook.net/tr_TR/sdk.js#xfbml=1&version=v15.0"
+            nonce="EpotFBUi"
+          ></script>
         </Head>
         <body>
           <Main />

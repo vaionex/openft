@@ -25,7 +25,7 @@ const imageInputAttributes = {
   id: 'nftImage',
   name: 'nftImage',
   title: 'NFT Image',
-  text: 'Click to upload cover photo',
+  text: 'Click to upload',
   subinfo: 'Max Resolution: 600x600. Max size:4 MB',
   limits: {
     maxWidth: 600,
@@ -87,6 +87,7 @@ const UploadForm = () => {
     setCroppedImageBlob(null)
   }
 
+  console.log(currentUser)
   const onSubmit = async (formData) => {
     console.log('submit call ')
     setIsPending(true)
@@ -180,11 +181,7 @@ const UploadForm = () => {
         tokenId,
         contractTxid: tokenObj.contractTxid,
         issueTxid: tokenObj.issueTxid,
-        // artist: {
-        //   name: currentUser?.name || '',
-        //   profileImage: currentUser?.profileImage || '',
-        //   username: currentUser?.username || '',
-        // },
+        username: currentUser?.username || '',
         offerHex: atomicSwapOffer?.contents[0]
           ? atomicSwapOffer.contents[0]
           : null,
@@ -240,6 +237,7 @@ const UploadForm = () => {
           >
             <ImageUploadDragAndDrop
               attributes={imageInputAttributes}
+              acceptableFileTypes={['JPG', 'JPEG', 'PNG', 'GIF', 'SVG', 'WEBP']}
               handleClear={() => setPhotoValues({})}
               isSelected={!!photoValues[imageInputAttributes.id]}
               setImageToState={handleImageState}

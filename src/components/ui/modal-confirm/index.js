@@ -9,11 +9,11 @@ const ModalConfirm = ({
   onClose,
   onConfirm,
   isLoadingConfirmBtn = false,
-  text,
+  content,
   title,
   button1Text = 'Delete',
   button2Text = 'Cancel',
-  icon = false,
+  icon = null,
   cancelButton = true,
   deleteButton = true,
 }) => {
@@ -57,16 +57,11 @@ const ModalConfirm = ({
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900 flex flex-col justify-center items-center"
                     >
-                      {icon && (
-                        <FeaturedIcon
-                          className="w-12 h-12 text-green-500"
-                          aria-hidden="true"
-                        />
-                      )}
+                      {icon && <div className="pb-5">{icon}</div>}
                       {title}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <div className="text-sm text-gray-500">{text}</div>
+                      <div className="text-sm text-gray-500">{content}</div>
                     </div>
                   </div>
                 </div>

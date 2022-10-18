@@ -3,7 +3,7 @@ import Checkbox from '@/components/ui/checkbox'
 import { InputMain } from '@/components/ui/inputs'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
- 
+
 const MyProfileForm = ({
   user,
   formValues,
@@ -68,7 +68,7 @@ const MyProfileForm = ({
           <InputMain.Label label="Username" htmlFor="username" />
           <InputMain.Input
             id="username"
-            name="username" 
+            name="username"
             variant="add-on"
             addon="open.nft/"
             placeholder="username"
@@ -88,6 +88,36 @@ const MyProfileForm = ({
             variant="add-on"
             addon="https://instagram.com/"
             placeholder="username"
+            className="sm:col-span-2"
+            value={formValues.instagram}
+            onChange={handleInputChange}
+          />
+        </InputMain>
+
+        <InputMain className="sm:grid-cols-3">
+          <InputMain.Label label="Facebook" htmlFor="facebook" />
+
+          <InputMain.Input
+            id="facebook"
+            name="facebook"
+            variant="add-on"
+            addon="https://facebook.com/"
+            placeholder="username"
+            className="sm:col-span-2"
+            value={formValues.facebook}
+            onChange={handleInputChange}
+          />
+        </InputMain>
+
+        <InputMain className="sm:grid-cols-3">
+          <InputMain.Label label="Website" htmlFor="website" />
+
+          <InputMain.Input
+            id="website"
+            name="website"
+            variant="add-on"
+            addon="https://"
+            placeholder="yourwebsite.com"
             className="sm:col-span-2"
             value={formValues.instagram}
             onChange={handleInputChange}

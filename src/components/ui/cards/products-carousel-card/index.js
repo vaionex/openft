@@ -22,9 +22,11 @@ import ModalConfirm from '../../modal-confirm'
 import useArtistData from '@/hooks/useArtistData'
 import walletSelector from '@/redux/selectors/wallet'
 import Alert from '@/components/ui/alert'
+import { FeaturedIcon } from '@/components/common/icons'
 import { swapNft, createAtomicSwapOffer } from '@/services/relysia-queries'
 import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
+import Social from '../../popover'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -266,7 +268,7 @@ const ProductsCarouselCard = ({
               <h3 className="text-sm text-blue-700 min-h-[20px]">
                 {artistData?.name}
               </h3>
-              <p className="mt-1 text-lg text-gray-800">{data?.name}</p>
+              <p className="mt-1 text-lg text-gray-800 h-10">{data?.name}</p>
             </a>
           </NextLink>
         </div>
@@ -283,8 +285,9 @@ const ProductsCarouselCard = ({
           >
             Buy now
           </button>
-          <button className="p-3.5 rounded-md border border-gray-200">
-            <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" />
+          <button className="rounded-md border border-gray-200">
+            {/* <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" /> */}
+            <Social path={`/discover/${data?.tokenId}`} />
           </button>
         </div>
       </div>
@@ -293,7 +296,7 @@ const ProductsCarouselCard = ({
         button1Text={'Confirm'}
         button2Text={'Cancel'}
         title={'Are you sure you want to buy this NFT?'}
-        text={
+        content={
           <Card
             data={data}
             usdBalance={usdBalance}
@@ -307,10 +310,15 @@ const ProductsCarouselCard = ({
       <ModalConfirm
         isOpen={isSuccess}
         button1Text={'Confirm'}
-        icon
+        icon={
+          <FeaturedIcon
+            className="w-12 h-12 text-green-500"
+            aria-hidden="true"
+          />
+        }
         cancelButton={false}
         title={'Success'}
-        text={
+        content={
           <div>
             You have successfully purchased <br /> &apos;Little Ghost&apos; NFT.{' '}
             <br /> Tx id: bduh2e8aysd78vc782a

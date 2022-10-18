@@ -15,9 +15,6 @@ import { connect, useSelector, useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
-// import Basket from '../basket'
-// import basketSelector from '@/redux/selectors/basket'
-// import { setOpen } from '@/redux/slices/basket'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -27,7 +24,6 @@ const navigation = [
 
 const Header = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
-  // const { open } = useSelector(basketSelector)
   const dispatch = useDispatch()
 
   const router = useRouter()
@@ -68,7 +64,6 @@ const Header = () => {
               ))}
             </div>
           </div>
-          {/* <Basket open={open} setOpen={setOpen} /> */}
           <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="/login">
@@ -78,7 +73,7 @@ const Header = () => {
               </NextLink>
             </li>
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
-              <NextLink href="register">
+              <NextLink href="/register">
                 <a className="btn-primary">Sign up</a>
               </NextLink>
             </li>
@@ -97,21 +92,6 @@ const Header = () => {
             </li>
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <ul className="flex items-center gap-1">
-                <li className="inline-flex">
-                  <NextLink href="/user-settings">
-                    <a className="inline-block p-3 text-base font-medium bg-gray-50 hover:text-gradient-primary-hover">
-                      <CogIcon className="w-6 h-6" aria-hidden="true" />
-                    </a>
-                  </NextLink>
-                </li>
-                {/* <li className="inline-flex">
-                  <button
-                    onClick={() => dispatch(setOpen(true))}
-                    className="inline-block p-3 text-base font-medium hover:bg-gray-50 hover:text-gradient-primary-hover"
-                  >
-                    <ShoppingCartIcon className="w-6 h-6" aria-hidden="true" />
-                  </button>
-                </li> */}
                 <li className="inline-flex">
                   <NextLink href="/user-settings/notifications">
                     <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">

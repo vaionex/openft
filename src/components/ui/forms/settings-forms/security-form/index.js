@@ -13,21 +13,40 @@ import {
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import { useSelector } from 'react-redux'
 import walletSelector from '@/redux/selectors/wallet'
+import Spinner from '@/components/ui/spinner'
 
 const SecurityForm = () => {
   const { mnemonic } = useSelector(walletSelector)
+  const [buttonStatus, setButtonStatus] = useState(false)
   const [msg, setMsg] = useState({
     type: '',
     content: '',
   })
   const auth = getAuth()
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, formState, reset } = useForm({
+  const { control, handleSubmit, formState, reset, getValues } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     resolver,
   })
   const { isSubmitting, isValid, errors } = formState
+
+  const changeHandler = () => {
+    const newPassword = getValues('newPassword')
+    const confirmPassword = getValues('confirmPassword')
+    const passRegx = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+    const regex = new RegExp(passRegx)
+    if (
+      regex.test(newPassword) &&
+      regex.test(confirmPassword) &&
+      newPassword === confirmPassword
+    ) {
+      setButtonStatus(true)
+    } else {
+      setButtonStatus(false)
+    }
+  }
+
   const onSubmit = async (data) => {
     const { password, newPassword } = data
     const credential = EmailAuthProvider.credential(
@@ -37,15 +56,23 @@ const SecurityForm = () => {
 
     await reauthenticateWithCredential(auth.currentUser, credential)
       .then(async () => {
-        await updatePassword(auth.currentUser, newPassword)
-          .then(() => {
-            reset({ password: '', newPassword: '', confirmPassword: '' })
-            setMsg({ type: 'success', content: 'Password updated' })
+        if (newPassword !== password) {
+          await updatePassword(auth.currentUser, newPassword)
+            .then(() => {
+              reset({ password: '', newPassword: '', confirmPassword: '' })
+              setMsg({ type: 'success', content: 'Password updated' })
+              setButtonStatus(false)
+            })
+            .catch((error) => {
+              setMsg({ type: 'error', content: 'Something went wrong' })
+              console.log(error)
+            })
+        } else {
+          setMsg({
+            type: 'error',
+            content: 'New password cannot be the same as your old password.',
           })
-          .catch((error) => {
-            setMsg({ type: 'error', content: 'Something went wrong' })
-            console.log(error)
-          })
+        }
       })
       .catch((err) =>
         setMsg({
@@ -56,10 +83,7 @@ const SecurityForm = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8 divide-y divide-gray-200"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 ">
       <div className="py-6 border-b border-b-gray-200">
         <InputMain className="relative border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="Your password" htmlFor="password" />
@@ -94,6 +118,10 @@ const SecurityForm = () => {
                   placeholder="Enter new password"
                   error={errors.newPassword?.message}
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    changeHandler()
+                  }}
                 />
               )
             }}
@@ -121,6 +149,10 @@ const SecurityForm = () => {
                   placeholder="Confirm new password"
                   error={errors.confirmPassword?.message}
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    changeHandler()
+                  }}
                 />
               )
             }}
@@ -133,7 +165,7 @@ const SecurityForm = () => {
             className="w-full text-gray-500 border border-gray-300 rounded-md shadow-sm resize-none disabled:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             rows={3}
             id="mnemonic"
-            defaultValue={mnemonic}
+            defaultValue={mnemonic || ''}
             disabled
             placeholder=""
           />
@@ -145,15 +177,20 @@ const SecurityForm = () => {
         </InputMain>
       </div>
 
-      <div className="flex items-center justify-end gap-3 border-none">
-        {msg.type === 'error' && (
-          <span className="text-xs text-red-500">{msg.content}</span>
-        )}
-        {msg.type === 'success' && (
-          <span className="text-xs text-green-500">{msg.content}</span>
-        )}
+      {msg.type === 'error' && (
+        <span className="text-xs text-red-500">{msg.content}</span>
+      )}
+      {msg.type === 'success' && (
+        <span className="text-xs text-green-500">{msg.content}</span>
+      )}
+
+      <div className="flex justify-end gap-3 border-none">
+        <NextLink href={'/'}>
+          <a className="btn-secondary py-2.5">Cancel</a>
+        </NextLink>
         <ButtonWLoading
           isPending={isSubmitting}
+          disabled={buttonStatus ? false : true}
           text="Update password"
           type="submit"
         />
