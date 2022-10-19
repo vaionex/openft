@@ -80,6 +80,7 @@ export default function NftDetail() {
               data={nftData}
               setData={setnftData}
               usdBalance={usdBalance}
+              singleNFT={true}
             />
           </div>
 
@@ -113,7 +114,7 @@ export default function NftDetail() {
               </div>
 
               <div className="mt-4">
-                <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+                <h1 className="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
                   {nftData?.name}
                 </h1>
 

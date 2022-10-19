@@ -42,6 +42,7 @@ const ProductsCarouselCard = ({
   view,
   index,
   setDataArr,
+  singleNFT = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -291,17 +292,19 @@ const ProductsCarouselCard = ({
             </span>
           </p>
         </div>
-        <div className="flex-1 my-6">
-          <NextLink href={`/discover/${data?.tokenId}`}>
-            <a className="cursor-pointer">
-              <h3 className="text-sm text-blue-700 min-h-[20px]">
-                {artistData?.name}
-              </h3>
-              <p className="mt-1 text-lg text-gray-800 h-10">{data?.name}</p>
-            </a>
-          </NextLink>
-        </div>
-        <div className="flex gap-1.5">
+        {!singleNFT && (
+          <div className="flex-1 my-6">
+            <NextLink href={`/discover/${data?.tokenId}`}>
+              <a className="cursor-pointer">
+                <h3 className="text-sm text-blue-700 min-h-[20px]">
+                  {artistData?.name}
+                </h3>
+                <p className="mt-1 text-lg text-gray-800 h-10">{data?.name}</p>
+              </a>
+            </NextLink>
+          </div>
+        )}
+        <div className={`flex gap-1.5 ${singleNFT ? 'my-2' : ''}`}>
           <button
             onClick={() => {
               if (isAuthenticated) {
