@@ -120,7 +120,6 @@ function RegistrationAddSocials({
         onClose={() => {
           setMnemonicStatus(false)
           dispatch(setMnemonicPopup(false))
-          console.log('sa')
         }}
         onConfirm={() => {
           setMnemonicStatus(false)
