@@ -49,7 +49,7 @@ export default function Form() {
           <div className="">
             <div className="max-w-md mx-auto sm:max-w-lg lg:mx-0">
               <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-                Contact
+                Contact us
               </h2>
               <p className="mt-4 text-lg text-gray-500 sm:mt-3">
                 Ask everything about how Openft can work for you.
