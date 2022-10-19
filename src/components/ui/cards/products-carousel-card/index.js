@@ -327,7 +327,8 @@ const ProductsCarouselCard = ({
         isOpen={isOpen}
         button1Text={'Confirm'}
         button2Text={'Cancel'}
-        title={'Are you sure you want to buy this NFT?'}
+        title={'Are you sure you want'}
+        secondTitle={'to buy this NFT?'}
         content={
           <Card
             data={data}

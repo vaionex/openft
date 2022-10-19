@@ -11,6 +11,7 @@ const ModalConfirm = ({
   isLoadingConfirmBtn = false,
   content,
   title,
+  secondTitle,
   button1Text = 'Delete',
   button2Text = 'Cancel',
   icon = null,
@@ -55,10 +56,10 @@ const ModalConfirm = ({
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900 flex flex-col justify-center items-center"
+                      className="text-lg pb-2 font-medium leading-6 text-gray-900 flex flex-col justify-center items-center"
                     >
                       {icon && <div className="pb-5">{icon}</div>}
-                      {title}
+                      {title} <br /> {secondTitle}
                     </Dialog.Title>
                     <div className="mt-2">
                       <div className="text-sm text-gray-500">{content}</div>
