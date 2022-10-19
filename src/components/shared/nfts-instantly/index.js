@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
 
-const NftsInstantly = () => {
+const NftsInstantly = ({ discover = true, getStarted = true }) => {
   const { isAuthenticated } = useSelector(userSelector)
 
   return (
@@ -22,29 +22,33 @@ const NftsInstantly = () => {
                 and unlockable content.
               </p>
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
-                <div className="my-3 rounded-md sm:my-0">
-                  <NextLink href="/discover">
-                    <a className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                      Discover
-                    </a>
-                  </NextLink>
-                </div>
-                <div className="rounded-md">
-                  <NextLink
-                    href={
-                      isAuthenticated ? '/user-settings/upload' : '/register'
-                    }
-                  >
-                    <a
-                      className={twMerge(
-                        'btn-primary',
-                        'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
-                      )}
+                {discover && (
+                  <div className="my-3 rounded-md sm:my-0">
+                    <NextLink href="/discover">
+                      <a className="flex items-center justify-center w-full px-5 py-3 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md hover:bg-gray-50 md:text-lg">
+                        Discover more
+                      </a>
+                    </NextLink>
+                  </div>
+                )}
+                {getStarted && (
+                  <div className="rounded-md">
+                    <NextLink
+                      href={
+                        isAuthenticated ? '/user-settings/upload' : '/register'
+                      }
                     >
-                      {isAuthenticated ? 'Create' : 'Sign up'}
-                    </a>
-                  </NextLink>
-                </div>
+                      <a
+                        className={twMerge(
+                          'btn-primary',
+                          'w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white md:text-lg ',
+                        )}
+                      >
+                        Get started
+                      </a>
+                    </NextLink>
+                  </div>
+                )}
               </div>
             </div>
           </div>
