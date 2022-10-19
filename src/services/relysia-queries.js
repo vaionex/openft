@@ -9,6 +9,7 @@ import {
 } from '../redux/slices/wallet'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
+const axiosRetry = require('axios-retry')
 
 export const getwalletBal = async (walletid, dispatch) => {
   //wallet balance
@@ -20,9 +21,10 @@ export const getwalletBal = async (walletid, dispatch) => {
     })
     .then((res) => {
       let balInBsv =
-        res?.data?.data?.balance / 100000000
+        res?.data?.data?.data?.balance / 100000000
           ? res.data.data.data.balance / 100000000
           : 0
+
       dispatch(updateBalance(balInBsv))
     })
     .catch((err) => {
@@ -156,8 +158,6 @@ export const uploadNFTFile = async (formData, walletId) => {
   }
 
   try {
-    const axiosRetry = require('axios-retry')
-
     let retryApiConfig = apiConfig
     await axiosRetry(apiConfig, {
       retries: 10, // number of retries
@@ -257,11 +257,36 @@ export const createAtomicSwapOffer = async (offerDetails) => {
   }
 
   try {
-    const response = await apiConfig.post('/v1/offer', parameters)
+    let retryApiConfig = apiConfig
+    await axiosRetry(apiConfig, {
+      retries: 10, // number of retries
+      retryDelay: (retryCount) => {
+        console.log(`retry attempt: ${retryCount}`)
+
+        try {
+          let metricesApi = apiConfig.get('/v1/tokenMetrics')
+          console.log('metricesApi', metricesApi.status, metricesApi.data)
+        } catch (err) {
+          console.log('tokenMetrics err', err)
+        }
+
+        return 5000 // time interval between retries
+      },
+      retryCondition: (error) => {
+        console.log('retry error call', error.message, error.response.data)
+        // if retry condition is not specified, by default idempotent requests are retried
+        return true
+      },
+    })
+
+    const response = await retryApiConfig.post('/v1/offer', parameters)
+
+    // const response = await apiConfig.post('/v1/offer', parameters)
 
     return response.data.data
   } catch (error) {
-    console.log('error', error)
+    console.log('err.response', error.response.data, error.message)
+
     return false
   }
 }
@@ -277,6 +302,7 @@ export const swapNft = async (swapHex) => {
   }
 
   try {
+    console.log('parameters', JSON.stringify(parameters))
     const response = await apiConfig.post('/v1/swap', parameters)
 
     return response.data.data
@@ -288,7 +314,7 @@ export const swapNft = async (swapHex) => {
       status: 'error',
       msg: error?.response?.data?.msg
         ? error.response.data.msg
-        : 'An error occured, please try later!',
+        : 'Nft is not indexed yet, please try later!',
     }
   }
 }

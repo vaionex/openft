@@ -110,6 +110,7 @@ export default function MoreNft() {
                   key={item.id}
                   data={item}
                   usdBalance={usdBalance}
+                  view="product"
                 />
               ))}
             </div>

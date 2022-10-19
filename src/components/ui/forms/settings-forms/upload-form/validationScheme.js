@@ -14,7 +14,7 @@ const validationSchema = yup.object().shape({
     .number()
     .typeError('Price must be a number')
     .required('Price is required')
-    .moreThan(0, 'Price must be bigger then 0'),
+    .min(0.01, 'Price must be equla to or bigger then 0.01'),
   description: yup
     .string()
     .required('Description is required')

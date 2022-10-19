@@ -27,6 +27,7 @@ import { swapNft, createAtomicSwapOffer } from '@/services/relysia-queries'
 import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
 import Social from '../../popover'
+import { setOpen } from '@/redux/slices/basket'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -38,6 +39,9 @@ const ProductsCarouselCard = ({
   usdBalance,
   setFavouriteNfts,
   setData,
+  view,
+  index,
+  setDataArr,
   singleNFT = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -57,7 +61,7 @@ const ProductsCarouselCard = ({
     if (dialogErrorMsg) {
       setTimeout(() => {
         setdialogErrorMsg(null)
-      }, 3000)
+      }, 5000)
     }
   }, [dialogErrorMsg])
 
@@ -82,58 +86,69 @@ const ProductsCarouselCard = ({
         return null
       }
 
-      //swaping nft
-      console.log('swaping nft')
-      if (!data.offerHex) {
-        setdialogErrorMsg('NFT is not available for sale any more!')
-        setloadingPurchaseBtn(false)
-        return null
-      }
-      const swapNftRes = await swapNft(data.offerHex)
+      // //swaping nft
+      // console.log('validations passed')
+      // console.log('swaping nft')
+      // if (!data.offerHex) {
+      //   setdialogErrorMsg('NFT is not available for sale any more!')
+      //   setloadingPurchaseBtn(false)
+      //   return null
+      // }
+      // const swapNftRes = await swapNft(data.offerHex)
 
-      console.log('swapNftRes', swapNftRes)
-      if (swapNftRes && swapNftRes.status === 'error') {
-        setdialogErrorMsg(swapNftRes.msg)
-        setloadingPurchaseBtn(false)
-        return null
-      }
+      // console.log('swapNftRes', swapNftRes)
+      // let transactionTx =
+      //   swapNftRes?.txIds && swapNftRes?.txIds[0] ? swapNftRes?.txIds[0] : null
+      let transactionTx = null //remove
+      // console.log('transactionTx', transactionTx)
+      // if (swapNftRes && swapNftRes.status === 'error') {
+      //   setdialogErrorMsg(swapNftRes.msg)
+      //   setloadingPurchaseBtn(false)
+      //   return null
+      // }
 
       //creating atomic swap offer
-      console.log('creating offer hex')
-      const atomicSwapOffer = await createAtomicSwapOffer({
-        tokenId: data.tokenId,
-        amount: data.amountInBSV,
-        sn: 1,
-      })
+      // console.log('creating offer hex')
+      const atomicSwapOffer = null //remove
+      // const atomicSwapOffer = await createAtomicSwapOffer({
+      //   tokenId: data.tokenId,
+      //   amount: data.amountInBSV,
+      //   sn: 1,
+      // })
 
-      if (
-        !atomicSwapOffer ||
-        (atomicSwapOffer && !atomicSwapOffer.contents) ||
-        (atomicSwapOffer &&
-          atomicSwapOffer.contents &&
-          !atomicSwapOffer.contents[0])
-      ) {
-        throw new Error('Failed to create Offer')
-      }
-      let swapId =
-        atomicSwapOffer &&
-        atomicSwapOffer.data &&
-        atomicSwapOffer.data.txIds &&
-        atomicSwapOffer.data.txIds[0]
-          ? atomicSwapOffer.data.txIds[0]
-          : '-'
+      // if (
+      //   !atomicSwapOffer ||
+      //   (atomicSwapOffer && !atomicSwapOffer.contents) ||
+      //   (atomicSwapOffer &&
+      //     atomicSwapOffer.contents &&
+      //     !atomicSwapOffer.contents[0])
+      // ) {
+      //   throw new Error('Failed to create Offer')
+      // }
+
+      // console.log('atomicSwapOffer', atomicSwapOffer)
+      // let swapId =
+      //   atomicSwapOffer &&
+      //   atomicSwapOffer.data &&
+      //   atomicSwapOffer.data.txIds &&
+      //   atomicSwapOffer.data.txIds[0]
+      //     ? atomicSwapOffer.data.txIds[0]
+      //     : '-'
+
+      // console.log('swapId', swapId)
 
       //updating database
       console.log('updating database')
 
       const batch = writeBatch(firebaseDb)
-      const tokenRef = doc(firebaseDb, 'nft', data.tokenId)
+      const tokenRef = doc(firebaseDb, 'nfts', data.tokenId)
 
       let tokenObj = {
         ownerId: currentUser.uid,
-        offerHex: atomicSwapOffer?.contents[0]
-          ? atomicSwapOffer.contents[0]
-          : null,
+        offerHex:
+          atomicSwapOffer && atomicSwapOffer?.contents[0]
+            ? atomicSwapOffer.contents[0]
+            : null,
       }
       batch.update(tokenRef, tokenObj)
 
@@ -141,7 +156,7 @@ const ProductsCarouselCard = ({
       let nftHisId = uuidv4()
       const hisRef = doc(
         firebaseDb,
-        'nft',
+        'nfts',
         data.tokenId,
         'nftHistory',
         nftHisId,
@@ -151,31 +166,46 @@ const ProductsCarouselCard = ({
         sn: 1,
         timestamp: Timestamp.now(),
         amount: data.amount,
-        amountInBSV: amountInBSV,
+        amountInBSV: data.amountInBSV,
         purchaserId: currentUser.uid,
         sellerId: data.ownerId,
-        txid: swapId,
+        txid: transactionTx,
       }
       batch.set(hisRef, hisObj)
       await batch.commit()
 
-      //updaing nft data locally
-      if (setData) {
+      // updaing nft data locally
+      if (view === 'product') {
+        setDataArr((prev) => {
+          let updatedArr = [...prev]
+          updatedArr[index] = {
+            ...updatedArr[index],
+            ownerId: currentUser.uid,
+            offerHex:
+              atomicSwapOffer && atomicSwapOffer?.contents[0]
+                ? atomicSwapOffer.contents[0]
+                : null,
+          }
+          return updatedArr
+        })
+      } else if (setData) {
         setData((prev) => ({
           ...prev,
           ownerId: currentUser.uid,
-          offerHex: atomicSwapOffer?.contents[0]
-            ? atomicSwapOffer.contents[0]
-            : null,
+          offerHex:
+            atomicSwapOffer && atomicSwapOffer?.contents[0]
+              ? atomicSwapOffer.contents[0]
+              : null,
         }))
       }
 
-      setloadingPurchaseBtn(false)
       setIsOpen(false)
+      setloadingPurchaseBtn(false)
       setIsSuccess(true)
     } catch (err) {
-      console.log('buy func error', error)
+      console.log('buy func error', err)
       setloadingPurchaseBtn(false)
+      setdialogErrorMsg('An error occured! please try later')
     }
   }
 
@@ -326,8 +356,14 @@ const ProductsCarouselCard = ({
             <br /> Tx id: bduh2e8aysd78vc782a
           </div>
         }
-        onClose={() => setIsSuccess(false)}
-        onConfirm={() => setIsSuccess(false)}
+        onClose={() => {
+          setIsSuccess(false)
+          // setIsOpen(false)
+        }}
+        onConfirm={() => {
+          setIsSuccess(false)
+          // setIsOpen(false)
+        }}
       />
     </div>
   )

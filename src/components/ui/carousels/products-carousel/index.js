@@ -139,6 +139,7 @@ const ProductsCarousel = ({ data }) => {
               setFavouriteNfts={setFavouriteNfts}
               type="carousel"
               usdBalance={usdBalance}
+              view="product"
             />
           ))}
       </Slider>
