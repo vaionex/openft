@@ -54,6 +54,12 @@ const validationSchema = yup.object().shape({
       },
     })
     .required('Email is required'),
+  role: yup
+    .string()
+    .trim()
+    .matches(nameRegex, 'Please enter only letters')
+    .required('Role is required')
+    .min(2, 'Role must be at least 2 characters long'),
 })
 
 export default validationSchema

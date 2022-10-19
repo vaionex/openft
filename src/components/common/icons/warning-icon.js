@@ -15,7 +15,7 @@ const SvgWarningIcon = (props) => (
       stroke="#F04438"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinejoin="round"
     />
     <rect
       x="4"

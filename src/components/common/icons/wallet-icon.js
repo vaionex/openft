@@ -15,7 +15,7 @@ const SvgWalletIcon = (props) => (
       stroke="#039855"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinejoin="round"
     />
     <rect
       x="4"
