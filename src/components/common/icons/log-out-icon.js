@@ -14,7 +14,7 @@ const SvgLogOutIcon = (props) => (
       stroke="#155EEF"
       stroke-width="1.66667"
       stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

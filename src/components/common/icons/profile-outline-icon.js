@@ -14,7 +14,7 @@ const SvgProfileOutlineIcon = (props) => (
       stroke="#155EEF"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinejoin="round"
     />
   </svg>
 )
