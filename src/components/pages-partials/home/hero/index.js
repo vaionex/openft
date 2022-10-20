@@ -1,10 +1,13 @@
 import { PlayCircleIcon } from '@/components/common/icons'
+import userSelector from '@/redux/selectors/user'
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import NextLink from 'next/link'
+import { useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 
 const HeroSection = () => {
+  const { isAuthenticated } = useSelector(userSelector)
   return (
     <div className="pt-10 sm:pt-16 lg:pt-16 lg:pb-24 lg:overflow-hidden ">
       <div className="mx-auto max-w-7xl lg:px-8">
@@ -46,18 +49,20 @@ const HeroSection = () => {
                     Demo
                   </a>
                 </div>
-                <div className="rounded-md">
-                  <NextLink href="/register">
-                    <a
-                      className={twMerge(
-                        'btn-primary',
-                        'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
-                      )}
-                    >
-                      Sign up
-                    </a>
-                  </NextLink>
-                </div>
+                {!isAuthenticated && (
+                  <div className="rounded-md">
+                    <NextLink href="/register">
+                      <a
+                        className={twMerge(
+                          'btn-primary',
+                          'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
+                        )}
+                      >
+                        Sign up
+                      </a>
+                    </NextLink>
+                  </div>
+                )}
               </div>
             </div>
           </div>

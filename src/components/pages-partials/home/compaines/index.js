@@ -3,9 +3,14 @@ import CompanyBanners from '@/components/shared/company-banners'
 import React from 'react'
 
 const companies = [
-  { id: 1, name: 'Vainoex', logo: Vainoex, url: '#' },
-  { id: 2, name: 'Relysia', logo: Relysia, url: '#' },
-  { id: 3, name: 'Stas Token', logo: Stastoken, url: '#' },
+  { id: 1, name: 'Vainoex', logo: Vainoex, url: 'https://www.vaionex.com/' },
+  { id: 2, name: 'Relysia', logo: Relysia, url: 'https://www.relysia.com/' },
+  {
+    id: 3,
+    name: 'Stas Token',
+    logo: Stastoken,
+    url: 'https://www.stastoken.com/',
+  },
 ]
 
 const CompaniesSection = () => {

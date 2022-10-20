@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CopyDIcon } from '@/components/common/icons'
+import { CopyDIcon, SvgDiamondIcon } from '@/components/common/icons'
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { InputMain } from '@/components/ui/inputs'
 import ProgressCircular from '@/components/ui/progress-circular'
@@ -20,10 +20,68 @@ import {
 import validationSchema from './validationScheme'
 import Alert from '@/components/ui/alert'
 import usePriceConverter from '@/hooks/usePriceConverter'
+import Image from 'next/image'
+import {
+  SvgDirectInboxIcon,
+  SvgDirectBoxSend,
+  SvgCheckCircleIcon,
+  SvgExternalLinkIcon,
+} from '@/components/common/icons'
+import SvgDirectionIcon from '@/components/common/icons/direction-icon'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
   { type: 'number', placeholder: 'Amount to transfer', name: 'amount' },
+]
+
+const TransactionsHistory = [
+  {
+    url: '#',
+    date: 'Aug 6, 2022',
+    amount: '$ 5,383.95',
+    transactionType: 'Deposit',
+    transactiondetail: 'olivia@relysia.com',
+    type: 'received',
+    icon: (
+      <SvgDirectInboxIcon className="w-6 h-6 direct-inbox" aria-hidden="true" />
+    ),
+  },
+  {
+    url: '#',
+    date: 'Aug 6, 2022',
+    amount: '$ 5,383.95',
+    transactionType: 'Deposit',
+    transactiondetail: 'olivia@relysia.com',
+    type: 'sent',
+    icon: (
+      <SvgDirectBoxSend className="w-6 h-6 directbox-send" aria-hidden="true" />
+    ),
+  },
+  {
+    url: '#',
+    date: 'Aug 5, 2022',
+    amount: '$ 5,383.95',
+    transactionType: 'NFT Sent',
+    transactiondetail: 'olivia@relysia.com',
+    type: 'sent',
+    icon: (
+      <SvgDirectBoxSend className="w-6 h-6 directbox-send" aria-hidden="true" />
+    ),
+  },
+  {
+    url: '#',
+    date: 'Aug 5, 2022',
+    amount: '$ 5,383.95',
+    transactionType: 'NFT Minted',
+    transactiondetail: 'olivia@relysia.com',
+    type: 'minted',
+    icon: (
+      <SvgDiamondIcon
+        className="w-6 h-6 diamondicon-filter"
+        aria-hidden="true"
+      />
+    ),
+  },
 ]
 
 const UserSettingsWalletSection = () => {
@@ -120,8 +178,8 @@ const UserSettingsWalletSection = () => {
   return (
     <UserSettingsLayout>
       <div>
-        <div className="md:grid lg:grid-cols-3 ">
-          <div className="mt-5 lg:mt-0 md:col-span-2">
+        <div className="md:grid lg:grid-cols-3">
+          <div className="mt-5 lg:mt-0 md:w-[666px]">
             <div className="sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Wallet
@@ -307,6 +365,72 @@ const UserSettingsWalletSection = () => {
                   />
                 </div>
               </div>
+            </div>
+            <div className="sm:border-t sm:border-gray-200 mt-10 lg:w-screen">
+              <div className="block text-lg mt-12 font-medium text-gray-900">
+                Transactions history
+                <div className="flex mb-4">
+                  <span className="block text-sm font-normal text-gray-500">
+                    Everything you get from the sale goes into your wallet
+                    balance.
+                  </span>
+                  <span></span>
+                </div>
+              </div>
+              {TransactionsHistory.map((items, index) => {
+                return (
+                  <div key={index}>
+                    <div className=" relative bg-white mb-6 flex-wrap justify-between py-4 sm:items-center px-6 flex flex-col sm:flex-row flex-start gap-8 min-h-[80px] border border-gray-200 rounded-lg max-w-[666px]">
+                      <div className="flex flex-row items-center min-w-48">
+                        <div className="directbox-container grid place-items-center rounded w-11 h-11">
+                          {items.icon}
+                        </div>
+                        <div className="flex flex-col ml-4">
+                          <span
+                            className={`font-medium text-sm ${
+                              (items.type == 'sent' && 'text-red-500') ||
+                              (items.type == 'minted'
+                                ? 'text-indigo-700'
+                                : 'text-blue-700')
+                            }`}
+                          >
+                            {items.transactionType}
+                          </span>
+                          <span className="text-gray-500 font-normal text-sm mt-2">
+                            {items.transactiondetail}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-gray-900 font-normal text-sm">
+                          {items.date}
+                        </span>
+                        <span className="flex items-center mt-2">
+                          <SvgCheckCircleIcon
+                            className={`w-4 h-4 ${
+                              items.type == 'sent'
+                                ? 'text-red-400'
+                                : 'text-green-400'
+                            }`}
+                            aria-hidden="true"
+                          />
+                          <span className="text-gray-500 font-normal text-sm ml-2">
+                            {items.amount}
+                          </span>
+                        </span>
+                      </div>
+                      <div className=" absolute right-6 sm:static">
+                        <a href={items.url}>
+                          <SvgExternalLinkIcon
+                            className="w-5 h-5"
+                            aria-hidden="true"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

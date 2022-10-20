@@ -51,12 +51,12 @@ const ModalConfirm = ({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative px-4 pt-5 pb-4 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-lg sm:w-full sm:p-6">
+              <Dialog.Panel className="relative px-4 pt-5 pb-4 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-lg sm:w-[438px] sm:p-6">
                 <div>
-                  <div className="mt-3 text-center sm:mt-5">
+                  <div className="text-center">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg pb-2 font-medium leading-6 text-gray-900 flex flex-col justify-center items-center"
+                      className="flex flex-col items-center justify-center pb-2 text-lg font-medium leading-6 text-gray-900"
                     >
                       {icon && <div className="pb-5">{icon}</div>}
                       {title} <br /> {secondTitle}
@@ -78,14 +78,14 @@ const ModalConfirm = ({
                       isPending={isLoadingConfirmBtn}
                       text={button1Text}
                       type="button"
-                      className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                      className="inline-flex justify-center w-full px-4 py-[11px] text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
                       onClick={onConfirm}
                     />
                   )}
                   {cancelButton && (
                     <button
                       type="button"
-                      className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                      className="inline-flex justify-center w-full px-4 py-[11px] mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                       onClick={onClose}
                       ref={cancelButtonRef}
                     >

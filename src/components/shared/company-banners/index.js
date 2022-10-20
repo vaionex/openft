@@ -13,6 +13,8 @@ const CompanyBanners = ({ companies, w, className }) => {
           href={company.url}
           key={company.name}
           className={twMerge('flex items-center justify-center', w)}
+          target="_blank"
+          rel="noreferrer"
         >
           <company.logo />
         </a>
