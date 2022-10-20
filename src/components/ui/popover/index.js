@@ -40,8 +40,8 @@ export default function Social({ path }) {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute right-4 z-[9999999] mt-3 w-screen max-w-[43px] transform px-4 sm:px-0">
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+              <Popover.Panel className="absolute right-4 z-[9999999] mt-3 w-screen max-w-[43px] transform px-0">
+                <div className="overflow-hidden w-full rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative flex flex-col space-y-2 bg-white">
                     <div
                       className="flex w-full justify-center items-center hover:bg-gray-100"
