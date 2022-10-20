@@ -381,7 +381,7 @@ const UserSettingsWalletSection = () => {
                 return (
                   <div key={index}>
                     <div className=" relative bg-white mb-6 flex-wrap justify-between py-4 sm:items-center px-6 flex flex-col sm:flex-row flex-start gap-8 min-h-[80px] border border-gray-200 rounded-lg max-w-[666px]">
-                      <div className="flex flex-row items-center w-56">
+                      <div className="flex flex-row items-center min-w-48">
                         <div className="directbox-container grid place-items-center rounded w-11 h-11">
                           {items.icon}
                         </div>
@@ -419,7 +419,7 @@ const UserSettingsWalletSection = () => {
                           </span>
                         </span>
                       </div>
-                      <div className=" absolute right-6 sm:relative">
+                      <div className=" absolute right-6 sm:static">
                         <a href={items.url}>
                           <SvgExternalLinkIcon
                             className="w-5 h-5"
