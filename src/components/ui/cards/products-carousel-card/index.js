@@ -56,7 +56,6 @@ const ProductsCarouselCard = ({
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
 
   const dispatch = useDispatch()
-
   useEffect(() => {
     if (dialogErrorMsg) {
       setTimeout(() => {
@@ -299,7 +298,7 @@ const ProductsCarouselCard = ({
                 <h3 className="text-sm text-blue-700 min-h-[20px]">
                   {artistData?.name}
                 </h3>
-                <p className="mt-1 text-lg text-gray-800 h-10">{data?.name}</p>
+                <p className="h-10 mt-1 text-lg text-gray-800">{data?.name}</p>
               </a>
             </NextLink>
           </div>
@@ -317,7 +316,7 @@ const ProductsCarouselCard = ({
           >
             Buy now
           </button>
-          <button className="rounded-md border border-gray-200">
+          <button className="border border-gray-200 rounded-md">
             {/* <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" /> */}
             <Social path={`/discover/${data?.tokenId}`} />
           </button>
@@ -332,6 +331,7 @@ const ProductsCarouselCard = ({
         content={
           <Card
             data={data}
+            artistData={artistData}
             usdBalance={usdBalance}
             dialogErrorMsg={dialogErrorMsg}
           />
@@ -382,7 +382,7 @@ ProductsCarouselCard.propTypes = {
 
 export default ProductsCarouselCard
 
-const Card = ({ data, usdBalance, dialogErrorMsg }) => {
+const Card = ({ data, artistData, usdBalance, dialogErrorMsg }) => {
   return (
     <div>
       <div
@@ -390,27 +390,29 @@ const Card = ({ data, usdBalance, dialogErrorMsg }) => {
           'relative border border-gray-200 group rounded-xl flex flex-col',
         )}
       >
-        <div className="relative">
-          <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
+        <div className="relative h-[280px]">
+          <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square h-[280px] group-hover:opacity-75">
             {data?.imageURL ? (
               <>
                 <Image
                   src={data?.imageURL || ''}
                   alt={data?.name}
                   layout="fill"
-                  className="absolute inset-0 object-cover object-center w-full h-full"
+                  className="absolute inset-0 object-cover object-center w-full"
                   quality={70}
                 />
                 <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
               </>
             ) : (
-              <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
+              <div className="absolute inset-0 bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
             )}
           </div>
         </div>
         <div className="flex flex-col flex-1 px-4 py-5">
-          <div className="flex items-center justify-between">
-            <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
+          <div className="flex items-center justify-between pt-2">
+            <p className="p-[11px] font-normal text-base rounded-lg bg-gray-50">
+              1/1
+            </p>
             <p className="text-xl font-medium text-gray-900">
               <span className="mr-2">${data?.amount}</span> BSV{' '}
               <span>
@@ -418,14 +420,14 @@ const Card = ({ data, usdBalance, dialogErrorMsg }) => {
               </span>
             </p>
           </div>
-          <div className="flex-1 my-6">
+          <div className="flex-1 mt-6">
             <h3 className="text-sm text-start text-blue-700 min-h-[20px]">
-              {data?.artist?.name}
+              {artistData?.name}
             </h3>
-            <p className="mt-1 text-lg text-start text-gray-800">
+            <p className="mt-1 text-lg text-gray-800 text-start">
               {data?.name}
             </p>
-            {/* <p className="mt-1 text-lg text-start text-gray-800">
+            {/* <p className="mt-1 text-lg text-gray-800 text-start">
             Wallet Balance
           </p> */}
           </div>
