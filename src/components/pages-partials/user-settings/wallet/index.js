@@ -101,7 +101,8 @@ const UserSettingsWalletSection = () => {
   const { isSubmitting, isValid, errors } = formState
   const onSubmit = async (data) => {
     try {
-      if (balance < data.amount) {
+      const amount = data.amount ? parseFloat(data.amount) : 0
+      if (balance < amount) {
         return setMsg({
           type: 'error',
           content: 'Please enter a valid value',
@@ -111,7 +112,7 @@ const UserSettingsWalletSection = () => {
         dataArray: [
           {
             to: data.address,
-            amount: Number(data.amount),
+            amount: Number(amount),
           },
         ],
       }
@@ -294,9 +295,9 @@ const UserSettingsWalletSection = () => {
                     title={'Transfer'}
                     deleteButton={false}
                     content={
-                      <div className="flex flex-col justify-center items-center space-y-4">
+                      <div className="flex flex-col items-center justify-center space-y-4">
                         <form
-                          className="space-y-6 w-full max-w-xs"
+                          className="w-full max-w-xs space-y-6"
                           onSubmit={handleSubmit(onSubmit)}
                         >
                           {inputAttributes.map((inputAttribute) => (
@@ -358,7 +359,7 @@ const UserSettingsWalletSection = () => {
                     title={'Add Funds.'}
                     deleteButton={false}
                     content={
-                      <div className="flex flex-col justify-center items-center space-y-4">
+                      <div className="flex flex-col items-center justify-center space-y-4">
                         <p>Use your QR scan to add money to your wallet.</p>
                         <QRCodeSVG value={'bitcoin:' + address + '?sv'} />
                       </div>
@@ -367,8 +368,8 @@ const UserSettingsWalletSection = () => {
                 </div>
               </div>
             </div>
-            <div className="sm:border-t sm:border-gray-200 mt-10 lg:w-screen">
-              <div className="block text-lg mt-12 font-medium text-gray-900">
+            <div className="mt-10 sm:border-t sm:border-gray-200 lg:w-screen">
+              <div className="block mt-12 text-lg font-medium text-gray-900">
                 Transactions history
                 <div className="flex mb-4">
                   <span className="block text-sm font-normal text-gray-500">
@@ -383,7 +384,7 @@ const UserSettingsWalletSection = () => {
                   <div key={index}>
                     <div className=" relative bg-white mb-6 flex-wrap justify-between py-4 sm:items-center px-6 flex flex-col sm:flex-row flex-start gap-8 min-h-[80px] border border-gray-200 rounded-lg max-w-[666px]">
                       <div className="flex flex-row items-center min-w-48">
-                        <div className="directbox-container grid place-items-center rounded w-11 h-11">
+                        <div className="grid rounded directbox-container place-items-center w-11 h-11">
                           {items.icon}
                         </div>
                         <div className="flex flex-col ml-4">
@@ -397,13 +398,13 @@ const UserSettingsWalletSection = () => {
                           >
                             {items.transactionType}
                           </span>
-                          <span className="text-gray-500 font-normal text-sm mt-2">
+                          <span className="mt-2 text-sm font-normal text-gray-500">
                             {items.transactiondetail}
                           </span>
                         </div>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-gray-900 font-normal text-sm">
+                        <span className="text-sm font-normal text-gray-900">
                           {items.date}
                         </span>
                         <span className="flex items-center mt-2">
@@ -415,12 +416,12 @@ const UserSettingsWalletSection = () => {
                             }`}
                             aria-hidden="true"
                           />
-                          <span className="text-gray-500 font-normal text-sm ml-2">
+                          <span className="ml-2 text-sm font-normal text-gray-500">
                             {items.amount}
                           </span>
                         </span>
                       </div>
-                      <div className=" absolute right-6 sm:static">
+                      <div className="absolute right-6 sm:static">
                         <a href={items.url}>
                           <SvgExternalLinkIcon
                             className="w-5 h-5"
