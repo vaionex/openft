@@ -3,7 +3,7 @@ import useArtistData from '@/hooks/useArtistData'
 import moment from 'moment'
 import NextLink from 'next/link'
 
-export default function HistoryComp({ data, index }) {
+export default function HistoryComp({ data, index, ...props }) {
   const [artistId, setartistId] = useState(null)
   const artistData = useArtistData(artistId)
 
@@ -18,7 +18,11 @@ export default function HistoryComp({ data, index }) {
   }, [data])
 
   return (
-    <div className="flex items-center mt-4 space-x-2" key={'his-' + index}>
+    <div
+      {...props}
+      className="flex items-center mt-4 space-x-2"
+      key={'his-' + index}
+    >
       <div>
         <img
           src={artistData?.profileImage}
@@ -71,6 +75,7 @@ export default function HistoryComp({ data, index }) {
               href={'https://whatsonchain.com/tx/' + data?.txid}
               target="_blank"
               rel="noopener noreferrer"
+
             >
               <img
                 src={'/images/chain.webp'}
