@@ -91,7 +91,8 @@ const UserSettingsWalletSection = () => {
   const [isSend, setIsSend] = useState(false)
   const [usdBalance, setUsdBalance] = useState(0)
   const [msg, setMsg] = useState(null)
-  const { paymail, address, balance } = useSelector(walletSelector)
+  const { paymail, address, balance, wallethistory } =
+    useSelector(walletSelector)
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState, reset } = useForm({
     mode: 'onSubmit',
