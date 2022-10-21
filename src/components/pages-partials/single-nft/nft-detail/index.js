@@ -16,6 +16,7 @@ import usePriceConverter from '@/hooks/usePriceConverter'
 import useArtistData from '@/hooks/useArtistData'
 import NextLink from 'next/link'
 import HistoryComp from './HistoryCom'
+import Spinner from '@/components/ui/spinner'
 
 const transactionData = {
   protocol: {
@@ -99,11 +100,15 @@ export default function NftDetail() {
               <div className="flex items-center py-3 mt-3 space-x-4">
                 <NextLink href={`/user/${artistData?.username}`}>
                   <a>
-                    <img
-                      src={artistData?.profileImage}
-                      alt="vaionex-mini-icon"
-                      className="w-8 h-8 bg-gray-100 rounded-full"
-                    />
+                    {artistData?.profileImage ? (
+                      <img
+                        src={artistData?.profileImage}
+                        alt="vaionex-mini-icon"
+                        className="w-8 h-8 bg-gray-100 rounded-full"
+                      />
+                    ) : (
+                      <Spinner className="w-8 h-8 mr-0 text-white" />
+                    )}
                   </a>
                 </NextLink>
                 <NextLink href={`/user/${artistData?.username}`}>
