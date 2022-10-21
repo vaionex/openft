@@ -3,11 +3,19 @@ import { BadgeCheckIcon } from '@heroicons/react/solid'
 import { Tab } from '@headlessui/react'
 import { ProductsCarouselCard } from '@/components/ui/cards'
 import { useRouter } from 'next/router'
-import { doc, getDoc } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  orderBy,
+  getDocs,
+} from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 import usePriceConverter from '@/hooks/usePriceConverter'
 import useArtistData from '@/hooks/useArtistData'
 import NextLink from 'next/link'
+import HistoryComp from './HistoryCom'
 
 const transactionData = {
   protocol: {
@@ -19,28 +27,6 @@ const transactionData = {
     content: 'NFT1.0/MA',
   },
 }
-const purchaseData = [
-  {
-    title: 'No 8/8 NFT minted 4 months ago',
-    buyer: 'by Vaionex Art',
-  },
-  {
-    title: 'No 8/8 NFT minted 4 months ago',
-    buyer: 'by Vaionex Art',
-  },
-  {
-    title: 'No 8/8 NFT minted 4 months ago',
-    buyer: 'by Vaionex Art',
-  },
-  {
-    title: 'No 8/8 NFT minted 4 months ago',
-    buyer: 'by Vaionex Art',
-  },
-  {
-    title: 'No 8/8 NFT minted 4 months ago',
-    buyer: 'by Vaionex Art',
-  },
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -50,12 +36,15 @@ export default function NftDetail() {
   const router = useRouter()
   const { slug } = router.query
   const [nftData, setnftData] = useState(null)
+  const [nftHistory, setnftHistory] = useState([])
+
   const usdBalance = usePriceConverter()
   const artistData = useArtistData(nftData?.ownerId)
 
   useEffect(() => {
     if (slug) {
       getNftData()
+      getNftHistory()
     }
   }, [slug])
 
@@ -64,9 +53,22 @@ export default function NftDetail() {
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists() && docSnap.data()) {
-      console.log('Document data:', docSnap.data())
       setnftData(docSnap.data())
     }
+  }
+
+  const getNftHistory = async () => {
+    const q = query(
+      collection(firebaseDb, 'nfts', slug, 'nftHistory'),
+      orderBy('timestamp', 'desc'),
+    )
+    const querySnapshot = await getDocs(q)
+
+    let hisArr = []
+    querySnapshot.forEach((doc) => {
+      hisArr.push({ ...doc.data() })
+    })
+    setnftHistory([...hisArr])
   }
 
   return (
@@ -201,42 +203,17 @@ export default function NftDetail() {
                   </Tab.Panel>
 
                   <Tab.Panel className="relative text-sm h-[280px] max-h-[280px] overflow-visible text-gray-500">
-                    <div className="absolute z-20 top-44 -bottom-12 -right-12 -left-12 pale-gradient" />
+                    {/* <div className="absolute z-20 top-44 -bottom-12 -right-12 -left-12 pale-gradient" />
                     <div className="absolute z-20 top-44 -bottom-12 -right-12 -left-12 pale-gradient-left" />
                     <div className="absolute z-20 top-44 -bottom-12 -right-12 -left-12 pale-gradient-bottom" />
-                    <h3 className="sr-only">Frequently Asked Questions</h3>
+                    <h3 className="sr-only">Frequently Asked Questions</h3> */}
                     <div className="overflow-scroll h-[300px] max-h-[300px]">
-                      {purchaseData.map((data, idx) => (
-                        <div
-                          className="flex items-center mt-4 space-x-2"
-                          key={idx}
-                        >
-                          <div>
-                            <img
-                              src={'/images/mini-vaionex.webp'}
-                              alt="vaionex-mini-icon"
-                              className="bg-gray-100 rounded-full w-9 h-9"
-                            />
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900 ">
-                              {data.title}
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <p className="font-medium text-blue-700">
-                                  {data.buyer}
-                                </p>
-                                <img
-                                  src={'/images/chain.webp'}
-                                  alt="vaionex-mini-icon"
-                                  className="object-cover h-5 bg-gray-100 rounded-full w-1-"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      {nftHistory.map((data, idx) => (
+                        <HistoryComp data={data} index={idx} />
                       ))}
+                      {nftHistory.length === 0 && (
+                        <div className="mt-2">No history found</div>
+                      )}
                     </div>
                   </Tab.Panel>
                 </Tab.Panels>

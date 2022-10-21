@@ -20,6 +20,9 @@ import {
   firebaseGetNftImageUrl,
   firebaseUploadNftImage,
 } from '@/firebase/utils'
+import { v4 as uuidv4 } from 'uuid'
+import { doc, Timestamp, writeBatch } from 'firebase/firestore'
+import { firebaseDb } from '@/firebase/init'
 
 const imageInputAttributes = {
   id: 'nftImage',
@@ -187,6 +190,7 @@ const UploadForm = () => {
           : null,
       }
       console.log('tokenId', tokenId)
+
       const nftDataFromFirebase = await firebaseSetDoc(
         'nfts',
         tokenId,
@@ -196,6 +200,23 @@ const UploadForm = () => {
       if (!nftDataFromFirebase) {
         throw new Error('Failed occured while uploading the NFT')
       }
+
+      //nft history
+      const batch = writeBatch(firebaseDb)
+
+      let nftHisId = uuidv4()
+      const hisRef = doc(firebaseDb, 'nfts', tokenId, 'nftHistory', nftHisId)
+      let hisObj = {
+        type: 'MINT',
+        sn: 1,
+        timestamp: Timestamp.now(),
+        amount: formData.amount,
+        amountInBSV: amountInBSV,
+        minterId: currentUser.uid,
+        txid: tokenObj.issueTxid,
+      }
+      batch.set(hisRef, hisObj)
+      await batch.commit()
 
       setIsSuccess(true)
       resetAllData()
