@@ -70,6 +70,7 @@ export default function HistoryComp({ data, index }) {
             <a
               href={'https://whatsonchain.com/tx/' + data?.txid}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <img
                 src={'/images/chain.webp'}
