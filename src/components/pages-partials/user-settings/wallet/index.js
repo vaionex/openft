@@ -314,6 +314,7 @@ const UserSettingsWalletSection = () => {
                                       placeholder={inputAttribute.placeholder}
                                       className="mb-8 sm:mb-4"
                                       type={inputAttribute.type}
+                                      step="any"
                                       {...field}
                                     />
                                   )
