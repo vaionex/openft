@@ -14,7 +14,7 @@ const ImageInputAttributes = [
     name: 'profileImage',
     title: 'Profile Image',
     text: 'Click to upload profile photo',
-    subinfo: 'Max 400x400 - 1MB',
+    subinfo: 'Max 400x400 px.',
     limits: {
       maxWidth: 400,
       maxHeight: 400,
