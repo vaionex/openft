@@ -209,7 +209,7 @@ export default function NftDetail() {
                     <h3 className="sr-only">Frequently Asked Questions</h3> */}
                     <div className="overflow-scroll h-[300px] max-h-[300px]">
                       {nftHistory.map((data, idx) => (
-                        <HistoryComp data={data} index={idx} />
+                        <HistoryComp key={idx} data={data} index={idx} />
                       ))}
                       {nftHistory.length === 0 && (
                         <div className="mt-2">No history found</div>
