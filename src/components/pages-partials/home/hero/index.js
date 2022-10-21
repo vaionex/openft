@@ -14,7 +14,7 @@ const HeroSection = () => {
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="lg:py-16">
-              <NextLink href="#">
+              <NextLink href="/user-settings/upload">
                 <a className="inline-flex items-center p-1 pr-2 text-blue-700 rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
                   <span className="px-3 py-0.5 bg-white text-blue-700 font-medium leading-5 tracking-wide rounded-full">
                     It&apos;s free!
