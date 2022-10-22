@@ -84,6 +84,7 @@ export default function NftDetail() {
               setData={setnftData}
               usdBalance={usdBalance}
               singleNFT={true}
+              setnftHistory={setnftHistory}
             />
           </div>
 

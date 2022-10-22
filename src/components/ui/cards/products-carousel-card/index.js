@@ -43,6 +43,7 @@ const ProductsCarouselCard = ({
   index,
   setDataArr,
   singleNFT = false,
+  setnftHistory,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -54,6 +55,7 @@ const ProductsCarouselCard = ({
   const { paymail, address, balance } = useSelector(walletSelector)
   const [loadingPurchaseBtn, setloadingPurchaseBtn] = useState(false)
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
+  const [successTx, setsuccessTx] = useState(null)
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -85,56 +87,53 @@ const ProductsCarouselCard = ({
         return null
       }
 
-      // //swaping nft
-      // console.log('validations passed')
-      // console.log('swaping nft')
-      // if (!data.offerHex) {
-      //   setdialogErrorMsg('NFT is not available for sale any more!')
-      //   setloadingPurchaseBtn(false)
-      //   return null
-      // }
-      // const swapNftRes = await swapNft(data.offerHex)
+      //swaping nft
+      console.log('validations passed')
+      console.log('swaping nft')
+      if (!data.offerHex) {
+        setdialogErrorMsg('NFT is not available for sale any more!')
+        setloadingPurchaseBtn(false)
+        return null
+      }
+      const swapNftRes = await swapNft(data.offerHex)
 
-      // console.log('swapNftRes', swapNftRes)
-      // let transactionTx =
-      //   swapNftRes?.txIds && swapNftRes?.txIds[0] ? swapNftRes?.txIds[0] : null
-      let transactionTx = null //remove
-      // console.log('transactionTx', transactionTx)
-      // if (swapNftRes && swapNftRes.status === 'error') {
-      //   setdialogErrorMsg(swapNftRes.msg)
-      //   setloadingPurchaseBtn(false)
-      //   return null
-      // }
+      console.log('swapNftRes', swapNftRes)
+      let transactionTx =
+        swapNftRes?.txIds && swapNftRes?.txIds[0] ? swapNftRes?.txIds[0] : null
+      // let transactionTx = null //remove
+      console.log('transactionTx', transactionTx)
+      if (swapNftRes && swapNftRes.status === 'error') {
+        setdialogErrorMsg(swapNftRes.msg)
+        setloadingPurchaseBtn(false)
+        return null
+      }
+
+      if (!transactionTx) {
+        setdialogErrorMsg('Nft is not indexed yet, please try later!')
+        setloadingPurchaseBtn(false)
+        return null
+      }
 
       //creating atomic swap offer
-      // console.log('creating offer hex')
-      const atomicSwapOffer = null //remove
-      // const atomicSwapOffer = await createAtomicSwapOffer({
-      //   tokenId: data.tokenId,
-      //   amount: data.amountInBSV,
-      //   sn: 1,
-      // })
+      console.log('creating offer hex')
+      // const atomicSwapOffer = null //remove
+      const atomicSwapOffer = await createAtomicSwapOffer({
+        tokenId: data.tokenId,
+        amount: data.amountInBSV,
+        sn: 1,
+      })
 
-      // if (
-      //   !atomicSwapOffer ||
-      //   (atomicSwapOffer && !atomicSwapOffer.contents) ||
-      //   (atomicSwapOffer &&
-      //     atomicSwapOffer.contents &&
-      //     !atomicSwapOffer.contents[0])
-      // ) {
-      //   throw new Error('Failed to create Offer')
-      // }
+      if (
+        !atomicSwapOffer ||
+        (atomicSwapOffer && !atomicSwapOffer.contents) ||
+        (atomicSwapOffer &&
+          atomicSwapOffer.contents &&
+          !atomicSwapOffer.contents[0])
+      ) {
+        throw new Error('Failed to create Offer')
+      }
 
-      // console.log('atomicSwapOffer', atomicSwapOffer)
-      // let swapId =
-      //   atomicSwapOffer &&
-      //   atomicSwapOffer.data &&
-      //   atomicSwapOffer.data.txIds &&
-      //   atomicSwapOffer.data.txIds[0]
-      //     ? atomicSwapOffer.data.txIds[0]
-      //     : '-'
-
-      // console.log('swapId', swapId)
+      console.log('atomicSwapOffer', atomicSwapOffer)
 
       //updating database
       console.log('updating database')
@@ -196,10 +195,13 @@ const ProductsCarouselCard = ({
               ? atomicSwapOffer.contents[0]
               : null,
         }))
+        //updating his array
+        setnftHistory((prev) => [hisObj, ...prev])
       }
 
       setIsOpen(false)
       setloadingPurchaseBtn(false)
+      setsuccessTx(transactionTx)
       setIsSuccess(true)
     } catch (err) {
       console.log('buy func error', err)
@@ -354,11 +356,12 @@ const ProductsCarouselCard = ({
         content={
           <div>
             You have successfully purchased <br /> &apos;Little Ghost&apos; NFT.{' '}
-            <br /> Tx id: bduh2e8aysd78vc782a
+            <br /> {successTx && <>Tx id: {successTx}</>}
           </div>
         }
         onClose={() => {
           setIsSuccess(false)
+          setsuccessTx(null)
           // setIsOpen(false)
         }}
         onConfirm={() => {
