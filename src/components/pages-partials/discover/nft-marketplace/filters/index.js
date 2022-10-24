@@ -35,7 +35,7 @@ const NFTMarketplaceFilters = () => {
       <ul role="list" className="space-y-6 divide-y divide-gray-200">
         <li>
           <NftMarketplaceArtistFilter
-            attribute="userId"
+            attribute="ownerId"
             onArtistFilter={onArtistFilter}
           />
         </li>

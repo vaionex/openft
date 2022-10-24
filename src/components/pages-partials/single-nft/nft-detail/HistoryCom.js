@@ -4,18 +4,18 @@ import moment from 'moment'
 import NextLink from 'next/link'
 
 export default function HistoryComp({ data, index, ...props }) {
-  const [artistId, setartistId] = useState(null)
-  const artistData = useArtistData(artistId)
+  // const [artistId, setartistId] = useState(null)
+  // const artistData = useArtistData(artistId)
 
-  useEffect(() => {
-    if (data) {
-      if (data.type === 'PURCHASE') {
-        setartistId(data.purchaserId)
-      } else if (data.type === 'MINT') {
-        setartistId(data.minterId)
-      }
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     if (data.type === 'PURCHASE') {
+  //       setartistId(data.purchaserId)
+  //     } else if (data.type === 'MINT') {
+  //       setartistId(data.minterId)
+  //     }
+  //   }
+  // }, [data])
 
   return (
     <div
@@ -25,7 +25,7 @@ export default function HistoryComp({ data, index, ...props }) {
     >
       <div>
         <img
-          src={artistData?.profileImage}
+          src={data?.profileImage}
           alt="vaionex-mini-icon"
           className="bg-gray-100 rounded-full w-9 h-9"
         />
@@ -63,10 +63,10 @@ export default function HistoryComp({ data, index, ...props }) {
         <div>
           <div className="flex items-center space-x-2">
             <p className="font-medium text-blue-700">
-              <NextLink href={'/user/' + artistData?.username}>
+              <NextLink href={'/user/' + data?.username}>
                 <a className="outline-none">
                   {' '}
-                  by {artistData?.username}
+                  by {data?.username}
                   {data.buyer}
                 </a>
               </NextLink>
@@ -75,7 +75,6 @@ export default function HistoryComp({ data, index, ...props }) {
               href={'https://whatsonchain.com/tx/' + data?.txid}
               target="_blank"
               rel="noopener noreferrer"
-
             >
               <img
                 src={'/images/chain.webp'}
