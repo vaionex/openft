@@ -4,7 +4,6 @@ import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { InputMain } from '@/components/ui/inputs'
 import ProgressCircular from '@/components/ui/progress-circular'
 import { ArrowSmUpIcon } from '@heroicons/react/outline'
-import { useSelector } from 'react-redux'
 import walletSelector from '@/redux/selectors/wallet'
 import Spinner from '@/components/ui/spinner'
 import ModalConfirm from '@/components/ui/modal-confirm'
@@ -16,7 +15,7 @@ import {
   metricsApiWithoutBody,
   getwalletDetails,
 } from '@/services/relysia-queries'
-
+import { useSelector, useDispatch } from 'react-redux'
 import validationSchema from './validationScheme'
 import Alert from '@/components/ui/alert'
 import usePriceConverter from '@/hooks/usePriceConverter'
@@ -31,7 +30,7 @@ import SvgDirectionIcon from '@/components/common/icons/direction-icon'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
-  { type: 'number', placeholder: 'Amount to transfer', name: 'amount' },
+  { type: 'number', placeholder: 'Amount to transfer in $', name: 'amount' },
 ]
 
 const TransactionsHistory = [
@@ -85,6 +84,8 @@ const TransactionsHistory = [
 ]
 
 const UserSettingsWalletSection = () => {
+  const dispatch = useDispatch()
+
   const bsvRate = usePriceConverter()
   const [loading, setLoading] = useState(true)
   const [isDeposit, setIsDeposit] = useState(false)
@@ -102,7 +103,8 @@ const UserSettingsWalletSection = () => {
   const onSubmit = async (data) => {
     try {
       const amount = data.amount ? parseFloat(data.amount) : 0
-      if (balance < amount) {
+      console.log(usdBalance, amount)
+      if (usdBalance < amount) {
         return setMsg({
           type: 'error',
           content: 'Please enter a valid value',
@@ -112,7 +114,9 @@ const UserSettingsWalletSection = () => {
         dataArray: [
           {
             to: data.address,
-            amount: Number(amount),
+            amount: Number((Number(amount) / bsvRate).toFixed(8)),
+            notes: `sending to ${data.address}`,
+            type: 'BSV',
           },
         ],
       }
@@ -123,6 +127,7 @@ const UserSettingsWalletSection = () => {
           walletID: '00000000-0000-0000-0000-000000000000',
         },
       })
+      console.log('transactionRes', transactionRes)
       if (
         transactionRes &&
         transactionRes.data &&
@@ -133,7 +138,7 @@ const UserSettingsWalletSection = () => {
         reset({ address: '', amount: '' })
         setMsg({ type: 'success', content: 'The transfer was successful' })
         setTimeout(() => {
-          dispatch(getwalletDetails())
+          getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
         }, 2000)
       }
     } catch (err) {
