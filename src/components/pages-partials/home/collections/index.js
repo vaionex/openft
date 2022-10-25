@@ -19,7 +19,7 @@ const CollectionsSection = ({ nftsData }) => {
         <div className="my-3 rounded-md sm:my-0">
           <NextLink href="/discover">
             <a className="flex items-center justify-center w-full px-5 py-3 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md hover:bg-gray-50 md:text-lg">
-              Learn More
+              Explore
             </a>
           </NextLink>
         </div>

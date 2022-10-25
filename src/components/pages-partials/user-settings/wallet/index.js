@@ -40,9 +40,11 @@ const UserSettingsWalletSection = () => {
   const bsvRate = usePriceConverter()
   const [loading, setLoading] = useState(true)
   const [isDeposit, setIsDeposit] = useState(false)
+  const [txHistory, setTxHistory] = useState([])
+  const [txLoading, setTxLoading] = useState(true)
+
   const [isSend, setIsSend] = useState(false)
   const [usdBalance, setUsdBalance] = useState(0)
-  const [txHIs, setTxHis] = useState([])
   const [msg, setMsg] = useState(null)
   const { paymail, address, balance, wallethistory } =
     useSelector(walletSelector)
@@ -133,60 +135,42 @@ const UserSettingsWalletSection = () => {
       }
     }
   }, [balance, bsvRate])
+  console.warn('wallethistory', wallethistory)
   useEffect(() => {
     if (wallethistory.length > 0) {
-      let txHistory = []
-      wallethistory.map((item) => {
-        txHistory.push({
-          type: item?.type,
-          txDetail: getTxName(item?.type, item?.protocol),
-          txdate: moment(item?.timestamp).format('MMM D, YYYY'),
-          txBal: item?.balance_change,
-          txTo: item?.to,
-          txFrom: item?.from,
-        })
-      })
-      setTxHis(txHistory)
+      setTxHistory(wallethistory)
+      setTxLoading(false)
     }
   }, [wallethistory])
 
   const getTxName = (type, protocol) => {
     if (type == 'credit' && protocol == 'STAS') {
-      return {
-        txName: (
-          <span className={'font-medium text-sm text-blue-700'}>WithDraw</span>
-        ),
-        send: false,
-        cash: true,
-      }
+      return (
+        <span className={'font-medium text-sm text-blue-700'}>Deposit</span>
+      )
     } else if (type == 'debit' && protocol == 'STAS') {
-      return {
-        txName: (
-          <span className={'font-medium text-sm text-red-500'}>Deposit</span>
-        ),
-        send: true,
-        cash: true,
-      }
+      return (
+        <span className={'font-medium text-sm text-red-500'}>
+          Transfer Success
+        </span>
+      )
     } else if (type == 'credit' && protocol == 'BSV') {
-      return {
-        txName: (
-          <span className={'font-medium text-sm text-blue-700'}>
-            NFT recived
-          </span>
-        ),
-        send: false,
-        cash: false,
-      }
+      return (
+        <span className={'font-medium text-sm text-blue-700'}>
+          NFT Received
+        </span>
+      )
     } else if (type == 'debit' && protocol == 'BSV') {
-      return {
-        txName: (
-          <span className={'font-medium text-sm text-red-500'}>NFT Sent</span>
-        ),
-        send: true,
-        cash: false,
-      }
+      return (
+        <span className={'font-medium text-sm text-red-500'}>NFT Sent</span>
+      )
     }
   }
+
+  const currencyFormat = (num) => {
+    return '$ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  }
+
   return (
     <UserSettingsLayout>
       <div>
@@ -390,63 +374,69 @@ const UserSettingsWalletSection = () => {
                   <span></span>
                 </div>
               </div>
-              {txHIs.map((items, index) => {
-                return (
-                  <div key={index}>
-                    <div className=" relative bg-white mb-6 flex-wrap justify-between py-4 sm:items-center px-6 flex flex-col sm:flex-row flex-start gap-8 min-h-[80px] border border-gray-200 rounded-lg max-w-[666px]">
-                      <div className="flex flex-row items-center min-w-[168px]">
-                        <div className="grid rounded directbox-container place-items-center w-11 h-11">
-                          {items?.txDetail?.send ? (
-                            <SvgDirectBoxSend
-                              className="w-6 h-6 directbox-send"
+              {!txLoading ? (
+                txHistory?.map((items, index) => {
+                  return (
+                    <div key={index}>
+                      <div className=" relative bg-white mb-6 py-4 sm:items-center px-6 grid grid-cols-2 sm:grid-cols-12  w-full gap-8 min-h-[80px] border border-gray-200 rounded-lg max-w-[666px]">
+                        <div className="flex flex-row items-center col-span-6">
+                          <div className="grid rounded overflow-hidden directbox-container place-items-center w-11 h-11">
+                            {items?.type === 'debit' ? (
+                              <SvgDirectBoxSend
+                                className="w-6 h-6 directbox-send"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <SvgDirectInboxIcon
+                                className="w-6 h-6 direct-inbox"
+                                aria-hidden="true"
+                              />
+                            )}
+                          </div>
+                          <div className="flex flex-col ml-4">
+                            {getTxName(items?.type, items?.protocol)}
+                            <span className="mt-2 text-sm font-normal text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis resize-x max-w-[200px] ">
+                              {items?.type === 'debit' ? items.to : items.to}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col w-full col-span-5">
+                          <span className="text-sm font-normal text-gray-900">
+                            {items?.timestamp
+                              ? moment(items?.timestamp).format('MMM D, YYYY')
+                              : '-'}
+                          </span>
+                          <span className="flex items-center mt-2">
+                            <SvgCheckCircleIcon
+                              className={`w-4 h-4 ${
+                                items.type === 'debit'
+                                  ? 'text-red-400'
+                                  : 'text-green-400'
+                              }`}
                               aria-hidden="true"
                             />
-                          ) : (
-                            <SvgDirectInboxIcon
-                              className="w-6 h-6 direct-inbox"
+                            <span className="ml-2 text-sm font-normal text-gray-500">
+                              {items?.protocol == 'STAS'
+                                ? currencyFormat(items?.balance_change)
+                                : items.balance_change + ' Satoshis'}
+                            </span>
+                          </span>
+                        </div>
+                        <div className="absolute cursor-pointer right-6 top-4 sm:static col-span-1">
+                          <a href={items.url}>
+                            <SvgExternalLinkIcon
+                              className="w-5 h-5"
                               aria-hidden="true"
                             />
-                          )}
+                          </a>
                         </div>
-                        <div className="flex flex-col ml-4">
-                          {items?.txDetail?.txName}
-                          <span className="mt-2 text-sm font-normal text-gray-500">
-                            {items?.txDetail?.send ? items.txTo : items.txFrom}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-normal text-gray-900">
-                          {items?.txdate}
-                        </span>
-                        <span className="flex items-center mt-2">
-                          <SvgCheckCircleIcon
-                            className={`w-4 h-4 ${
-                              items.txDetail?.send
-                                ? 'text-red-400'
-                                : 'text-green-400'
-                            }`}
-                            aria-hidden="true"
-                          />
-                          <span className="ml-2 text-sm font-normal text-gray-500">
-                            {items?.txDetail?.cash
-                              ? '$' + items.txBal
-                              : items.txBal + ' BSV'}
-                          </span>
-                        </span>
-                      </div>
-                      <div className="absolute right-6 sm:static">
-                        <a href={items.url}>
-                          <SvgExternalLinkIcon
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </a>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              ) : (
+                <Spinner />
+              )}
             </div>
           </div>
         </div>
