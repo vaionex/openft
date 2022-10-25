@@ -4,7 +4,11 @@ import { twMerge } from 'tailwind-merge'
 import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
 
-const NftsInstantly = ({ discover = true, getStarted = true }) => {
+const NftsInstantly = ({
+  discover = true,
+  getStarted = true,
+  isHomePage = true,
+}) => {
   const { isAuthenticated } = useSelector(userSelector)
 
   return (
@@ -26,7 +30,7 @@ const NftsInstantly = ({ discover = true, getStarted = true }) => {
                   <div className="my-3 rounded-md sm:my-0">
                     <NextLink href="/discover">
                       <a className="flex items-center gap-2 justify-center w-full px-5 py-3 text-base font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
-                        Discover more
+                        {!isHomePage ? 'Learn more' : 'Discover more'}
                       </a>
                     </NextLink>
                   </div>

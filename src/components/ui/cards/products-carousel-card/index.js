@@ -254,7 +254,7 @@ const ProductsCarouselCard = ({
       key={data?.id}
       className={twMerge(
         'relative border border-gray-200 group rounded-xl flex flex-col',
-        type === 'carousel' ? 'sm:mr-5 mb-[128px]' : '',
+        type === 'carousel' ? 'sm:mr-5' : '',
       )}
     >
       <div className="relative">

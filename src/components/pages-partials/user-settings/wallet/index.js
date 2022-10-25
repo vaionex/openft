@@ -135,7 +135,7 @@ const UserSettingsWalletSection = () => {
       }
     }
   }, [balance, bsvRate])
-  console.warn('wallethistory', wallethistory)
+
   useEffect(() => {
     if (wallethistory.length > 0) {
       setTxHistory(wallethistory)
