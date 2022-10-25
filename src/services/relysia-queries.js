@@ -318,3 +318,12 @@ export const swapNft = async (swapHex) => {
     }
   }
 }
+
+export const getUsersData = async (artistId) => {
+  const docRef = doc(firebaseDb, 'users', artistId)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    return docSnap.data()
+  }
+}

@@ -17,6 +17,7 @@ import useArtistData from '@/hooks/useArtistData'
 import NextLink from 'next/link'
 import HistoryComp from './HistoryCom'
 import Spinner from '@/components/ui/spinner'
+import { getUsersData } from '@/services/relysia-queries'
 
 const transactionData = {
   protocol: {
@@ -38,7 +39,7 @@ export default function NftDetail() {
   const { slug } = router.query
   const [nftData, setnftData] = useState(null)
   const [nftHistory, setnftHistory] = useState([])
-
+  const [isLoading, setIsLoading] = useState(true)
   const usdBalance = usePriceConverter()
   const artistData = useArtistData(nftData?.ownerId)
 
@@ -64,12 +65,34 @@ export default function NftDetail() {
       orderBy('timestamp', 'desc'),
     )
     const querySnapshot = await getDocs(q)
-
     let hisArr = []
     querySnapshot.forEach((doc) => {
       hisArr.push({ ...doc.data() })
     })
+
+    for await (const [index, data] of hisArr.entries()) {
+      if (data.type === 'PURCHASE') {
+        await getUsersData(data.purchaserId).then((res) => {
+          hisArr[index] = {
+            ...data,
+            profileImage: res?.profileImage,
+          }
+          console.warn('data', data)
+        })
+      } else if (data.type === 'MINT') {
+        await getUsersData(data.minterId).then((res) => {
+          hisArr[index] = {
+            ...data,
+            profileImage: res?.profileImage,
+          }
+        })
+      }
+
+      console.log('hisArr', hisArr)
+    }
+
     setnftHistory([...hisArr])
+    setIsLoading(false)
   }
 
   return (
@@ -214,11 +237,15 @@ export default function NftDetail() {
                     <div className="absolute z-20 top-44 -bottom-12 -right-12 -left-12 pale-gradient-bottom" />
                     <h3 className="sr-only">Frequently Asked Questions</h3> */}
                     <div className="overflow-scroll h-[300px] max-h-[300px]">
-                      {nftHistory.map((data, idx) => (
-                        <HistoryComp key={idx} data={data} index={idx} />
-                      ))}
-                      {nftHistory.length === 0 && (
-                        <div className="mt-2">No history found</div>
+                      {!isLoading && (
+                        <>
+                          {nftHistory.map((data, idx) => (
+                            <HistoryComp key={idx} data={data} index={idx} />
+                          ))}
+                          {nftHistory.length === 0 && (
+                            <div className="mt-2">No history found</div>
+                          )}
+                        </>
                       )}
                     </div>
                   </Tab.Panel>

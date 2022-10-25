@@ -20,6 +20,16 @@ const SelectWImage = ({
     setMounted(true)
   }, [])
 
+  const filteredPeople =
+    query === ''
+      ? users
+      : users.filter((person) =>
+          person.name
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(query.toLowerCase().replace(/\s+/g, '')),
+        )
+
   if (!mounted) return null
 
   return (
@@ -32,6 +42,7 @@ const SelectWImage = ({
           className="w-full py-2 pl-3 pr-10 bg-white border border-gray-200 rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
           displayValue={(user) => user?.name}
           placeholder={placeholder}
+          onChange={(event) => setQuery(event.target.value)}
         />
         {selectedUser && clearSelectedUser ? (
           <div
@@ -61,7 +72,7 @@ const SelectWImage = ({
 
         {users.length > 0 && (
           <Combobox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {users.map((user) => (
+            {filteredPeople.map((user) => (
               <span key={user.userId}>
                 <Combobox.Option
                   value={user}
