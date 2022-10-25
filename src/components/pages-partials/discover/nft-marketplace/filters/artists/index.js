@@ -56,6 +56,8 @@ const NftMarketplaceArtistFilter = (props) => {
     onArtistFilter.current = () => {
       if (selectedUser) {
         refine(selectedUser.userId)
+      } else {
+        refine('')
       }
     }
   }, [selectedUser, refine])
