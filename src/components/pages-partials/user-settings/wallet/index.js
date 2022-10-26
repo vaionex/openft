@@ -25,6 +25,7 @@ import {
   SvgDirectBoxSend,
   SvgCheckCircleIcon,
   SvgExternalLinkIcon,
+  SvgAscendingIcon,
 } from '@/components/common/icons'
 import SvgDirectionIcon from '@/components/common/icons/direction-icon'
 import moment from 'moment'
@@ -46,6 +47,7 @@ const UserSettingsWalletSection = () => {
   const [isSend, setIsSend] = useState(false)
   const [usdBalance, setUsdBalance] = useState(0)
   const [msg, setMsg] = useState(null)
+  const [isAscending, setIsAscending] = useState(false)
   const { paymail, address, balance, wallethistory } =
     useSelector(walletSelector)
   // const resolver = useYupValidationResolver(validationSchema)
@@ -138,7 +140,12 @@ const UserSettingsWalletSection = () => {
 
   useEffect(() => {
     if (wallethistory.length > 0) {
-      setTxHistory(wallethistory)
+      const walHistory = _.sortBy(wallethistory, (num) =>
+        num.timestamp.toLowerCase(),
+      ).reverse()
+      setTxHistory(walHistory)
+      setTxLoading(false)
+    } else {
       setTxLoading(false)
     }
   }, [wallethistory])
@@ -171,6 +178,19 @@ const UserSettingsWalletSection = () => {
     return '$ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 
+  const handleSort = () => {
+    if (isAscending) {
+      const sort = _.sortBy(txHistory, (num) =>
+        num.timestamp.toLowerCase(),
+      ).reverse()
+      setTxHistory(sort)
+      setIsAscending(false)
+    } else {
+      const sort = _.sortBy(txHistory, (num) => num.timestamp.toLowerCase())
+      setTxHistory(sort)
+      setIsAscending(true)
+    }
+  }
   return (
     <UserSettingsLayout>
       <div>
@@ -364,14 +384,27 @@ const UserSettingsWalletSection = () => {
               </div>
             </div>
             <div className="mt-10 sm:border-t sm:border-gray-200 lg:w-screen">
-              <div className="block mt-12 text-lg font-medium text-gray-900">
-                Transactions history
-                <div className="flex mb-4">
-                  <span className="block text-sm font-normal text-gray-500">
-                    Everything you get from the sale goes into your wallet
-                    balance.
-                  </span>
-                  <span></span>
+              <div className="block mt-12 text-lg font-medium text-gray-900 max-w-[666px]">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    Transactions history
+                    <span className="block text-sm font-normal text-gray-500">
+                      Everything you get from the sale goes into your wallet
+                      balance.
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSort}
+                    className="font-medium cursor-pointer ml-1 mt-1.5 text-gray-700 text-xs py-2 px-3"
+                  >
+                    <span className="flex  flex-row items-center gap-2">
+                      {isAscending ? 'Ascending' : 'Descending'}
+                      <SvgAscendingIcon
+                        className={!isAscending && 'rotate-180 -scale-x-100'}
+                      />
+                    </span>
+                  </button>
                 </div>
               </div>
               {!txLoading ? (
@@ -423,7 +456,11 @@ const UserSettingsWalletSection = () => {
                           </span>
                         </div>
                         <div className="absolute cursor-pointer right-6 top-4 sm:static col-span-1">
-                          <a href={items.url}>
+                          <a
+                            href={`https://whatsonchain.com/tx/${items.txId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
                             <SvgExternalLinkIcon
                               className="w-5 h-5"
                               aria-hidden="true"

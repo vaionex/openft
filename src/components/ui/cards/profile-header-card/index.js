@@ -13,6 +13,7 @@ import Spinner from '../../spinner'
 import { checkValidation } from '@/utils/imageValidation'
 import getFileExt from '@/utils/getFileExt'
 import ImageCropper from '../../image-cropper'
+import NextLink from 'next/link'
 
 const ProfileHeaderCard = ({
   user,
@@ -173,7 +174,7 @@ const ProfileHeaderCard = ({
             <AvatarWithName className="w-24 h-24 ml-4 sm:w-32 sm:h-32 " />
           )}
 
-          <div className="flex items-center justify-end flex-1 mt-6 sm:min-w-0 sm:space-x-6 sm:pb-1">
+          <div className="flex relative items-center justify-end flex-1 mt-6 sm:min-w-0 space-x-4 sm:pb-1">
             <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block">
               <h2 className="mb-1 text-2xl font-medium text-gray-900 truncate">
                 {user?.name}
@@ -182,12 +183,14 @@ const ProfileHeaderCard = ({
                 <h3 className="font-normal text-gray-500">{user?.jobTitle}</h3>
               )}
             </div>
-            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
-              {isSuccess && (
-                <span className="text-xs text-green-500">
-                  Profile successfully updated.{' '}
-                </span>
-              )}
+            <div className="flex flex-col items-center justify-stretch sm:mr-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <NextLink href="/">
+                <a className="text-sm font-medium hover:text-gradient-primary-hover px-[16px] py-[9px] border border-solid rounded-lg border-[#D0D5DD] hover:shadow-[0_0px_1px_2px_rgba(16,24,40,0.05)]">
+                  Cancel
+                </a>
+              </NextLink>
+            </div>
+            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0">
               <ButtonWLoading
                 isError={isError}
                 isPending={isPending}
@@ -195,6 +198,11 @@ const ProfileHeaderCard = ({
                 onClick={onSubmit}
               />
             </div>
+            {isSuccess && (
+              <span className="text-xs absolute  top-12 text-green-500">
+                Profile successfully updated.{' '}
+              </span>
+            )}
           </div>
         </div>
         <div className="flex-1 block min-w-0 mt-6 md:hidden">
