@@ -10,7 +10,7 @@ const DiscoverBanner = ({ action, pages }) => {
         <div className="absolute left-0 -top-12 -bottom-0 -right-56">
           <Image
             className="object-cover w-full h-full"
-            src="/images/discover-banner.png"
+            src="/images/discover-banner.jpg"
             alt="People working on laptops"
             layout="fill"
             priority={true}
