@@ -174,7 +174,7 @@ const ProfileHeaderCard = ({
             <AvatarWithName className="w-24 h-24 ml-4 sm:w-32 sm:h-32 " />
           )}
 
-          <div className="flex items-center justify-end flex-1 mt-6 sm:min-w-0 sm:space-x-6 sm:pb-1">
+          <div className="flex items-center justify-end flex-1 mt-6 sm:min-w-0 space-x-4 sm:pb-1">
             <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block">
               <h2 className="mb-1 text-2xl font-medium text-gray-900 truncate">
                 {user?.name}
