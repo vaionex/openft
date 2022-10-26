@@ -82,10 +82,10 @@ const Header = () => {
                 <a>
                   <span className="btn-secondary">
                     <UploadBoxIcon
-                      className="w-6 h-6 mr-2"
+                      className="w-6 h-6 mr-2 text-sm"
                       aria-hidden="true"
                     />
-                    Mint
+                    Upload
                   </span>
                 </a>
               </NextLink>

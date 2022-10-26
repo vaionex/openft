@@ -13,6 +13,7 @@ import Spinner from '../../spinner'
 import { checkValidation } from '@/utils/imageValidation'
 import getFileExt from '@/utils/getFileExt'
 import ImageCropper from '../../image-cropper'
+import NextLink from 'next/link'
 
 const ProfileHeaderCard = ({
   user,
@@ -182,7 +183,14 @@ const ProfileHeaderCard = ({
                 <h3 className="font-normal text-gray-500">{user?.jobTitle}</h3>
               )}
             </div>
-            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col items-center justify-stretch sm:mr-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <NextLink href="/">
+                <a className="text-sm font-medium hover:text-gradient-primary-hover px-[16px] py-[9px] border border-solid rounded-lg border-[#D0D5DD] hover:shadow-[0_0px_1px_2px_rgba(16,24,40,0.05)]">
+                  Cancel
+                </a>
+              </NextLink>
+            </div>
+            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0">
               {isSuccess && (
                 <span className="text-xs text-green-500">
                   Profile successfully updated.{' '}

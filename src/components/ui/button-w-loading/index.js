@@ -38,7 +38,7 @@ const ButtonWLoading = ({
       type={type}
       disabled={isPending}
       className={twMerge(
-        'btn-primary py-2.5',
+        'btn-primary py-2',
         isPending
           ? 'opacity-50 cursor-not-allowed pointer-events-none'
           : 'cursor-pointer',
