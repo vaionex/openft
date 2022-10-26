@@ -86,8 +86,8 @@ const profile = {
 export default function Header({ userInfo }) {
   return (
     <div>
-      <div className="relative h-44 w-full object-cover sm:h-64 ">
-        <div className="user-overview-gradient absolute inset-0 z-10" />
+      <div className="relative object-cover w-full h-44 sm:h-64 ">
+        <div className="absolute inset-0 z-10 user-overview-gradient" />
         <Image
           src={profile.backgroundImage}
           layout="fill"
@@ -105,7 +105,7 @@ export default function Header({ userInfo }) {
               <span className="sr-only">Facebook</span>
               <svg
                 fill="currentColor"
-                className="h-5 w-5 sm:h-6 sm:w-6"
+                className="w-5 h-5 sm:h-6 sm:w-6"
                 aria-hidden="true"
                 viewBox="0 0 24 24"
               >
@@ -127,7 +127,7 @@ export default function Header({ userInfo }) {
               <span className="sr-only">Instagram</span>
               <svg
                 fill="currentColor"
-                className="h-5 w-5 sm:h-6 sm:w-6"
+                className="w-5 h-5 sm:h-6 sm:w-6"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
@@ -154,7 +154,7 @@ export default function Header({ userInfo }) {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={1.5}
-                className="h-5 w-5 sm:h-6 sm:w-6"
+                className="w-5 h-5 sm:h-6 sm:w-6"
               >
                 <path
                   fillRule="evenodd"
@@ -166,9 +166,9 @@ export default function Header({ userInfo }) {
           )}
         </div>
       </div>
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="-mt-12 sm:-mt-16 flex justify-center sm:space-x-5">
-          <div className="flex z-20 bg-blue-500 relative h-20 w-20 rounded-xl ring-4 ring-white sm:h-32 sm:w-32">
+      <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
+        <div className="flex justify-center -mt-12 sm:-mt-16 sm:space-x-5">
+          <div className="relative z-20 flex w-20 h-20 bg-blue-500 rounded-xl ring-4 ring-white sm:h-32 sm:w-32">
             {userInfo ? (
               <Image
                 className="rounded-xl"
@@ -179,7 +179,7 @@ export default function Header({ userInfo }) {
               />
             ) : (
               <div
-                className="w-full h-full flex justify-center items-center"
+                className="flex items-center justify-center w-full h-full"
                 role="status"
               >
                 <svg
@@ -203,12 +203,14 @@ export default function Header({ userInfo }) {
             )}
           </div>
         </div>
-        <div className="mt-6 min-w-0 flex-1 flex justify-center flex-col items-center">
-          <div>3d illustrator</div>
-          <h2 className="truncate text-2xl py-2 font-bold text-gray-900">
+        <div className="flex flex-col items-center justify-center flex-1 min-w-0 mt-6">
+          <div className="leading-6 text-blue-700 uppercase">
+            3d illustrator
+          </div>
+          <h2 className="py-2 text-2xl font-bold text-gray-900 truncate">
             {userInfo ? userInfo.name : '...'}
           </h2>
-          <p className="max-w-3xl">
+          <p className="max-w-[813px] text-xl font-normal text-center">
             Molestias repudiandae magni eos qui voluptatem aut. Non soluta
             praesentium. Voluptatem corporis ea quia quibusdam aperiam harum.
             Temporibus expedita amet facere aliquid alias.
