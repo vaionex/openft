@@ -10,7 +10,7 @@ const SingleNftPageMain = () => {
       <NftDetail />
       <BannerSection />
       <MoreNft />
-      <Cta /> 
+      <Cta />
     </SharedLayout>
   )
 }
