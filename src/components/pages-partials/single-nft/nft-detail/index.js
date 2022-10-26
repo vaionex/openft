@@ -77,7 +77,6 @@ export default function NftDetail() {
             ...data,
             profileImage: res?.profileImage,
           }
-          console.warn('data', data)
         })
       } else if (data.type === 'MINT') {
         await getUsersData(data.minterId).then((res) => {
@@ -87,8 +86,6 @@ export default function NftDetail() {
           }
         })
       }
-
-      console.log('hisArr', hisArr)
     }
 
     setnftHistory([...hisArr])
