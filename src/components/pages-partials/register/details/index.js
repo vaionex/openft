@@ -62,10 +62,10 @@ function RegistrationDetails({ goToStep }) {
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <UserCircleIcon className="w-auto mx-auto rounded-full h-14" />
-        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+        <h2 className="mt-6 text-3xl font-semibold text-center text-gray-900">
           Your details
         </h2>
-        <p className="mt-4 text-center">
+        <p className="mt-3 text-center font-normal text-base text-gray-500">
           Will be displayed on your profile and <br /> visible to the public
         </p>
       </div>

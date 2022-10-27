@@ -85,7 +85,7 @@ const ImageUploadDragAndDrop = ({
             )}
             {...(!isCropping && { ...getRootProps() })}
           >
-            <div className="flex justify-center w-full px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div className="flex justify-center w-full px-6 pt-5 pb-6 border border-gray-200 border-dashed rounded-lg">
               <div className="space-y-1 text-center">
                 <div className="flex items-center justify-center w-10 h-10 mx-auto rounded-full bg-gray-50">
                   <UploadIcon width={20} height={20} />

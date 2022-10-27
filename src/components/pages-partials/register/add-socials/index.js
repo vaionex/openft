@@ -59,10 +59,10 @@ function RegistrationAddSocials({
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <UsersCircleIcon className="w-auto mx-auto rounded-full h-14" />
-        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+        <h2 className="mt-6 text-3xl font-semibold text-center text-gray-900">
           Add your socials
         </h2>
-        <p className="mt-4 text-center">
+        <p className="mt-3 text-center text-base font-normal text-gray-500">
           You are welcome to link to your own webpage <br /> with more details.
         </p>
       </div>

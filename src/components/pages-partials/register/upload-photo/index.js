@@ -57,10 +57,10 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <CameraIcon className="w-auto rounded-full mx-auto p-3 bg-blue-50 text-blue-600 h-14 stroke-[1.5]" />
-        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+        <h2 className="mt-6 text-3xl font-semibold text-center text-gray-900">
           Upload your photo
         </h2>
-        <p className="mt-4 text-center">
+        <p className="mt-3 text-gray-500 font-normal text-base text-center">
           Beautify your profile, it also will
           <br /> be visible to the public
         </p>
