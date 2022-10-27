@@ -53,10 +53,8 @@ const Login = () => {
                 </a>
               </NextLink>
               <div>
-                <h2 className="text-3xl font-extrabold text-gray-900">
-                  Log in
-                </h2>
-                <p className="mt-2 text-sm text-gray-500">
+                <h2 className="text-4xl font-semibold text-gray-900">Log in</h2>
+                <p className="mt-3 text-base font-normal text-gray-500">
                   Welcome back! Please enter your details.
                 </p>
               </div>
@@ -67,7 +65,7 @@ const Login = () => {
 
                 <div>
                   <button
-                    className="w-full text-gray-700 bg-white border border-gray-300 btn-primary hover:bg-gray-100"
+                    className="w-full text-gray-700 bg-white border border-gray-300 font-medium text-base btn-primary hover:bg-gray-100"
                     onClick={handleUserAuthWithGoogle}
                   >
                     <GoogleIcon className="w-6 h-6" />
