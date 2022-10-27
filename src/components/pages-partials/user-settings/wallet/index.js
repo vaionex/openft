@@ -29,6 +29,9 @@ import {
 } from '@/components/common/icons'
 import SvgDirectionIcon from '@/components/common/icons/direction-icon'
 import moment from 'moment'
+import userSelector from '@/redux/selectors/user'
+import { firebaseAddNewNotification } from '@/firebase/utils'
+import { Timestamp } from 'firebase/firestore'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -50,6 +53,7 @@ const UserSettingsWalletSection = () => {
   const [isAscending, setIsAscending] = useState(false)
   const { paymail, address, balance, wallethistory } =
     useSelector(walletSelector)
+  const { currentUser } = useSelector(userSelector)
   // const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState, reset } = useForm({
     mode: 'onSubmit',
@@ -77,6 +81,7 @@ const UserSettingsWalletSection = () => {
           },
         ],
       }
+
       const transactionRes = await apiConfig('/v1/send', {
         method: 'post',
         data: dataObj,
@@ -94,6 +99,19 @@ const UserSettingsWalletSection = () => {
       ) {
         reset({ address: '', amount: '' })
         setMsg({ type: 'success', content: 'The transfer was successful' })
+
+        const notificationValues = {
+          type: 'debit',
+          message: `${Number((Number(amount) / bsvRate).toFixed(8))} sent to ${
+            data.address
+          }`,
+        }
+
+        const ron1 = await firebaseAddNewNotification(
+          currentUser.uid,
+          notificationValues,
+        )
+
         setTimeout(() => {
           getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
         }, 2000)

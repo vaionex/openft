@@ -71,6 +71,11 @@ const notificationObj = {
   },
 }
 
+const userCreateNotification = {
+  type: 'account_created',
+  message: 'Your wallet has been created successfully',
+}
+
 const firebaseGetUserInfoFromDb = async (id, collection) => {
   try {
     const docRef = doc(firebaseDb, collection, id)
@@ -181,6 +186,7 @@ const firebaseRegister = async (data) => {
     }
     await setDoc(doc(firebaseDb, 'users', user.uid), infos)
     await firebaseAddDocWithID('notifications', notificationObj, user.uid)
+    await firebaseAddNewNotification(user.uid, userCreateNotification)
     const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
       async (user) => {
         await firebaseUploadUserImage({
@@ -536,6 +542,35 @@ const firebaseAddDocWithID = async (collectionName, obj, uid) => {
   }
 }
 
+const firebaseAddNewNotification = async (uid, obj) => {
+  try {
+    const notificationRef = collection(
+      firebaseDb,
+      'notifications',
+      uid,
+      'notifications',
+    )
+    const dc = await addDoc(notificationRef, {
+      ...obj,
+      timestamp: Timestamp.now(),
+    }).then(() => tr)
+    return dc
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const firebaseGetMsgNotification = async (uId) => {
+  const snapshot = await getDocs(
+    collection(firebaseDb, 'notifications', uId, 'notifications'),
+  )
+  let notifications = []
+  snapshot.docs.forEach((doc) => {
+    notifications.push({ id: doc.id, ...doc.data() })
+  })
+  return notifications
+}
+
 const firebaseAddDoc = async (collectionName, uid, obj) => {
   try {
     const dc = await setDoc(doc(firebaseDb, collectionName, uid), {
@@ -667,6 +702,8 @@ export {
   firebaseAddDoc,
   firebaseSetDoc,
   firebaseAddDocWithID,
+  firebaseAddNewNotification,
+  firebaseGetMsgNotification,
   firebaseAddDocWithRandomID,
   firebaseDeleteDoc,
   firebaseUpdateDoc,
