@@ -44,15 +44,19 @@ function LoginForm() {
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      <div className="flex justify-center pt-2">
-        {error && <Alert message={error} type="error" />}
-      </div>
+      {error ? (
+        <div className="flex justify-center pt-2">
+          {error && <Alert message={error} type="error" />}
+        </div>
+      ) : (
+        ''
+      )}
       <div>
         <label
           htmlFor="email"
           className="block text-sm font-medium text-gray-700"
         >
-          Email address
+          Email
         </label>
         <div className="mt-1">
           <input
@@ -102,7 +106,7 @@ function LoginForm() {
       <div className="flex items-center justify-between gap-2">
         <Checkbox
           id="remember-me"
-          text="Remember me"
+          text="Remember for 30 days"
           onChange={(e) => setRememberMe(e.target.checked)}
         />
 
