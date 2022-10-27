@@ -1,8 +1,11 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { NotificationsForm } from '@/components/ui/forms'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NotificationList from '@/components/ui/lists/notification-list'
 import DropdownMinimal from '@/components/ui/dropdown-minimal'
+import { firebaseGetMsgNotification } from '@/firebase/utils'
+import { useSelector } from 'react-redux'
+import userSelector from '@/redux/selectors/user'
 
 const items = [
   {
@@ -32,6 +35,16 @@ const dropdownItems = [
 ]
 
 const UserSettingsNotificationSection = () => {
+  const { currentUser } = useSelector(userSelector)
+  const [notifications, setNotifications] = useState([])
+  useEffect(() => {
+    const getNotifications = async () => {
+      const notification = await firebaseGetMsgNotification(currentUser.uid)
+      setNotifications(notification)
+    }
+    getNotifications()
+  }, [currentUser.uid])
+
   return (
     <UserSettingsLayout>
       <div>
@@ -48,6 +61,7 @@ const UserSettingsNotificationSection = () => {
 
             <NotificationsForm />
           </div>
+
           <div className="md:col-span-4">
             <div className="relative sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
@@ -60,7 +74,7 @@ const UserSettingsNotificationSection = () => {
                 <DropdownMinimal items={dropdownItems} />
               </span>
             </div>
-            <NotificationList items={items} />
+            <NotificationList items={notifications} />
           </div>
         </div>
       </div>

@@ -50,14 +50,14 @@ const NotificationsForm = () => {
       'app-notification': {
         itemSold: itemSold ? itemSold : false,
         purchases: purchases ? purchases : false,
-        priceChanges: priceChanges ? priceChanges : false,
-        itemUpdates: itemUpdates ? itemUpdates : false,
+        // priceChanges: priceChanges ? priceChanges : false,
+        // itemUpdates: itemUpdates ? itemUpdates : false,
       },
       'email-notification': {
         itemSoldEmail: itemSoldEmail ? itemSoldEmail : false,
         purchasesEmail: purchasesEmail ? purchasesEmail : false,
-        priceChangesEmail: priceChangesEmail ? priceChangesEmail : false,
-        itemUpdatesEmail: itemUpdatesEmail ? itemUpdatesEmail : false,
+        // priceChangesEmail: priceChangesEmail ? priceChangesEmail : false,
+        // itemUpdatesEmail: itemUpdatesEmail ? itemUpdatesEmail : false,
       },
     }
 
@@ -125,7 +125,7 @@ const NotificationsForm = () => {
                   }}
                 />
               </div>
-              <div className="relative flex items-start">
+              {/* <div className="relative flex items-start">
                 <Controller
                   name={'priceChanges'}
                   control={control}
@@ -158,7 +158,7 @@ const NotificationsForm = () => {
                     )
                   }}
                 />
-              </div>
+              </div> */}
             </div>
           </fieldset>
           <fieldset className="mt-6 ">
@@ -207,7 +207,7 @@ const NotificationsForm = () => {
                   }}
                 />
               </div>
-              <div className="relative flex items-start">
+              {/* <div className="relative flex items-start">
                 <Controller
                   name={'priceChangesEmail'}
                   control={control}
@@ -240,7 +240,7 @@ const NotificationsForm = () => {
                     )
                   }}
                 />
-              </div>
+              </div> */}
             </div>
           </fieldset>
         </div>
