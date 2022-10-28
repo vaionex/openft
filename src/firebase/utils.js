@@ -553,7 +553,9 @@ const firebaseAddNewNotification = async (uid, obj) => {
     const dc = await addDoc(notificationRef, {
       ...obj,
       timestamp: Timestamp.now(),
-    }).then(() => tr)
+    })
+      .then(() => true)
+      .catch(() => false)
     return dc
   } catch (error) {
     console.log(error)

@@ -4,7 +4,7 @@ import ActivityTag from '../../activity-tag'
 
 const NotificationList = ({ items }) => {
   return (
-    <div>
+    <div className="max-h-96 h-auto overflow-auto">
       <ul role="list" className="divide-y divide-gray-200">
         {items.map((activityItem) => (
           <li key={activityItem.id} className="py-4">
@@ -17,7 +17,11 @@ const NotificationList = ({ items }) => {
               <div className="flex-1 space-y-1">
                 <div className="flex items-center gap-2">
                   <div className="flex justify-between w-full text-sm">
-                    {activityItem?.message}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: activityItem?.message,
+                      }}
+                    ></span>
                   </div>
                   {activityItem.isNew && (
                     <span className="text-blue-500">&#8226;</span>

@@ -19,6 +19,7 @@ import {
   firebaseAddDocWithRandomID,
   firebaseGetNftImageUrl,
   firebaseUploadNftImage,
+  firebaseAddNewNotification,
 } from '@/firebase/utils'
 import { v4 as uuidv4 } from 'uuid'
 import { doc, Timestamp, writeBatch } from 'firebase/firestore'
@@ -36,6 +37,11 @@ const imageInputAttributes = {
     maxSize: 4, //MB
   },
   aspect: 1,
+}
+
+const notificationValues = {
+  type: 'nft_create',
+  message: 'Your NFT has been created!',
 }
 
 const UploadForm = () => {
@@ -219,6 +225,12 @@ const UploadForm = () => {
       await batch.commit()
 
       setIsSuccess(true)
+
+      const ron1 = await firebaseAddNewNotification(
+        currentUser.uid,
+        notificationValues,
+      )
+
       resetAllData()
     } catch (error) {
       if (error?.message) {
