@@ -218,15 +218,17 @@ const ProductsCarouselCard = ({
     }
   }
 
-  const notifyUser = async (currentUserId, ownerId, nftName) => {
+  const notifyUser = async (currentUserId, ownerId, nftName, nftId) => {
     const purchaserNotificationValues = {
       type: 'debit',
-      message: `You have purchased ${nftName}`,
+      message: `You have purchased <strong>${nftName}</strong>`,
+      nftId: nftId,
     }
 
     const sellerNotificationValues = {
       type: 'credit',
-      message: `Your ${nftName} has been sold`,
+      message: `Your <strong>${nftName}</strong> has been sold`,
+      nftId: nftId,
     }
 
     // currentUser
@@ -236,23 +238,11 @@ const ProductsCarouselCard = ({
         purchaserNotificationValues,
       )
     }
-    if (notificationObj['app-notification'].itemSold) {
-      const pur = await firebaseAddNewNotification(
-        currentUserId,
-        sellerNotificationValues,
-      )
-    }
     // for seller
     const ownerNotificationSetting = await firebaseGetSingleDoc(
       'notifications',
       ownerId,
     )
-    if (ownerNotificationSetting['app-notification'].purchases) {
-      const sel = await firebaseAddNewNotification(
-        ownerId,
-        purchaserNotificationValues,
-      )
-    }
     if (ownerNotificationSetting['app-notification'].itemSold) {
       const sel = await firebaseAddNewNotification(
         ownerId,

@@ -76,9 +76,6 @@ const UserSettingsNotificationSection = () => {
                   Latest notification from marketplace.
                 </span>
               </span>
-              <span className="absolute top-0 right-0">
-                <DropdownMinimal items={dropdownItems} />
-              </span>
             </div>
             <NotificationList items={notifications} />
           </div>
