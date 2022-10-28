@@ -209,7 +209,7 @@ const ProductsCarouselCard = ({
       setIsOpen(false)
       setloadingPurchaseBtn(false)
       setsuccessTx(transactionTx)
-      notifyUser(currentUser?.uid, data?.ownerId, data?.name)
+      notifyUser(currentUser?.uid, data?.ownerId, data?.name, data?.tokenId)
       setIsSuccess(true)
     } catch (err) {
       console.log('buy func error', err)
@@ -222,15 +222,15 @@ const ProductsCarouselCard = ({
     const purchaserNotificationValues = {
       type: 'debit',
       message: `You have purchased <strong>${nftName}</strong>`,
-      nftId: nftId,
+      nftId,
     }
 
     const sellerNotificationValues = {
       type: 'credit',
       message: `Your <strong>${nftName}</strong> has been sold`,
-      nftId: nftId,
+      nftId,
     }
-
+    console.log(':::: 1', notificationObj)
     // currentUser
     if (notificationObj['app-notification'].purchases) {
       const pur = await firebaseAddNewNotification(
@@ -243,6 +243,7 @@ const ProductsCarouselCard = ({
       'notifications',
       ownerId,
     )
+    console.log(':::: 2', ownerNotificationSetting)
     if (ownerNotificationSetting['app-notification'].itemSold) {
       const sel = await firebaseAddNewNotification(
         ownerId,
@@ -396,7 +397,7 @@ const ProductsCarouselCard = ({
         title={'Success'}
         content={
           <div>
-            You have successfully purchased <br /> &apos;Little Ghost&apos; NFT.{' '}
+            You have successfully purchased <br /> &apos;{data?.name}&apos; NFT.{' '}
             <br /> {successTx && <>Tx id: {successTx}</>}
           </div>
         }
