@@ -4,7 +4,7 @@ import ActivityTag from '../../activity-tag'
 
 const NotificationList = ({ items }) => {
   return (
-    <div>
+    <div className=" max-h-80 h-auto overflow-auto">
       <ul role="list" className="divide-y divide-gray-200">
         {items.map((activityItem) => (
           <li key={activityItem.id} className="py-4">

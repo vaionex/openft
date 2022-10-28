@@ -6,6 +6,7 @@ import DropdownMinimal from '@/components/ui/dropdown-minimal'
 import { firebaseGetMsgNotification } from '@/firebase/utils'
 import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
+import _ from 'lodash'
 
 const items = [
   {
@@ -40,7 +41,12 @@ const UserSettingsNotificationSection = () => {
   useEffect(() => {
     const getNotifications = async () => {
       const notification = await firebaseGetMsgNotification(currentUser.uid)
-      setNotifications(notification)
+      const allNotifications = _.sortBy(
+        notification,
+        (noti) => noti.timestamp,
+      ).reverse()
+
+      setNotifications(allNotifications)
     }
     getNotifications()
   }, [currentUser.uid])

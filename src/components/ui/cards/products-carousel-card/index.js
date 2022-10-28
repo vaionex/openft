@@ -8,7 +8,12 @@ import {
   doc,
   Timestamp,
 } from 'firebase/firestore'
-import { firebaseAddDoc, firebaseUpdateDoc } from '@/firebase/utils'
+import {
+  firebaseAddDoc,
+  firebaseAddNewNotification,
+  firebaseGetSingleDoc,
+  firebaseUpdateDoc,
+} from '@/firebase/utils'
 
 import Image from 'next/image'
 import PropTypes from 'prop-types'
@@ -28,6 +33,7 @@ import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
 import Social from '../../popover'
 import { setOpen } from '@/redux/slices/basket'
+import { async } from '@firebase/util'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -51,7 +57,8 @@ const ProductsCarouselCard = ({
   const router = useRouter()
   const [hasLike, setHasLike] = useState(false)
   const artistData = useArtistData(data?.ownerId)
-  const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const { currentUser, isAuthenticated, notificationObj } =
+    useSelector(userSelector)
   const { paymail, address, balance } = useSelector(walletSelector)
   const [loadingPurchaseBtn, setloadingPurchaseBtn] = useState(false)
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
@@ -202,11 +209,55 @@ const ProductsCarouselCard = ({
       setIsOpen(false)
       setloadingPurchaseBtn(false)
       setsuccessTx(transactionTx)
+      notifyUser(currentUser?.uid, data?.ownerId, data?.name)
       setIsSuccess(true)
     } catch (err) {
       console.log('buy func error', err)
       setloadingPurchaseBtn(false)
       setdialogErrorMsg('An error occured! please try later')
+    }
+  }
+
+  const notifyUser = async (currentUserId, ownerId, nftName) => {
+    const purchaserNotificationValues = {
+      type: 'debit',
+      message: `You have purchased ${nftName}`,
+    }
+
+    const sellerNotificationValues = {
+      type: 'credit',
+      message: `Your ${nftName} has been sold`,
+    }
+
+    // currentUser
+    if (notificationObj['app-notification'].purchases) {
+      const pur = await firebaseAddNewNotification(
+        currentUserId,
+        purchaserNotificationValues,
+      )
+    }
+    if (notificationObj['app-notification'].itemSold) {
+      const pur = await firebaseAddNewNotification(
+        currentUserId,
+        sellerNotificationValues,
+      )
+    }
+    // for seller
+    const ownerNotificationSetting = await firebaseGetSingleDoc(
+      'notifications',
+      ownerId,
+    )
+    if (ownerNotificationSetting['app-notification'].purchases) {
+      const sel = await firebaseAddNewNotification(
+        ownerId,
+        purchaserNotificationValues,
+      )
+    }
+    if (ownerNotificationSetting['app-notification'].itemSold) {
+      const sel = await firebaseAddNewNotification(
+        ownerId,
+        sellerNotificationValues,
+      )
     }
   }
 
