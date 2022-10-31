@@ -53,12 +53,12 @@ const NotificationsForm = () => {
         // priceChanges: priceChanges ? priceChanges : false,
         // itemUpdates: itemUpdates ? itemUpdates : false,
       },
-      'email-notification': {
-        itemSoldEmail: itemSoldEmail ? itemSoldEmail : false,
-        purchasesEmail: purchasesEmail ? purchasesEmail : false,
-        // priceChangesEmail: priceChangesEmail ? priceChangesEmail : false,
-        // itemUpdatesEmail: itemUpdatesEmail ? itemUpdatesEmail : false,
-      },
+      // 'email-notification': {
+      //   itemSoldEmail: itemSoldEmail ? itemSoldEmail : false,
+      //   purchasesEmail: purchasesEmail ? purchasesEmail : false,
+      //   // priceChangesEmail: priceChangesEmail ? priceChangesEmail : false,
+      //   // itemUpdatesEmail: itemUpdatesEmail ? itemUpdatesEmail : false,
+      // },
     }
 
     const res = await firebaseAddDocWithID(
@@ -161,7 +161,7 @@ const NotificationsForm = () => {
               </div> */}
             </div>
           </fieldset>
-          <fieldset className="mt-6 ">
+          {/* <fieldset className="mt-6 ">
             <legend className="sr-only">Email notifications </legend>
             <div
               className="text-base font-medium text-gray-900 "
@@ -207,7 +207,7 @@ const NotificationsForm = () => {
                   }}
                 />
               </div>
-              {/* <div className="relative flex items-start">
+              <div className="relative flex items-start">
                 <Controller
                   name={'priceChangesEmail'}
                   control={control}
@@ -240,9 +240,9 @@ const NotificationsForm = () => {
                     )
                   }}
                 />
-              </div> */}
+              </div>
             </div>
-          </fieldset>
+          </fieldset> */}
         </div>
         {resStatus && (
           <Alert message={'Notifications has been updated'} type="success" />
