@@ -1,16 +1,11 @@
 import NextLink from 'next/link'
 import { Popover } from '@headlessui/react'
-import {
-  BellIcon,
-  CogIcon,
-  MenuIcon,
-  ShoppingCartIcon,
-} from '@heroicons/react/outline'
+import { CogIcon, MenuIcon, ShoppingCartIcon } from '@heroicons/react/outline'
 import MobileNav from '../mobile/nav'
 import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
-import { UploadBoxIcon } from '@/components/common/icons'
+import { UploadBoxIcon, BellIcon } from '@/components/common/icons'
 import { connect, useSelector, useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
@@ -95,7 +90,10 @@ const Header = () => {
                 <li className="inline-flex">
                   <NextLink href="/user-settings/notifications">
                     <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">
-                      <BellIcon className="w-6 h-6" aria-hidden="true" />
+                      <BellIcon
+                        className="w-6 h-6 stroke-gray-500"
+                        aria-hidden="true"
+                      />
                     </a>
                   </NextLink>
                 </li>
