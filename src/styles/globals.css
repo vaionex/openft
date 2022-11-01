@@ -133,9 +133,9 @@
 }
 
 @layer components {
-  .carousel-main .slick-slider {
+  /* .carousel-main .slick-slider {
     @apply shadow-inner;
-  }
+  } */
 
   .custom-progress-circular svg {
     .CircularProgressbar-trail {
