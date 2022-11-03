@@ -150,12 +150,12 @@ function RegistrationAddSocials({
                       {mnc}
                       {!mnemonic && (
                         <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
-                          <div class="flex justify-center space-x-2 animate-pulse">
-                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                          <div className="flex justify-center space-x-2 animate-pulse">
+                            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
                           </div>
-                          <span class="sr-only">Loading...</span>
+                          <span className="sr-only">Loading...</span>
                         </div>
                       )}
                     </div>

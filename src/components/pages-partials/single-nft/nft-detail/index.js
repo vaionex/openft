@@ -18,6 +18,7 @@ import NextLink from 'next/link'
 import HistoryComp from './HistoryCom'
 import Spinner from '@/components/ui/spinner'
 import { getUsersData } from '@/services/relysia-queries'
+import Image from 'next/image'
 
 const transactionData = {
   protocol: {
@@ -122,9 +123,11 @@ export default function NftDetail() {
                 <NextLink href={`/user/${artistData?.username}`}>
                   <a>
                     {artistData?.profileImage ? (
-                      <img
+                      <Image
                         src={artistData?.profileImage}
                         alt="vaionex-mini-icon"
+                        width={36}
+                        height={36}
                         className="w-8 h-8 bg-gray-100 rounded-full"
                       />
                     ) : (
@@ -196,7 +199,7 @@ export default function NftDetail() {
                             nftData?.contractTxid
                           }
                           target="_blank"
-                          class="hover:underline hover:text-blue-600"
+                          className="hover:underline hover:text-blue-600"
                           rel="noopener noreferrer"
                         >
                           {nftData?.contractTxid}
