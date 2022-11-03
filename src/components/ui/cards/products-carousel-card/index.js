@@ -86,7 +86,7 @@ const ProductsCarouselCard = ({
       }
 
       //checking wallet balance
-      let nftPriceInBSV = Number((data.amount / usdBalance).toFixed(8))
+      let nftPriceInBSV = Number((data?.amount / usdBalance).toFixed(8))
       if (balance < nftPriceInBSV) {
         setdialogErrorMsg('Insufficient balance in wallet')
 
@@ -97,12 +97,12 @@ const ProductsCarouselCard = ({
       //swaping nft
       console.log('validations passed')
       console.log('swaping nft')
-      if (!data.offerHex) {
+      if (!data?.offerHex) {
         setdialogErrorMsg('NFT is not available for sale any more!')
         setloadingPurchaseBtn(false)
         return null
       }
-      const swapNftRes = await swapNft(data.offerHex)
+      const swapNftRes = await swapNft(data?.offerHex)
 
       console.log('swapNftRes', swapNftRes)
       let transactionTx =
@@ -125,8 +125,8 @@ const ProductsCarouselCard = ({
       console.log('creating offer hex')
       // const atomicSwapOffer = null //remove
       const atomicSwapOffer = await createAtomicSwapOffer({
-        tokenId: data.tokenId,
-        amount: data.amountInBSV,
+        tokenId: data?.tokenId,
+        amount: data?.amountInBSV,
         sn: 1,
       })
 
@@ -146,7 +146,7 @@ const ProductsCarouselCard = ({
       console.log('updating database')
 
       const batch = writeBatch(firebaseDb)
-      const tokenRef = doc(firebaseDb, 'nfts', data.tokenId)
+      const tokenRef = doc(firebaseDb, 'nfts', data?.tokenId)
 
       let tokenObj = {
         ownerId: currentUser.uid,
@@ -162,7 +162,7 @@ const ProductsCarouselCard = ({
       const hisRef = doc(
         firebaseDb,
         'nfts',
-        data.tokenId,
+        data?.tokenId,
         'nftHistory',
         nftHisId,
       )
@@ -170,10 +170,10 @@ const ProductsCarouselCard = ({
         type: 'PURCHASE',
         sn: 1,
         timestamp: Timestamp.now(),
-        amount: data.amount,
-        amountInBSV: data.amountInBSV,
+        amount: data?.amount,
+        amountInBSV: data?.amountInBSV,
         purchaserId: currentUser.uid,
-        sellerId: data.ownerId,
+        sellerId: data?.ownerId,
         txid: transactionTx,
       }
       batch.set(hisRef, hisObj)
@@ -331,7 +331,7 @@ const ProductsCarouselCard = ({
           <p className="text-xl font-medium text-gray-900">
             <span className="mr-2">${data?.amount}</span> BSV{' '}
             <span>
-              {data?.amount && Number((data.amount / usdBalance).toFixed(4))}
+              {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
             </span>
           </p>
         </div>

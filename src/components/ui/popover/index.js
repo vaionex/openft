@@ -63,7 +63,7 @@ export default function Social({ path }) {
                     </div>
                     <div className="flex  w-full justify-center items-center hover:bg-gray-100">
                       <a
-                        class="twitter-share-button p-1"
+                        className="twitter-share-button p-1"
                         target="_blank"
                         rel="noreferrer noopener"
                         href={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fopenft.vercel.app${uri}`}
