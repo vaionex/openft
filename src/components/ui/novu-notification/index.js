@@ -5,7 +5,7 @@ import {
   IMessage,
 } from '@novu/notification-center'
 
-const NovuNotificationSection = () => {
+const NovuNotification = () => {
   const onNotificationClick = (notification) => {
     navigate(notification.cta.data.url)
   }
@@ -14,10 +14,10 @@ const NovuNotificationSection = () => {
       subscriberId={'uniqueID'}
       applicationIdentifier={'KLjPvkLDlvhe'}
     >
-      <PopoverNotificationCenter onNotificationClick={onNotificationClick}>
+      <PopoverNotificationCenter>
         {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
       </PopoverNotificationCenter>
     </NovuProvider>
   )
 }
-export default NovuNotificationSection
+export default NovuNotification
