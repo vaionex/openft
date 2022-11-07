@@ -7,6 +7,7 @@ import { firebaseGetMsgNotification } from '@/firebase/utils'
 import { useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
 import _ from 'lodash'
+import NovuNotificationSection from './novu'
 
 const items = [
   {
@@ -78,6 +79,7 @@ const UserSettingsNotificationSection = () => {
               </span>
             </div>
             <NotificationList items={notifications} />
+            {/* <NovuNotificationSection /> */}
           </div>
         </div>
       </div>

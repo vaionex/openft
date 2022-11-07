@@ -32,6 +32,7 @@ import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
 import { firebaseAddNewNotification } from '@/firebase/utils'
 import { Timestamp } from 'firebase/firestore'
+import { Novu } from '@novu/node'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -144,6 +145,30 @@ const UserSettingsWalletSection = () => {
       }
     }
   }
+
+  // const handleSend = async () => {
+  //   const novu = new Novu('api-key')
+  //   const forEmail = {
+  //     to: {
+  //       subscriberId: 'uniqueID',
+  //       email: 'useremail@test.com',
+  //       firstName: 'John',
+  //       lastName: 'Doe',
+  //     },
+  //     payload: {
+  //       customVariables: 'Hello',
+  //     },
+  //   }
+  //   const forInApp = {
+  //     to: {
+  //       subscriberId: 'uniqueID',
+  //     },
+  //     payload: {
+  //       customVariables: 'Hello',
+  //     },
+  //   }
+  //   await novu.trigger('in-app', forInApp)
+  // }
 
   useEffect(() => {
     if (balance !== null && bsvRate) {
