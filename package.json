@@ -13,6 +13,8 @@
   "dependencies": {
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "1.0.5",
+    "@novu/node": "^0.8.0",
+    "@novu/notification-center": "^0.8.0",
     "@ramonak/react-progress-bar": "^5.0.2",
     "@reduxjs/toolkit": "^1.7.2",
     "@tailwindcss/forms": "^0.4.0",

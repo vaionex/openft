@@ -94,7 +94,7 @@ export default function Header({ userInfo }) {
           objectFit="cover"
           alt=""
         />
-        <div className="flex relative max-w-7xl mx-auto z-10 top-36 sm:top-52 sm:left-7 space-x-1.5 sm:space-x-6">
+        <div className="flex relative max-w-7xl mx-auto z-10 top-36 sm:top-52 ml-7 space-x-1.5 sm:space-x-6">
           {userInfo?.socialLinks?.facebook && (
             <a
               target="_blank"

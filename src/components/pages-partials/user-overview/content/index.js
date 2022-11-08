@@ -121,7 +121,7 @@ export default function Content({ nftInfo, userFavList }) {
           onSubmit={(e) => handleSubmit(e, searchState)}
           className="flex items-center gap-2 order-1 sm:order:2"
         >
-          <InputMain className="relative w-full pb-0 border-none">
+          <InputMain className="relative w-full md:min-w-[348px] pb-0 border-none">
             <span className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
               <MagnifyGlassIcon className="w-5 h-5 text-gray-400 " />
             </span>

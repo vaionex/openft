@@ -10,6 +10,7 @@ import { connect, useSelector, useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
+import NovuNotification from '@/components/ui/novu-notification'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -85,7 +86,7 @@ const Header = () => {
                 </a>
               </NextLink>
             </li>
-            <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
+            {/* <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <ul className="flex items-center gap-1">
                 <li className="inline-flex">
                   <NextLink href="/user-settings/notifications">
@@ -98,8 +99,8 @@ const Header = () => {
                   </NextLink>
                 </li>
               </ul>
-            </li>
-
+            </li> */}
+            <NovuNotification />
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <DropdownUser user={currentUser} />
             </li>
