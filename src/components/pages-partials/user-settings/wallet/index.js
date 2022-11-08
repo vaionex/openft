@@ -19,7 +19,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import validationSchema from './validationScheme'
 import Alert from '@/components/ui/alert'
 import usePriceConverter from '@/hooks/usePriceConverter'
-import Image from 'next/image'
 import {
   SvgDirectInboxIcon,
   SvgDirectBoxSend,
@@ -27,13 +26,10 @@ import {
   SvgExternalLinkIcon,
   SvgAscendingIcon,
 } from '@/components/common/icons'
-import SvgDirectionIcon from '@/components/common/icons/direction-icon'
 import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
 import { firebaseAddNewNotification } from '@/firebase/utils'
-import { Timestamp } from 'firebase/firestore'
-import { Novu } from '@novu/node'
-
+import { CreateNovuNotification } from '@/services/novu-notifications'
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
   { type: 'number', placeholder: 'Amount to transfer in $', name: 'amount' },
@@ -101,17 +97,11 @@ const UserSettingsWalletSection = () => {
         reset({ address: '', amount: '' })
         setMsg({ type: 'success', content: 'The transfer was successful' })
 
-        const notificationValues = {
-          type: 'debit',
-          message: `${Number((Number(amount) / bsvRate).toFixed(8))} sent to ${
-            data.address
-          }`,
-        }
+        const message = `${Number(
+          (Number(amount) / bsvRate).toFixed(8),
+        )} sent to ${data.address}`
 
-        const ron1 = await firebaseAddNewNotification(
-          currentUser.uid,
-          notificationValues,
-        )
+        await CreateNovuNotification(currentUser.uid, message)
 
         setTimeout(() => {
           getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
@@ -145,30 +135,6 @@ const UserSettingsWalletSection = () => {
       }
     }
   }
-
-  // const handleSend = async () => {
-  //   const novu = new Novu('api-key')
-  //   const forEmail = {
-  //     to: {
-  //       subscriberId: 'uniqueID',
-  //       email: 'useremail@test.com',
-  //       firstName: 'John',
-  //       lastName: 'Doe',
-  //     },
-  //     payload: {
-  //       customVariables: 'Hello',
-  //     },
-  //   }
-  //   const forInApp = {
-  //     to: {
-  //       subscriberId: 'uniqueID',
-  //     },
-  //     payload: {
-  //       customVariables: 'Hello',
-  //     },
-  //   }
-  //   await novu.trigger('in-app', forInApp)
-  // }
 
   useEffect(() => {
     if (balance !== null && bsvRate) {
@@ -339,9 +305,9 @@ const UserSettingsWalletSection = () => {
                     onClick={() => {
                       setIsSend(true)
                     }}
-                    className="btn-secondary py-2.5"
+                    className="btn-secondary py-2.5 border border-[#EAECF0] text-sm font-medium"
                   >
-                    Send
+                    Transfer
                   </button>
                   <ModalConfirm
                     isOpen={isSend}
@@ -407,7 +373,7 @@ const UserSettingsWalletSection = () => {
                     onClick={() => {
                       setIsDeposit(true)
                     }}
-                    className="btn-primary py-2.5"
+                    className="btn-primary py-2.5 text-sm font-medium"
                   >
                     Deposit
                   </button>
@@ -428,7 +394,7 @@ const UserSettingsWalletSection = () => {
             </div>
             <div className="mt-10 sm:border-t sm:border-gray-200 lg:w-screen">
               <div className="block mt-12 text-lg font-medium text-gray-900 max-w-[666px]">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center justify-between mb-4">
                   <div>
                     Transactions history
                     <span className="block text-sm font-normal text-gray-500">
@@ -441,7 +407,7 @@ const UserSettingsWalletSection = () => {
                     onClick={handleSort}
                     className="font-medium cursor-pointer ml-1 mt-1.5 text-gray-700 text-xs py-2 px-3"
                   >
-                    <span className="flex  flex-row items-center gap-2">
+                    <span className="flex flex-row items-center gap-2">
                       {isAscending ? 'Ascending' : 'Descending'}
                       <SvgAscendingIcon
                         className={!isAscending && 'rotate-180 -scale-x-100'}
@@ -456,7 +422,7 @@ const UserSettingsWalletSection = () => {
                     <div key={index}>
                       <div className=" relative bg-white mb-6 py-4 sm:items-center px-6 grid grid-cols-2 sm:grid-cols-12  w-full gap-8 min-h-[80px] border border-gray-200 rounded-lg max-w-[666px]">
                         <div className="flex flex-row items-center col-span-6">
-                          <div className="grid rounded overflow-hidden directbox-container place-items-center w-11 h-11">
+                          <div className="grid overflow-hidden rounded directbox-container place-items-center w-11 h-11">
                             {items?.type === 'debit' ? (
                               <SvgDirectBoxSend
                                 className="w-6 h-6 directbox-send"
@@ -498,7 +464,7 @@ const UserSettingsWalletSection = () => {
                             </span>
                           </span>
                         </div>
-                        <div className="absolute cursor-pointer right-6 top-4 sm:static col-span-1">
+                        <div className="absolute col-span-1 cursor-pointer right-6 top-4 sm:static">
                           <a
                             href={`https://whatsonchain.com/tx/${items.txId}`}
                             target="_blank"

@@ -10,7 +10,7 @@ import { connect, useSelector, useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
-import NovuNotification from '@/components/ui/novu-notification'
+import NovuNotificationCenter from '@/components/ui/novu-notification-center'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -60,7 +60,7 @@ const Header = () => {
               ))}
             </div>
           </div>
-          <ul className="items-center hidden md:flex md:gap-4 md:items-center ">
+          <ul className="items-center hidden md:flex md:gap-4">
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="/login">
                 <a className="text-base font-medium hover:text-gradient-primary-hover">
@@ -86,21 +86,15 @@ const Header = () => {
                 </a>
               </NextLink>
             </li>
-            {/* <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
-              <ul className="flex items-center gap-1">
-                <li className="inline-flex">
-                  <NextLink href="/user-settings/notifications">
-                    <a className="inline-block p-3 text-base font-medium hover:text-gradient-primary-hover">
-                      <BellIcon
-                        className="w-6 h-6 stroke-gray-500"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </NextLink>
-                </li>
-              </ul>
-            </li> */}
-            <NovuNotification />
+            <li
+              className={twMerge(
+                'hidden',
+                isAuthenticated && 'list-item md:inline-flex',
+              )}
+            >
+              <NovuNotificationCenter />
+            </li>
+
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <DropdownUser user={currentUser} />
             </li>

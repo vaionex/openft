@@ -34,6 +34,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Social from '../../popover'
 import { setOpen } from '@/redux/slices/basket'
 import { async } from '@firebase/util'
+import { CreateNovuNotification } from '@/services/novu-notifications'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -209,7 +210,16 @@ const ProductsCarouselCard = ({
       setIsOpen(false)
       setloadingPurchaseBtn(false)
       setsuccessTx(transactionTx)
-      notifyUser(currentUser?.uid, data?.ownerId, data?.name, data?.tokenId)
+      await CreateNovuNotification(
+        data?.ownerId,
+        `Your ${data?.name} has been sold`,
+      )
+
+      await CreateNovuNotification(
+        currentUser?.uid,
+        `You have purchased ${data?.name}`,
+      )
+
       setIsSuccess(true)
     } catch (err) {
       console.log('buy func error', err)
@@ -327,7 +337,7 @@ const ProductsCarouselCard = ({
       </div>
       <div className="flex flex-col flex-1 px-4 py-5">
         <div className="flex items-center justify-between">
-          <p className="px-3 py-2 rounded-lg bg-gray-50">1/1</p>
+          <p className="px-3 py-2 rounded-lg bg-gray-50">{data?.likes}</p>
           <p className="text-xl font-medium text-gray-900">
             <span className="mr-2">${data?.amount}</span> BSV{' '}
             <span>
@@ -428,6 +438,7 @@ ProductsCarouselCard.propTypes = {
 export default ProductsCarouselCard
 
 const Card = ({ data, artistData, usdBalance, dialogErrorMsg }) => {
+  console.warn('data', data)
   return (
     <div>
       <div
@@ -456,7 +467,7 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg }) => {
         <div className="flex flex-col flex-1 px-4 py-5">
           <div className="flex items-center justify-between pt-2">
             <p className="p-[11px] font-normal text-base rounded-lg bg-gray-50">
-              1/1
+              {data?.likes}
             </p>
             <p className="text-xl font-medium text-gray-900">
               <span className="mr-2">${data?.amount}</span> BSV{' '}
