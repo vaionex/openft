@@ -180,3 +180,47 @@
 .diamondicon-filter {
   filter: drop-shadow(0px 6px 6px rgba(79, 70, 229, 0.3));
 }
+
+.sc-eDvSVe {
+  @apply hidden;
+}
+
+.sc-dIfARi {
+  @apply bg-gray-50;
+}
+
+.sc-bjfHbI {
+  @apply text-gray-700 font-base;
+}
+
+.sc-hHTYSt {
+  @apply text-gray-500 font-base;
+}
+
+.bXsISD:before {
+  @apply bg-gradient-to-t from-blue-700 to-blue-400;
+}
+
+.sc-gswNZR {
+  @apply font-base;
+}
+
+.mantine-122skuy {
+  @apply bg-gradient-to-t from-blue-700 to-blue-400 font-base;
+}
+
+.sc-jSUZER {
+  @apply font-base;
+}
+
+.sc-iBYQkv {
+  @apply font-base;
+}
+
+.mantine-Switch-input[type='checkbox']:checked {
+  @apply bg-blue-600 bg-none;
+}
+
+.mantine-Switch-input[type='checkbox'] {
+  @apply h-auto bg-gray-500 rounded-[32px] p-[3px] w-[46px];
+}
