@@ -34,6 +34,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Social from '../../popover'
 import { setOpen } from '@/redux/slices/basket'
 import { async } from '@firebase/util'
+import { CreateNovuNotification } from '@/services/novu-notifications'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -209,7 +210,16 @@ const ProductsCarouselCard = ({
       setIsOpen(false)
       setloadingPurchaseBtn(false)
       setsuccessTx(transactionTx)
-      notifyUser(currentUser?.uid, data?.ownerId, data?.name, data?.tokenId)
+      await CreateNovuNotification(
+        data?.ownerId,
+        `Your ${data?.name} has been sold`,
+      )
+
+      await CreateNovuNotification(
+        currentUser?.uid,
+        `You have purchased ${data?.name}`,
+      )
+
       setIsSuccess(true)
     } catch (err) {
       console.log('buy func error', err)

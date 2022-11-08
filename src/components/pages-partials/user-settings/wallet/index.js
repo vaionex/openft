@@ -19,7 +19,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import validationSchema from './validationScheme'
 import Alert from '@/components/ui/alert'
 import usePriceConverter from '@/hooks/usePriceConverter'
-import Image from 'next/image'
 import {
   SvgDirectInboxIcon,
   SvgDirectBoxSend,
@@ -27,13 +26,10 @@ import {
   SvgExternalLinkIcon,
   SvgAscendingIcon,
 } from '@/components/common/icons'
-import SvgDirectionIcon from '@/components/common/icons/direction-icon'
 import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
 import { firebaseAddNewNotification } from '@/firebase/utils'
-import { Timestamp } from 'firebase/firestore'
-import { Novu } from '@novu/node'
-
+import { CreateNovuNotification } from '@/services/novu-notifications'
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
   { type: 'number', placeholder: 'Amount to transfer in $', name: 'amount' },
@@ -101,17 +97,11 @@ const UserSettingsWalletSection = () => {
         reset({ address: '', amount: '' })
         setMsg({ type: 'success', content: 'The transfer was successful' })
 
-        const notificationValues = {
-          type: 'debit',
-          message: `${Number((Number(amount) / bsvRate).toFixed(8))} sent to ${
-            data.address
-          }`,
-        }
+        const message = `${Number(
+          (Number(amount) / bsvRate).toFixed(8),
+        )} sent to ${data.address}`
 
-        const ron1 = await firebaseAddNewNotification(
-          currentUser.uid,
-          notificationValues,
-        )
+        await CreateNovuNotification(currentUser.uid, message)
 
         setTimeout(() => {
           getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
@@ -145,30 +135,6 @@ const UserSettingsWalletSection = () => {
       }
     }
   }
-
-  // const handleSend = async () => {
-  //   const novu = new Novu('api-key')
-  //   const forEmail = {
-  //     to: {
-  //       subscriberId: 'uniqueID',
-  //       email: 'useremail@test.com',
-  //       firstName: 'John',
-  //       lastName: 'Doe',
-  //     },
-  //     payload: {
-  //       customVariables: 'Hello',
-  //     },
-  //   }
-  //   const forInApp = {
-  //     to: {
-  //       subscriberId: 'uniqueID',
-  //     },
-  //     payload: {
-  //       customVariables: 'Hello',
-  //     },
-  //   }
-  //   await novu.trigger('in-app', forInApp)
-  // }
 
   useEffect(() => {
     if (balance !== null && bsvRate) {
