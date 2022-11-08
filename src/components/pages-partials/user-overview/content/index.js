@@ -11,6 +11,7 @@ import userSelector from '@/redux/selectors/user'
 import { useSelector } from 'react-redux'
 import usePriceConverter from '@/hooks/usePriceConverter'
 import { firebaseGetSingleDoc } from '@/firebase/utils'
+import _ from 'lodash'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -21,6 +22,10 @@ export default function Content({ nftInfo, userFavList }) {
   const { currentUser } = useSelector(userSelector)
   const router = useRouter()
   const [favouriteNfts, setFavouriteNfts] = useState()
+  const [searchState, setsearchState] = useState('')
+
+  const [filteredNfts, setFilteredNfts] = useState(nftInfo.nftsData)
+
   const [tabs, setTabs] = useState([
     {
       name: 'Artworks',
@@ -37,6 +42,22 @@ export default function Content({ nftInfo, userFavList }) {
       status: false,
     },
   ])
+
+  useEffect(() => {
+    if (searchState) {
+      setFilteredNfts(nftInfo.nftsData)
+    }
+  }, [nftInfo.nftsData, searchState])
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (searchState) {
+      const filtered = _.filter(filteredNfts, { name: searchState })
+      setFilteredNfts(filtered)
+    } else {
+      setFilteredNfts(nftInfo.nftsData)
+    }
+  }
 
   useEffect(() => {
     const setFavorites = async () => {
@@ -118,7 +139,7 @@ export default function Content({ nftInfo, userFavList }) {
           </div>
         </div>
         <form
-          onSubmit={(e) => handleSubmit(e, searchState)}
+          onSubmit={(e) => handleSubmit(e)}
           className="flex items-center gap-2 order-1 sm:order:2"
         >
           <InputMain className="relative w-full md:min-w-[348px] pb-0 border-none">
@@ -135,9 +156,9 @@ export default function Content({ nftInfo, userFavList }) {
               name="search"
               id="search"
               placeholder="Search"
-              //value={searchState}
+              value={searchState}
               inputClassName="pl-10 h-[36px]"
-              //onChange={handleChange}
+              onChange={(e) => setsearchState(e.target.value)}
             />
           </InputMain>
           <button className="p-3 rounded-md btn-primary">
@@ -168,7 +189,7 @@ export default function Content({ nftInfo, userFavList }) {
               ))}
             {(router.query.current === undefined ||
               router.query.current === 'artworks') &&
-              nftInfo.nftsData.map((hit) => (
+              filteredNfts?.map((hit) => (
                 <ProductsCarouselCard
                   favouriteNfts={favouriteNfts}
                   setFavouriteNfts={setFavouriteNfts}
