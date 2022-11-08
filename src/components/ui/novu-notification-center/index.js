@@ -9,12 +9,17 @@ import { useSelector } from 'react-redux'
 
 const NovuNotificationCenter = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
+  const theme = {
+    light: {
+      loaderColor: '#2563EB',
+    },
+  }
   return (
     <NovuProvider
       subscriberId={currentUser?.uid}
       applicationIdentifier={process.env.NEXT_PUBLIC_NOVU_APP_ID}
     >
-      <PopoverNotificationCenter>
+      <PopoverNotificationCenter colorScheme={'light'} theme={theme}>
         {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
       </PopoverNotificationCenter>
     </NovuProvider>

@@ -273,7 +273,7 @@ const UserSettingsWalletSection = () => {
 
                 <InputMain>
                   <InputMain.Label
-                    label="BitcoinSV Addressk"
+                    label="BitcoinSV Address"
                     htmlFor="bitcoinSVAddress"
                   />
                   <InputMain.Input
