@@ -1,6 +1,7 @@
 import UserOverviewMain from '@/components/pages-partials/user-overview'
 import {
   firebaseGetNftByUsername,
+  firebaseGetUserDetailByUsername,
   firebaseGetUserInfoFromDb,
   fireGetNftsFromFavList,
 } from '@/firebase/utils'
@@ -8,10 +9,10 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const UserOverviewPage = ({ nftInfo }) => {
+const UserOverviewPage = ({ nftInfo, userDetail }) => {
   const router = useRouter()
   const [userFavList, setUserFavList] = useState(null)
-  const [userInfo, setUserInfo] = useState(null)
+  const userInfo = userDetail.nftsData[0]
   useEffect(() => {
     if (nftInfo.collectionSize !== 0) {
       ;(async () => {
@@ -19,11 +20,6 @@ const UserOverviewPage = ({ nftInfo }) => {
           nftInfo.nftsData[0].ownerId,
           'favourites',
         )
-        const userInfo = await firebaseGetUserInfoFromDb(
-          nftInfo.nftsData[0].ownerId,
-          'users',
-        )
-        setUserInfo(userInfo)
         if (favIdList) {
           const nfts = await fireGetNftsFromFavList(favIdList.nfts)
           setUserFavList(nfts)
@@ -44,9 +40,10 @@ const UserOverviewPage = ({ nftInfo }) => {
 }
 
 export const getServerSideProps = async ({ query }) => {
+  const userDetail = await firebaseGetUserDetailByUsername(query.slug)
   const nftInfo = await firebaseGetNftByUsername(query.slug)
   return {
-    props: { nftInfo },
+    props: { nftInfo, userDetail },
   }
 }
 

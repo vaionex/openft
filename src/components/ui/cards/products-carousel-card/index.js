@@ -468,7 +468,7 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
           <div className="flex items-center justify-between">
             {totalLikes > 0 && (
               <p className="px-3 py-2 font-normal text-base rounded-lg bg-gray-50">
-                {data?.likes}
+                {totalLikes}
               </p>
             )}
             <p className="text-xl py-2 ml-auto font-medium text-gray-900">

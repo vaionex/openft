@@ -35,7 +35,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function NftDetail() {
+export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
   const router = useRouter()
   const { slug } = router.query
   const [nftData, setnftData] = useState(null)
@@ -106,6 +106,8 @@ export default function NftDetail() {
               usdBalance={usdBalance}
               singleNFT={true}
               setnftHistory={setnftHistory}
+              favouriteNfts={favouriteNfts}
+              setFavouriteNfts={setFavouriteNfts}
             />
           </div>
 
