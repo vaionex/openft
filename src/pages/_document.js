@@ -21,7 +21,7 @@ class MyDocument extends Document {
           <script
             async
             defer
-            crossorigin="anonymous"
+            crossOrigin="anonymous"
             src="https://connect.facebook.net/tr_TR/sdk.js#xfbml=1&version=v15.0"
             nonce="EpotFBUi"
           ></script>
