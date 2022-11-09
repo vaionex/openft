@@ -52,7 +52,9 @@ export default function Content({ nftInfo, userFavList }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (searchState) {
-      const filtered = _.filter(filteredNfts, { name: searchState })
+      const filtered = _.filter(filteredNfts, (ele) => {
+        return _.includes(ele.name.toLowerCase(), searchState.toLowerCase())
+      })
       setFilteredNfts(filtered)
     } else {
       setFilteredNfts(nftInfo.nftsData)

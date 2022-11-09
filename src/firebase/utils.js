@@ -56,7 +56,7 @@ import apiConfig from '@/config/relysiaApi'
 import { storageBucketUrl } from './config'
 import { v4 as uuidv4 } from 'uuid'
 import {
-  CreateNovuNotification,
+  SendNotification,
   CreateNovuSubscriber,
 } from '@/services/novu-notifications'
 
@@ -191,7 +191,7 @@ const firebaseRegister = async (data) => {
     await setDoc(doc(firebaseDb, 'users', user.uid), infos)
     await firebaseAddDocWithID('notifications', notificationObj, user.uid)
     await CreateNovuSubscriber(user.uid, user.email, username)
-    await CreateNovuNotification(
+    await SendNotification(
       user.uid,
       'Your wallet has been created successfully',
     )

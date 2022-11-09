@@ -23,7 +23,7 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 import { doc, Timestamp, writeBatch } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
-import { CreateNovuNotification } from '@/services/novu-notifications'
+import { SendNotification } from '@/services/novu-notifications'
 
 const imageInputAttributes = {
   id: 'nftImage',
@@ -221,10 +221,7 @@ const UploadForm = () => {
 
       setIsSuccess(true)
 
-      await CreateNovuNotification(
-        currentUser.uid,
-        'Your NFT has been created!',
-      )
+      SendNotification(currentUser.uid, 'Your NFT has been created!')
 
       resetAllData()
     } catch (error) {

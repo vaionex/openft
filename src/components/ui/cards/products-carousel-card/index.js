@@ -34,7 +34,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Social from '../../popover'
 import { setOpen } from '@/redux/slices/basket'
 import { async } from '@firebase/util'
-import { CreateNovuNotification } from '@/services/novu-notifications'
+import { SendNotification } from '@/services/novu-notifications'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -64,6 +64,7 @@ const ProductsCarouselCard = ({
   const [loadingPurchaseBtn, setloadingPurchaseBtn] = useState(false)
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
   const [successTx, setsuccessTx] = useState(null)
+  const [totalLikes, setTotalLikes] = useState(data?.likes)
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -210,17 +211,10 @@ const ProductsCarouselCard = ({
       setIsOpen(false)
       setloadingPurchaseBtn(false)
       setsuccessTx(transactionTx)
-      await CreateNovuNotification(
-        data?.ownerId,
-        `Your ${data?.name} has been sold`,
-      )
-
-      await CreateNovuNotification(
-        currentUser?.uid,
-        `You have purchased ${data?.name}`,
-      )
-
       setIsSuccess(true)
+
+      SendNotification(data?.ownerId, `Your ${data?.name} has been sold`)
+      SendNotification(currentUser?.uid, `You have purchased ${data?.name}`)
     } catch (err) {
       console.log('buy func error', err)
       setloadingPurchaseBtn(false)
@@ -267,12 +261,14 @@ const ProductsCarouselCard = ({
     const isLike =
       favouriteNfts?.findIndex((like) => like === data?.tokenId) !== -1
     setHasLike(isLike)
-  }, [favouriteNfts])
+  }, [data?.tokenId, favouriteNfts])
 
   const likeNfts = async () => {
     if (!currentUser) return
     if (hasLike) {
       setHasLike(false)
+      setTotalLikes(totalLikes - 1)
+
       await firebaseUpdateDoc('favourites', currentUser?.uid, {
         nfts: arrayRemove(data?.tokenId),
       })
@@ -287,6 +283,7 @@ const ProductsCarouselCard = ({
       await firebaseUpdateDoc('nfts', data?.tokenId, { likes: increment(-1) })
     } else {
       setHasLike(true)
+      setTotalLikes(totalLikes + 1)
 
       const updateFav = { nfts: arrayUnion(data?.tokenId) }
       if (favouriteNfts) {
@@ -337,8 +334,10 @@ const ProductsCarouselCard = ({
       </div>
       <div className="flex flex-col flex-1 px-4 py-5">
         <div className="flex items-center justify-between">
-          <p className="px-3 py-2 rounded-lg bg-gray-50">{data?.likes}</p>
-          <p className="text-xl font-medium text-gray-900">
+          {totalLikes > 0 && (
+            <p className="px-3 py-2 rounded-lg bg-gray-50">{totalLikes}</p>
+          )}
+          <p className="py-2 text-xl font-medium ml-auto text-gray-900">
             <span className="mr-2">${data?.amount}</span> BSV{' '}
             <span>
               {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
@@ -388,6 +387,7 @@ const ProductsCarouselCard = ({
             artistData={artistData}
             usdBalance={usdBalance}
             dialogErrorMsg={dialogErrorMsg}
+            totalLikes={totalLikes}
           />
         }
         onClose={() => setIsOpen(false)}
@@ -437,7 +437,7 @@ ProductsCarouselCard.propTypes = {
 
 export default ProductsCarouselCard
 
-const Card = ({ data, artistData, usdBalance, dialogErrorMsg }) => {
+const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
   console.warn('data', data)
   return (
     <div>
@@ -465,11 +465,13 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg }) => {
           </div>
         </div>
         <div className="flex flex-col flex-1 px-4 py-5">
-          <div className="flex items-center justify-between pt-2">
-            <p className="p-[11px] font-normal text-base rounded-lg bg-gray-50">
-              {data?.likes}
-            </p>
-            <p className="text-xl font-medium text-gray-900">
+          <div className="flex items-center justify-between">
+            {totalLikes > 0 && (
+              <p className="px-3 py-2 font-normal text-base rounded-lg bg-gray-50">
+                {data?.likes}
+              </p>
+            )}
+            <p className="text-xl py-2 ml-auto font-medium text-gray-900">
               <span className="mr-2">${data?.amount}</span> BSV{' '}
               <span>
                 {data?.amount && Number((data.amount / usdBalance).toFixed(4))}

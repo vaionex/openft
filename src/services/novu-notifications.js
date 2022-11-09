@@ -36,3 +36,22 @@ export const CreateNovuSubscriber = async (
       console.log(err)
     })
 }
+
+export async function SendNotification(userId, message) {
+  try {
+    const sendNotification = await fetch('/api/novu', {
+      method: 'POST',
+      body: JSON.stringify({
+        userId,
+        message,
+      }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    const data = await sendNotification.json()
+  } catch (err) {
+    console.error('2::', err)
+  }
+}
