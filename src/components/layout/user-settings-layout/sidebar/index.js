@@ -6,11 +6,11 @@ const links = [
   { name: 'My profile', href: '/user-settings', current: false },
   { name: 'Upload', href: '/user-settings/upload', current: false },
   { name: 'Security', href: '/user-settings/security', current: false },
-  {
-    name: 'Notifications',
-    href: '/user-settings/notifications',
-    current: false,
-  },
+  // {
+  //   name: 'Notifications',
+  //   href: '/user-settings/notifications',
+  //   current: false,
+  // },
   { name: 'Wallet', href: '/user-settings/wallet', current: false },
 ]
 

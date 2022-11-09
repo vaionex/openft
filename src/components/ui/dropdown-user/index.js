@@ -36,12 +36,12 @@ const dropdownRoutes = [
     icon: SecurityIcon,
     desc: 'Your password and mnemonic phrase.',
   },
-  {
-    url: '/user-settings/notifications',
-    name: 'Notifications',
-    icon: BellIcon,
-    desc: "Manage when you'll receive notifications.",
-  },
+  // {
+  //   url: '/user-settings/notifications',
+  //   name: 'Notifications',
+  //   icon: BellIcon,
+  //   desc: "Manage when you'll receive notifications.",
+  // },
   {
     url: '/user-settings/wallet',
     name: 'Wallet',
