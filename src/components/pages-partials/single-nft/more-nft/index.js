@@ -5,12 +5,17 @@ import { searchClientLite as searchClient } from '@/services/algolia'
 import NextLink from 'next/link'
 import Products from './Products'
 
-export default function MoreNft(indexName, ...restProps) {
+export default function MoreNft({
+  indexName,
+  favouriteNfts,
+  setFavouriteNfts,
+  ...restProps
+}) {
   const usdBalance = usePriceConverter()
 
   return (
     <InstantSearch
-      indexName={'nfts'}
+      indexName={indexName}
       searchClient={searchClient}
       {...restProps}
     >
@@ -22,7 +27,10 @@ export default function MoreNft(indexName, ...restProps) {
             {/* Replace with your content */}
             <div className="h-full">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
-                <Products />
+                <Products
+                  favouriteNfts={favouriteNfts}
+                  setFavouriteNfts={setFavouriteNfts}
+                />
               </div>
             </div>
             {/* /End replace */}

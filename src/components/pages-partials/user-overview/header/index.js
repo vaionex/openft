@@ -168,7 +168,7 @@ export default function Header({ userInfo }) {
       </div>
       <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
         <div className="flex justify-center -mt-12 sm:-mt-16 sm:space-x-5">
-          <div className="relative z-20 flex w-20 h-20 bg-blue-500 rounded-xl ring-4 ring-white sm:h-32 sm:w-32">
+          <div className="relative z-10 flex w-20 h-20 bg-blue-500 rounded-xl ring-4 ring-white sm:h-32 sm:w-32">
             {userInfo ? (
               <Image
                 className="rounded-xl"
