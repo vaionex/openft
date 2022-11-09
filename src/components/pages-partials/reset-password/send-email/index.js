@@ -60,7 +60,7 @@ const ResetSendEmail = () => {
             <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
               Magic link sent
             </h2>
-            <p className="mt-4 text-center">
+            <p className="mx-4 mt-4 text-center md:mx-0">
               Please click the link in your email to reset your password and try
               to
               <NextLink href="/login">
