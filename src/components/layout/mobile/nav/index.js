@@ -6,7 +6,7 @@ import NextLink from 'next/link'
 import ActiveLink from '@/components/common/active-link'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { LogOutIcon } from '@/components/common/icons'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { logout } from '@/redux/slices/user'
 import { clearWalletData } from '@/redux/slices/wallet'
@@ -36,7 +36,8 @@ const ProfileRoutes = [
 ]
 
 const MobileNav = ({ navItems }) => {
-  //const { currentUser, isAuthenticated } = userSelector(userSelector)
+  const { isAuthenticated } = useSelector(userSelector)
+
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -85,66 +86,65 @@ const MobileNav = ({ navItems }) => {
                 </ActiveLink>
               ))}
             </div>
+            {isAuthenticated ? (
+              <div className="pt-5 pb-6">
+                <div className="px-3 space-y-1">
+                  <p className="text-xl text-black">User Settings</p>
+                  {ProfileRoutes.map((item) => (
+                    <ActiveLink
+                      key={item.name}
+                      href={item.href}
+                      activeClassName=" text-blue-600 font-semibold"
+                    >
+                      <a className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:text-white hover:bg-gray-900">
+                        {item.name}
+                      </a>
+                    </ActiveLink>
+                  ))}
 
-            <div className="pt-5 pb-6">
-              <div className="px-3 space-y-1">
-                <p className="text-xl text-black">User Settings</p>
-                {ProfileRoutes.map((item) => (
-                  <ActiveLink
-                    key={item.name}
-                    href={item.href}
-                    activeClassName=" text-blue-600 font-semibold"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleLogout()
+                      router.push('/')
+                    }}
+                    className={
+                      'flex justify-center items-center space-x-4 w-full px-4 py-5 font-semibold'
+                    }
                   >
-                    <a className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:text-white hover:bg-gray-900">
-                      {item.name}
-                    </a>
-                  </ActiveLink>
-                ))}
+                    <div className="flex flex-col">
+                      <span className="font-semibold">Log out</span>
+                    </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleLogout()
-                    router.push('/')
-                  }}
-                  className={
-                    'flex justify-center items-center space-x-4 w-full px-4 py-5 font-semibold'
-                  }
-                >
-                  <div className="flex flex-col">
-                    <span className="font-semibold">Log out</span>
-                  </div>
-
-                  <div className="shrink-0">
-                    <LogOutIcon
-                      className="w-6 h-6 mr-2 stroke-blue-600"
-                      aria-hidden="true"
-                    />
-                  </div>
-                </button>
+                    <div className="shrink-0">
+                      <LogOutIcon
+                        className="w-6 h-6 mr-2 stroke-blue-600"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              ''
+            )}
 
-            <div className="px-5 mt-6">
-              <p className="text-base font-medium text-center text-gray-500">
-                Do you have an account?{' '}
-                <NextLink href="/login">
-                  <a className="text-blue-700 hover:underline">Login</a>
-                </NextLink>
-              </p>
-            </div>
+            {!isAuthenticated ? (
+              <div className="px-5 mt-6">
+                <p className="text-base font-medium text-center text-gray-500">
+                  Do you have an account?{' '}
+                  <NextLink href="/login">
+                    <a className="text-blue-700 hover:underline">Login</a>
+                  </NextLink>
+                </p>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </Popover.Panel>
     </Transition>
   )
 }
-
-// const mapStateToProps = (state) => {
-//   return {
-//     isAuthenticated: state.user.isAuthenticated,
-//     currentUser: state.user.currentUser,
-//   }
-// }
-//export default connect(mapStateToProps)(MobileNav)
 export default MobileNav
