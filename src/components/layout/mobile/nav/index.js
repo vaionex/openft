@@ -1,11 +1,50 @@
 import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
+import { Menu, Popover, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { Logo } from '@/components/common/svgs'
 import NextLink from 'next/link'
 import ActiveLink from '@/components/common/active-link'
+import DropdownUser from '@/components/ui/dropdown-user'
+import { LogOutIcon } from '@/components/common/icons'
+import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
+import { logout } from '@/redux/slices/user'
+import { clearWalletData } from '@/redux/slices/wallet'
+import userSelector from '@/redux/selectors/user'
+import { twMerge } from 'tailwind-merge'
+const ProfileRoutes = [
+  {
+    href: '/user-settings',
+    name: 'Profile',
+  },
+  {
+    href: '/user-settings/upload',
+    name: 'Upload',
+  },
+  {
+    href: '/user-settings/security',
+    name: 'Security',
+  },
+  {
+    href: '/user-settings/wallet',
+    name: 'Wallet',
+  },
+  {
+    href: '/contact',
+    name: 'Help and support',
+  },
+]
 
 const MobileNav = ({ navItems }) => {
+  //const { currentUser, isAuthenticated } = userSelector(userSelector)
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    dispatch(logout())
+    dispatch(clearWalletData())
+  }
+
   return (
     <Transition
       as={Fragment}
@@ -18,7 +57,7 @@ const MobileNav = ({ navItems }) => {
     >
       <Popover.Panel
         focus
-        className="absolute z-20 inset-x-0 top-0 p-2 transition origin-top transform md:hidden"
+        className="absolute inset-x-0 top-0 z-20 p-2 transition origin-top transform md:hidden"
       >
         <div className="overflow-hidden bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="flex items-center justify-between px-5 pt-4">
@@ -40,11 +79,50 @@ const MobileNav = ({ navItems }) => {
                   href={item.href}
                   activeClassName=" text-blue-600 font-semibold"
                 >
-                  <a className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:bg-gray-900">
+                  <a className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:text-white hover:bg-gray-900">
                     {item.name}
                   </a>
                 </ActiveLink>
               ))}
+            </div>
+
+            <div className="pt-5 pb-6">
+              <div className="px-3 space-y-1">
+                <p className="text-xl text-black">User Settings</p>
+                {ProfileRoutes.map((item) => (
+                  <ActiveLink
+                    key={item.name}
+                    href={item.href}
+                    activeClassName=" text-blue-600 font-semibold"
+                  >
+                    <a className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:text-white hover:bg-gray-900">
+                      {item.name}
+                    </a>
+                  </ActiveLink>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleLogout()
+                    router.push('/')
+                  }}
+                  className={
+                    'flex justify-center items-center space-x-4 w-full px-4 py-5 font-semibold'
+                  }
+                >
+                  <div className="flex flex-col">
+                    <span className="font-semibold">Log out</span>
+                  </div>
+
+                  <div className="shrink-0">
+                    <LogOutIcon
+                      className="w-6 h-6 mr-2 stroke-blue-600"
+                      aria-hidden="true"
+                    />
+                  </div>
+                </button>
+              </div>
             </div>
 
             <div className="px-5 mt-6">
@@ -62,4 +140,11 @@ const MobileNav = ({ navItems }) => {
   )
 }
 
+// const mapStateToProps = (state) => {
+//   return {
+//     isAuthenticated: state.user.isAuthenticated,
+//     currentUser: state.user.currentUser,
+//   }
+// }
+//export default connect(mapStateToProps)(MobileNav)
 export default MobileNav
