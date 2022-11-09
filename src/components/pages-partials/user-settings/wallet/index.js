@@ -29,7 +29,7 @@ import {
 import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
 import { firebaseAddNewNotification } from '@/firebase/utils'
-import { CreateNovuNotification } from '@/services/novu-notifications'
+import { SendNotification } from '@/services/novu-notifications'
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
   { type: 'number', placeholder: 'Amount to transfer in $', name: 'amount' },
@@ -101,7 +101,7 @@ const UserSettingsWalletSection = () => {
           (Number(amount) / bsvRate).toFixed(8),
         )} sent to ${data.address}`
 
-        await CreateNovuNotification(currentUser.uid, message)
+        SendNotification(currentUser.uid, message)
 
         setTimeout(() => {
           getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
