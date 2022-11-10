@@ -5,14 +5,22 @@ import MobileNav from '../mobile/nav'
 import ActiveLink from '@/components/common/active-link'
 import { Logo } from '@/components/common/svgs'
 import DropdownUser from '@/components/ui/dropdown-user'
-import { UploadBoxIcon, BellIcon } from '@/components/common/icons'
+import { UploadBoxIcon, BellIcon, SvgMintIcon } from '@/components/common/icons'
 import { connect, useSelector, useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
 import NovuNotificationCenter from '@/components/ui/novu-notification-center'
+import DropdownMinimal from '@/components/ui/dropdown-minimal'
+import DropdownMint from '@/components/ui/dropdown-mint'
 
 const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'Discover', href: '/discover' },
+  { name: 'Contact', href: '/contact' },
+]
+
+const mintDrop = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
   { name: 'Contact', href: '/contact' },
@@ -77,17 +85,7 @@ const Header = () => {
               </NextLink>
             </li>
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
-              <NextLink href="/user-settings/upload" className="btn-secondary">
-                <a>
-                  <span className="btn-secondary">
-                    <UploadBoxIcon
-                      className="w-6 h-6 mr-2 text-sm"
-                      aria-hidden="true"
-                    />
-                    Upload
-                  </span>
-                </a>
-              </NextLink>
+              <DropdownMint />
             </li>
             <li
               className={twMerge(

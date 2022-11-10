@@ -25,7 +25,7 @@ const dropdownRoutes = [
     desc: 'Change your profile details.',
   },
   {
-    url: '/user-settings/upload',
+    url: '/user-settings/mint',
     name: 'Upload',
     icon: UploadBoxIcon,
     desc: 'Upload your artwork and its details here.',

@@ -39,7 +39,7 @@ const NftsInstantly = ({
                   <div className="rounded-md">
                     <NextLink
                       href={
-                        isAuthenticated ? '/user-settings/upload' : '/register'
+                        isAuthenticated ? '/user-settings/mint' : '/register'
                       }
                     >
                       <a
