@@ -43,10 +43,10 @@ const Login = () => {
 
   return (
     <LoginLayout title="Login">
-      <div className="flex min-h-[calc(100vh-56px)]">
-        <div className="flex-[2] flex flex-col">
+      <div className="flex min-h-[calc(100vh-56px)] px-8 max-w-screen-2xl sm:mx-w-full max-w-full mx-auto">
+        <div className="flex-[3] flex flex-col">
           <div className="flex items-center justify-center h-full">
-            <div className="w-full max-w-sm p-4 mx-auto ">
+            <div className="w-full max-w-full py-4 pr-0 mx-auto lg:pr-8 xl:max-w-sm lg:max-w-full md:max-w-sm ">
               <NextLink href="/">
                 <a className="inline-block mb-20 text-white md:text-black">
                   <Logo />
@@ -65,7 +65,7 @@ const Login = () => {
 
                 <div>
                   <button
-                    className="w-full text-gray-700 bg-white border border-gray-300 font-medium text-base btn-primary hover:bg-gray-100"
+                    className="w-full text-base font-medium text-gray-700 bg-white border border-gray-300 btn-primary hover:bg-gray-100"
                     onClick={handleUserAuthWithGoogle}
                   >
                     <GoogleIcon className="w-6 h-6" />
@@ -83,7 +83,7 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="hidden lg:flex px-8 pt-14 lg:items-end lg:justify-center relative w-0 flex-[3] ">
+        <div className="hidden lg:flex pt-14 lg:items-end lg:justify-center relative w-0 flex-[3] ">
           <div className="relative flex items-end w-full h-full max-w-2xl p-10 overflow-hidden rounded-3xl ">
             <Image
               src="/images/login-bg.png"
