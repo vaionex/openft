@@ -11,6 +11,7 @@ import { twMerge } from 'tailwind-merge'
 import userSelector from '@/redux/selectors/user'
 import { useRouter } from 'next/router'
 import NovuNotificationCenter from '@/components/ui/novu-notification-center'
+import { useLayoutEffect, useState } from 'react'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -23,6 +24,16 @@ const Header = () => {
   const dispatch = useDispatch()
 
   const router = useRouter()
+
+  const [size, setSize] = useState(0)
+  useLayoutEffect(() => {
+    function updateSize(size) {
+      setSize(window.innerWidth)
+    }
+    window.addEventListener('resize', updateSize)
+    updateSize()
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
 
   return (
     <Popover as="header" className="relative">
@@ -41,7 +52,7 @@ const Header = () => {
               </NextLink>
               <div className="flex items-center -mr-2 md:hidden">
                 <div className="inline-flex items-center justify-center p-3">
-                  <NovuNotificationCenter />
+                  {size < 768 && <NovuNotificationCenter />}
                 </div>
                 <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-blue-50">
                   <span className="sr-only">Open main menu</span>
@@ -95,7 +106,7 @@ const Header = () => {
                 isAuthenticated && 'list-item md:inline-flex',
               )}
             >
-              <NovuNotificationCenter />
+              {size > 767 && <NovuNotificationCenter />}
             </li>
 
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
@@ -104,7 +115,6 @@ const Header = () => {
           </ul>
         </nav>
       </div>
-
       <MobileNav navItems={navigation} />
     </Popover>
   )
