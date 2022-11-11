@@ -1,39 +1,26 @@
 import React, { Fragment } from 'react'
-import { logout } from '@/redux/slices/user'
-import { clearWalletData } from '@/redux/slices/wallet'
 import { Menu, Transition } from '@headlessui/react'
-import { useDispatch } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
-import { Avatar, AvatarWithName } from '../avatars'
-import { useRouter } from 'next/router'
 import { UploadBoxIcon, SvgMintIcon } from '@/components/common/icons'
 import NextLink from 'next/link'
 import { FingerPrintIcon } from '@heroicons/react/outline'
 
 const dropdownRoutes = [
   {
-    url: '/user-settings/mint',
+    url: '/user-settings/mint?query=upload',
     name: 'Upload',
     icon: UploadBoxIcon,
     desc: 'Upload your artwork and its details here.',
   },
   {
-    url: '/user-settings/mint',
+    url: '/user-settings/mint?query=generate',
     name: 'Generate',
     icon: FingerPrintIcon,
     desc: 'Generate artwork from AI technology.',
   },
 ]
 
-const DropdownMint = ({ user }) => {
-  const dispatch = useDispatch()
-  const router = useRouter()
-
-  const handleLogout = () => {
-    dispatch(logout())
-    dispatch(clearWalletData())
-  }
-
+const DropdownMint = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
