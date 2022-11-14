@@ -4,7 +4,7 @@ import NextLink from 'next/link'
 
 const links = [
   { name: 'My profile', href: '/user-settings', current: false },
-  { name: 'Upload', href: '/user-settings/upload', current: false },
+  { name: 'Mint', href: '/user-settings/mint', current: false },
   { name: 'Security', href: '/user-settings/security', current: false },
   // {
   //   name: 'Notifications',
