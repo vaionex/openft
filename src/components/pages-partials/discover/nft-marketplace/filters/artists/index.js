@@ -66,7 +66,7 @@ const NftMarketplaceArtistFilter = (props) => {
     <div className="flex flex-col gap-4">
       <SelectWImage
         placeholder="Artists"
-        label="Artist Filter"
+        label="Filter"
         users={artists}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}

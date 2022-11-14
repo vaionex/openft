@@ -337,7 +337,7 @@ const ProductsCarouselCard = ({
           {totalLikes > 0 && (
             <p className="px-3 py-2 rounded-lg bg-gray-50">{totalLikes}</p>
           )}
-          <p className="py-2 text-xl font-medium ml-auto text-gray-900">
+          <p className="py-2 ml-auto text-xl font-medium text-[#101828]">
             <span className="mr-2">${data?.amount}</span> BSV{' '}
             <span>
               {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
@@ -348,7 +348,7 @@ const ProductsCarouselCard = ({
           <div className="flex-1 my-6">
             <NextLink href={`/discover/${data?.tokenId}`}>
               <a className="cursor-pointer">
-                <h3 className="text-sm text-blue-700 min-h-[20px]">
+                <h3 className="text-sm text-[#155EEF] min-h-[20px]">
                   {artistData?.name}
                 </h3>
                 <p className="h-10 mt-1 text-lg text-gray-800">{data?.name}</p>
@@ -365,7 +365,7 @@ const ProductsCarouselCard = ({
                 router.push('/login')
               }
             }}
-            className="btn-primary py-2.5 flex w-full border-none justify-center items-center font-normal"
+            className="bg-[#155EEF] hover:bg-[#2d6ff1] rounded-lg text-white py-2.5 flex w-full border-none justify-center items-center font-normal"
           >
             Buy now
           </button>
@@ -467,11 +467,11 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
         <div className="flex flex-col flex-1 px-4 py-5">
           <div className="flex items-center justify-between">
             {totalLikes > 0 && (
-              <p className="px-3 py-2 font-normal text-base rounded-lg bg-gray-50">
+              <p className="px-3 py-2 text-base font-normal rounded-lg bg-gray-50">
                 {totalLikes}
               </p>
             )}
-            <p className="text-xl py-2 ml-auto font-medium text-gray-900">
+            <p className="py-2 ml-auto text-xl font-medium text-[#101828]">
               <span className="mr-2">${data?.amount}</span> BSV{' '}
               <span>
                 {data?.amount && Number((data.amount / usdBalance).toFixed(4))}

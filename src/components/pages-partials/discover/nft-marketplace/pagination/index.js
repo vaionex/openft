@@ -18,7 +18,7 @@ const NFTMarketplacePagination = ({
     <div className="pagination-wrapper">
       <ReactPaginate
         previousLabel={
-          <span className="flex gap-1">
+          <span className="flex gap-1 text-[#667085]">
             <LeftIcon
               className="w-5 h-5 hover:text-gray-500"
               aria-hidden="true"
@@ -27,7 +27,7 @@ const NFTMarketplacePagination = ({
           </span>
         }
         nextLabel={
-          <span className="flex gap-1">
+          <span className="flex gap-1 text-[#667085]">
             Next
             <RightIcon
               className="w-5 h-5 hover:text-gray-500"

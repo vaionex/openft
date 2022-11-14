@@ -24,17 +24,17 @@ const SelectWImage = ({
     query === ''
       ? users
       : users.filter((person) =>
-          person.name
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, '')),
-        )
+        person.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(query.toLowerCase().replace(/\s+/g, '')),
+      )
 
   if (!mounted) return null
 
   return (
     <Combobox as="div" value={selectedUser} onChange={setSelectedUser}>
-      <Combobox.Label className="block text-sm text-gray-700">
+      <Combobox.Label className="block text-sm text-[#344054]">
         {label}
       </Combobox.Label>
       <div className="relative mt-1">
