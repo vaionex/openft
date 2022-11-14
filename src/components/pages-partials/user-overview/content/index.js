@@ -88,9 +88,9 @@ export default function Content({ nftInfo, userFavList }) {
   }, [router.query])
 
   return (
-    <div className="px-4 sm:px-6 lg:max-w-7xl lg:px-8 mx-auto">
-      <div className="mt-10 flex justify-between items-end sm:flex-row flex-col space-x-7">
-        <div className="border-b border-gray-200 pb-5 sm:pb-0 flex-1 sm:order-1 order-2">
+    <div className="px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="flex flex-col items-end justify-between mt-10 sm:flex-row space-x-7">
+        <div className="flex-1 order-2 pb-5 border-b border-gray-200 sm:pb-0 sm:order-1">
           <div className="mt-3 sm:mt-4">
             <div className="sm:hidden">
               <label htmlFor="current-tab" className="sr-only">
@@ -99,7 +99,7 @@ export default function Content({ nftInfo, userFavList }) {
               <select
                 id="current-tab"
                 name="current-tab"
-                className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                className="block w-full py-2 pl-3 pr-10 text-base border-gray-300 rounded-md focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 defaultValue={tabs.find((tab) => tab.status).name}
               >
                 {tabs.map((tab) => (
@@ -108,7 +108,7 @@ export default function Content({ nftInfo, userFavList }) {
               </select>
             </div>
             <div className="hidden sm:block">
-              <nav className="-mb-px flex space-x-8">
+              <nav className="flex -mb-px space-x-8">
                 {tabs.map((tab) => (
                   <NextLink
                     key={tab.name}
@@ -142,7 +142,7 @@ export default function Content({ nftInfo, userFavList }) {
         </div>
         <form
           onSubmit={(e) => handleSubmit(e)}
-          className="flex items-center gap-2 order-1 sm:order:2"
+          className="flex items-center order-1 gap-2 sm:order:2"
         >
           <InputMain className="relative w-full md:min-w-[348px] pb-0 border-none">
             <span className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
@@ -163,7 +163,7 @@ export default function Content({ nftInfo, userFavList }) {
               onChange={(e) => setsearchState(e.target.value)}
             />
           </InputMain>
-          <button className="p-3 rounded-md btn-primary">
+          <button className="p-3 rounded-md bg-[#155EEF] hover:bg-[#2d6ff1]">
             <span className="sr-only">Search Button</span>
             <MagnifyGlassIcon className="w-4 h-3 text-white" />
           </button>

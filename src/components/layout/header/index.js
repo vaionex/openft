@@ -75,7 +75,7 @@ const Header = () => {
                   href={item.href}
                   activeClassName="text-blue-600 font-semibold pointer-events-none"
                 >
-                  <a className="font-medium text-gray-500 hover:text-gray-600">
+                  <a className="font-medium text-[#667085] hover:text-gray-600">
                     {item.name}
                   </a>
                 </ActiveLink>
@@ -85,14 +85,14 @@ const Header = () => {
           <ul className="items-center hidden md:flex md:gap-4">
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="/login">
-                <a className="text-base font-medium hover:text-gradient-primary-hover">
-                  Login
+                <a className="text-base font-medium hover:text-gray-500 py-[14px] px-[17px] text-[#667085] hover:bg-gray-50 rounded-lg">
+                  Log in
                 </a>
               </NextLink>
             </li>
             <li className={twMerge('hidden', !isAuthenticated && 'list-item')}>
               <NextLink href="/register">
-                <a className="btn-primary">Sign up</a>
+                <a className="py-[14px] px-[17px] text-[white] font-medium rounded-lg text-base bg-[#155EEF] hover:bg-[#2d6ff1]">Sign up</a>
               </NextLink>
             </li>
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>

@@ -15,11 +15,11 @@ const HeroSection = () => {
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="lg:py-16">
               <NextLink href="/user-settings/mint">
-                <a className="inline-flex items-center p-1 pr-2 text-blue-700 rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
-                  <span className="px-3 py-0.5 bg-white text-blue-700 font-medium leading-5 tracking-wide rounded-full">
+                <a className="inline-flex items-center p-1 pr-2 text-[#004EEB] rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
+                  <span className="px-3 py-0.5 bg-white text-[#004EEB] font-medium leading-5 tracking-wide rounded-full">
                     It&apos;s free!
                   </span>
-                  <span className="ml-4 text-sm font-medium">
+                  <span className="ml-4 text-sm font-medium text-[#004EEB]">
                     Mint and sell NFTs
                   </span>
                   <ArrowRightIcon
@@ -40,7 +40,7 @@ const HeroSection = () => {
                 <div className="my-3 rounded-md sm:my-0">
                   <a
                     href="#"
-                    className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
+                    className="flex items-center justify-center w-full py-4 text-base font-medium text-gray-600 bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-[15px] md:text-lg md:px-8"
                   >
                     <PlayCircleIcon
                       className="w-5 h-5 mr-2"
@@ -54,8 +54,7 @@ const HeroSection = () => {
                     <NextLink href="/register">
                       <a
                         className={twMerge(
-                          'btn-primary',
-                          'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white 0 md:py-4 md:text-lg md:px-10 ',
+                          'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white bg-[#155EEF] hover:bg-[#2d6ff1] md:py-[15px] md:text-lg md:px-7 ',
                         )}
                       >
                         Sign up
