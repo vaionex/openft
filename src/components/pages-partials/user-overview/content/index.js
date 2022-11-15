@@ -23,9 +23,7 @@ export default function Content({ nftInfo, userFavList }) {
   const router = useRouter()
   const [favouriteNfts, setFavouriteNfts] = useState()
   const [searchState, setsearchState] = useState('')
-
   const [filteredNfts, setFilteredNfts] = useState(nftInfo.nftsData)
-
   const [tabs, setTabs] = useState([
     {
       name: 'Artworks',
@@ -87,6 +85,10 @@ export default function Content({ nftInfo, userFavList }) {
     }
   }, [router.query])
 
+  const switchTab = (href) => {
+    router.push(`/user/${router.query.slug}/${href}`)
+  }
+
   return (
     <div className="px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
       <div className="flex flex-col items-end justify-between mt-10 sm:flex-row space-x-7">
@@ -101,9 +103,12 @@ export default function Content({ nftInfo, userFavList }) {
                 name="current-tab"
                 className="block w-full py-2 pl-3 pr-10 text-base border-gray-300 rounded-md focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 defaultValue={tabs.find((tab) => tab.status).name}
+                onChange={(e) => switchTab(e.target.value)}
               >
                 {tabs.map((tab) => (
-                  <option key={tab.name}>{tab.name}</option>
+                  <option key={tab.name} value={tab.href}>
+                    {tab.name}
+                  </option>
                 ))}
               </select>
             </div>

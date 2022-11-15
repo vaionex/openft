@@ -18,7 +18,7 @@ const CompaniesSection = () => {
     <div className="py-10 sm:py-14 lg:overflow-hidden">
       <div className="flex max-w-6xl mx-auto lg:px-8">
         <span className="flex flex-col items-center w-full gap-8 whitespace-nowrap md:flex-row">
-          <span className="flex justify-center text-lg text-gray-500 w-60">
+          <span className="flex justify-center text-lg text-[#667085] w-60">
             Powered by:
           </span>
           <CompanyBanners companies={companies} />
