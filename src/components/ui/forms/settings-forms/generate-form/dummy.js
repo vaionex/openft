@@ -1,16 +1,16 @@
 import { SvgArtDownloadIcon } from '@/components/common/icons'
 
-export const DummyTwo = () => {
+export const DummyTwo = ({ data }) => {
   return (
-    <section class="overflow-hidden text-gray-700">
-      <div class="mx-auto">
-        <div class="flex flex-wrap">
-          <div class="flex flex-wrap w-1/2">
-            <div class="group relative p-px w-1/2">
+    <section className="overflow-hidden text-gray-700">
+      <div className="mx-auto">
+        <div className="flex flex-wrap">
+          {data?.map((ele) => (
+            <div key={ele.id} class="group relative p-px w-1/2 md:w-1/4">
               <img
                 alt="gallery"
-                class="block object-cover object-center w-full h-full"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(89).webp"
+                className="block object-cover object-center w-full h-full"
+                src={ele.image}
               />
               <div className="absolute p-2 top-0 left-0 w-full flex flex-col justify-center items-center bg-black/50 opacity-0 group-hover:h-full group-hover:opacity-100">
                 <button
@@ -28,75 +28,7 @@ export const DummyTwo = () => {
                 </button>
               </div>
             </div>
-            <div class="group relative p-px w-1/2">
-              <img
-                alt="gallery"
-                class="block object-cover object-center w-full h-full"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(87).webp"
-              />
-              <div className="absolute p-[8px] top-0 left-0 w-full flex flex-col justify-center items-center bg-black/50 opacity-0 group-hover:h-full group-hover:opacity-100">
-                <button
-                  type="button"
-                  className="absolute right-2 top-2 bg-black/50 p-2"
-                >
-                  <SvgArtDownloadIcon />
-                </button>
-                <button
-                  type="button"
-                  className="px-[14px] py-2 text-white border rounded border-blue-600 bg-blue-600 text-sm font-medium"
-                  href="#"
-                >
-                  Select Artwork
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-wrap w-1/2">
-            <div class="group relative p-px w-1/2">
-              <img
-                alt="gallery"
-                class="block object-cover object-center w-full h-full"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(93).webp"
-              />
-              <div className="absolute p-[8px] top-0 left-0 w-full flex flex-col justify-center items-center bg-black/50 opacity-0 group-hover:h-full group-hover:opacity-100">
-                <button
-                  type="button"
-                  className="absolute right-2 top-2 bg-black/50 p-2"
-                >
-                  <SvgArtDownloadIcon />
-                </button>
-                <button
-                  type="button"
-                  className="px-[14px] py-2 text-white border rounded border-blue-600 bg-blue-600 text-sm font-medium"
-                  href="#"
-                >
-                  Select Artwork
-                </button>
-              </div>
-            </div>
-            <div class="group relative p-px w-1/2">
-              <img
-                alt="gallery"
-                class="block object-cover object-center w-full h-full"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(97).webp"
-              />
-              <div className="absolute p-[8px] top-0 left-0 w-full flex flex-col justify-center items-center bg-black/50 opacity-0 group-hover:h-full group-hover:opacity-100">
-                <button
-                  type="button"
-                  className="absolute right-2 top-2 bg-black/50 p-2"
-                >
-                  <SvgArtDownloadIcon />
-                </button>
-                <button
-                  type="button"
-                  className="px-[14px] py-2 text-white border rounded border-blue-600 bg-blue-600 text-sm font-medium"
-                  href="#"
-                >
-                  Select Artwork
-                </button>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

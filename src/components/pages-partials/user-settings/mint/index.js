@@ -1,15 +1,30 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { GenerateForm, UploadForm } from '@/components/ui/forms'
 import { Tab } from '@headlessui/react'
-import { Fragment } from 'react'
+import { useRouter } from 'next/router'
+import { Fragment, useEffect, useState } from 'react'
 
 const UserSettingsMintSection = () => {
+  const router = useRouter()
+  const query = router.query?.query
+  const [selectedIndex, setSelectedIndex] = useState(0)
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
+  useEffect(() => {
+    if (query == 'upload') {
+      setSelectedIndex(0)
+    } else if (query == 'generate') {
+      setSelectedIndex(1)
+    }
+  }, [query])
   return (
     <UserSettingsLayout>
-      <Tab.Group as="div">
+      <Tab.Group
+        as="div"
+        selectedIndex={selectedIndex}
+        onChange={setSelectedIndex}
+      >
         <div className="border-b border-gray-200 mb-8">
           <Tab.List className="flex -mb-px space-x-px">
             <Tab

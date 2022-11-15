@@ -335,7 +335,9 @@ const ProductsCarouselCard = ({
       <div className="flex flex-col flex-1 px-4 py-5">
         <div className="flex items-center justify-between">
           {totalLikes > 0 && (
-            <p className="px-3 py-2 rounded-lg bg-gray-50">{totalLikes}</p>
+            <p className="px-3 py-2 rounded-lg text-[#667085] bg-gray-50">
+              {totalLikes}
+            </p>
           )}
           <p className="py-2 ml-auto text-xl font-medium text-[#101828]">
             <span className="mr-2">${data?.amount}</span> BSV{' '}
@@ -467,7 +469,7 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
         <div className="flex flex-col flex-1 px-4 py-5">
           <div className="flex items-center justify-between">
             {totalLikes > 0 && (
-              <p className="px-3 py-2 text-base font-normal rounded-lg bg-gray-50">
+              <p className="px-3 py-2 text-base font-normal text-[#667085] rounded-lg bg-gray-50">
                 {totalLikes}
               </p>
             )}

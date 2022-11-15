@@ -20,7 +20,7 @@ const DiscoverBanner = ({ action, pages }) => {
           <h3 className="text-4xl font-extrabold tracking-tight text-white">
             Discover brand new NFTs
           </h3>
-          <p className="mt-5 text-xl text-blue-100 ">
+          <p className="mt-5 text-xl text-[#D1E0FF]">
             Discover over 4,000+ NFTs already minted on Openft.
           </p>
           {action === 'default' && null}
