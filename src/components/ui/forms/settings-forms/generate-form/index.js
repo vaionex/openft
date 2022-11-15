@@ -30,6 +30,29 @@ const GenerateForm = () => {
     setHidden(!hidden)
   }
 
+  const dummyTwoData = [
+    {
+      id: 1,
+      image:
+        'https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(89).webp',
+    },
+    {
+      id: 2,
+      image:
+        'https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(89).webp',
+    },
+    {
+      id: 3,
+      image:
+        'https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(89).webp',
+    },
+    {
+      id: 4,
+      image:
+        'https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(89).webp',
+    },
+  ]
+
   return (
     <form className="space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
@@ -69,7 +92,7 @@ const GenerateForm = () => {
         </InputMain>
         {hidden && (
           <>
-            <DummyTwo />
+            <DummyTwo data={dummyTwoData} />
             <InputMain className="sm:grid-cols-3 border-none">
               <InputMain.Label
                 label="Artwork name"

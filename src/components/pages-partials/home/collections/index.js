@@ -11,7 +11,7 @@ const CollectionsSection = ({ nftsData }) => {
         <h2 className="mt-4 text-4xl tracking-[-2%] text-[#101828] sm:mt-5">
           Hot collections
         </h2>
-        <p className="mt-6 text-base sm:text-xl">
+        <p className="mt-6 text-base sm:text-xl text-[#667085]">
           Best selling collection selected by exchangers.
         </p>
       </div>
