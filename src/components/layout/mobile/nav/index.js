@@ -18,7 +18,7 @@ const ProfileRoutes = [
     name: 'Profile',
   },
   {
-    href: '/user-settings/upload',
+    href: '/user-settings/mint',
     name: 'Upload',
   },
   {
