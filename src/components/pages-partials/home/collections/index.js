@@ -8,7 +8,7 @@ const CollectionsSection = ({ nftsData }) => {
   return (
     <div className="relative px-4 mx-auto pb-14 md:pb-20  max-w-7xl lg:mt-24 sm:px-6 lg:px-8">
       <div className="sm:text-center lg:text-left">
-        <h2 className="mt-4 text-4xl tracking-[-2%] sm:mt-5">
+        <h2 className="mt-4 text-4xl tracking-[-2%] text-[#101828] sm:mt-5">
           Hot collections
         </h2>
         <p className="mt-6 text-base sm:text-xl">
