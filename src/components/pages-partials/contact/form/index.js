@@ -48,7 +48,7 @@ export default function Form() {
         <div className="flex flex-col justify-center px-12 sm:text-center lg:text-left">
           <div className="">
             <div className="max-w-md mx-auto sm:max-w-lg lg:mx-0">
-              <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h2 className="text-3xl text-[#101828] font-semibold tracking-tight sm:text-4xl">
                 Contact us
               </h2>
               <p className="mt-4 text-lg text-gray-500 sm:mt-3">

@@ -20,17 +20,20 @@ const Footer = ({ page }) => {
         <div className="flex justify-center md:order-1">
           <Logo />
         </div>
-        <div className="flex flex-wrap justify-center mt-8 space-x-6 md:mt-0 md:order-2">
+        <div className="flex flex-wrap justify-center mt-8 space-x-8 md:mt-0 md:order-2">
           {navigation.map((item) => (
             <NextLink href={item.href} key={item.name}>
-              <a href={item.href} className="text-gray-500 hover:text-gray-600">
-                <span className="">{item.name}</span>
+              <a
+                href={item.href}
+                className="text-[#667085] text-base hover:text-gray-600"
+              >
+                <span>{item.name}</span>
               </a>
             </NextLink>
           ))}
         </div>
         <div className="mt-8 md:mt-0 md:order-3">
-          <p className="text-base text-center text-gray-400">
+          <p className="text-base text-center text-[#98A2B3] font-normal">
             &copy; 2022 Vaionex
           </p>
         </div>

@@ -9,6 +9,7 @@ const ButtonWLoading = ({
   onClick,
   fullWidth,
   type,
+  className,
   ...props
 }) => {
   if (fullWidth) {
@@ -42,6 +43,7 @@ const ButtonWLoading = ({
         isPending
           ? 'opacity-50 cursor-not-allowed pointer-events-none'
           : 'cursor-pointer',
+        className,
       )}
       onClick={onClick}
       {...props}

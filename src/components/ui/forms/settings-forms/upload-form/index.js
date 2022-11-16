@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { doc, Timestamp, writeBatch } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 import { SendNotification } from '@/services/novu-notifications'
+import Link from 'next/link'
 
 const imageInputAttributes = {
   id: 'nftImage',
@@ -411,12 +412,22 @@ const UploadForm = () => {
           {isError && (
             <span className="text-xs text-red-500">{errorMessage}</span>
           )}
-          <ButtonWLoading
-            isError={isError}
-            isPending={isPending}
-            text="Save"
-            type="submit"
-          />
+          <div className="flex space-x-3">
+            <div className="rounded-md">
+              <Link href="/">
+                <a className="flex items-center leading-5 justify-center w-full px-4 py-[10px] text-sm font-medium text-[#344054] bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+                  Cancel
+                </a>
+              </Link>
+            </div>
+            <ButtonWLoading
+              className={'text-sm px-4 py-[10px]'}
+              isError={isError}
+              isPending={isPending}
+              text="Save"
+              type="submit"
+            />
+          </div>
         </div>
       </div>
     </form>
