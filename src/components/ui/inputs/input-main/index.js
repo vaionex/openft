@@ -33,7 +33,7 @@ InputMain.Label = function InputMainLabel({
       <label
         htmlFor={htmlFor}
         className={twMerge(
-          ' block text-sm font-medium text-gray-700 sm:mt-px',
+          ' block text-sm font-medium text-[#344054] sm:mt-px',
           !sublabel && 'sm:pt-2',
           className,
         )}

@@ -176,7 +176,7 @@ const ProfileHeaderCard = ({
 
           <div className="flex relative items-center justify-end flex-1 mt-6 sm:min-w-0 space-x-4 sm:pb-1">
             <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block">
-              <h2 className="mb-1 text-2xl font-medium text-gray-900 truncate">
+              <h2 className="mb-1 text-[30px] font-medium text-[#101828] truncate">
                 {user?.name}
               </h2>
               {user?.jobTitle && user?.showJobTitle && (
