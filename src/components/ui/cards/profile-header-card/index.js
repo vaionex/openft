@@ -174,7 +174,7 @@ const ProfileHeaderCard = ({
             <AvatarWithName className="w-24 h-24 ml-4 sm:w-32 sm:h-32 " />
           )}
 
-          <div className="flex relative items-center justify-end flex-1 mt-6 sm:min-w-0 space-x-4 sm:pb-1">
+          <div className="relative flex items-center justify-end flex-1 mt-6 space-x-4 sm:min-w-0 sm:pb-1">
             <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block max-w-[558px]">
               <h2 className="mb-1 text-[30px] font-medium text-[#101828] truncate">
                 {user?.name}
@@ -190,8 +190,9 @@ const ProfileHeaderCard = ({
                 </a>
               </NextLink>
             </div>
-            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0">
+            <div className="flex flex-col items-center space-y-3 text-sm font-medium justify-stretch sm:flex-row sm:space-y-0">
               <ButtonWLoading
+                className={`py-2.5`}
                 isError={isError}
                 isPending={isPending}
                 text="Save"
