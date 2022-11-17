@@ -174,9 +174,9 @@ const ProfileHeaderCard = ({
             <AvatarWithName className="w-24 h-24 ml-4 sm:w-32 sm:h-32 " />
           )}
 
-          <div className="flex relative items-center justify-end flex-1 mt-6 sm:min-w-0 space-x-4 sm:pb-1">
-            <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block">
-              <h2 className="mb-1 text-2xl font-medium text-gray-900 truncate">
+          <div className="relative flex items-center justify-end flex-1 mt-6 space-x-4 sm:min-w-0 sm:pb-1">
+            <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block max-w-[558px]">
+              <h2 className="mb-1 text-[30px] font-medium text-[#101828] truncate">
                 {user?.name}
               </h2>
               {user?.jobTitle && user?.showJobTitle && (
@@ -185,13 +185,14 @@ const ProfileHeaderCard = ({
             </div>
             <div className="flex flex-col items-center justify-stretch sm:mr-3 sm:flex-row sm:space-y-0 sm:space-x-4">
               <NextLink href="/">
-                <a className="text-sm font-medium hover:text-gradient-primary-hover px-[16px] py-[9px] border border-solid rounded-lg border-[#D0D5DD] hover:shadow-[0_0px_1px_2px_rgba(16,24,40,0.05)]">
+                <a className="text-sm text-[#344054] font-medium hover:text-gradient-primary-hover px-[15.5px] py-[9px] border border-solid rounded-lg border-[#D0D5DD] hover:shadow-[0_0px_1px_2px_rgba(16,24,40,0.05)]">
                   Cancel
                 </a>
               </NextLink>
             </div>
-            <div className="flex flex-col items-center space-y-3 justify-stretch sm:flex-row sm:space-y-0">
+            <div className="flex flex-col items-center space-y-3 text-sm font-medium justify-stretch sm:flex-row sm:space-y-0">
               <ButtonWLoading
+                className={`py-2.5`}
                 isError={isError}
                 isPending={isPending}
                 text="Save"

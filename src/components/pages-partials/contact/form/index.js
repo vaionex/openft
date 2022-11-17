@@ -33,11 +33,11 @@ export default function Form() {
   }
   return (
     <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6">
-      <div className="lg:grid-cols-2 lg:grid lg:gap-16 min-h-[calc(100vh-(6rem+8rem))]">
-        <div className="relative hidden mt-12 sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block">
-          <div className="relative w-full h-full mx-auto ">
+      <div className="lg:grid-cols-2 lg:grid lg:gap-16 xl:gap-[112px] min-h-[calc(100vh-(6rem+8rem))]">
+        <div className="relative hidden mt-12 sm:max-w-lg xl:max-w-[576px] min-h-[816px] sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block">
+          <div className="relative w-full h-full mx-auto">
             <Image
-              className="relative block w-full h-full overflow-hidden bg-white "
+              className="relative block w-full h-full overflow-hidden bg-white"
               src="/images/contact-page.webp"
               alt=""
               layout="fill"
@@ -45,13 +45,13 @@ export default function Form() {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center px-12 sm:text-center lg:text-left">
+        <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left">
           <div className="">
-            <div className="max-w-md mx-auto sm:max-w-lg lg:mx-0">
+            <div className="max-w-md mx-auto sm:max-w-lg xl:max-w-[480px] lg:mx-0">
               <h2 className="text-3xl text-[#101828] font-semibold tracking-tight sm:text-4xl">
                 Contact us
               </h2>
-              <p className="mt-4 text-lg text-gray-500 sm:mt-3">
+              <p className="mt-4 text-lg text-[#667085] sm:mt-3">
                 Ask everything about how Openft can work for you.
               </p>
               <form
@@ -203,12 +203,15 @@ export default function Form() {
                   <div className="ml-3 text-sm">
                     <label
                       htmlFor="privacy"
-                      className="font-medium text-gray-400"
+                      className="font-medium text-[#667085]"
                     >
                       You agree to our friendly{' '}
                     </label>
                     <NextLink href="/privacy">
-                      <a id="privacy-policy" className="font-medium underline">
+                      <a
+                        id="privacy-policy"
+                        className="font-medium underline text-[#667085]"
+                      >
                         privacy policy.
                       </a>
                     </NextLink>
