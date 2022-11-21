@@ -64,23 +64,31 @@ const MyProfileForm = ({
   return (
     <form className="mt-12 space-y-8 divide-y divide-gray-200">
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
-        <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Username" htmlFor="username" />
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
+          <InputMain.Label
+            label="Username"
+            htmlFor="username"
+            className="sm:w-[280px]"
+          />
           <InputMain.Input
             id="username"
             name="username"
             variant="add-on"
             addon="open.nft/"
             placeholder="username"
-            className="sm:col-span-2"
+            className="sm:w-full sm:max-w-[666px]"
             value={formValues.username}
             onChange={handleInputChange}
             error={errorMessage}
           />
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Instagram" htmlFor="instagram" />
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
+          <InputMain.Label
+            label="Instagram"
+            htmlFor="instagram"
+            className="sm:w-[280px]"
+          />
 
           <InputMain.Input
             id="instagram"
@@ -88,14 +96,18 @@ const MyProfileForm = ({
             variant="add-on"
             addon="https://instagram.com/"
             placeholder="username"
-            className="sm:col-span-2"
+            className="sm:w-full sm:max-w-[666px]"
             value={formValues.instagram}
             onChange={handleInputChange}
           />
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Facebook" htmlFor="facebook" />
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
+          <InputMain.Label
+            label="Facebook"
+            htmlFor="facebook"
+            className="sm:w-[280px]"
+          />
 
           <InputMain.Input
             id="facebook"
@@ -103,14 +115,18 @@ const MyProfileForm = ({
             variant="add-on"
             addon="https://facebook.com/"
             placeholder="username"
-            className="sm:col-span-2"
+            className="sm:w-full sm:max-w-[666px]"
             value={formValues.facebook}
             onChange={handleInputChange}
           />
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
-          <InputMain.Label label="Website" htmlFor="website" />
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
+          <InputMain.Label
+            label="Website"
+            htmlFor="website"
+            className="sm:w-[280px]"
+          />
 
           <InputMain.Input
             id="website"
@@ -118,19 +134,20 @@ const MyProfileForm = ({
             variant="add-on"
             addon="https://"
             placeholder="yourwebsite.com"
-            className="sm:col-span-2"
+            className="sm:w-full sm:max-w-[666px]"
             value={formValues.instagram}
             onChange={handleInputChange}
           />
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
             label="Your Photo"
             sublabel="This will be displayed on your profile."
             htmlFor="avatar"
+            className="sm:w-[280px]"
           />
-          <div className="sm:col-span-2">
+          <div className="sm:w-full sm:max-w-[666px]">
             <AvatarUpload
               limits={{
                 maxWidth: 400,
@@ -142,13 +159,14 @@ const MyProfileForm = ({
           </div>
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
             label="Your Bio"
             sublabel="Write a short introduction."
             htmlFor="bio"
+            className="sm:w-[280px]"
           />
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
+          <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
             <textarea
               className="w-full p-3 border border-gray-200 rounded min-h-[154px] resize-none"
               placeholder="Add a short bio..."
@@ -163,13 +181,17 @@ const MyProfileForm = ({
           </div>
         </InputMain>
 
-        <InputMain className="border-none sm:grid-cols-3">
-          <InputMain.Label label="Job title" htmlFor="jobTitle" />
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
+          <InputMain.Label
+            label="Job title"
+            htmlFor="jobTitle"
+            className="sm:w-[280px]"
+          />
           <InputMain.Input
             id="jobTitle"
             name="jobTitle"
             placeholder="e.g. UI Artist"
-            className="sm:col-span-2"
+            className="sm:w-full sm:max-w-[666px]"
             value={formValues.jobTitle}
             additionalCheckbox={
               <Checkbox
