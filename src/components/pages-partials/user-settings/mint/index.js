@@ -31,9 +31,9 @@ const UserSettingsMintSection = () => {
               className={({ selected }) =>
                 classNames(
                   selected
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                  'outline-none whitespace-nowrap p-3 pb-2 border-b-2 font-medium text-sm',
+                    ? 'border-[#155EEF] text-[#155EEF]'
+                    : 'border-transparent text-[#667085] hover:text-gray-800 hover:border-gray-300',
+                  'outline-none whitespace-nowrap p-3 pb-2 border-b-2 font-medium text-sm lg:text-base',
                 )
               }
             >
@@ -43,9 +43,9 @@ const UserSettingsMintSection = () => {
               className={({ selected }) =>
                 classNames(
                   selected
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                  'outline-none whitespace-nowrap p-3 pb-2 border-b-2 font-medium text-sm',
+                    ? 'border-[#155EEF] text-[#155EEF]'
+                    : 'border-transparent text-[#667085] hover:text-gray-800 hover:border-gray-300',
+                  'outline-none whitespace-nowrap p-3 pb-2 border-b-2 font-medium text-sm lg:text-base',
                 )
               }
             >
@@ -55,10 +55,10 @@ const UserSettingsMintSection = () => {
         </div>
         <Tab.Panels as={Fragment}>
           <Tab.Panel>
-            <div className="items-center sm:border-b sm:border-gray-200 sm:pb-5">
-              <span className="block text-lg font-medium text-gray-700">
+            <div className="items-center sm:border-b sm:border-[#EAECF0] sm:pb-5">
+              <span className="block text-lg font-medium text-[#101828]">
                 Upload Artwork
-                <span className="block text-sm font-normal text-gray-500">
+                <span className="block text-sm font-normal text-[#667085] mt-1">
                   Upload your artwork and its details here.
                 </span>
               </span>
@@ -66,10 +66,10 @@ const UserSettingsMintSection = () => {
             <UploadForm />
           </Tab.Panel>
           <Tab.Panel>
-            <div className="flex items-center sm:border-b sm:border-gray-200 sm:pb-5">
-              <span className="block text-lg font-medium text-gray-700">
+            <div className="flex items-center sm:border-b sm:border-[#EAECF0] sm:pb-5">
+              <span className="block text-lg font-medium text-[#101828]">
                 Generate Artwork
-                <span className="block text-sm font-normal text-gray-500">
+                <span className="block text-sm font-normal text-[#667085] mt-1">
                   Generate artwork from AI technology powered by Open AI.
                 </span>
               </span>
