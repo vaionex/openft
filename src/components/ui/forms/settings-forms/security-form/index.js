@@ -96,6 +96,7 @@ const SecurityForm = () => {
                   inputType={'password'}
                   id="password"
                   className="sm:col-span-2"
+                  inputClassName="md:h-11"
                   placeholder="Enter your current password"
                   error={errors.password?.message}
                   {...field}
@@ -115,6 +116,7 @@ const SecurityForm = () => {
                   id="newPassword"
                   inputType={'password'}
                   className="sm:col-span-2"
+                  inputClassName="md:h-11"
                   placeholder="Enter new password"
                   error={errors.newPassword?.message}
                   {...field}
@@ -146,6 +148,7 @@ const SecurityForm = () => {
                   id="confirmPassword"
                   inputType={'password'}
                   className="sm:col-span-2"
+                  inputClassName="md:h-11"
                   placeholder="Confirm new password"
                   error={errors.confirmPassword?.message}
                   {...field}

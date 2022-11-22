@@ -251,6 +251,7 @@ const UserSettingsWalletSection = () => {
                   <InputMain.Input
                     id="paymail"
                     variant="add-on-reverse"
+                    inputClassName="md:h-11"
                     addon={
                       paymail ? (
                         <>
@@ -279,6 +280,7 @@ const UserSettingsWalletSection = () => {
                   <InputMain.Input
                     id="bitcoinSVAddress"
                     variant="add-on-reverse"
+                    inputClassName="md:h-11"
                     addon={
                       address ? (
                         <>
