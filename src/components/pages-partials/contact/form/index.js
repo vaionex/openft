@@ -73,6 +73,7 @@ export default function Form() {
                           <InputMain.Input
                             id="first-name"
                             className="sm:col-span-2"
+                            inputClassName="md:h-11"
                             placeholder="First name"
                             onChange={() => {}}
                             error={errors['first-name']?.message}
@@ -98,6 +99,7 @@ export default function Form() {
                           <InputMain.Input
                             id="last-name"
                             className="sm:col-span-2"
+                            inputClassName="md:h-11"
                             placeholder="Last name"
                             onChange={() => {}}
                             error={errors['last-name']?.message}
@@ -119,6 +121,7 @@ export default function Form() {
                           <InputMain.Input
                             id="email"
                             className="w-full sm:col-span-2"
+                            inputClassName="md:h-11"
                             placeholder="you@company.com"
                             onChange={() => {}}
                             error={errors['email']?.message}
@@ -144,6 +147,7 @@ export default function Form() {
                           <InputMain.Input
                             id="company"
                             className="w-full sm:col-span-2"
+                            inputClassName="md:h-11"
                             placeholder="Your company"
                             onChange={() => {}}
                             error={errors['company']?.message}
@@ -168,7 +172,7 @@ export default function Form() {
                         return (
                           <InputMain.Textarea
                             id="message"
-                            className="w-full "
+                            className="w-full"
                             placeholder="Type here..."
                             rows={6}
                             onChange={() => {}}

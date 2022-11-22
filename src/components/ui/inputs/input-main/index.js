@@ -81,6 +81,7 @@ InputMain.Input = function InputMainInput(
     inputType,
     className,
     inputClassName,
+    inputContainer,
     tooltip,
     error,
     inputIcon,
@@ -94,7 +95,12 @@ InputMain.Input = function InputMainInput(
     <div className={className}>
       {variant === 'add-on' && !!addon && (
         <div>
-          <div className="flex mt-1 rounded-md shadow-sm sm:mt-0 md:h-11">
+          <div
+            className={twMerge(
+              'flex mt-1 rounded-md shadow-sm sm:mt-0',
+              inputContainer,
+            )}
+          >
             <span className="inline-flex items-center px-3 md:py-[10px] text-sm md:text-base text-[#667085] border border-r-0 border-[#EAECF0] rounded-l-md bg-[#F9FAFB]">
               {addon}
             </span>
@@ -118,7 +124,12 @@ InputMain.Input = function InputMainInput(
         </div>
       )}
       {variant === 'add-on-reverse' && !!addon && (
-        <div className="flex mt-1 rounded-md shadow-sm md:h-11">
+        <div
+          className={twMerge(
+            'flex mt-1 rounded-md shadow-sm sm:mt-0',
+            inputContainer,
+          )}
+        >
           <div className="relative flex items-stretch flex-grow focus-within:z-10">
             <input
               id={id}
@@ -151,7 +162,12 @@ InputMain.Input = function InputMainInput(
       )}
       {variant === 'default' && (
         <>
-          <div className="relative flex rounded-md shadow-sm md:h-11">
+          <div
+            className={twMerge(
+              'flex mt-1 rounded-md shadow-sm sm:mt-0',
+              inputContainer,
+            )}
+          >
             <input
               id={id}
               type={inputType}

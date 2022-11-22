@@ -289,6 +289,7 @@ const UploadForm = () => {
                   className="sm:col-span-2"
                   placeholder="e.g. My artwork"
                   onChange={() => {}}
+                  inputContainer="md:h-11"
                   error={errors['name']?.message}
                   disabled={isPending}
                   {...field}
@@ -332,7 +333,7 @@ const UploadForm = () => {
           </div>
         </InputMain>
 
-        <InputMain className=" sm:grid-cols-3">
+        <InputMain className="sm:grid-cols-3">
           <InputMain.Label
             label="Starting price"
             sublabel="The price shown on your artwork."
@@ -349,6 +350,8 @@ const UploadForm = () => {
                   name="amount"
                   type="number"
                   id="amount"
+                  className="relative"
+                  inputContainer="md:h-11"
                   autoComplete="given-name"
                   placeholder="e.g. $0.00"
                   error={errors['amount']?.message}
@@ -364,7 +367,8 @@ const UploadForm = () => {
             id="bsv"
             disabled
             value={bsvPrice}
-            className="mt-2 text-gray-500 sm:mt-0"
+            className="mt-2 text-gray-500 sm:mt-0 relative"
+            inputContainer="md:h-11"
             placeholder="1 BSV"
             tooltip={{
               text: 'This conversion is based on coinmarketcap.',

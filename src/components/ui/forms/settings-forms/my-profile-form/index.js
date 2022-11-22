@@ -77,6 +77,7 @@ const MyProfileForm = ({
             addon="open.nft/"
             placeholder="username"
             className="sm:w-full sm:max-w-[666px]"
+            inputContainer="md:h-11"
             value={formValues.username}
             onChange={handleInputChange}
             error={errorMessage}
@@ -97,6 +98,7 @@ const MyProfileForm = ({
             addon="https://instagram.com/"
             placeholder="username"
             className="sm:w-full sm:max-w-[666px]"
+            inputContainer="md:h-11"
             value={formValues.instagram}
             onChange={handleInputChange}
           />
@@ -116,6 +118,7 @@ const MyProfileForm = ({
             addon="https://facebook.com/"
             placeholder="username"
             className="sm:w-full sm:max-w-[666px]"
+            inputContainer="md:h-11"
             value={formValues.facebook}
             onChange={handleInputChange}
           />
@@ -135,6 +138,7 @@ const MyProfileForm = ({
             addon="https://"
             placeholder="yourwebsite.com"
             className="sm:w-full sm:max-w-[666px]"
+            inputContainer="md:h-11"
             value={formValues.instagram}
             onChange={handleInputChange}
           />
@@ -192,6 +196,7 @@ const MyProfileForm = ({
             name="jobTitle"
             placeholder="e.g. UI Artist"
             className="sm:w-full sm:max-w-[666px]"
+            inputContainer="md:h-11"
             value={formValues.jobTitle}
             additionalCheckbox={
               <Checkbox
