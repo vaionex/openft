@@ -11,6 +11,9 @@ import ButtonWLoading from '@/components/ui/button-w-loading'
 import ModalConfirm from '@/components/ui/modal-confirm'
 import { WalletIcon, WarningIcon } from '@/components/common/icons'
 import { setMnemonicPopup } from '@/redux/slices/user'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { createRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const inputAttributes = [
   {
@@ -44,6 +47,9 @@ function RegistrationAddSocials({
   setMnemonicStatus,
   mnemonic,
 }) {
+  const recaptchaRef = createRef()
+  const [captcha, setCaptcha] = useState('')
+  const [submitCounter, setSubmitCounter] = useState(0)
   const dispatch = useDispatch()
   const { isPending, isError } = useSelector(userSelector)
   const { socialsValues } = useSelector(registrationFormSelector)
@@ -52,9 +58,35 @@ function RegistrationAddSocials({
   })
 
   const onSubmit = async (data) => {
+    if (submitCounter >= 5 && !captcha) {
+      toast.error('Please Complete Captcha', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+      return
+    } else {
+      setSubmitCounter(submitCounter + 1)
+    }
     dispatch(setSocialsValues(data))
+
+    setCaptcha('')
+    if (submitCounter >= 5) {
+      setSubmitCounter(0)
+    }
   }
 
+  const onReCAPTCHAChange = (captchaCode) => {
+    if (!captchaCode) {
+      return
+    }
+    setCaptcha(captchaCode)
+  }
   return (
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -94,7 +126,15 @@ function RegistrationAddSocials({
                 />
               </InputMain>
             ))}
-
+            {submitCounter >= 5 ? (
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                onChange={onReCAPTCHAChange}
+              />
+            ) : (
+              ''
+            )}
             <div className="flex gap-4">
               <button
                 type="button"

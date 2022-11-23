@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Footer from '../footer'
 import Header from '../header'
 import { twMerge } from 'tailwind-merge'
+import { ToastContainer } from 'react-toastify'
 
 const SharedLayout = ({ children, title, className }) => {
   return (
@@ -13,6 +14,9 @@ const SharedLayout = ({ children, title, className }) => {
 
       <Header />
       <main className={twMerge('min-h-[calc(100vh-(6rem+8.3rem))]', className)}>
+        <div className="absolute h-0">
+          <ToastContainer />
+        </div>
         {children}
       </main>
       <Footer />
