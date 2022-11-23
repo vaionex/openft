@@ -115,21 +115,24 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
           <div className="w-full  max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
             <div className="flex flex-col">
               <div>
-                <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-500">
-                  <BadgeCheckIcon className="-ml-1 mr-1.5 h-4 w-4 text-blue-600" />
+                <span className="inline-flex items-center px-[10.2px] py-1 rounded-full text-sm font-medium bg-[#F2F4F7] text-[#667085]">
+                  <BadgeCheckIcon className="-ml-1 mr-1.5 h-4 w-4 text-[#0788F5]" />
                   Verified
                 </span>
               </div>
 
-              <div className="flex items-center py-3 mt-3 space-x-4">
-                <NextLink href={`/user/${artistData?.username}`}>
+              <div className="flex items-center mt-4  space-x-4">
+                <NextLink
+                  href={`/user/${artistData?.username}`}
+                  className="h-8"
+                >
                   <a>
                     {artistData?.profileImage ? (
                       <Image
                         src={artistData?.profileImage}
                         alt="vaionex-mini-icon"
-                        width={36}
-                        height={36}
+                        width={32}
+                        height={32}
                         className="w-8 h-8 bg-gray-100 rounded-full"
                       />
                     ) : (
@@ -139,7 +142,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                 </NextLink>
                 <NextLink href={`/user/${artistData?.username}`}>
                   <a>
-                    <span className="text-lg font-medium text-blue-600">
+                    <span className="text-lg font-medium my-auto text-[#155EEF]">
                       {artistData?.name}
                     </span>
                   </a>

@@ -3,12 +3,20 @@ import { InputMain } from '@/components/ui/inputs'
 import { Controller, useForm } from 'react-hook-form'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import validationSchema from './validationScheme'
-import { useRef, useState } from 'react'
+import { createRef, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import ButtonWLoading from '@/components/ui/button-w-loading'
+import ReCAPTCHA from 'react-google-recaptcha'
+
+import { firebaseAddDocWithRandomID } from '@/firebase/utils'
+import { toast } from 'react-toastify'
 
 export default function Form() {
   const textAreaRef = useRef(null)
+  const recaptchaRef = createRef()
+  const [captcha, setCaptcha] = useState('')
+  const [submitCounter, setSubmitCounter] = useState(0)
+  const [checked, setChecked] = useState(false)
   const [message, setMessage] = useState(false)
   const resolver = useYupValidationResolver(validationSchema)
   const {
@@ -22,14 +30,62 @@ export default function Form() {
     resolver,
   })
 
-  const onSubmit = (data) => {
-    console.log(data)
-    reset({ 'first-name': '', 'last-name': '', email: '', company: '' })
-    textAreaRef.current.value = ''
+  setTimeout(() => {
+    setMessage(false)
+  }, 2000)
+
+  const onReCAPTCHAChange = (captchaCode) => {
+    if (!captchaCode) {
+      return
+    }
+    setCaptcha(captchaCode)
+  }
+
+  const onSubmit = async (formData) => {
+    if (submitCounter >= 5 && !captcha) {
+      toast.error('Please Complete Captcha', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+      return
+    } else {
+      setSubmitCounter(submitCounter + 1)
+    }
+    const data = {
+      company: formData.company,
+      email: formData?.email,
+      first_name: formData['first-name'],
+      last_name: formData['last-name'],
+      message: formData?.message,
+    }
+    await firebaseAddDocWithRandomID('contact', data)
     setMessage({
       msg: 'Thanks for reaching out 🎉. One of our representative will reach out to you shortly',
       type: 'success',
     })
+    // form reset
+    resetAllData()
+  }
+
+  const resetAllData = () => {
+    reset({
+      'first-name': '',
+      'last-name': '',
+      email: '',
+      company: '',
+    })
+    textAreaRef.current.value = ''
+    setChecked(false)
+    setCaptcha('')
+    if (submitCounter >= 5) {
+      setSubmitCounter(0)
+    }
   }
   return (
     <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6">
@@ -185,8 +241,8 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="relative flex items-start my-2 sm:col-span-2">
-                  <div className="flex items-center h-5 ">
+                <div className="relative flex  my-2 sm:col-span-2">
+                  <div className="flex items-center h-4 sm:h-5 ">
                     <Controller
                       name={'privacy'}
                       control={control}
@@ -195,8 +251,10 @@ export default function Form() {
                           <InputMain.Input
                             id="privacy"
                             type="checkbox"
-                            inputClassName="cursor-pointer w-4 h-4 text-blue-600 rounded-md border-gray-300 focus:ring-blue-500"
-                            onChange={() => {}}
+                            checked={checked}
+                            inputContainer={'sm:w-5 w-4'}
+                            inputClassName="cursor-pointer w-4 sm:w-5 w-4 sm:h-5 text-blue-600 rounded-md border-gray-300 focus:ring-blue-500"
+                            onClick={() => setChecked(!checked)}
                             error={errors['privacy']?.message}
                             {...field}
                           />
@@ -204,7 +262,11 @@ export default function Form() {
                       }}
                     />
                   </div>
-                  <div className="ml-3 text-sm">
+                  <div
+                    className={`ml-8 ${
+                      errors['privacy']?.message ? '-mt-2.5' : ''
+                    } inset-0 absolute text-sm text-left`}
+                  >
                     <label
                       htmlFor="privacy"
                       className="font-medium text-[#667085]"
@@ -221,7 +283,15 @@ export default function Form() {
                     </NextLink>
                   </div>
                 </div>
-
+                {submitCounter >= 5 ? (
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                    onChange={onReCAPTCHAChange}
+                  />
+                ) : (
+                  ''
+                )}
                 <div className="sm:col-span-2">
                   <ButtonWLoading type="submit" fullWidth text="Send message" />
                 </div>

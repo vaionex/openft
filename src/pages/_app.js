@@ -6,6 +6,7 @@ import 'slick-carousel/slick/slick.css'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import 'react-circular-progressbar/dist/styles.css'
 import '@/styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css'
 import { Suspense, useEffect, useState } from 'react'
 import {
   firebaseGetAuthorizedUser,
