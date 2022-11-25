@@ -112,7 +112,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
           </div>
 
           {/* Product details */}
-          <div className="w-full  max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
+          <div className="w-full max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
             <div className="flex flex-col">
               <div>
                 <span className="inline-flex items-center px-[10.2px] py-1 rounded-full text-sm font-medium bg-[#F2F4F7] text-[#667085]">
@@ -121,7 +121,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                 </span>
               </div>
 
-              <div className="flex items-center mt-4  space-x-4">
+              <div className="flex items-center mt-4 space-x-4">
                 <NextLink
                   href={`/user/${artistData?.username}`}
                   className="h-8"
@@ -160,7 +160,9 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
               </div>
             </div>
 
-            <p className="mt-6 text-gray-500">{nftData?.description}</p>
+            <p className="mt-6 text-xl font-normal text-[#667085] leading-[30px] max-w-[480px]">
+              {nftData?.description}
+            </p>
             <div className="mt-3">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
@@ -196,8 +198,10 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                     <h3 className="sr-only">Transactions Information</h3>
 
                     <dl className="flex flex-col text-sm font-medium text-gray-500 break-all mt-7">
-                      <dt className="text-gray-700">Contract Transaction ID</dt>
-                      <dd className="mb-5">
+                      <dt className="text-[#344054]">
+                        Contract Transaction ID
+                      </dt>
+                      <dd className="mb-5 text-[#667085]">
                         <a
                           href={
                             'https://whatsonchain.com/tx/' +
@@ -210,8 +214,10 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                           {nftData?.contractTxid}
                         </a>
                       </dd>
-                      <dt className="text-gray-700">Issuance Transaction ID</dt>
-                      <dd className="mb-5">
+                      <dt className="text-[#344054]">
+                        Issuance Transaction ID
+                      </dt>
+                      <dd className="mb-5 text-[#667085]">
                         <a
                           href={
                             'https://whatsonchain.com/tx/' + nftData?.issueTxid
@@ -223,16 +229,18 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                           {nftData?.issueTxid}
                         </a>
                       </dd>
-                      <dt className="text-gray-700">
+                      <dt className="text-[#344054]">
                         {transactionData.protocol.name}
                       </dt>
-                      <dd className="mb-5">
+                      <dd className="mb-5 text-[#667085]">
                         {transactionData.protocol.content}
                       </dd>
-                      <dt className="text-gray-700">
+                      <dt className="text-[#344054]">
                         {transactionData.schema.name}
                       </dt>
-                      <dd>{transactionData.schema.content}</dd>
+                      <dd className="text-[#667085]">
+                        {transactionData.schema.content}
+                      </dd>
                     </dl>
                   </Tab.Panel>
 
