@@ -27,7 +27,7 @@ const transactionData = {
   },
   schema: {
     name: 'Schema_id',
-    content: 'NFT1.0/MA',
+    content: 'NFT1.0',
   },
 }
 
@@ -77,6 +77,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
           hisArr[index] = {
             ...data,
             profileImage: res?.profileImage,
+            username: res?.name,
           }
         })
       } else if (data.type === 'MINT') {
@@ -84,6 +85,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
           hisArr[index] = {
             ...data,
             profileImage: res?.profileImage,
+            username: res?.name,
           }
         })
       }

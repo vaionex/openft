@@ -123,7 +123,7 @@ export default function Content({ nftInfo, userFavList }) {
                       className={classNames(
                         tab.status
                           ? 'border-blue-500 text-blue-600'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                          : 'border-transparent text-[#475467] hover:text-gray-700 hover:border-gray-300',
                         'whitespace-nowrap flex space-x-2 pb-4 px-1 border-b-2 font-medium text-sm',
                       )}
                       aria-current={tab.status ? 'page' : undefined}
@@ -180,7 +180,7 @@ export default function Content({ nftInfo, userFavList }) {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 cursor">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
             {router.query.current === 'liked-artworks' &&
               userFavList &&
               userFavList.nftsData.map((hit) => (
