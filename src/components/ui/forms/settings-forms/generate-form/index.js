@@ -245,7 +245,7 @@ const GenerateForm = () => {
               className={'text-sm px-4 py-[10px]'}
               isError={isError}
               isPending={isPending}
-              text="Save"
+              text="Mint"
               type="submit"
             />
           </div>

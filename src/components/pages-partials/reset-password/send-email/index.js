@@ -94,7 +94,7 @@ const ResetSendEmail = () => {
                       <InputMain.Input
                         id="email"
                         placeholder="Email"
-                        className="mb-8 sm:mb-4"
+                        className="0"
                         onInput={(e) => {
                           e.target.value = e.target.value.replace(/\s/g, '')
                         }}

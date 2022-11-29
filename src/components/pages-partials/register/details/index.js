@@ -91,7 +91,7 @@ function RegistrationDetails({ goToStep }) {
                       <InputMain.Input
                         id={inputAttribute.name}
                         placeholder={inputAttribute.placeholder}
-                        className="mb-8 sm:mb-4"
+                        className="mb-0"
                         type={inputAttribute.type}
                         onInput={(e) => {
                           console.log(e.target.name)

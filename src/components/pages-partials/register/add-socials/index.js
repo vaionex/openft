@@ -14,6 +14,8 @@ import { setMnemonicPopup } from '@/redux/slices/user'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { createRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import validationError from './validationerrors'
+import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 
 const inputAttributes = [
   {
@@ -22,6 +24,7 @@ const inputAttributes = [
     addon: 'https://instagram.com/',
     placeholder: 'username',
     name: 'instagram',
+    required: true,
   },
   {
     id: 'facebook',
@@ -29,6 +32,7 @@ const inputAttributes = [
     addon: 'https://facebook.com/',
     placeholder: 'username',
     name: 'facebook',
+    required: true,
   },
   {
     id: 'website',
@@ -53,10 +57,13 @@ function RegistrationAddSocials({
   const dispatch = useDispatch()
   const { isPending, isError } = useSelector(userSelector)
   const { socialsValues } = useSelector(registrationFormSelector)
-  const { control, handleSubmit } = useForm({
+  const resolver = useYupValidationResolver(validationError)
+  const { control, handleSubmit, formState } = useForm({
     defaultValues: socialsValues,
+    reValidateMode: 'onBlur',
+    resolver,
   })
-
+  const { errors } = formState
   const onSubmit = async (data) => {
     if (submitCounter >= 5 && !captcha) {
       toast.error('Please Complete Captcha', {
@@ -115,8 +122,9 @@ function RegistrationAddSocials({
                       variant="add-on"
                       addon={inputAttribute.addon}
                       placeholder={inputAttribute.placeholder}
-                      className="mb-8 sm:mb-4"
+                      className="mb-0"
                       type={inputAttribute.type}
+                      required={inputAttribute.required}
                       onInput={(e) => {
                         e.target.value = e.target.value.replace(/\s/g, '')
                       }}
@@ -124,6 +132,9 @@ function RegistrationAddSocials({
                     />
                   )}
                 />
+                <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
+                  {errors[inputAttribute.name]?.message}
+                </span>
               </InputMain>
             ))}
             {submitCounter >= 5 ? (

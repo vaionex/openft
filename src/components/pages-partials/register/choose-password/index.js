@@ -92,7 +92,7 @@ function RegistrationChoosePassword({ goToStep }) {
                     <InputMain.Input
                       id={inputAttribute.name}
                       placeholder={inputAttribute.placeholder}
-                      className="mb-8 sm:mb-4"
+                      className="mb-0"
                       type={inputAttribute.type}
                       {...field}
                     />

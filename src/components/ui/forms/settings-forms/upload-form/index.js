@@ -25,6 +25,7 @@ import { doc, Timestamp, writeBatch } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 import { SendNotification } from '@/services/novu-notifications'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const imageInputAttributes = {
   id: 'nftImage',
@@ -59,7 +60,7 @@ const UploadForm = () => {
     reValidateMode: 'onBlur',
     resolver,
   })
-
+  const router = useRouter()
   const { errors } = formState
 
   const usdPrice = watch('amount')
@@ -225,6 +226,7 @@ const UploadForm = () => {
       SendNotification(currentUser.uid, 'Your NFT has been created!')
 
       resetAllData()
+      router.push('/discover')
     } catch (error) {
       if (error?.message) {
         setIsError(true)
@@ -428,7 +430,7 @@ const UploadForm = () => {
               className={'text-sm px-4 py-[10px]'}
               isError={isError}
               isPending={isPending}
-              text="Save"
+              text="Mint"
               type="submit"
             />
           </div>
