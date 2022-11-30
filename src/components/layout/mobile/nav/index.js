@@ -87,9 +87,11 @@ const MobileNav = ({ navItems }) => {
               ))}
             </div>
             {isAuthenticated ? (
-              <div className="pt-5 pb-6">
+              <div className="pt-3 pb-6">
                 <div className="px-3 space-y-1">
-                  <p className="text-xl text-black">User Settings</p>
+                  <p className="text-lg font-bold px-2 text-black">
+                    User settings
+                  </p>
                   {ProfileRoutes.map((item) => (
                     <ActiveLink
                       key={item.name}

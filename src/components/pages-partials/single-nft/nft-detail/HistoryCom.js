@@ -62,7 +62,7 @@ export default function HistoryComp({ data, index, ...props }) {
         </div>
         <div>
           <div className="flex items-center space-x-2">
-            <p className="font-medium text-blue-700">
+            <p className="font-medium text-[#004EEB]">
               <NextLink href={'/user/' + data?.username}>
                 <a className="outline-none">
                   {' '}

@@ -164,13 +164,13 @@ export default function Content({ nftInfo, userFavList }) {
               id="search"
               placeholder="Search"
               value={searchState}
-              inputClassName="pl-10 h-[36px]"
+              inputClassName="pl-10 h-[44px]"
               onChange={(e) => setsearchState(e.target.value)}
             />
           </InputMain>
-          <button className="p-3 rounded-md bg-[#155EEF] hover:bg-[#2d6ff1]">
+          <button className="p-[14px] rounded-md bg-[#155EEF] hover:bg-[#2d6ff1]">
             <span className="sr-only">Search Button</span>
-            <MagnifyGlassIcon className="w-4 h-3 text-white" />
+            <MagnifyGlassIcon className="w-4 h-4 text-white" />
           </button>
         </form>
       </div>
@@ -180,7 +180,7 @@ export default function Content({ nftInfo, userFavList }) {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 cursor">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
+          <div className="grid grid-cols-1 gap-[29px] md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
             {router.query.current === 'liked-artworks' &&
               userFavList &&
               userFavList.nftsData.map((hit) => (
