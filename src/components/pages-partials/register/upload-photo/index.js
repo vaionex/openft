@@ -10,30 +10,30 @@ import {
 
 const ImageInputAttributes = [
   {
-    id: 'profileImage',
-    name: 'profileImage',
-    title: 'Profile Image',
-    text: 'Click to upload profile photo',
-    subinfo: 'Max 400x400 px.',
-    limits: {
-      maxWidth: 400,
-      maxHeight: 400,
-      maxSize: 1, //MB
-    },
-    aspect: 1,
-  },
-  {
     id: 'coverImage',
     name: 'coverImage',
     title: 'Cover Image',
     text: 'Click to upload cover photo',
-    subinfo: 'Max 3840x2160 - 4MB',
+    subinfo: 'Max Size - 4MB',
     limits: {
-      maxWidth: 3840,
-      maxHeight: 2160,
+      // maxWidth: 3840,
+      // maxHeight: 2160,
       maxSize: 4, //MB
     },
-    aspect: 191 / 48,
+    aspect: 4 / 3,
+  },
+  {
+    id: 'profileImage',
+    name: 'profileImage',
+    title: 'Profile Image',
+    text: 'Click to upload profile photo',
+    subinfo: 'Max Size - 1MB',
+    limits: {
+      // maxWidth: 400,
+      // maxHeight: 400,
+      maxSize: 1, //MB
+    },
+    aspect: 1,
   },
 ]
 
