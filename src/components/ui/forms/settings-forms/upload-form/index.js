@@ -93,7 +93,6 @@ const UploadForm = () => {
     setCroppedImageBlob(null)
   }
 
-  console.log(currentUser)
   const onSubmit = async (formData) => {
     console.log('submit call ')
     setIsPending(true)
@@ -125,6 +124,8 @@ const UploadForm = () => {
         fileName: formData.name,
       }
 
+      console.log('fileToChain', fileToChain)
+
       console.log('uploading image to BSV network')
       const blockchainResponse = await uploadNFTFile(fileToChain)
       if (!blockchainResponse) {
@@ -132,6 +133,8 @@ const UploadForm = () => {
           'Failed to upload file to blockchain, please press "Save" again',
         )
       }
+
+      console.log('blockchainResponse', blockchainResponse)
       const {
         uploadObj: { txid, url: blockchainUrl },
       } = blockchainResponse
@@ -144,6 +147,7 @@ const UploadForm = () => {
         amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
+        url: nftImageForChain,
       }
       const mintResponse = await mintNFT(dataToMint)
       if (!mintResponse) {
@@ -155,6 +159,8 @@ const UploadForm = () => {
         fileFromStorage.metadata?.name,
         'normal',
       )
+
+      console.log('mintResponse', mintResponse)
 
       //creating atomic swap offer
       console.log('creating offer hex')
