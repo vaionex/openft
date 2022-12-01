@@ -54,7 +54,7 @@ const NFTMarketplace = ({
             open={mobileFiltersOpen}
             onClose={setMobileFiltersOpen}
           />
-        )}
+        )} 
 
         <section aria-labelledby="products-heading" className="pt-6 pb-24">
           <h2 id="products-heading" className="sr-only">
