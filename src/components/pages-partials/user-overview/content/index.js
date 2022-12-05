@@ -122,7 +122,7 @@ export default function Content({ nftInfo, userFavList }) {
                     <a
                       className={classNames(
                         tab.status
-                          ? 'border-blue-500 text-blue-600'
+                          ? 'border-blue-500 text-[#155EEF]'
                           : 'border-transparent text-[#475467] hover:text-gray-700 hover:border-gray-300',
                         'whitespace-nowrap flex space-x-2 pb-4 px-1 border-b-2 font-medium text-sm',
                       )}
@@ -131,8 +131,8 @@ export default function Content({ nftInfo, userFavList }) {
                       <tab.icon
                         className={classNames(
                           tab.status
-                            ? 'text-blue-600 stroke-blue-600'
-                            : 'text-gray-500 stroke-gray-500',
+                            ? 'text-[#155EEF] stroke-blue-600'
+                            : 'text-[#475467] stroke-gray-500',
                           'w-5 h-5',
                         )}
                         aria-hidden="true"
@@ -149,7 +149,7 @@ export default function Content({ nftInfo, userFavList }) {
           onSubmit={(e) => handleSubmit(e)}
           className="flex items-center order-1 gap-2 sm:order:2"
         >
-          <InputMain className="relative w-full md:min-w-[348px] pb-0 border-none">
+          <InputMain className="relative w-full md:min-w-[329px] pb-0 border-none">
             <span className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
               <MagnifyGlassIcon className="w-5 h-5 text-gray-400 " />
             </span>
