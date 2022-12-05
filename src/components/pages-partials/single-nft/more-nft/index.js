@@ -26,7 +26,7 @@ export default function MoreNft({
           <div className="lg:col-span-3">
             {/* Replace with your content */}
             <div className="h-full">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-7 gap-y-12 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
                 <Products
                   favouriteNfts={favouriteNfts}
                   setFavouriteNfts={setFavouriteNfts}

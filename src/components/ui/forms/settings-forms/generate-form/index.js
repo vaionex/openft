@@ -65,7 +65,7 @@ const GenerateForm = () => {
             </span>
           </label>
 
-          <div className="flex mt-1 rounded-md shadow-sm">
+          <div className="flex mt-1 rounded-md shadow-sm h-10">
             <div className="relative flex items-stretch flex-grow focus-within:z-10">
               <input
                 type="text"
@@ -94,38 +94,43 @@ const GenerateForm = () => {
         {hidden && (
           <>
             <DummyTwo data={dummyTwoData} />
-            <InputMain className="sm:grid-cols-3 border-none">
+            <InputMain className="sm:flex sm:justify-between sm:gap-8">
               <InputMain.Label
                 label="Artwork name"
                 sublabel="This will be displayed on your artwork."
                 htmlFor="name"
+                className="sm:w-[280px]"
               />
-              <Controller
-                name="name"
-                control={control}
-                defaultValue=""
-                render={({ field }) => {
-                  return (
-                    <InputMain.Input
-                      id="name"
-                      className="sm:col-span-2"
-                      placeholder="e.g. My artwork"
-                      onChange={() => {}}
-                      error={errors['name']?.message}
-                      disabled={isPending}
-                      {...field}
-                    />
-                  )
-                }}
-              />
+              <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
+                <Controller
+                  name="name"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => {
+                    return (
+                      <InputMain.Input
+                        id="name"
+                        className="sm:col-span-2"
+                        placeholder="e.g. My artwork"
+                        onChange={() => {}}
+                        inputContainer="md:h-11"
+                        error={errors['name']?.message}
+                        disabled={isPending}
+                        {...field}
+                      />
+                    )
+                  }}
+                />
+              </div>
             </InputMain>
-            <InputMain className="sm:grid-cols-3 border-none">
+            <InputMain className="sm:flex sm:justify-between sm:gap-8">
               <InputMain.Label
                 label="Description"
                 sublabel="A quick snapshot of your artwork."
                 htmlFor="description"
+                className="sm:w-[280px]"
               />
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
                 <Controller
                   name="description"
                   control={control}
@@ -152,74 +157,83 @@ const GenerateForm = () => {
                 </p>
               </div>
             </InputMain>
-            <InputMain className=" sm:grid-cols-3 border-none">
+            <InputMain className="sm:flex sm:justify-between sm:gap-8">
               <InputMain.Label
                 label="Starting price"
                 sublabel="The price shown on your artwork."
                 htmlFor="amount"
+                className="sm:w-[280px]"
               />
-
-              <Controller
-                name="amount"
-                control={control}
-                defaultValue=""
-                render={({ field }) => {
-                  return (
-                    <InputMain.Input
-                      name="amount"
-                      type="number"
-                      id="amount"
-                      autoComplete="given-name"
-                      placeholder="e.g. $0.00"
-                      error={errors['amount']?.message}
-                      disabled={isPending}
-                      inputIcon="$"
-                      {...field}
-                    />
-                  )
-                }}
-              />
-              <InputMain.Input
-                name="bsv"
-                id="bsv"
-                disabled
-                value={bsvPrice}
-                className="mt-2 text-gray-500 sm:mt-0"
-                placeholder="1 BSV"
-                tooltip={{
-                  text: 'This conversion is based on coinmarketcap.',
-                }}
-              />
+              <div className="flex flex-col sm:flex-row mt-1 sm:mt-0 gap-4 w-full sm:max-w-[666px]">
+                <Controller
+                  name="amount"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => {
+                    return (
+                      <InputMain.Input
+                        name="amount"
+                        type="number"
+                        id="amount"
+                        className="relative w-full sm:w-1/2 h-11"
+                        inputContainer="md:h-11"
+                        autoComplete="given-name"
+                        placeholder="e.g. $0.00"
+                        error={errors['amount']?.message}
+                        disabled={isPending}
+                        inputIcon="$"
+                        {...field}
+                      />
+                    )
+                  }}
+                />
+                <InputMain.Input
+                  name="bsv"
+                  id="bsv"
+                  disabled
+                  value={bsvPrice}
+                  className="mt-2 text-gray-500 sm:mt-0 relative w-full sm:w-1/2"
+                  inputContainer="md:h-11"
+                  placeholder="1 BSV"
+                  tooltip={{
+                    text: 'This conversion is based on coinmarketcap.',
+                  }}
+                />
+              </div>
             </InputMain>
-            <InputMain className="sm:grid-cols-3">
+            <InputMain className="sm:flex sm:justify-between sm:gap-8">
               <InputMain.Label
                 label="Supply"
                 sublabel="The number of copies minted artwork."
                 htmlFor="supply"
+                className="sm:w-[280px]"
               />
-              <Controller
-                name="supply"
-                control={control}
-                defaultValue=""
-                render={({ field }) => {
-                  return (
-                    <InputMain.Input
-                      id="supply"
-                      type="number"
-                      placeholder="e.g. 10"
-                      className="sm:col-span-2"
-                      tooltip={{
-                        title: 'Supply',
-                        text: 'Presently we only provide 1 supply for each NFT to preserve the originality of each NFT.',
-                      }}
-                      onChange={() => {}}
-                      error={errors['supply']?.message}
-                      disabled={isPending}
-                      {...field}
-                    />
-                  )
-                }}
-              />
+              <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
+                <Controller
+                  name="supply"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => {
+                    return (
+                      <InputMain.Input
+                        id="supply"
+                        type="number"
+                        placeholder="e.g. 10"
+                        className="sm:col-span-2 relative"
+                        inputContainer="md:h-11"
+                        tooltip={{
+                          title: 'Supply',
+                          text: 'Presently we only provide 1 supply for each NFT to preserve the originality of each NFT.',
+                        }}
+                        onChange={() => {}}
+                        error={errors['supply']?.message}
+                        disabled={isPending}
+                        {...field}
+                      />
+                    )
+                  }}
+                />
+              </div>
             </InputMain>
           </>
         )}

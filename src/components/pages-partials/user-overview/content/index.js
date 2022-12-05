@@ -179,8 +179,8 @@ export default function Content({ nftInfo, userFavList }) {
           Products
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 cursor">
-          <div className="grid grid-cols-1 gap-[29px] md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12 cursor">
+          <div className="grid grid-cols-1 gap-x-[29px] gap-y-12 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
             {router.query.current === 'liked-artworks' &&
               userFavList &&
               userFavList.nftsData.map((hit) => (
