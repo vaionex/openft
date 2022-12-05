@@ -257,15 +257,16 @@ const UploadForm = () => {
       className="space-y-8 divide-y divide-gray-200"
     >
       <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
+            className="sm:w-[280px]"
             label="Upload artwork file"
             sublabel="This will be your NFT"
             htmlFor="nftImage"
           />
           <div
             className={twMerge(
-              'mt-1  sm:mt-0 sm:col-span-2',
+              'mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]',
               isPending && 'pointer-events-none touch-none',
             )}
           >
@@ -280,40 +281,44 @@ const UploadForm = () => {
           </div>
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
             label="Artwork name"
             sublabel="This will be displayed on your artwork."
             htmlFor="name"
+            className="sm:w-[280px]"
           />
-          <Controller
-            name="name"
-            control={control}
-            defaultValue=""
-            render={({ field }) => {
-              return (
-                <InputMain.Input
-                  id="name"
-                  className="sm:col-span-2"
-                  placeholder="e.g. My artwork"
-                  onChange={() => {}}
-                  inputContainer="md:h-11"
-                  error={errors['name']?.message}
-                  disabled={isPending}
-                  {...field}
-                />
-              )
-            }}
-          />
+          <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              render={({ field }) => {
+                return (
+                  <InputMain.Input
+                    id="name"
+                    className="sm:col-span-2"
+                    placeholder="e.g. My artwork"
+                    onChange={() => {}}
+                    inputContainer="md:h-11"
+                    error={errors['name']?.message}
+                    disabled={isPending}
+                    {...field}
+                  />
+                )
+              }}
+            />
+          </div>
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
             label="Description"
             sublabel="A quick snapshot of your artwork."
             htmlFor="description"
+            className="sm:w-[280px]"
           />
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
+          <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
             <Controller
               name="description"
               control={control}
@@ -341,47 +346,49 @@ const UploadForm = () => {
           </div>
         </InputMain>
 
-        <InputMain className="sm:grid-cols-3">
+        <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
             label="Starting price"
             sublabel="The price shown on your artwork."
             htmlFor="amount"
+            className="sm:w-[280px]"
           />
-
-          <Controller
-            name="amount"
-            control={control}
-            defaultValue=""
-            render={({ field }) => {
-              return (
-                <InputMain.Input
-                  name="amount"
-                  type="number"
-                  id="amount"
-                  className="relative"
-                  inputContainer="md:h-11"
-                  autoComplete="given-name"
-                  placeholder="e.g. $0.00"
-                  error={errors['amount']?.message}
-                  disabled={isPending}
-                  inputIcon="$"
-                  {...field}
-                />
-              )
-            }}
-          />
-          <InputMain.Input
-            name="bsv"
-            id="bsv"
-            disabled
-            value={bsvPrice}
-            className="mt-2 text-gray-500 sm:mt-0 relative"
-            inputContainer="md:h-11"
-            placeholder="1 BSV"
-            tooltip={{
-              text: 'This conversion is based on coinmarketcap.',
-            }}
-          />
+          <div className="flex flex-col sm:flex-row mt-1 sm:mt-0 gap-4 w-full sm:max-w-[666px]">
+            <Controller
+              name="amount"
+              control={control}
+              defaultValue=""
+              render={({ field }) => {
+                return (
+                  <InputMain.Input
+                    name="amount"
+                    type="number"
+                    id="amount"
+                    className="relative w-full sm:w-1/2"
+                    inputContainer="md:h-11"
+                    autoComplete="given-name"
+                    placeholder="e.g. $0.00"
+                    error={errors['amount']?.message}
+                    disabled={isPending}
+                    inputIcon="$"
+                    {...field}
+                  />
+                )
+              }}
+            />
+            <InputMain.Input
+              name="bsv"
+              id="bsv"
+              disabled
+              value={bsvPrice}
+              className="mt-2 text-gray-500 sm:mt-0 relative w-full sm:w-1/2"
+              inputContainer="md:h-11"
+              placeholder="1 BSV"
+              tooltip={{
+                text: 'This conversion is based on coinmarketcap.',
+              }}
+            />
+          </div>
         </InputMain>
 
         {/* <InputMain className="sm:grid-cols-3">

@@ -20,7 +20,7 @@ const NFTMarketplaceProducts = ({
     <>
       {productsArr.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-7 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
             {productsArr.map((hit, index) => (
               <ProductsCarouselCard
                 favouriteNfts={favouriteNfts}

@@ -224,3 +224,10 @@
 .mantine-Switch-input[type='checkbox'] {
   @apply h-auto bg-gray-500 rounded-[32px] p-[3px] w-[46px];
 }
+
+@media screen and (max-width: 480px) {
+  .jLdupo {
+    /* max-width: 420px; */
+    width: 360px !important;
+  }
+}
