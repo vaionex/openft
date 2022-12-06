@@ -132,7 +132,7 @@ function RegistrationAddSocials({
                     />
                   )}
                 />
-                <span className="absolute text-xs text-red-600 -bottom-6 sm:-bottom-2 left-2">
+                <span className="absolute text-xs text-red-600 -bottom-5 sm:-bottom-[18px] left-2">
                   {errors[inputAttribute.name]?.message}
                 </span>
               </InputMain>

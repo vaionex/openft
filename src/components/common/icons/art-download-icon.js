@@ -12,9 +12,9 @@ const SvgArtDownloadIcon = (props) => (
     <path
       d="M16.5 16.6797H1.5M14 8.34635L9 13.3464M9 13.3464L4 8.34635M9 13.3464V1.67969"
       stroke="white"
-      stroke-width="1.66667"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )
