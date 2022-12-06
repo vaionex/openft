@@ -13,6 +13,12 @@ import RegistrationChoosePassword from './choose-password'
 import RegistrationDetails from './details'
 import RegistrationUploadPhoto from './upload-photo'
 import walletSelector from '@/redux/selectors/wallet'
+import {
+  setDetailsValues,
+  setPasswordValues,
+  setPhotoValues,
+  setSocialsValues,
+} from '@/redux/slices/registration-form'
 
 const RegistrationFormMain = () => {
   const router = useRouter()
@@ -108,9 +114,40 @@ const RegistrationFormMain = () => {
         />
       )
 
-    router.push('/')
+    resetAllSates()
   }
 
+  const resetAllSates = () => {
+    dispatch(
+      setDetailsValues({
+        name: '',
+        username: '',
+        email: '',
+        role: '',
+      }),
+    )
+    dispatch(
+      setPasswordValues({
+        password: '',
+        confirmPassword: '',
+      }),
+    )
+    dispatch(
+      setPhotoValues({
+        coverImage: null,
+        profileImage: null,
+      }),
+    )
+    dispatch(
+      setSocialsValues({
+        facebook: '',
+        instagram: '',
+        website: '',
+      }),
+    )
+
+    router.push('/')
+  }
   return (
     <RegistrationLayout goToStep={goToStep}>
       {renderComponent()}

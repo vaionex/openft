@@ -158,7 +158,9 @@ InputMain.Input = function InputMainInput(
         </div>
       )}
       {message && (
-        <span className="flex justify-end text-sm text-red-500">Copied!</span>
+        <span className="flex justify-end mt-1 text-sm text-red-500">
+          Copied!
+        </span>
       )}
       {variant === 'default' && (
         <>

@@ -649,7 +649,6 @@ const firebaseGetAuthorizedUser = () => {
         userResponse.uid,
       )
       store.dispatch(setUserData(user))
-      console.log('33333333333333333')
       store.dispatch(
         setNotifications({
           'app-notification':
@@ -683,7 +682,6 @@ const firebaseOnIdTokenChange = async () => {
 
   firebaseAuth.onIdTokenChanged(async (user) => {
     if (user) {
-      console.log('user.accessToken', user.accessToken)
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       if (!paymail && !address) {
         const walletData = await getWalletAddressAndPaymail(walletId)

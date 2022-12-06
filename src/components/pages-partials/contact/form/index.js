@@ -30,10 +30,6 @@ export default function Form() {
     resolver,
   })
 
-  setTimeout(() => {
-    setMessage(false)
-  }, 2000)
-
   const onReCAPTCHAChange = (captchaCode) => {
     if (!captchaCode) {
       return
@@ -86,6 +82,10 @@ export default function Form() {
     if (submitCounter >= 5) {
       setSubmitCounter(0)
     }
+
+    setTimeout(() => {
+      setMessage(false)
+    }, 5000)
   }
   return (
     <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6">

@@ -222,40 +222,6 @@ const ProductsCarouselCard = ({
     }
   }
 
-  const notifyUser = async (currentUserId, ownerId, nftName, nftId) => {
-    const purchaserNotificationValues = {
-      type: 'debit',
-      message: `You have purchased <strong>${nftName}</strong>`,
-      nftId,
-    }
-
-    const sellerNotificationValues = {
-      type: 'credit',
-      message: `Your <strong>${nftName}</strong> has been sold`,
-      nftId,
-    }
-    console.log(':::: 1', notificationObj)
-    // currentUser
-    if (notificationObj['app-notification'].purchases) {
-      const pur = await firebaseAddNewNotification(
-        currentUserId,
-        purchaserNotificationValues,
-      )
-    }
-    // for seller
-    const ownerNotificationSetting = await firebaseGetSingleDoc(
-      'notifications',
-      ownerId,
-    )
-    console.log(':::: 2', ownerNotificationSetting)
-    if (ownerNotificationSetting['app-notification'].itemSold) {
-      const sel = await firebaseAddNewNotification(
-        ownerId,
-        sellerNotificationValues,
-      )
-    }
-  }
-
   useEffect(() => {
     if (!favouriteNfts) return
     const isLike =
@@ -264,6 +230,7 @@ const ProductsCarouselCard = ({
   }, [data?.tokenId, favouriteNfts])
 
   const likeNfts = async () => {
+    if (!isAuthenticated) router.push('/login')
     if (!currentUser) return
     if (hasLike) {
       setHasLike(false)
@@ -409,8 +376,9 @@ const ProductsCarouselCard = ({
         title={'Success'}
         content={
           <div>
-            You have successfully purchased <br /> &apos;{data?.name}&apos; NFT.{' '}
-            <br /> {successTx && <>Tx id: {successTx}</>}
+            You have successfully purchased <br /> &apos;{data?.name}&apos; NFT.
+            <br />
+            {successTx && <span className="break-all">Tx id: {successTx}</span>}
           </div>
         }
         onClose={() => {
