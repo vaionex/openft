@@ -21,7 +21,7 @@ export default function MoreNft({
     >
       <Configure hitsPerPage={9} />
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <section aria-labelledby="products-heading" className="pt-6 pb-24">
+        <section aria-labelledby="products-heading" className="pt-10">
           {/* Product grid */}
           <div className="lg:col-span-3">
             {/* Replace with your content */}
@@ -35,7 +35,7 @@ export default function MoreNft({
             </div>
             {/* /End replace */}
           </div>
-          <div className="flex items-center justify-center rounded-md mt-14">
+          <div className="flex items-center justify-center rounded-md my-14">
             <NextLink href="/discover">
               <a className="max-w-[151px] flex items-center justify-center w-full text-base font-medium text-[#344054] bg-white border border-gray-200 rounded-md px-3 hover:bg-gray-50 py-[11px]">
                 Discover More

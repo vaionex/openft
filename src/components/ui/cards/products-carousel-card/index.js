@@ -365,7 +365,8 @@ const ProductsCarouselCard = ({
       />
       <ModalConfirm
         isOpen={isSuccess}
-        button1Text={'Confirm'}
+        className="sm:max-w-[304px] max-w-[304px] "
+        button1Text={'Dismis'}
         icon={
           <FeaturedIcon
             className="w-12 h-12 text-green-500"
@@ -375,10 +376,20 @@ const ProductsCarouselCard = ({
         cancelButton={false}
         title={'Success'}
         content={
-          <div>
+          <div className="">
             You have successfully purchased <br /> &apos;{data?.name}&apos; NFT.
             <br />
-            {successTx && <span className="break-all">Tx id: {successTx}</span>}
+            {successTx && (
+              <div className="inline-flex items-center space-x-1">
+                <span>Tx id:</span>
+                <a
+                  className="font-normal text-[#155EEF] max-w-[100px] text-ellipsis overflow-hidden"
+                  href={`https://whatsonchain.com/tx/${successTx}`}
+                >
+                  {successTx}
+                </a>
+              </div>
+            )}
           </div>
         }
         onClose={() => {
