@@ -131,7 +131,7 @@ const FAQMain = () => {
                   Ask everything about how Openft can work for you.
                 </p>
                 <div className="flex gap-2">
-                  <NextLink href="#">
+                  <NextLink href="/docs">
                     <a className="btn-secondary">Docs</a>
                   </NextLink>
                   <NextLink href="/contact">

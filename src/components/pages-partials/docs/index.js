@@ -2,16 +2,14 @@ import SharedLayout from '@/components/layout/shared-layout'
 import Image from 'next/image'
 import NextLink from 'next/link'
 
-const PrivacyMain = () => {
+const DocsMain = () => {
   return (
     <SharedLayout title="Privacy Policy">
       <div className="py-16 sm:py-24">
         <div className="relative flex flex-col justify-between max-w-md px-4 mx-auto sm:max-w-4xl sm:px-6 ">
           <div className="px-4 mx-auto text-center sm:px-6 lg:px-8">
             <div>
-              <h2 className="text-lg font-semibold text-blue-600">
-                Privacy Policy
-              </h2>
+              <h2 className="text-lg font-semibold text-blue-600">Docs</h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 We care about your privacy
               </p>
@@ -199,4 +197,4 @@ const PrivacyMain = () => {
   )
 }
 
-export default PrivacyMain
+export default DocsMain
