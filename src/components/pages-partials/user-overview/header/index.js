@@ -86,7 +86,7 @@ const profile = {
 export default function Header({ userInfo }) {
   return (
     <div>
-      <div className="relative object-cover w-full h-44 sm:h-64 ">
+      <div className="relative object-cover w-full h-44 sm:h-64 xl:h-[475px]">
         <div className="absolute inset-0 z-10 user-overview-gradient" />
         <Image
           src={profile.backgroundImage}
@@ -94,7 +94,7 @@ export default function Header({ userInfo }) {
           objectFit="cover"
           alt=""
         />
-        <div className="flex relative max-w-7xl mx-auto z-10 top-36 sm:top-52 ml-7 space-x-1.5 sm:space-x-6">
+        <div className="flex relative px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 z-10 top-36 sm:top-52 xl:top-[425px] space-x-1.5 sm:space-x-6">
           {userInfo?.socialLinks?.facebook && (
             <a
               target="_blank"
@@ -203,17 +203,15 @@ export default function Header({ userInfo }) {
             )}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center flex-1 min-w-0 mt-6">
+        <div className="flex flex-col items-center justify-center flex-1 min-w-0 mt-8">
           <div className="leading-6 text-blue-700 uppercase">
-            3d illustrator
+            {userInfo ? userInfo?.jobTitle : ''}
           </div>
           <h2 className="py-2 text-2xl font-bold text-gray-900 truncate">
             {userInfo ? userInfo.name : '...'}
           </h2>
           <p className="max-w-[813px] text-xl font-normal text-center">
-            Molestias repudiandae magni eos qui voluptatem aut. Non soluta
-            praesentium. Voluptatem corporis ea quia quibusdam aperiam harum.
-            Temporibus expedita amet facere aliquid alias.
+            {userInfo ? userInfo.bio : ''}
           </p>
         </div>
       </div>
