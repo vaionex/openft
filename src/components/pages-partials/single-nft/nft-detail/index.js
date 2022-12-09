@@ -224,7 +224,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                           href={
                             'https://whatsonchain.com/tx/' + nftData?.issueTxid
                           }
-                          class="hover:underline hover:text-blue-600"
+                          className="hover:underline hover:text-blue-600"
                           target="_blank"
                           rel="noopener noreferrer"
                         >

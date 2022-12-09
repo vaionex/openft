@@ -102,14 +102,11 @@ const Header = () => {
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <DropdownMint />
             </li>
-            <li
-              className={twMerge(
-                'hidden',
-                isAuthenticated && 'list-item md:inline-flex',
-              )}
-            >
-              {size > 767 && <NovuNotificationCenter />}
-            </li>
+            {isAuthenticated && (
+              <li className="list-item md:inline-flex">
+                {size > 767 && <NovuNotificationCenter />}
+              </li>
+            )}
 
             <li className={twMerge('hidden', isAuthenticated && 'list-item')}>
               <DropdownUser user={currentUser} />
