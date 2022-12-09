@@ -174,7 +174,7 @@ export default function Content({ nftInfo, userFavList }) {
           </button>
         </form>
       </div>
-      <section aria-labelledby="products-heading" className="pt-6">
+      <section aria-labelledby="products-heading" className="pt-12 pb-24">
         <h2 id="products-heading" className="sr-only">
           Products
         </h2>
