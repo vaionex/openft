@@ -1,4 +1,8 @@
-import { HeartIcon } from '@heroicons/react/outline'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  HeartIcon,
+} from '@heroicons/react/outline'
 import { CryptoIcon } from '@/components/common/icons'
 import { MagnifyGlassIcon } from '@/components/common/icons'
 import { InputMain } from '@/components/ui/inputs'
@@ -12,10 +16,13 @@ import { useSelector } from 'react-redux'
 import usePriceConverter from '@/hooks/usePriceConverter'
 import { firebaseGetSingleDoc } from '@/firebase/utils'
 import _ from 'lodash'
+import ReactPaginate from 'react-paginate'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+
+const itemsPerPage = 6
 
 export default function Content({ nftInfo, userFavList }) {
   const usdBalance = usePriceConverter()
@@ -23,7 +30,8 @@ export default function Content({ nftInfo, userFavList }) {
   const router = useRouter()
   const [favouriteNfts, setFavouriteNfts] = useState()
   const [searchState, setsearchState] = useState('')
-  const [filteredNfts, setFilteredNfts] = useState(nftInfo.nftsData)
+  const [filteredNfts, setFilteredNfts] = useState([])
+  const [itemOffset, setItemOffset] = useState(0)
   const [tabs, setTabs] = useState([
     {
       name: 'Artworks',
@@ -41,11 +49,13 @@ export default function Content({ nftInfo, userFavList }) {
     },
   ])
 
+  const pageCount = Math.ceil(nftInfo?.nftsData?.length / itemsPerPage)
+
   useEffect(() => {
-    if (searchState) {
-      setFilteredNfts(nftInfo.nftsData)
-    }
-  }, [nftInfo.nftsData, searchState])
+    const endOffset = itemOffset + itemsPerPage
+    const currentItems = nftInfo?.nftsData?.slice(itemOffset, endOffset)
+    setFilteredNfts(currentItems)
+  }, [itemOffset, nftInfo?.nftsData, searchState])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -89,6 +99,11 @@ export default function Content({ nftInfo, userFavList }) {
     router.push(`/user/${router.query.slug}/${href}`)
   }
 
+  const handlePageClick = (event) => {
+    const newOffset =
+      (event.selected * itemsPerPage) % nftInfo?.nftsData?.length
+    setItemOffset(newOffset)
+  }
   return (
     <div className="px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
       <div className="flex flex-col items-end justify-between mt-10 sm:flex-row space-x-7">
@@ -183,11 +198,11 @@ export default function Content({ nftInfo, userFavList }) {
           <div className="grid grid-cols-1 gap-x-[29px] gap-y-12 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
             {router.query.current === 'liked-artworks' &&
               userFavList &&
-              userFavList.nftsData.map((hit) => (
+              userFavList.nftsData.map((hit, index) => (
                 <ProductsCarouselCard
                   favouriteNfts={favouriteNfts}
                   setFavouriteNfts={setFavouriteNfts}
-                  key={hit.objectID}
+                  key={index + 'fav'}
                   data={hit}
                   usdBalance={usdBalance}
                   type="list"
@@ -196,11 +211,11 @@ export default function Content({ nftInfo, userFavList }) {
               ))}
             {(router.query.current === undefined ||
               router.query.current === 'artworks') &&
-              filteredNfts?.map((hit) => (
+              filteredNfts?.map((hit, index) => (
                 <ProductsCarouselCard
                   favouriteNfts={favouriteNfts}
                   setFavouriteNfts={setFavouriteNfts}
-                  key={hit.objectID}
+                  key={index + 'nor'}
                   data={hit}
                   usdBalance={usdBalance}
                   type="list"
@@ -209,6 +224,29 @@ export default function Content({ nftInfo, userFavList }) {
               ))}
           </div>
         </div>
+        {filteredNfts.length > 0 && (
+          <div className="mt-12 w-full flex justify-center">
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel={
+                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+              }
+              onPageChange={handlePageClick}
+              // pageRangeDisplayed={1}
+              pageCount={pageCount}
+              previousLabel={
+                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+              }
+              renderOnZeroPageCount={null}
+              containerClassName="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+              pageLinkClassName="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+              breakLinkClassName="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+              previousLinkClassName="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              nextLinkClassName="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              activeLinkClassName="z-10 bg-blue-50 !border-blue-500 !text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+            />
+          </div>
+        )}
       </section>
     </div>
   )

@@ -33,7 +33,7 @@ const ImageInputAttributes = [
       // maxHeight: 400,
       maxSize: 1, //MB
     },
-    aspect: 1,
+    aspect: 1 / 1,
   },
 ]
 
