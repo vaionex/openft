@@ -30,6 +30,7 @@ import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
 import { firebaseAddNewNotification } from '@/firebase/utils'
 import { SendNotification } from '@/services/novu-notifications'
+
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
   { type: 'number', placeholder: 'Amount to transfer in $', name: 'amount' },
@@ -200,6 +201,7 @@ const UserSettingsWalletSection = () => {
       setIsAscending(true)
     }
   }
+
   return (
     <UserSettingsLayout>
       <div>

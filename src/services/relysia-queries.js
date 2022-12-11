@@ -327,3 +327,36 @@ export const getUsersData = async (artistId) => {
     return docSnap.data()
   }
 }
+
+export const chackBalancefromApi = async () => {
+  let balance = 0.0
+  let currency = 'USD'
+  apiConfig
+    .get('v1/balance', {
+      headers: {
+        walletID: '00000000-0000-0000-0000-000000000000',
+        currency,
+      },
+    })
+    .then((balanceData) => {
+      console.log({ balanceData })
+      if (
+        balanceData &&
+        balanceData.data &&
+        balanceData.data.data &&
+        balanceData.data.data.status === 'success'
+      ) {
+        const balance2 = balanceData.data.data.totalBalance
+        console.log('returning', balance2.balance)
+        balance = balance2.balance
+        var bsv =
+          balanceData.data.data.coins[0] &&
+          balanceData.data.data.coins[0].balance
+
+        console.log({
+          dollarBal: balance,
+          bsvBal: bsv,
+        })
+      }
+    })
+}

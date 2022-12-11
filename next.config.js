@@ -6,6 +6,7 @@ module.exports = {
       'lh3.googleusercontent.com',
       'firebasestorage.googleapis.com',
       'dummyimage.com',
+      'upload.wikimedia.org',
     ],
   },
   experimental: {
