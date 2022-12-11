@@ -648,7 +648,9 @@ const firebaseGetAuthorizedUser = () => {
         'notifications',
         userResponse.uid,
       )
-      store.dispatch(setUserData(user))
+      store.dispatch(
+        setUserData({ ...user, accessToken: userResponse.accessToken }),
+      )
       store.dispatch(
         setNotifications({
           'app-notification':
