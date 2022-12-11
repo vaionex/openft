@@ -1,8 +1,8 @@
 import * as yup from 'yup'
 
 const validationError = yup.object().shape({
-  instagram: yup.string().trim().required('Instagram username is required'),
-  facebook: yup.string().trim().required('Facebook username is required'),
+  instagram: yup.string().trim(),
+  facebook: yup.string().trim(),
 })
 
 export default validationError

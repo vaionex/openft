@@ -51,14 +51,12 @@ const RegistrationFormMain = () => {
   const registerUser = async () => {
     setPending(true)
     const { coverImage, profileImage } = photoValues
-    const coverImageForUpload = await getCroppedImg(
-      coverImage,
-      coverImage.croppedAreaPixels,
-    )
-    const profileImageForUpload = await getCroppedImg(
-      profileImage,
-      profileImage.croppedAreaPixels,
-    )
+    const coverImageForUpload = coverImage
+      ? await getCroppedImg(coverImage, coverImage.croppedAreaPixels)
+      : null
+    const profileImageForUpload = profileImage
+      ? await getCroppedImg(profileImage, profileImage.croppedAreaPixels)
+      : null
 
     const dataForServer = {
       ...detailsValues,

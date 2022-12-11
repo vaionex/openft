@@ -24,7 +24,7 @@ const inputAttributes = [
     addon: 'https://instagram.com/',
     placeholder: 'username',
     name: 'instagram',
-    required: true,
+    required: false,
   },
   {
     id: 'facebook',
@@ -32,7 +32,7 @@ const inputAttributes = [
     addon: 'https://facebook.com/',
     placeholder: 'username',
     name: 'facebook',
-    required: true,
+    required: false,
   },
   {
     id: 'website',
