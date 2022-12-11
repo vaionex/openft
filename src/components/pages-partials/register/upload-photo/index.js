@@ -89,10 +89,6 @@ const RegistrationUploadPhoto = ({ goToStep }) => {
                 Back
               </button>
               <button
-                disabled={
-                  photoValues?.profileImage === null ||
-                  photoValues?.coverImage === null
-                }
                 type="button"
                 className="w-full font-semibold btn-primary"
                 onClick={() => goToStep(4)}

@@ -197,17 +197,19 @@ const firebaseRegister = async (data) => {
     )
     const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
       async (user) => {
-        await firebaseUploadUserImage({
-          user,
-          imageFile: profileImageForUpload.file,
-          imageType: 'profileImage',
-        })
+        profileImageForUpload &&
+          (await firebaseUploadUserImage({
+            user,
+            imageFile: profileImageForUpload.file,
+            imageType: 'profileImage',
+          }))
 
-        await firebaseUploadUserImage({
-          user,
-          imageFile: coverImageForUpload.file,
-          imageType: 'coverImage',
-        })
+        coverImageForUpload &&
+          (await firebaseUploadUserImage({
+            user,
+            imageFile: coverImageForUpload.file,
+            imageType: 'coverImage',
+          }))
       },
     )
 
