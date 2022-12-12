@@ -3,7 +3,7 @@ import {
   ChevronRightIcon,
   HeartIcon,
 } from '@heroicons/react/outline'
-import { CryptoIcon } from '@/components/common/icons'
+import { CryptoIcon, LeftIcon, RightIcon } from '@/components/common/icons'
 import { MagnifyGlassIcon } from '@/components/common/icons'
 import { InputMain } from '@/components/ui/inputs'
 import React from 'react'
@@ -22,7 +22,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const itemsPerPage = 6
+const itemsPerPage = 9
 
 export default function Content({ nftInfo, userFavList }) {
   const usdBalance = usePriceConverter()
@@ -224,27 +224,40 @@ export default function Content({ nftInfo, userFavList }) {
               ))}
           </div>
         </div>
-        {filteredNfts.length > 0 && (
-          <div className="mt-12 w-full flex justify-center">
+        {filteredNfts.length > 0 ? (
+          <div className="mt-12 w-full flex justify-center pagination-wrapper">
             <ReactPaginate
-              breakLabel="..."
+              breakLabel={'...'}
               nextLabel={
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                <span className="flex gap-1 text-[#667085]">
+                  Next
+                  <RightIcon
+                    className="w-5 h-5 hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                </span>
               }
               onPageChange={handlePageClick}
-              // pageRangeDisplayed={1}
               pageCount={pageCount}
               previousLabel={
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                <span className="flex gap-1 text-[#667085]">
+                  <LeftIcon
+                    className="w-5 h-5 hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Previous
+                </span>
               }
               renderOnZeroPageCount={null}
-              containerClassName="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-              pageLinkClassName="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-              breakLinkClassName="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-              previousLinkClassName="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              nextLinkClassName="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              activeLinkClassName="z-10 bg-blue-50 !border-blue-500 !text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={0}
+              containerClassName={'pagination'}
+              activeClassName={'active'}
             />
+          </div>
+        ) : (
+          <div className="flex items-center justify-center w-full h-full">
+            No NFTs found
           </div>
         )}
       </section>
