@@ -227,7 +227,7 @@
 
 @media screen and (max-width: 480px) {
   .jLdupo {
-    /* max-width: 420px; */
     width: 360px !important;
+    /* max-width: 420px; */
   }
 }

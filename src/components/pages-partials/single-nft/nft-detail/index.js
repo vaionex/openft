@@ -78,6 +78,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
             ...data,
             profileImage: res?.profileImage,
             username: res?.name,
+            name: res?.name,
           }
         })
       } else if (data.type === 'MINT') {
@@ -85,7 +86,8 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
           hisArr[index] = {
             ...data,
             profileImage: res?.profileImage,
-            username: res?.name,
+            username: res?.username,
+            name: res?.name,
           }
         })
       }
@@ -138,7 +140,18 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                         className="w-8 h-8 bg-gray-100 rounded-full"
                       />
                     ) : (
-                      <Spinner className="w-8 h-8 mr-0 text-white" />
+                      <svg
+                        class="w-8 h-8 text-gray-400 bg-gray-100 rounded-full"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
                     )}
                   </a>
                 </NextLink>
