@@ -29,8 +29,12 @@ const inputAttributes = [
 const validationSchema = yup.object({
   password: yup
     .string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters'),
+    .matches(/(?=.*?[#?!@$%^&*-])/, 'Password need special character')
+    .matches(/^(?=.*?[A-Z])/, 'Password need upper case letter')
+    .matches(/(?=.*?[a-z])/, 'Password need lower case letter')
+    .matches(/(?=.*?[0-9])/, 'Password need number')
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
   confirmPassword: yup
     .string()
     .required('Confirm password is required')
@@ -63,8 +67,8 @@ function RegistrationChoosePassword({ goToStep }) {
           Choose a password
         </h2>
         <p className="mt-3 text-center text-base font-normal text-gray-500">
-          Your password must be more than 8 characters and should contain an
-          alfa numeric, atleast one upper case character.
+          Your password must be minimum eight characters, at least one uppercase
+          letter, one lowercase letter, one number and one special character.
         </p>
       </div>
 
