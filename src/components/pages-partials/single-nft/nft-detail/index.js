@@ -44,8 +44,6 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
   const usdBalance = usePriceConverter()
   const artistData = useArtistData(nftData?.ownerId)
 
-  console.log('artistData', artistData)
-
   useEffect(() => {
     if (slug) {
       getNftData()
@@ -80,11 +78,11 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
             ...data,
             profileImage: res?.profileImage,
             username: res?.name,
+            name: res?.name,
           }
         })
       } else if (data.type === 'MINT') {
         await getUsersData(data.minterId).then((res) => {
-          console.log('res', res)
           hisArr[index] = {
             ...data,
             profileImage: res?.profileImage,
