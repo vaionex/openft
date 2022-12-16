@@ -38,16 +38,15 @@ const HeroSection = () => {
               </p>
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
                 <div className="my-3 rounded-md sm:my-0">
-                  <a
-                    href="/discover"
-                    className="flex items-center justify-center w-full py-4 text-base font-medium text-[#475467] bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-[15px] md:text-lg md:px-8"
-                  >
-                    <PlayCircleIcon
-                      className="w-5 h-5 mr-2"
-                      aria-hidden="true"
-                    />
-                    Explore
-                  </a>
+                  <NextLink href="/discover">
+                    <a className="flex items-center justify-center w-full py-4 text-base font-medium text-[#475467] bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-[15px] md:text-lg md:px-8">
+                      <PlayCircleIcon
+                        className="w-5 h-5 mr-2"
+                        aria-hidden="true"
+                      />
+                      Explore
+                    </a>
+                  </NextLink>
                 </div>
                 {!isAuthenticated && (
                   <div className="rounded-md">
