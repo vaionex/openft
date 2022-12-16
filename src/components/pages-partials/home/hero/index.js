@@ -39,14 +39,14 @@ const HeroSection = () => {
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
                 <div className="my-3 rounded-md sm:my-0">
                   <a
-                    href="#"
+                    href="/discover"
                     className="flex items-center justify-center w-full py-4 text-base font-medium text-[#475467] bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-[15px] md:text-lg md:px-8"
                   >
                     <PlayCircleIcon
                       className="w-5 h-5 mr-2"
                       aria-hidden="true"
                     />
-                    Demo
+                    Explore
                   </a>
                 </div>
                 {!isAuthenticated && (
@@ -68,7 +68,7 @@ const HeroSection = () => {
           <div className="px-4 mt-16 mb-8 sm:my-16 lg:my-0">
             <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[640px] lg:max-w-[576px] sm:px-6 lg:px-0 rounded-3xl">
               <Image
-                src="/images/home-hero.png"
+                src="/images/hero_nft.webp"
                 className="w-full h-full"
                 alt="openft hero image"
                 layout="fill"

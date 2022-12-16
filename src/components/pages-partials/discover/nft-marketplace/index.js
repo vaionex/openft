@@ -46,7 +46,7 @@ const NFTMarketplace = ({
       <Configure hitsPerPage={9} />
 
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8" ref={toTopRef}>
-        <div className="relative z-10 flex gap-4 pt-24 pb-6">
+        <div className="relative z-10 flex gap-4 pt-0 pb-6">
           <NFTMarketplaceSearch />
         </div>
         {!isDesktopOrLaptop && (
