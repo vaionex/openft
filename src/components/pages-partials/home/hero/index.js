@@ -9,11 +9,11 @@ import { twMerge } from 'tailwind-merge'
 const HeroSection = () => {
   const { isAuthenticated } = useSelector(userSelector)
   return (
-    <div className="pt-10 sm:pt-16 lg:pt-16 lg:pb-24 lg:overflow-hidden ">
+    <div className="pt-10 sm:pt-6 lg:pt-10 lg:pb-8 lg:overflow-hidden ">
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
-            <div className="lg:py-16">
+            <div className="lg:py-8">
               <NextLink href="https://github.com/vaionex/openft">
                 <a className="inline-flex items-center p-1 pr-2 text-[#004EEB] rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
                   <span className="px-3 py-0.5 bg-white text-[#004EEB] font-medium leading-5 tracking-wide rounded-full">
@@ -64,17 +64,18 @@ const HeroSection = () => {
               </div>
             </div>
           </div>
-          <div className="px-4 mt-16 mb-8 sm:my-16 lg:my-0">
-            <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[640px] lg:max-w-[576px] sm:px-6 lg:px-0 rounded-3xl">
-              <Image
-                src="/images/hero_nft.webp"
-                className="w-full h-full"
-                alt="Nftana hero image"
-                layout="fill"
-                quality={100}
-                objectFit="cover"
-                priority={true}
-              />
+          <div className="px-4 mt-16 mb-8 sm:my-16 lg:my-4">
+            <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[600px] lg:max-w-[600px] sm:px-6 lg:px-0 rounded-3xl bg-white">
+               <Image
+                 src={`/images/hero${Math.floor(Math.random() * 3) + 1}.webp`}
+                 className="w-full h-full"
+                 alt="Nftana hero image"
+                 layout="fill"
+                 quality={100}
+                 objectFit="cover"
+                 priority={true}
+               />
+
             </div>
           </div>
         </div>
