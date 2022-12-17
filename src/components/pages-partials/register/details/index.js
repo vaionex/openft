@@ -25,7 +25,7 @@ const inputAttributes = [
   },
   {
     type: 'text',
-    placeholder: 'e.g. johnsmith@openft.com',
+    placeholder: 'e.g. johnsmith@nftana.com',
     name: 'email',
     title: 'Email',
     required: true,

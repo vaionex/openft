@@ -7,7 +7,7 @@ const LoginLayout = ({ children, title, className }) => {
   return (
     <>
       <Head>
-        <title>Openft | {title}</title>
+        <title>Nftana | {title}</title>
       </Head>
 
       <main className={twMerge('min-h-[600px]', className)}>{children}</main>

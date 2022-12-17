@@ -9,7 +9,7 @@ const ResetPasswordLayout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Openft | Reset Password</title>
+        <title>Nftana | Reset Password</title>
       </Head>
 
       <div className="grid min-h-screen grid-cols-12">
@@ -19,7 +19,7 @@ const ResetPasswordLayout = ({ children }) => {
           <div className="px-4 mx-auto md:hidden sm:px-6 lg:px-8">
             <NextLink href="/">
               <a className="inline-block mt-10">
-                <span className="sr-only">Openft Logo</span>
+                <span className="sr-only">Nftana Logo</span>
                 <Logo />
               </a>
             </NextLink>

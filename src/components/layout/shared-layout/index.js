@@ -9,7 +9,7 @@ const SharedLayout = ({ children, title, className }) => {
   return (
     <>
       <Head>
-        <title>Openft | {title}</title>
+        <title>Nftana | {title}</title>
       </Head>
 
       <Header />

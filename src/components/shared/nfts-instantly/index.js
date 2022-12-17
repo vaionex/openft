@@ -61,7 +61,7 @@ const NftsInstantly = ({
               <Image
                 src="/images/home-cta.png"
                 className="w-full h-full "
-                alt="openft hero image"
+                alt="nftana hero image"
                 layout="fill"
                 quality={100}
                 objectFit="contain"

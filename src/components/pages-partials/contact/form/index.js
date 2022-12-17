@@ -108,7 +108,7 @@ export default function Form() {
                 Contact us
               </h2>
               <p className="mt-4 text-lg text-[#667085] sm:mt-3">
-                Ask everything about how Openft can work for you.
+                Ask everything about how Nftana can work for you.
               </p>
               <form
                 onSubmit={handleSubmit(onSubmit)}

@@ -13,25 +13,25 @@ const list = [
   {
     name: 'Where can I get the Openft source code?',
     description:
-      'You can visit the contact us page and convey your wishes, our team will contact you shortly.',
+      'We developed the code in public, and the code is available for download at https://github.com/vaionex/openft.',
     icon: <CodeIcon className="w-12 h-12" />,
   },
   {
-    name: 'Can I change my plan later?',
+    name: 'What do I need to run the code?',
     description:
-      'Of course. Our pricing scales with your company. Chat to our friendly team to find a solution that works for you.',
+      'All you need is a free firebase setup, and a Relysia.com project ServiceId. Additional optional features are algolia search and novu notifications.',
     icon: <DirectionIcon className="w-12 h-12" />,
   },
   {
-    name: 'What is your cancellation policy?',
+    name: 'What is not allowed on Nftana?',
     description:
-      'We understand that things change. You can cancel your plan at any time and we’ll refund you the difference already paid.',
+      'Do not infringe copyrights of other artists, stay friendly and keep it safe for work. You can clone the code and create your own variant of the platform with different rules.',
     icon: <BlockIcon className="w-12 h-12" />,
   },
   {
-    name: 'Can other info be added to an invoice?',
+    name: 'How does it work?',
     description:
-      "At the moment, the only way to add additional information to invoices is to add the information to the workspace's name.",
+      "Each sale is a atomic swap on the BSV blockchain, which the counter party can take without the risk of loosing money without receiving the NFT.",
     icon: <DocIcon className="w-12 h-12" />,
   },
 ]
@@ -128,7 +128,7 @@ const FAQMain = () => {
                   Still have questions?
                 </h2>
                 <p className="mt-5 mb-8 text-xl text-white">
-                  Ask everything about how Openft can work for you.
+                  Ask everything about how Nftana can work for you.
                 </p>
                 <div className="flex gap-2">
                   <NextLink href="/docs">

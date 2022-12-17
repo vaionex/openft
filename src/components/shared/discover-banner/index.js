@@ -21,7 +21,7 @@ const DiscoverBanner = ({ action, pages }) => {
             Discover brand new NFTs
           </h3>
           <p className="mt-5 text-xl text-[#D1E0FF]">
-            Discover over 4,000+ NFTs already minted on Openft.
+            Discover over 4,000+ NFTs already minted on Nftana.
           </p>
           {action === 'default' && null}
           {action === 'button' && (

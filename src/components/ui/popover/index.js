@@ -13,7 +13,7 @@ export default function Social({ path }) {
 
   const copyToClipboard = () => {
     setStatus(true)
-    navigator.clipboard.writeText(`https://openft.vercel.app${path}`)
+    navigator.clipboard.writeText(`https://nftana.com${path}`)
     setTimeout(() => setStatus(false), 2000)
   }
   return (
@@ -45,13 +45,13 @@ export default function Social({ path }) {
                   <div className="relative flex flex-col space-y-2 bg-white">
                     <div
                       className="flex w-full justify-center items-center hover:bg-gray-100"
-                      data-href={`https://openft.vercel.app${path}`}
+                      data-href={`https://nftana.com${path}`}
                       data-layout="button"
                       data-size="small"
                     >
                       <a
                         target="_blank"
-                        href={`https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fopenft.vercel.app${uri}&amp;src=sdkpreparse`}
+                        href={`https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnftana.com${uri}&amp;src=sdkpreparse`}
                         className="fb-xfbml-parse-ignore mx-auto p-1"
                         rel="noreferrer noopener"
                       >
@@ -66,7 +66,7 @@ export default function Social({ path }) {
                         className="twitter-share-button p-1"
                         target="_blank"
                         rel="noreferrer noopener"
-                        href={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fopenft.vercel.app${uri}`}
+                        href={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fnftana.com${uri}`}
                         data-size="large"
                       >
                         <TwitterIcon

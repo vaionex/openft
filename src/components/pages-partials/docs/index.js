@@ -14,7 +14,7 @@ const DocsMain = () => {
                 We care about your privacy
               </p>
               <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
-                Your privacy is important to us at Openft. We respect your
+                Your privacy is important to us at NFtana. We respect your
                 privacy regarding any information we may collect from you across
                 our website.
               </p>
@@ -178,7 +178,7 @@ const DocsMain = () => {
                   Still have questions?
                 </h2>
                 <p className="mt-5 mb-8 text-xl text-white">
-                  Ask everything about how Openft can work for you.
+                  Ask everything about how Nftana can work for you.
                 </p>
                 <div className="flex gap-2">
                   <NextLink href="/docs">

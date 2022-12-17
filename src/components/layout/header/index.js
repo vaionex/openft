@@ -52,11 +52,11 @@ const Header = () => {
         >
           <div className="flex items-center flex-1">
             <div className="flex items-center justify-between w-full md:w-auto">
-              <NextLink href="/">
-                <a className="outline-none">
-                  <span className="sr-only">Workflow</span>
-                  <Logo />
-                </a>
+              <NextLink href="/" className="outline-none inline-block">
+                  <div className='flex items-center cursor-pointer'>
+                  <img className="h-5 pb-0.5 flex-none" src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg" alt="Relysia" />
+                  <p className='pl-2 font-semibold text-xl text-blue-900'>Nftana</p>
+                  </div>
               </NextLink>
               <div className="flex items-center -mr-2 md:hidden">
                 {isAuthenticated && (
@@ -77,7 +77,7 @@ const Header = () => {
                   href={item.href}
                   activeClassName="text-blue-600 font-semibold pointer-events-none"
                 >
-                  <a className="font-medium text-[#667085] hover:text-gray-600">
+                  <a className="font-medium text-[#667085] hover:text-gray-700 hover:duration-300">
                     {item.name}
                   </a>
                 </ActiveLink>

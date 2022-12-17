@@ -14,13 +14,13 @@ const HeroSection = () => {
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="lg:py-16">
-              <NextLink href="/user-settings/mint">
+              <NextLink href="https://github.com/vaionex/openft">
                 <a className="inline-flex items-center p-1 pr-2 text-[#004EEB] rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
                   <span className="px-3 py-0.5 bg-white text-[#004EEB] font-medium leading-5 tracking-wide rounded-full">
                     It&apos;s free!
                   </span>
                   <span className="ml-4 text-sm font-medium text-[#004EEB]">
-                    Mint and sell NFTs
+                    Github Code
                   </span>
                   <ArrowRightIcon
                     className="w-4 h-4 ml-1 text-blue-700"
@@ -32,7 +32,7 @@ const HeroSection = () => {
                 The new beyond-creative NFT Exchange.
               </h1>
               <p className="text-base mt-6 sm:text-xl lg:max-w-[30rem] lg:text-lg xl:text-xl">
-                Openft is a next-gen open source NFT Exchange marketplace that
+                Nftana is a next-gen open source NFT Exchange marketplace that
                 anyone can contribute to develop or use this marketplace as
                 their framework.
               </p>
@@ -69,7 +69,7 @@ const HeroSection = () => {
               <Image
                 src="/images/hero_nft.webp"
                 className="w-full h-full"
-                alt="openft hero image"
+                alt="Nftana hero image"
                 layout="fill"
                 quality={100}
                 objectFit="cover"

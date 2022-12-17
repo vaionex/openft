@@ -12,21 +12,21 @@ import { useRouter } from 'next/router'
 const testimonials = [
   {
     id: 1,
-    text: 'Openft is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
+    text: 'Nftana is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
     name: 'Jordan A',
     title: 'CEO, Coincombat',
     location: 'Canada, United States',
   },
   {
     id: 2,
-    text: 'Openft is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
+    text: 'Nftana is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
     name: 'Jordan A',
     title: 'CEO, Coincombat',
     location: 'Canada, United States',
   },
   {
     id: 3,
-    text: 'Openft is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
+    text: 'Nftana is a next-gen open source NFT Exchange marketplace that anyone can contribute to develop or use this marketplace as their framework.',
     name: 'Jordan A',
     title: 'CEO, Coincombat',
     location: 'Canada, United States',
@@ -47,11 +47,6 @@ const Login = () => {
         <div className="flex-[3] flex flex-col">
           <div className="flex items-center justify-center h-full">
             <div className="w-full max-w-full py-4 pr-0 mx-auto lg:pr-8 xl:max-w-sm lg:max-w-full md:max-w-sm ">
-              <NextLink href="/">
-                <a className="inline-block mb-20 text-white md:text-black">
-                  <Logo />
-                </a>
-              </NextLink>
               <div>
                 <h2 className="text-4xl font-semibold text-gray-900">Log in</h2>
                 <p className="mt-3 text-base font-normal text-gray-500">
@@ -79,6 +74,9 @@ const Login = () => {
                     <a className="font-semibold text-blue-700">Sign up </a>
                   </NextLink>
                 </p>
+                <NextLink href="/">
+                  <p className='text-center text-gray-400 font-normal cursor-pointer pt-2 hover:text-gray-600 hover:duration-300'> back </p>
+                </NextLink>
               </div>
             </div>
           </div>
@@ -94,7 +92,7 @@ const Login = () => {
               objectFit="cover"
               priority
             />
-            <LoginCarousel data={testimonials} />
+            {/* <LoginCarousel data={testimonials} /> */}
           </div>
         </div>
       </div>
