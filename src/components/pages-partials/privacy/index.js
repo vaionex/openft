@@ -111,7 +111,7 @@ const PrivacyMain = () => {
               <p className="max-w-2xl mt-6 tracking-wide text-gray-500">
                 We take your privacy seriously and are committed to protecting
                 your information. If you have any questions or concerns about
-                our privacy practices, please don't hesitate to contact us at
+                our privacy practices, please don&apos;t hesitate to contact us at
                 admin@vaionex.com.
               </p>
             </div>
