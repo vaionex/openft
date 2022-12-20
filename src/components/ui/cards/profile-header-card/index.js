@@ -202,7 +202,7 @@ const ProfileHeaderCard = ({
               />
             </div>
             {isSuccess && (
-              <span className="text-xs absolute top-12 sm:top-[52px] text-green-500">
+              <span className="text-xs absolute top-12 sm:top-[60px] text-green-500">
                 Profile successfully updated.
               </span>
             )}
