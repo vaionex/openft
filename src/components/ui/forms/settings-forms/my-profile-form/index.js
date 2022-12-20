@@ -139,7 +139,7 @@ const MyProfileForm = ({
             placeholder="yourwebsite.com"
             className="sm:w-full sm:max-w-[666px]"
             inputContainer="md:h-11"
-            value={formValues.instagram}
+            value={formValues.website}
             onChange={handleInputChange}
           />
         </InputMain>
