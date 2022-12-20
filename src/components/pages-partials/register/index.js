@@ -17,7 +17,7 @@ import {
   setDetailsValues,
   setPasswordValues,
   setPhotoValues,
-  setSocialsValues,
+  // setSocialsValues,
 } from '@/redux/slices/registration-form'
 
 const RegistrationFormMain = () => {
@@ -29,7 +29,7 @@ const RegistrationFormMain = () => {
   const { isPending, isError, errorMessage } = useSelector(userSelector)
   const {
     detailsValues,
-    socialsValues,
+    // socialsValues,
     passwordValues,
     photoValues,
     readyToGo,
@@ -61,7 +61,7 @@ const RegistrationFormMain = () => {
     const dataForServer = {
       ...detailsValues,
       ...passwordValues,
-      ...socialsValues,
+      // ...socialsValues,
     }
 
     try {
@@ -101,17 +101,24 @@ const RegistrationFormMain = () => {
   const renderComponent = () => {
     if (step === '1') return <RegistrationDetails goToStep={goToStep} />
     if (step === '2') return <RegistrationChoosePassword goToStep={goToStep} />
-    if (step === '3') return <RegistrationUploadPhoto goToStep={goToStep} />
-    if (step === '4')
+    if (step === '3')
       return (
-        <RegistrationAddSocials
+        <RegistrationUploadPhoto
           goToStep={goToStep}
           mnemonicStatus={mnemonicStatus}
           setMnemonicStatus={setMnemonicStatus}
           mnemonic={mnemonic}
         />
       )
-
+    // if (step === '4')
+    // return (
+    //   <RegistrationAddSocials
+    //     goToStep={goToStep}
+    //     mnemonicStatus={mnemonicStatus}
+    //     setMnemonicStatus={setMnemonicStatus}
+    //     mnemonic={mnemonic}
+    //   />
+    // )
     resetAllSates()
   }
 
@@ -136,13 +143,13 @@ const RegistrationFormMain = () => {
         profileImage: null,
       }),
     )
-    dispatch(
-      setSocialsValues({
-        facebook: '',
-        instagram: '',
-        website: '',
-      }),
-    )
+    // dispatch(
+    //   setSocialsValues({
+    //     facebook: '',
+    //     instagram: '',
+    //     website: '',
+    //   }),
+    // )
 
     router.push('/')
   }

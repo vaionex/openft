@@ -41,7 +41,10 @@ const registrationFormSlice = createSlice({
     },
     setSocialsValues: (state, action) => {
       state.socialsValues = action.payload
-      state.readyToGo = true
+      // state.readyToGo = true
+    },
+    setReadyToGo: (state, action) => {
+      state.readyToGo = action.payload
     },
 
     clearRegistrationForm: (state) => {
@@ -65,6 +68,7 @@ export const {
   setDetailsValues,
   setPasswordValues,
   setPhotoValues,
+  setReadyToGo,
   setSocialsValues,
   setCurrentStep,
   clearPhotoValues,

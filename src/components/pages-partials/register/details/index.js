@@ -30,13 +30,13 @@ const inputAttributes = [
     title: 'Email',
     required: true,
   },
-  {
-    type: 'text',
-    placeholder: 'e.g. Illustrator',
-    name: 'role',
-    title: 'Role',
-    required: true,
-  },
+  // {
+  //   type: 'text',
+  //   placeholder: 'e.g. Illustrator',
+  //   name: 'role',
+  //   title: 'Role',
+  //   required: true,
+  // },
 ]
 
 function RegistrationDetails({ goToStep }) {
@@ -94,7 +94,6 @@ function RegistrationDetails({ goToStep }) {
                         className="mb-0"
                         type={inputAttribute.type}
                         onInput={(e) => {
-                          console.log(e.target.name)
                           const removeWhiteSpace = ['username', 'email']
                           if (removeWhiteSpace.includes(e.target.name)) {
                             e.target.value = e.target.value.replace(/\s/g, '')

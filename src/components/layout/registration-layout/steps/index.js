@@ -27,13 +27,13 @@ const steps = [
     href: '/register?step=3',
     status: 'upcoming',
   },
-  {
-    id: 4,
-    name: 'Add your socials',
-    description: 'Let people know more about you',
-    href: '/register?step=4',
-    status: 'upcoming',
-  },
+  // {
+  //   id: 4,
+  //   name: 'Add your socials',
+  //   description: 'Let people know more about you',
+  //   href: '/register?step=4',
+  //   status: 'upcoming',
+  // },
 ]
 
 const RegistrationSteps = ({ stepsType }) => {
