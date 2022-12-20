@@ -34,8 +34,8 @@ const SecurityForm = () => {
   const changeHandler = () => {
     const newPassword = getValues('newPassword')
     const confirmPassword = getValues('confirmPassword')
-    const passRegx =
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+    // /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+    const passRegx = /^(?=.*?[A-Z])(?=.*?[a-z]).{5,}$/
     const regex = new RegExp(passRegx)
     if (
       regex.test(newPassword) &&
@@ -130,9 +130,7 @@ const SecurityForm = () => {
             }}
           />
           <span className="text-sm text-gray-500">
-            Your password must be minimum eight characters, at least one
-            uppercase letter, one lowercase letter, one number and one special
-            character.
+            Your password must be minimum five characters.
           </span>
         </InputMain>
 

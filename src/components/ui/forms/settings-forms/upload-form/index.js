@@ -32,10 +32,10 @@ const imageInputAttributes = {
   name: 'nftImage',
   title: 'NFT Image',
   text: 'Click to upload',
-  subinfo: 'Max Resolution: 600x600. Max size:4 MB',
+  subinfo: 'Max size:4 MB',
   limits: {
-    maxWidth: 600,
-    maxHeight: 600,
+    // maxWidth: 600,
+    // maxHeight: 600,
     maxSize: 4, //MB
   },
   aspect: 1,

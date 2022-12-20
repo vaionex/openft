@@ -15,11 +15,11 @@ import { useRouter } from 'next/router'
 const validationSchema = yup.object().shape({
   password: yup
     .string()
-    .matches(/(?=.*?[#?!@$%^&*-])/, 'Password need special character')
-    .matches(/^(?=.*?[A-Z])/, 'Password need upper case letter')
-    .matches(/(?=.*?[a-z])/, 'Password need lower case letter')
-    .matches(/(?=.*?[0-9])/, 'Password need number')
-    .min(8, 'Password must be at least 8 characters')
+    // .matches(/(?=.*?[#?!@$%^&*-])/, 'Password need special character')
+    // .matches(/^(?=.*?[A-Z])/, 'Password need upper case letter')
+    // .matches(/(?=.*?[a-z])/, 'Password need lower case letter')
+    // .matches(/(?=.*?[0-9])/, 'Password need number')
+    .min(5, 'Password must be at least 5 characters')
     .required('Password is required'),
   confirmPassword: yup
     .string()
@@ -110,9 +110,7 @@ const ResetNewPassword = () => {
               New password
             </h2>
             <p className="mt-4 text-center">
-              Your new password must be minimum eight characters, at least one
-              uppercase letter, one lowercase letter, one number and one special
-              character.
+              Your new password must be minimum five characters.
             </p>
           </div>
           <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
