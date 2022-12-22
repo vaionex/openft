@@ -172,7 +172,7 @@ const RegistrationUploadPhoto = ({
         icon={
           <WalletIcon className="w-12 h-12 text-green-500" aria-hidden="true" />
         }
-        title={'Congratulatuions!'}
+        title={'Congratulations!'}
         content={
           <>
             <div>
