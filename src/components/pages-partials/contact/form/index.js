@@ -93,7 +93,7 @@ export default function Form() {
         <div className="relative hidden mt-12 sm:max-w-lg xl:max-w-[576px] min-h-[816px] sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block">
           <div className="relative w-full h-full mx-auto">
             <Image
-              className="relative block w-full h-full overflow-hidden bg-white rounded-xl"
+              className="relative object-cover block w-full h-full overflow-hidden bg-white rounded-3xl"
               src="/images/contact-page.webp"
               alt=""
               layout="fill"
