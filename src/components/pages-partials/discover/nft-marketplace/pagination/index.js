@@ -23,12 +23,12 @@ const NFTMarketplacePagination = ({
               className="w-5 h-5 hover:text-gray-500"
               aria-hidden="true"
             />
-            Previous
+            <span className="hidden sm:block">Previous</span>
           </span>
         }
         nextLabel={
           <span className="flex gap-1 text-[#667085]">
-            Next
+            <span className="hidden sm:block">Next</span>
             <RightIcon
               className="w-5 h-5 hover:text-gray-500"
               aria-hidden="true"
