@@ -6,13 +6,13 @@ let storageBucket = ''
 
 if (envMODE === 'DEV') {
   config = {
-    apiKey: 'AIzaSyBm1PRFUgyethkZdRHCkjZ2IJh5PQiD0hg',
-    authDomain: 'openft-98e94.firebaseapp.com',
-    projectId: 'openft-98e94',
-    storageBucket: 'openft-98e94.appspot.com',
-    messagingSenderId: '635036232353',
-    appId: '1:635036232353:web:53d0930c0a1a309f801ee0',
-    measurementId: 'G-NRVT06LPJT',
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   }
 
   storageBucket =
