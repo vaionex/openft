@@ -19,7 +19,7 @@ if (envMODE === 'DEV') {
     'https://firebasestorage.googleapis.com/v0/b/openft-98e94.appspot.com/o/'
 
   apiConfig.defaults.headers.common['serviceId'] =
-    '2b14f353-6695-4017-8474-9c58f5e71e35'
+    '560fecbe-6479-47ba-907a-21e324b71d88'
 }
 
 export default config
