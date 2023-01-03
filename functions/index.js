@@ -1,10 +1,13 @@
 const functions = require('firebase-functions')
 const algoliasearch = require('algoliasearch')
+const { defineString } = require('firebase-functions/params')
 
-const ALGOLIA_ID = functions.config().algolia.app
-const ALGOLIA_SEARCH_KEY = functions.config().algolia.key
+// const ALGOLIA_ID = functions.config().algolia.app
+// const ALGOLIA_SEARCH_KEY = functions.config().algolia.key
+const ALGOLIA_ID = defineString('NEXT_PUBLIC_ALGOLIA_APP_ID')
+const ALGOLIA_SEARCH_KEY = defineString('NEXT_PUBLIC_ALGOLIA_KEY')
 
-const client = algoliasearch(ALGOLIA_ID, ALGOLIA_SEARCH_KEY)
+const client = algoliasearch(ALGOLIA_ID.value(), ALGOLIA_SEARCH_KEY.value())
 const index = client.initIndex('nfts')
 
 exports.addToIndex = functions.firestore

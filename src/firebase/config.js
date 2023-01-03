@@ -16,10 +16,10 @@ if (envMODE === 'DEV') {
   }
 
   storageBucket =
-    'https://firebasestorage.googleapis.com/v0/b/openft-98e94.appspot.com/o/'
+    'https://firebasestorage.googleapis.com/v0/b/vaionexalpha.appspot.com/o/'
 
   apiConfig.defaults.headers.common['serviceId'] =
-    '560fecbe-6479-47ba-907a-21e324b71d88'
+    '7a8ca3a7-02bb-42e8-9d70-dec87390c0fd'
 }
 
 export default config
