@@ -8,6 +8,12 @@ module.exports = {
       fontFamily: {
         base: ['Inter', 'sans-serif'],
       },
+      colors: {
+        mirage: '#101828',
+        mist: '#667085',
+        bluewood: '#344054',
+        'vista-white': '#F9FAFB',
+      },
       screens: {
         xs: '475px',
         '2xlg': '1200px',

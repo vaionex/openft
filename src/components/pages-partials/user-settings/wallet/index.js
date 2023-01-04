@@ -219,8 +219,6 @@ const UserSettingsWalletSection = () => {
 
             <div>
               <div className="relative flex flex-col items-center w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg lg:items-stretch md:flex-row">
-                {/* <ProgressCircular value={40} /> */}
-
                 <div className="flex flex-col justify-between flex-1">
                   <div className="font-medium">Wallet</div>
                   <div>
@@ -232,11 +230,6 @@ const UserSettingsWalletSection = () => {
                     </span>
                   </div>
                 </div>
-                <ArrowSmUpIcon
-                  width={24}
-                  height={24}
-                  className="absolute text-gray-500 transform rotate-45 cursor-pointer top-2 right-2"
-                />
                 <div className="flex items-end justify-center flex-1 md:relative md:justify-end">
                   <span className="text-xs text-amber-400 bg-amber-50 truncate font-medium p-y1 px-2.5 rounded-full">
                     {!loading ? (

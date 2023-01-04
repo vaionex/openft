@@ -12,12 +12,12 @@ const dropdownRoutes = [
     icon: UploadBoxIcon,
     desc: 'Upload your artwork and its details here.',
   },
-  {
-    url: '/user-settings/mint?query=generate',
-    name: 'Generate',
-    icon: FingerPrintIcon,
-    desc: 'Generate artwork from AI technology.',
-  },
+  // {
+  //   url: '/user-settings/mint?query=generate',
+  //   name: 'Generate',
+  //   icon: FingerPrintIcon,
+  //   desc: 'Generate artwork from AI technology.',
+  // },
 ]
 
 const DropdownMint = () => {
