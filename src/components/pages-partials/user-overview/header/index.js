@@ -1,3 +1,4 @@
+import { AvatarWithName } from '@/components/ui/avatars'
 import Image from 'next/image'
 
 const social = [
@@ -84,12 +85,17 @@ const profile = {
 }
 
 export default function Header({ userInfo }) {
+  console.warn('userInfo', userInfo)
   return (
     <div>
       <div className="relative object-cover w-full h-44 sm:h-64 xl:h-[475px]">
         <div className="absolute inset-0 z-10 user-overview-gradient" />
         <Image
-          src={profile.backgroundImage}
+          src={
+            userInfo?.coverImage
+              ? userInfo?.coverImage
+              : profile.backgroundImage
+          }
           layout="fill"
           objectFit="cover"
           alt=""
@@ -170,13 +176,20 @@ export default function Header({ userInfo }) {
         <div className="flex justify-center -mt-10 sm:-mt-20 sm:space-x-5">
           <div className="relative z-10 flex w-20 h-20 bg-blue-500 rounded-xl ring-4 ring-white sm:h-40 sm:w-40">
             {userInfo ? (
-              <Image
-                className="rounded-xl"
-                objectFit="cover"
-                layout="fill"
-                src={userInfo.profileImage}
-                alt=""
-              />
+              userInfo.profileImage ? (
+                <Image
+                  className="rounded-xl"
+                  objectFit="cover"
+                  layout="fill"
+                  src={userInfo.profileImage}
+                  alt=""
+                />
+              ) : (
+                <AvatarWithName
+                  className="w-full h-full rounded-xl text-4xl"
+                  name={userInfo.name}
+                />
+              )
             ) : (
               <div
                 className="flex items-center justify-center w-full h-full"

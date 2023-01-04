@@ -14,6 +14,7 @@ import { checkValidation } from '@/utils/imageValidation'
 import getFileExt from '@/utils/getFileExt'
 import ImageCropper from '../../image-cropper'
 import NextLink from 'next/link'
+import { toast } from 'react-toastify'
 
 const ProfileHeaderCard = ({
   user,
@@ -74,7 +75,16 @@ const ProfileHeaderCard = ({
       })
       setIsCropping(true)
     } else {
-      alert(errorObjects.message)
+      toast.error(errorObjects.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
     }
   }, [])
 
