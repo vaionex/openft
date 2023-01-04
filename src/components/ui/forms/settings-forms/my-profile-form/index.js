@@ -154,8 +154,8 @@ const MyProfileForm = ({
           <div className="sm:w-full sm:max-w-[666px]">
             <AvatarUpload
               limits={{
-                maxWidth: 400,
-                maxHeight: 400,
+                // maxWidth: 400,
+                // maxHeight: 400,
                 maxSize: 1,
               }}
               aspect={1}

@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 const NovuNotificationCenter = () => {
   const { currentUser, isAuthenticated } = useSelector(userSelector)
   const theme = {
-    light: {
+    common: {
       loaderColor: '#2563EB',
     },
   }

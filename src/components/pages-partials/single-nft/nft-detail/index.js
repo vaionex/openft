@@ -19,6 +19,7 @@ import HistoryComp from './HistoryCom'
 import Spinner from '@/components/ui/spinner'
 import { getUsersData } from '@/services/relysia-queries'
 import Image from 'next/image'
+import { AvatarWithName } from '@/components/ui/avatars'
 
 const transactionData = {
   protocol: {
@@ -140,18 +141,10 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                         className="w-8 h-8 bg-gray-100 rounded-full"
                       />
                     ) : (
-                      <svg
-                        class="w-8 h-8 text-gray-400 bg-gray-100 rounded-full"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
+                      <AvatarWithName
+                        className="w-8 h-8 rounded-full text-sm"
+                        name={artistData?.name}
+                      />
                     )}
                   </a>
                 </NextLink>
