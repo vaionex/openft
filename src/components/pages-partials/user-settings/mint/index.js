@@ -39,7 +39,7 @@ const UserSettingsMintSection = () => {
             >
               Upload
             </Tab>
-            <Tab
+            {/* <Tab
               className={({ selected }) =>
                 classNames(
                   selected
@@ -50,7 +50,7 @@ const UserSettingsMintSection = () => {
               }
             >
               Generate
-            </Tab>
+            </Tab> */}
           </Tab.List>
         </div>
         <Tab.Panels as={Fragment}>

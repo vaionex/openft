@@ -192,17 +192,39 @@
 .nc-preferences-root {
   @apply !font-base;
 }
+
 .nc-preferences-item-title {
-  @apply font-base;
+  @apply font-base text-bluewood;
 }
 
 .nc-preferences-item-channels {
-  @apply font-base;
+  @apply font-base text-mist;
 }
 
 .nc-preferences-channel-label {
-  @apply font-base;
+  @apply font-base text-mist;
 }
+
+.nc-header-title {
+  @apply text-mirage;
+}
+
+.nc-header-mark-as-read {
+  @apply text-mist;
+}
+
+.nc-notifications-list-item {
+  @apply bg-vista-white;
+}
+
+.nc-notifications-list-item-title {
+  @apply text-bluewood;
+}
+
+.nc-notifications-list-item-timestamp {
+  @apply !text-mist;
+}
+
 .nc-notifications-list-item::before {
   @apply bg-gradient-to-t from-blue-700 to-blue-400;
 }
