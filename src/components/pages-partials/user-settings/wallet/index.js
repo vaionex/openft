@@ -163,29 +163,29 @@ const UserSettingsWalletSection = () => {
   const getTxName = (type, protocol) => {
     if (type == 'credit' && protocol == 'STAS') {
       return (
-        <span className={'font-medium text-sm text-blue-700'}>Deposit</span>
+        <span className={'font-medium text-sm text-blue-700'}>Purchased an NFT</span>
       )
     } else if (type == 'debit' && protocol == 'STAS') {
       return (
         <span className={'font-medium text-sm text-red-500'}>
-          Transfer Success
+          Sold an NFT
         </span>
       )
     } else if (type == 'credit' && protocol == 'BSV') {
       return (
         <span className={'font-medium text-sm text-blue-700'}>
-          NFT Received
+          Deposit
         </span>
       )
     } else if (type == 'debit' && protocol == 'BSV') {
       return (
-        <span className={'font-medium text-sm text-red-500'}>NFT Sent</span>
+        <span className={'font-medium text-sm text-red-500'}>Withdrawal</span>
       )
     }
   }
 
   const currencyFormat = (num) => {
-    return '$ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return ' ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '1 NFT')
   }
 
   const handleSort = () => {
@@ -393,7 +393,7 @@ const UserSettingsWalletSection = () => {
               <div className="block mt-12 text-lg font-medium text-gray-900 max-w-[666px]">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    Transactions history
+                    Transaction history
                     <span className="block text-sm font-normal text-gray-500">
                       Everything you get from the sale goes into your wallet
                       balance.
