@@ -28,8 +28,9 @@ import {
 } from '@/components/common/icons'
 import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
-import { firebaseAddNewNotification } from '@/firebase/utils'
+import { firebaseGetUserByPaymail } from '@/firebase/utils'
 import { SendNotification } from '@/services/novu-notifications'
+import { updateUser } from '@/redux/slices/user'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -98,11 +99,14 @@ const UserSettingsWalletSection = () => {
         reset({ address: '', amount: '' })
         setMsg({ type: 'success', content: 'The transfer was successful' })
 
-        const message = `${Number(
+        const senderMessage = `${Number(
           (Number(amount) / bsvRate).toFixed(8),
         )} sent to ${data.address}`
-
-        SendNotification(currentUser.uid, message)
+        const receiverMessage = `${Number(
+          (Number(amount) / bsvRate).toFixed(8),
+        )} received from ${currentUser.name}`
+        SendNotification(currentUser.uid, senderMessage)
+        SendNotificationByPaymail(data.address, receiverMessage)
 
         setTimeout(() => {
           getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
@@ -160,6 +164,15 @@ const UserSettingsWalletSection = () => {
     }
   }, [wallethistory])
 
+  if (!currentUser.paymail) {
+    dispatch(
+      updateUser({
+        uid: currentUser.uid,
+        values: { paymail: paymail },
+      }),
+    )
+  }
+
   const getTxName = (type, protocol) => {
     if (type == 'credit' && protocol == 'STAS') {
       return (
@@ -200,6 +213,15 @@ const UserSettingsWalletSection = () => {
     }
   }
 
+  const SendNotificationByPaymail = async (address, message) => {
+    const user = await firebaseGetUserByPaymail(address)
+    const userId = user?.userData[0]?.uid
+    console.log(
+      '🚀 ~ file: index.js:220 ~ SendNotificationByPaymail ~ userId',
+      userId,
+    )
+    if (userId) SendNotification(userId, message)
+  }
   return (
     <UserSettingsLayout>
       <div>

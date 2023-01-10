@@ -524,6 +524,26 @@ const firebaseGetNftByUsername = async (username) => {
   }
 }
 
+const firebaseGetUserByPaymail = async (paymail) => {
+  try {
+    const paymailRef = collection(firebaseDb, 'users')
+    const queryRef = query(paymailRef, where('paymail', '==', paymail))
+    const documentSnapshots = await getDocs(queryRef)
+
+    const userData = documentSnapshots.docs.map((doc) => {
+      const userPaymail = doc.data()
+      userPaymail.id = doc.id
+      return userPaymail
+    })
+
+    return {
+      userData: JSON.parse(JSON.stringify(userData)),
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const firebaseGetUserDetailByUsername = async (username) => {
   const nftsRef = collection(firebaseDb, 'users')
   const queryRef = query(nftsRef, where('username', '==', username))
@@ -744,4 +764,5 @@ export {
   firebaseGetNftImageUrl,
   fireGetNftsFromFavList,
   firebaseGetUserDetailByUsername,
+  firebaseGetUserByPaymail,
 }
