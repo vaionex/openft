@@ -31,12 +31,17 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
+  getMultiFactorResolver,
   updatePassword,
   updateEmail,
   setPersistence,
   browserLocalPersistence,
   browserSessionPersistence,
   sendPasswordResetEmail,
+  sendEmailVerification,
+  PhoneAuthProvider,
+  PhoneMultiFactorGenerator,
+  RecaptchaVerifier,
 } from 'firebase/auth'
 import store from '@/redux/store'
 import {
@@ -73,6 +78,110 @@ const notificationObj = {
     priceChangesEmail: false,
     itemUpdatesEmail: false,
   },
+}
+
+let rsl
+const firebaseLoginMfa = async ({ verificationId, verificationCode }) => {
+  const cred = PhoneAuthProvider.credential(verificationId, verificationCode)
+  const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred)
+  // Complete sign-in.
+  const { user } = await rsl.resolveSignIn(multiFactorAssertion)
+  if (user) {
+    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+    const userNotifications = await firebaseGetSingleDoc(
+      'notifications',
+      user.uid,
+    )
+    apiConfig.defaults.headers.common['authorization'] = user.accessToken
+    return {
+      user: {
+        ...userFromDb,
+        ...user.reloadUserInfo,
+        accessToken: user.accessToken,
+      },
+      userNotifications: {
+        'app-notification':
+          userNotifications && userNotifications['app-notification']
+            ? userNotifications['app-notification']
+            : null,
+        'email-notification':
+          userNotifications && userNotifications['email-notification']
+            ? userNotifications['email-notification']
+            : null,
+      },
+    }
+  }
+}
+
+const firebaseLogin = async ({ email, password, rememberMe, setVerifyID }) => {
+  const recaptchaVerifier = new RecaptchaVerifier(
+    '2fa-captcha',
+    {
+      callback: (verificationId) => setVerifyID(verificationId),
+      'expired-callback': () => setVerifyID(null),
+      size: 'invisible',
+    },
+    firebaseAuth,
+  )
+
+  const user = await setPersistence(
+    firebaseAuth,
+    rememberMe ? browserLocalPersistence : browserSessionPersistence,
+  ).then(async () => {
+    const usr = await signInWithEmailAndPassword(firebaseAuth, email, password)
+      .then(async (userCredential) => {
+        const user = await firebaseGetUserInfoFromDb(
+          userCredential.user.uid,
+          'users',
+        )
+        const userNotifications = await firebaseGetSingleDoc(
+          'notifications',
+          userCredential.user.uid,
+        )
+        return {
+          user: {
+            ...user,
+            ...userCredential.user.reloadUserInfo,
+            accessToken: userCredential.user.accessToken,
+          },
+          userNotifications: {
+            'app-notification':
+              userNotifications && userNotifications['app-notification']
+                ? userNotifications['app-notification']
+                : null,
+            'email-notification':
+              userNotifications && userNotifications['email-notification']
+                ? userNotifications['email-notification']
+                : null,
+          },
+        }
+      })
+      .catch(async (error) => {
+        console.log(error)
+        if (error.code == 'auth/multi-factor-auth-required') {
+          const resolver = getMultiFactorResolver(firebaseAuth, error)
+          // Ask user which second factor to use.
+
+          const phoneInfoOptions = {
+            multiFactorHint: resolver.hints[0],
+            session: resolver.session,
+          }
+          const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+          // Send SMS verification code
+          phoneAuthProvider
+            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+            .then(function (verificationId) {
+              setVerifyID(verificationId)
+            })
+          rsl = resolver
+        } else if (error.code == 'auth/wrong-password') {
+          const errorMessage = error.message
+          console.log(errorMessage)
+        }
+      })
+    return usr
+  })
+  return user
 }
 
 const userCreateNotification = {
@@ -120,40 +229,6 @@ const firebaseIsUsernameExist = async (username) => {
   })
 
   return isExist
-}
-
-const firebaseLogin = async ({ email, password, rememberMe }) => {
-  try {
-    await setPersistence(
-      firebaseAuth,
-      rememberMe ? browserLocalPersistence : browserSessionPersistence,
-    )
-    const auth = await signInWithEmailAndPassword(firebaseAuth, email, password)
-    const user = await firebaseGetUserInfoFromDb(auth.user.uid, 'users')
-    const userNotifications = await firebaseGetSingleDoc(
-      'notifications',
-      auth.user.uid,
-    )
-
-    return {
-      user: {
-        ...user,
-        accessToken: auth.user.accessToken,
-      },
-      userNotifications: {
-        'app-notification':
-          userNotifications && userNotifications['app-notification']
-            ? userNotifications['app-notification']
-            : null,
-        'email-notification':
-          userNotifications && userNotifications['email-notification']
-            ? userNotifications['email-notification']
-            : null,
-      },
-    }
-  } catch (error) {
-    return { error: 'Incorrect email or password.' }
-  }
 }
 
 const firebaseRegister = async (data) => {
@@ -651,7 +726,11 @@ const firebaseGetAuthorizedUser = () => {
         userResponse.uid,
       )
       store.dispatch(
-        setUserData({ ...user, accessToken: userResponse.accessToken }),
+        setUserData({
+          ...user,
+          ...userResponse.reloadUserInfo,
+          accessToken: userResponse.accessToken,
+        }),
       )
       store.dispatch(
         setNotifications({
@@ -714,8 +793,28 @@ const firebaseGetNftImageUrl = async (userId, fileName, size) => {
   })
 }
 
+const firebaseVerifyMail = async () => {
+  const actionCodeSettings = {
+    url: 'http://localhost:3000/user-settings/mfa',
+  }
+  const res = await sendEmailVerification(
+    firebaseAuth.currentUser,
+    actionCodeSettings,
+  )
+    .then(() => {
+      return true
+    })
+    .catch((err) => {
+      console.log(err)
+      return false
+    })
+
+  return res
+}
+
 export {
   firebaseLogin,
+  firebaseLoginMfa,
   firebaseRegister,
   firebaseGetAuthorizedUser,
   firebaseLogout,
@@ -744,4 +843,5 @@ export {
   firebaseGetNftImageUrl,
   fireGetNftsFromFavList,
   firebaseGetUserDetailByUsername,
+  firebaseVerifyMail,
 }

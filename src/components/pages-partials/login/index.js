@@ -37,13 +37,13 @@ const Login = () => {
   const dispatch = useDispatch()
 
   const handleUserAuthWithGoogle = async () => {
-    await dispatch(loginWithGoogle())
+    dispatch(loginWithGoogle())
     router.push('/')
   }
 
   return (
     <LoginLayout title="Login">
-      <div className="flex min-h-[calc(100vh-56px)] px-8 max-w-screen-2xl sm:mx-w-full max-w-full mx-auto">
+      <div className="flex min-h-[calc(100vh-56px)] px-8 max-w-screen-2xl sm:mx-w-full mx-auto">
         <div className="flex-[3] flex flex-col">
           <div className="flex items-center justify-center h-full">
             <div className="w-full max-w-full py-4 pr-0 mx-auto lg:pr-8 xl:max-w-sm lg:max-w-full md:max-w-sm ">
@@ -57,7 +57,7 @@ const Login = () => {
                 <div className="mb-6">
                   <LoginForm />
                 </div>
-
+                <div id="2fa-captcha"></div>
                 <div>
                   <button
                     className="w-full text-base font-medium text-gray-700 bg-white border border-gray-300 btn-primary hover:bg-gray-100"
@@ -75,7 +75,10 @@ const Login = () => {
                   </NextLink>
                 </p>
                 <NextLink href="/">
-                  <p className='text-center text-gray-400 font-normal cursor-pointer pt-2 hover:text-gray-600 hover:duration-300'> back </p>
+                  <p className="text-center text-gray-400 font-normal cursor-pointer pt-2 hover:text-gray-600 hover:duration-300">
+                    {' '}
+                    back{' '}
+                  </p>
                 </NextLink>
               </div>
             </div>

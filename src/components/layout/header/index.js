@@ -54,11 +54,13 @@ const Header = () => {
             <div className="flex items-center justify-between w-full md:w-auto">
               <NextLink href="/" className="outline-none inline-block">
                 <div className="flex items-center cursor-pointer">
-                  <img
-                    className="h-5 pb-0.5 flex-none"
-                    src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
-                    alt="Relysia"
-                  />
+                  <div className="w-5 h-5">
+                    <img
+                      className="h-5 pb-0.5 flex-none"
+                      src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
+                      alt="Relysia"
+                    />
+                  </div>
                   <p className="pl-2 font-semibold text-xl text-blue-900">
                     Nftana
                   </p>

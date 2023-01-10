@@ -28,6 +28,11 @@
     @apply inline-flex items-center justify-center px-4 py-3 font-bold text-white bg-[#155EEF] rounded-lg hover:opacity-90 disabled:opacity-50 disabled:pointer-events-none;
   }
 
+  .PhoneInput > input {
+    display: flex !important;
+    border-radius: 5px !important;
+  }
+
   .btn-secondary {
     @apply inline-flex items-center justify-center px-4 py-3 font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 disabled:bg-slate-300 disabled:opacity-50 disabled:pointer-events-none;
   }

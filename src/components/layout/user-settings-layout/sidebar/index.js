@@ -12,6 +12,7 @@ const links = [
   //   href: '/user-settings/notifications',
   //   current: false,
   // },
+  { name: '2-Factor Auth', href: '/user-settings/mfa', current: false },
   { name: 'Wallet', href: '/user-settings/wallet', current: false },
 ]
 

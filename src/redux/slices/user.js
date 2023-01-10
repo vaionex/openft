@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {
   firebaseLogin,
+  firebaseLoginMfa,
   firebaseLoginWithGoogle,
   firebaseLogout,
   firebaseRegister,
@@ -37,7 +38,9 @@ export const login = createAsyncThunk(
   'auth/login',
   async (request, thunkAPI) => {
     try {
-      const user = await firebaseLogin(request)
+      const user = await firebaseLoginMfa(request).then(
+        (userCredential) => userCredential,
+      )
       if (user && !user?.error) return user
       else throw user?.error
     } catch (error) {
