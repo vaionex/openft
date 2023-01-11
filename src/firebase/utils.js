@@ -87,12 +87,12 @@ const firebaseLoginMfa = async ({ verificationId, verificationCode }) => {
   // Complete sign-in.
   const { user } = await rsl.resolveSignIn(multiFactorAssertion)
   if (user) {
+    apiConfig.defaults.headers.common['authToken'] = user.accessToken
     const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
     const userNotifications = await firebaseGetSingleDoc(
       'notifications',
       user.uid,
     )
-    apiConfig.defaults.headers.common['authorization'] = user.accessToken
     return {
       user: {
         ...userFromDb,
@@ -113,7 +113,13 @@ const firebaseLoginMfa = async ({ verificationId, verificationCode }) => {
   }
 }
 
-const firebaseLogin = async ({ email, password, rememberMe, setVerifyID }) => {
+const firebaseLogin = async ({
+  email,
+  password,
+  rememberMe,
+  setVerifyID,
+  setError,
+}) => {
   const recaptchaVerifier = new RecaptchaVerifier(
     '2fa-captcha',
     {
@@ -175,8 +181,9 @@ const firebaseLogin = async ({ email, password, rememberMe, setVerifyID }) => {
             })
           rsl = resolver
         } else if (error.code == 'auth/wrong-password') {
-          const errorMessage = error.message
-          console.log(errorMessage)
+          setError('The password is incorrect.')
+        } else if (error.code == 'auth/user-not-found') {
+          setError('This mail does not exist.')
         }
       })
     return usr
@@ -740,6 +747,7 @@ const firebaseDeleteDoc = async (collectionName, id) => {
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
+      apiConfig.defaults.headers.common['authToken'] = userResponse.accessToken
       const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
       const userNotifications = await firebaseGetSingleDoc(
         'notifications',
@@ -749,6 +757,8 @@ const firebaseGetAuthorizedUser = () => {
         setUserData({
           ...user,
           ...userResponse.reloadUserInfo,
+          emailVerified: userResponse.emailVerified,
+          phoneNumber: userResponse.phoneNumber,
           accessToken: userResponse.accessToken,
         }),
       )
@@ -779,17 +789,16 @@ const firebaseGetAuthorizedUser = () => {
 }
 
 const firebaseOnIdTokenChange = async () => {
-  const walletId = '00000000-0000-0000-0000-000000000000'
-  const paymail = store.getState().user.paymail
-  const address = store.getState().user.address
-
   firebaseAuth.onIdTokenChanged(async (user) => {
-    if (user) {
+    const paymail = store.getState().wallet.paymail
+    const address = store.getState().wallet.address
+    if (user && !paymail && !address) {
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      await getwalletDetails(store.dispatch)
       if (!paymail && !address) {
-        const walletData = await getWalletAddressAndPaymail(walletId)
+        const walletData = await getWalletAddressAndPaymail()
         if (walletData.address && walletData.paymail) {
-          getwalletDetails(walletId, store.dispatch)
+          getwalletDetails(store.dispatch)
         } else {
           createwallet('default', store.dispatch)
         }

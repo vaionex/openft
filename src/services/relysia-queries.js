@@ -11,12 +11,14 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 const axiosRetry = require('axios-retry')
 
-export const getwalletBal = async (walletid, dispatch) => {
+const walletID = '00000000-0000-0000-0000-000000000000'
+
+export const getwalletBal = async (dispatch) => {
   //wallet balance
   await apiConfig
     .get('/v1/metrics', {
       headers: {
-        walletID: `${walletid}`,
+        walletID,
       },
     })
     .then((res) => {
@@ -46,11 +48,11 @@ export const metricsApiWithoutBody = async () => {
     })
 }
 
-export const getwalletDetails = async (walletid, dispatch) => {
+export const getwalletDetails = async (dispatch) => {
   apiConfig
     .get('/v1/address', {
       headers: {
-        walletID: `${walletid}`,
+        walletID,
       },
     })
     .then((res) => {
@@ -67,7 +69,7 @@ export const getwalletDetails = async (walletid, dispatch) => {
   apiConfig
     .get('/v1/address?path=0', {
       headers: {
-        walletID: `${walletid}`,
+        walletID,
       },
     })
     .then((res) => {
@@ -78,13 +80,13 @@ export const getwalletDetails = async (walletid, dispatch) => {
     })
 
   //wallet balance
-  getwalletBal(walletid, dispatch)
+  getwalletBal(dispatch)
 
   //wallet mnemonic
   apiConfig
     .get('/v1/mnemonic', {
       headers: {
-        walletID: `${walletid}`,
+        walletID,
       },
     })
     .then((res) => {
@@ -98,7 +100,7 @@ export const getwalletDetails = async (walletid, dispatch) => {
   apiConfig
     .get('/v1/history', {
       headers: {
-        walletID: `${walletid}`,
+        walletID,
       },
     })
     .then((res) => {
@@ -113,7 +115,7 @@ export const getwalletDetails = async (walletid, dispatch) => {
     })
 }
 
-export const getWalletAddressAndPaymail = async (walletId) => {
+export const getWalletAddressAndPaymail = async () => {
   let obj = {
     address: null,
     paymail: null,
@@ -121,7 +123,7 @@ export const getWalletAddressAndPaymail = async (walletId) => {
   return await apiConfig
     .get('/v1/address?path=0', {
       headers: {
-        walletID: walletId,
+        walletID,
       },
     })
     .then((res) => {
@@ -142,8 +144,8 @@ export const createwallet = async (name, dispatch) => {
         walletTitle: `${name}`,
       },
     })
-    .then((res) => {
-      getwalletDetails(res.data.data.walletID, dispatch)
+    .then(() => {
+      getwalletDetails(dispatch)
       return true
     })
     .catch((err) => {
@@ -334,7 +336,7 @@ export const chackBalancefromApi = async () => {
   apiConfig
     .get('v1/balance', {
       headers: {
-        walletID: '00000000-0000-0000-0000-000000000000',
+        walletID,
         currency,
       },
     })

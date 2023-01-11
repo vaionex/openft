@@ -26,7 +26,7 @@ function LoginForm() {
     6: null,
   })
   const [passwordVisible, setPasswordVisible] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
+  const [rememberMe, setRememberMe] = useState(true)
   const [error, setError] = useState(null)
   const [formData, setFormData] = useState({
     email: '',
@@ -62,10 +62,15 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      firebaseLogin({ ...formData, rememberMe, setVerifyID })
+      await firebaseLogin({
+        ...formData,
+        rememberMe,
+        setVerifyID,
+        setError,
+      })
     } catch (e) {
       console.log('login error', e)
-      setError(e)
+      //setError(e)
     }
   }
 
@@ -141,6 +146,7 @@ function LoginForm() {
           <Checkbox
             id="remember-me"
             text="Remember for 30 days"
+            checked={true}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
 

@@ -1,6 +1,6 @@
 import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import { ArrowLeftIcon } from '@heroicons/react/outline'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { firebaseVerifyMail } from '@/firebase/utils'
@@ -9,6 +9,7 @@ import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import { InputMain } from '@/components/ui/inputs'
 import { firebaseAuth } from '@/firebase/init'
+import { useRouter } from 'next/router'
 import {
   RecaptchaVerifier,
   PhoneAuthProvider,
@@ -19,10 +20,12 @@ import OtpModal from './otp'
 let applicationVer
 const UserSettingsMfaSection = () => {
   const [loading, setLoading] = useState(false)
+  const [mfaLoading, setMfaLoading] = useState(false)
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [phone, setPhone] = useState(null)
   const [updateType, setUpdateType] = useState(null)
-  const [disableMfaPopup, setDisableMfaPopup] = useState(false)
+  const [enrolLen, setEnrolLen] = useState(0)
   const [phoneErrorMessage, setPhoneErrorMessage] = useState(null)
   const [verifyID, setVerifyID] = useState(null)
   const captchaContainer = useRef()
@@ -34,15 +37,15 @@ const UserSettingsMfaSection = () => {
 
   const disableMfa = async () => {
     try {
+      setMfaLoading(true)
       const options = multiFactor(firebaseAuth.currentUser).enrolledFactors
-      const r = await multiFactor(firebaseAuth.currentUser)
+      await multiFactor(firebaseAuth.currentUser)
         .unenroll(options[0])
-        .then((r) => r)
-      console.log(r)
+        .then(() => router.reload())
     } catch (error) {
       console.log(error)
     } finally {
-      //setMfaLoading(false)
+      setMfaLoading(false)
     }
   }
 
@@ -65,8 +68,7 @@ const UserSettingsMfaSection = () => {
 
   const enableMfa = async () => {
     setUpdateType('mfa')
-    //setMfaLoading(true)
-
+    setMfaLoading(true)
     if (applicationVer && captchaContainer.current) {
       applicationVer.clear()
       applicationVer = null
@@ -95,24 +97,28 @@ const UserSettingsMfaSection = () => {
               setVerifyID(verificationId)
               setIsOpen(true)
             })
-            .catch((err) => {
-              console.log(err)
+            .catch((error) => {
+              setPhoneErrorMessage(
+                'Please login again to be able to perform this operation!',
+              )
+              applicationVer.render().then(function (widgetId) {
+                grecaptcha.reset(widgetId)
+              })
             })
         })
-        .catch((err) => {
-          console.log(err)
+        .catch((error) => {
+          console.log(error)
         })
     } catch (err) {
       console.log(err)
     } finally {
-      //setMfaLoading(false)
+      setMfaLoading(false)
     }
   }
 
   const verifyPhone = () => {
     if (isPossiblePhoneNumber(phone)) {
       setUpdateType('mailVerify')
-      setPhoneErrorMessage(null)
       if (applicationVer && captchaContainer.current) {
         applicationVer.clear()
         applicationVer = null
@@ -133,14 +139,19 @@ const UserSettingsMfaSection = () => {
           setIsOpen(true)
         })
         .catch((err) => {
-          setPhoneErrorMessage(err)
+          console.log(err)
         })
-    } else {
-      setPhoneErrorMessage('Please enter an available phone number.')
     }
   }
-  console.log(phone && isPossiblePhoneNumber(phone))
-  console.log(currentUser)
+
+  useEffect(() => {
+    if (firebaseAuth?.currentUser) {
+      const mfaLen = multiFactor(firebaseAuth.currentUser).enrolledFactors
+        .length
+      setEnrolLen(mfaLen)
+    }
+  }, [])
+
   return (
     <UserSettingsLayout>
       <div>
@@ -229,14 +240,41 @@ const UserSettingsMfaSection = () => {
                     onChange={setPhone}
                   />
                 </div>
+
+                <div
+                  className={`flex py-2 mb-2 text-sm ${
+                    enrolLen > 0 ? 'text-green-500' : 'text-yellow-500'
+                  } rounded-lg`}
+                  role="alert"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 inline w-5 h-5 mr-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Info</span>
+                  <div>
+                    {enrolLen > 0
+                      ? 'The multi factor authentication operation is currently open.'
+                      : 'The multi factor authentication operation is currently closed. We recommend used it for safety.'}
+                  </div>
+                </div>
                 {phoneErrorMessage && (
                   <div
-                    class="flex py-2 mb-4 text-sm text-red-700 rounded-lg"
+                    className="flex py-1 mb-2 text-sm text-red-500 rounded-lg"
                     role="alert"
                   >
                     <svg
                       aria-hidden="true"
-                      class="flex-shrink-0 inline w-5 h-5 mr-3"
+                      className="flex-shrink-0 inline w-5 h-5 mr-3"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -247,40 +285,45 @@ const UserSettingsMfaSection = () => {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="sr-only">Info</span>
+                    <span className="sr-only">Info</span>
                     <div>{phoneErrorMessage}</div>
                   </div>
                 )}
+
                 <div className="flex justify-end gap-3 border-none mt-10">
                   {currentUser?.phoneNumber &&
                     currentUser?.emailVerified &&
-                    multiFactor(firebaseAuth.currentUser).enrolledFactors
-                      .length === 0 && (
-                      <button
-                        type="button"
+                    enrolLen === 0 && (
+                      <ButtonWLoading
+                        isPending={mfaLoading}
+                        disabled={mfaLoading ? true : false}
                         onClick={enableMfa}
-                        className="btn-secondary py-2.5 border border-[#EAECF0] text-sm font-medium"
-                      >
-                        Enable MFA
-                      </button>
+                        text="Enable MFA"
+                        type="button"
+                      />
                     )}
 
                   {currentUser?.phoneNumber &&
                     currentUser?.emailVerified &&
-                    multiFactor(firebaseAuth.currentUser).enrolledFactors
-                      .length > 0 && (
-                      <button
-                        type="button"
+                    enrolLen > 0 && (
+                      <ButtonWLoading
+                        isPending={mfaLoading}
+                        disabled={mfaLoading ? true : false}
                         onClick={disableMfa}
-                        className="btn-secondary py-2.5 border border-[#EAECF0] text-sm font-medium"
-                      >
-                        Disable MFA
-                      </button>
+                        text="Disable MFA"
+                        type="button"
+                      />
                     )}
 
                   <ButtonWLoading
                     isPending={loading}
-                    disabled={loading ? true : false}
+                    disabled={
+                      loading ||
+                      !phone ||
+                      (phone && !isPossiblePhoneNumber(phone))
+                        ? true
+                        : false
+                    }
                     onClick={verifyPhone}
                     text="Update"
                     type="button"
@@ -294,7 +337,9 @@ const UserSettingsMfaSection = () => {
             <OtpModal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
+              router={router}
               verifyID={verifyID}
+              setPhoneErrorMessage={setPhoneErrorMessage}
               type={updateType}
             />
           </div>

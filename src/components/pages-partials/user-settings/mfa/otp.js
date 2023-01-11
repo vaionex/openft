@@ -8,7 +8,14 @@ import {
   multiFactor,
 } from 'firebase/auth'
 
-export default function OtpModal({ isOpen, setIsOpen, verifyID, type }) {
+export default function OtpModal({
+  isOpen,
+  setIsOpen,
+  router,
+  verifyID,
+  setPhoneErrorMessage,
+  type,
+}) {
   const first = useRef(null)
   const second = useRef(null)
   const third = useRef(null)
@@ -62,7 +69,14 @@ export default function OtpModal({ isOpen, setIsOpen, verifyID, type }) {
       const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
       const multiFactorAssertion =
         PhoneMultiFactorGenerator.assertion(phoneCredential)
-      multiFactor(user).enroll(multiFactorAssertion, 'personel number')
+      multiFactor(user)
+        .enroll(multiFactorAssertion, 'personel number')
+        .then(() => router.reload())
+        .catch((error) => {
+          if (error.code == 'auth/requires-recent-login') {
+            console.log('eeeeeeeeeee')
+          }
+        })
       closeModal()
     } else {
       const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
@@ -70,8 +84,14 @@ export default function OtpModal({ isOpen, setIsOpen, verifyID, type }) {
       updatePhoneNumber(user, phoneCredential)
         .then(() => {
           closeModal()
+          router.reload()
         })
         .catch((err) => {
+          if (err.code == 'auth/account-exists-with-different-credential') {
+            setPhoneErrorMessage(
+              'Please login again to be able to perform this operation!',
+            )
+          }
           console.log(err)
         })
     }
