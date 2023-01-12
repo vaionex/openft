@@ -77,11 +77,11 @@ export default function OtpModal({
                     as="h3"
                     className="text-2xl font-bold text-center leading-6 text-gray-900"
                   >
-                    OTP Verification
+                    SMS Verification
                   </Dialog.Title>
 
                   <div class="flex items-center flex-col mt-4">
-                    <span>Enter the OTP you received</span>
+                    <span>Enter the SMS you received</span>
                     {/* <span class="font-bold">+91 ******876</span> */}
                   </div>
                   <div className="mt-2">

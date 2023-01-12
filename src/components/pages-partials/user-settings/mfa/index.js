@@ -17,7 +17,6 @@ import {
 } from 'firebase/auth'
 import OtpModal from './otp'
 
-let applicationVer
 const UserSettingsMfaSection = () => {
   const [loading, setLoading] = useState(false)
   const [mfaLoading, setMfaLoading] = useState(false)
@@ -44,6 +43,9 @@ const UserSettingsMfaSection = () => {
         .then(() => router.reload())
     } catch (error) {
       console.log(error)
+      setPhoneErrorMessage(
+        'Please login again to be able to perform this operation!',
+      )
     } finally {
       setMfaLoading(false)
     }
@@ -69,16 +71,12 @@ const UserSettingsMfaSection = () => {
   const enableMfa = async () => {
     setUpdateType('mfa')
     setMfaLoading(true)
-    if (applicationVer && captchaContainer.current) {
-      applicationVer.clear()
-      applicationVer = null
-      document.getElementById('recaptcha-container222').innerHTML =
-        '<div id="recaptcha-container"></div>'
-    }
 
-    applicationVer = new RecaptchaVerifier(
+    const recaptchaVerifier = new RecaptchaVerifier(
       'recaptcha-container',
-      { size: 'invisible' },
+      {
+        size: 'invisible',
+      },
       firebaseAuth,
     )
 
@@ -92,7 +90,7 @@ const UserSettingsMfaSection = () => {
           }
           const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
           phoneAuthProvider
-            .verifyPhoneNumber(phoneInfoOptions, applicationVer)
+            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
             .then((verificationId) => {
               setVerifyID(verificationId)
               setIsOpen(true)
@@ -101,7 +99,7 @@ const UserSettingsMfaSection = () => {
               setPhoneErrorMessage(
                 'Please login again to be able to perform this operation!',
               )
-              applicationVer.render().then(function (widgetId) {
+              recaptchaVerifier.render().then(function (widgetId) {
                 grecaptcha.reset(widgetId)
               })
             })
@@ -119,27 +117,26 @@ const UserSettingsMfaSection = () => {
   const verifyPhone = () => {
     if (isPossiblePhoneNumber(phone)) {
       setUpdateType('mailVerify')
-      if (applicationVer && captchaContainer.current) {
-        applicationVer.clear()
-        applicationVer = null
-        document.getElementById('recaptcha-container222').innerHTML =
-          '<div id="recaptcha-container"></div>'
-      }
-      applicationVer = new RecaptchaVerifier(
+      const recaptchaVerifier = new RecaptchaVerifier(
         'recaptcha-container',
-        { size: 'invisible' },
+        {
+          size: 'invisible',
+        },
         firebaseAuth,
       )
 
       const provider = new PhoneAuthProvider(firebaseAuth)
       provider
-        .verifyPhoneNumber(phone, applicationVer)
+        .verifyPhoneNumber(phone, recaptchaVerifier)
         .then((verificationId) => {
           setVerifyID(verificationId)
           setIsOpen(true)
         })
         .catch((err) => {
           console.log(err)
+          recaptchaVerifier.render().then(function (widgetId) {
+            grecaptcha.reset(widgetId)
+          })
         })
     }
   }
@@ -331,9 +328,9 @@ const UserSettingsMfaSection = () => {
                 </div>
               </>
             )}
-            <div id="recaptcha-container222" ref={captchaContainer}>
-              <div id="recaptcha-container"></div>
-            </div>
+
+            <div id="recaptcha-container"></div>
+
             <OtpModal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
