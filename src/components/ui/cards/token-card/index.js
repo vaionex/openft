@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import NextLink from 'next/link'
 import { SvgUpRightIcon } from '@/components/common/icons'
+import ModalNFTSell from '../../modal-nft-sell'
 
 const TokenCard = ({ data, type, idx }) => {
+  let [isOpen, setIsOpen] = useState(false)
+
   const isInFirstThree = idx < 3
   return (
     <div
@@ -38,20 +41,42 @@ const TokenCard = ({ data, type, idx }) => {
           </NextLink>
         </div>
       </div>
-      <div className="mt-5 flex justify-between px-2">
-        <span>{data.symbol}</span>
-        <span>{data.satsPerToken + '/' + data.sn[0]}</span>
-      </div>
-      <div className="mt-3 px-2">
-        <span>{data.name}</span>
-      </div>
-      <div className={`flex gap-1.5 my-2 px-2`}>
-        <NextLink href={`/user-settings/collection?current=${data?.tokenId}`}>
-          <a className="bg-[#155EEF] hover:bg-[#2d6ff1] rounded-lg text-white py-2.5 flex space-x-2 w-full border-none justify-center items-center font-normal">
-            <span>NFT Details</span>
-            <SvgUpRightIcon className="w-4 h-4" />
-          </a>
-        </NextLink>
+      <div className="px-4 py-5">
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col">
+            <span className="text-azul font-semibold text-sm">
+              {data.symbol}
+            </span>
+            <span className="text-mirage text-lg font-medium">{data.name}</span>
+          </div>
+
+          <span className="p-2 bg-vista-white rounded-lg">
+            {data.satsPerToken + '/' + data.sn[0]}
+          </span>
+        </div>
+
+        <div className="flex gap-1.5 mt-4">
+          <NextLink href={`/user-settings/collection?current=${data?.tokenId}`}>
+            <a className="bg-azul hover:bg-ultramarine rounded-lg text-white py-2.5 px-3 flex w-full border-none justify-center items-center font-medium">
+              <span>NFT Details</span>
+            </a>
+          </NextLink>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="bg-white rounded-lg border border-azul text-azul py-2.5 px-2 flex w-full justify-center items-center font-semibold"
+          >
+            <span>Sell Nft</span>
+          </button>
+        </div>
+        <ModalNFTSell
+          data={data}
+          isOpen={isOpen}
+          onClose={() => {
+            setIsOpen(false)
+          }}
+        />
       </div>
     </div>
   )
