@@ -191,6 +191,7 @@ const UploadForm = () => {
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
         likes: 0,
+        status: true,
         tokenId,
         contractTxid: tokenObj.contractTxid,
         issueTxid: tokenObj.issueTxid,

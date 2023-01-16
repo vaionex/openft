@@ -1,12 +1,29 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckCircleIcon } from '@heroicons/react/outline'
-import { FeaturedIcon } from '@/components/common/icons'
+
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import NextLink from 'next/link'
 import Image from 'next/image'
+import { InputMain } from '../inputs'
+import { Controller, useForm } from 'react-hook-form'
+import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 
 const ModalNFTSell = ({ className, isOpen, onClose, onConfirm, data }) => {
+  // const resolver = useYupValidationResolver(validationSchema)
+  const textAreaRef = useRef(null)
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onBlur',
+    // resolver,
+  })
+
+  const onSubmit = async (formData) => {}
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-30" onClose={onClose}>
@@ -36,8 +53,8 @@ const ModalNFTSell = ({ className, isOpen, onClose, onConfirm, data }) => {
               <Dialog.Panel
                 className={`relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl w-full ${className} `}
               >
-                <div className="md:grid grid-cols-3 gap-16 p-4 sm:p-16">
-                  <div className=" col-span-1">
+                <div className="flex flex-col sm:flex-row p-4 sm:p-16">
+                  <div className="w-full">
                     <div className="relative max-w-sm border border-gray-200 group rounded-xl flex flex-col">
                       <div className="relative">
                         <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
@@ -46,18 +63,15 @@ const ModalNFTSell = ({ className, isOpen, onClose, onConfirm, data }) => {
                           >
                             <a className="cursor-pointer">
                               {data?.image ? (
-                                <>
-                                  <Image
-                                    src={data?.image || ''}
-                                    alt={data?.name}
-                                    layout="fill"
-                                    className="absolute inset-0 object-cover object-center w-full h-full"
-                                    quality={70}
-                                  />
-                                  <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
-                                </>
+                                <Image
+                                  src={data?.image || ''}
+                                  alt={data?.name}
+                                  layout="fill"
+                                  className="object-cover object-center w-full h-full"
+                                  quality={100}
+                                />
                               ) : (
-                                <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
+                                <div className="h-full w-full bg-gradient-to-tr from-blue-600 to-blue-300" />
                               )}
                             </a>
                           </NextLink>
@@ -91,7 +105,91 @@ const ModalNFTSell = ({ className, isOpen, onClose, onConfirm, data }) => {
                       </div>
                     </div>
                   </div>
-                  <div className=" col-span-2 bg-gray-700"></div>
+                  <div className="w-full">
+                    <div className="space-y-4 mb-8">
+                      <h3 className="uppercase text-3xl text-azul">
+                        Sell Your NFT
+                      </h3>
+                      <p className="text-mirage font-medium">
+                        Unlock the potential of your digital assets.
+                      </p>
+                      <p className="text-mirage font-medium">
+                        Connect with buyers and sellers form around the world,
+                        and take the first step towards monetizing your unique
+                        digital creations.
+                      </p>
+                    </div>
+                    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                      <div className="w-full mb-4">
+                        <InputMain className="relative pb-2 border-none sm:gap-1">
+                          <InputMain.Label
+                            label="Sale Price"
+                            htmlFor="Sale Price"
+                            required
+                          />
+                          <Controller
+                            name={'sale-price'}
+                            control={control}
+                            render={({ field }) => {
+                              return (
+                                <InputMain.Input
+                                  id="sale-price"
+                                  type="number"
+                                  className="sm:col-span-2"
+                                  inputClassName="md:h-11"
+                                  onChange={() => {}}
+                                  error={errors['first-name']?.message}
+                                  {...field}
+                                />
+                              )
+                            }}
+                          />
+                        </InputMain>
+                      </div>
+
+                      <div className="w-full">
+                        <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
+                          <InputMain.Label
+                            label="Description"
+                            htmlFor="desc"
+                            required
+                          />
+                          <Controller
+                            name="desc"
+                            control={control}
+                            render={({ field }) => {
+                              return (
+                                <InputMain.Textarea
+                                  id="desc"
+                                  className="w-full"
+                                  rows={6}
+                                  onChange={() => {}}
+                                  error={errors['message']?.message}
+                                  {...field}
+                                  ref={textAreaRef}
+                                />
+                              )
+                            }}
+                          />
+                        </InputMain>
+                      </div>
+
+                      <div className="mt-5 border-t border-gray-200 flex gap-1.5 justify-end py-3">
+                        <button
+                          type="button"
+                          onClick={() => onClose()}
+                          className="bg-white rounded-lg border w-fit py-2.5 px-2 flex justify-center items-center"
+                        >
+                          <span>Cancel</span>
+                        </button>
+                        <ButtonWLoading
+                          type="submit"
+                          text="LIST ITEM ON MARKET"
+                          className="font-normal"
+                        />
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
