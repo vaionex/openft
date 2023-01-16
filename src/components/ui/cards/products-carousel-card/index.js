@@ -128,7 +128,8 @@ const ProductsCarouselCard = ({
       // const atomicSwapOffer = null //remove
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId: data?.tokenId,
-        amount: data?.amountInBSV,
+        amount: 1,
+        wantedAmount: data?.amountInBSV,
         sn: 1,
       })
 
