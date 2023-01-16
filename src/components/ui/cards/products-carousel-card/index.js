@@ -275,7 +275,7 @@ const ProductsCarouselCard = ({
       )}
     >
       <div className="relative">
-        <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
+        <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-80">
           <NextLink href={`/discover/${data?.tokenId}`}>
             <a className="cursor-pointer">
               {data?.imageURL ? (
@@ -288,10 +288,10 @@ const ProductsCarouselCard = ({
                     priority={type === 'list' && isInFirstThree}
                     quality={70}
                   />
-                  <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
+                  {/* <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" /> */}
                 </>
               ) : (
-                <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
+                <div className="h-full w-full bg-gradient-to-tr from-blue-600 to-blue-300" />
               )}
             </a>
           </NextLink>
@@ -423,7 +423,6 @@ ProductsCarouselCard.propTypes = {
 export default ProductsCarouselCard
 
 const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
-  console.warn('data', data)
   return (
     <div>
       <div

@@ -14,6 +14,7 @@ import {
   BellIcon,
   LifeBuoyIcon,
   LogOutIcon,
+  SvgQRcodeIcon,
 } from '@/components/common/icons'
 import NextLink from 'next/link'
 
@@ -47,6 +48,12 @@ const dropdownRoutes = [
     name: 'Wallet',
     icon: WalletOutlineIcon,
     desc: 'A place where you can check your balance.',
+  },
+  {
+    url: '/user-settings/mfa',
+    name: '2-Factor Authentication',
+    icon: SecurityIcon,
+    desc: 'Verify your email address to use the multi factor feature.',
   },
   {
     url: '/contact',

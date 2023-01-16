@@ -113,7 +113,7 @@ const Collection = () => {
             <Details nft={tokenInfo} />
           </>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12 cursor">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12">
             <div className="grid grid-cols-1 gap-x-[29px] gap-y-12 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
               {tokens &&
                 tokens?.map((token) => (

@@ -12,6 +12,8 @@ module.exports = {
         mirage: '#101828',
         mist: '#667085',
         bluewood: '#344054',
+        azul: '#155EEF',
+        ultramarine: '#2d6ff1',
         'vista-white': '#F9FAFB',
       },
       screens: {

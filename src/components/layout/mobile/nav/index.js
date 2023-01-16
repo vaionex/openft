@@ -26,6 +26,10 @@ const ProfileRoutes = [
     name: 'Security',
   },
   {
+    href: '/user-settings/mfa',
+    name: '2-Factor Authentication',
+  },
+  {
     href: '/user-settings/wallet',
     name: 'Wallet',
   },
