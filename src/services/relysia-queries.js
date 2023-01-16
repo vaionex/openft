@@ -245,12 +245,13 @@ export const mintNFT = async (nftDetails) => {
 
 //create atomic swap offer
 export const createAtomicSwapOffer = async (offerDetails) => {
-  const { tokenId, amount, sn } = offerDetails
+  const { tokenId, amount, wantedAmount, sn } = offerDetails
 
   const parameters = {
     dataArray: [
       {
-        amount: amount,
+        amount,
+        wantedAmount,
         type: 'BSV',
         tokenId: tokenId,
         sn: sn,

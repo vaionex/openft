@@ -128,7 +128,8 @@ const ProductsCarouselCard = ({
       // const atomicSwapOffer = null //remove
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId: data?.tokenId,
-        amount: data?.amountInBSV,
+        amount: 1,
+        wantedAmount: data?.amountInBSV,
         sn: 1,
       })
 
@@ -310,11 +311,10 @@ const ProductsCarouselCard = ({
             <span className="mr-2">${data?.amount}</span>
           </p>
           <p className="py-2 text-xl font-medium text-[#101828]">
-            
             <span>
               {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
-            </span>
-            {' '}BSV
+            </span>{' '}
+            BSV
           </p>
         </div>
         {!singleNFT && (

@@ -167,7 +167,8 @@ const UploadForm = () => {
       let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId,
-        amount: amountInBSV,
+        amount: 1,
+        wantedAmount: amountInBSV,
         sn: 1,
       })
 
