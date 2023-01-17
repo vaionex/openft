@@ -55,7 +55,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
   const getNftData = async () => {
     const docRef = doc(firebaseDb, 'nfts', slug)
     const docSnap = await getDoc(docRef)
-
+    console.log('docSnap.data()::', docSnap.data())
     if (docSnap.exists() && docSnap.data()) {
       setnftData(docSnap.data())
     }
@@ -142,7 +142,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                       />
                     ) : (
                       <AvatarWithName
-                        className="w-8 h-8 rounded-full text-sm"
+                        className="w-8 h-8 text-sm rounded-full"
                         name={artistData?.name}
                       />
                     )}
