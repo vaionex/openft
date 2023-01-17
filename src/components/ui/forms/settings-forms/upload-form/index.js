@@ -191,7 +191,7 @@ const UploadForm = () => {
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
         likes: 0,
-        status: true,
+        status: 'live',
         tokenId,
         contractTxid: tokenObj.contractTxid,
         issueTxid: tokenObj.issueTxid,
@@ -383,7 +383,7 @@ const UploadForm = () => {
               id="bsv"
               disabled
               value={bsvPrice}
-              className="mt-2 text-gray-500 sm:mt-0 relative w-full sm:w-1/2"
+              className="relative w-full mt-2 text-gray-500 sm:mt-0 sm:w-1/2"
               inputContainer="md:h-11"
               placeholder="1 BSV"
               tooltip={{

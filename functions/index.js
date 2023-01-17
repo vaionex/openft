@@ -30,6 +30,7 @@ exports.addToIndex = functions.firestore
       offerHex: data.offerHex,
       likes: data.likes,
       timestamp: data.timestamp,
+      status: data.status,
     }
 
     return index.saveObject(indexableData)
@@ -55,6 +56,7 @@ exports.updateIndex = functions.firestore
       offerHex: newData.offerHex,
       likes: newData.likes,
       timestamp: newData.timestamp,
+      status: newData.status,
     }
 
     return index.saveObject(indexableData)
