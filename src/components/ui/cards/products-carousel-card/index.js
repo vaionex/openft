@@ -153,6 +153,7 @@ const ProductsCarouselCard = ({
 
       let tokenObj = {
         ownerId: currentUser.uid,
+        status: 'private',
         offerHex:
           atomicSwapOffer && atomicSwapOffer?.contents[0]
             ? atomicSwapOffer.contents[0]

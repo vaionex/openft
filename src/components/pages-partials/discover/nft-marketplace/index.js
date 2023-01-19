@@ -43,7 +43,7 @@ const NFTMarketplace = ({
       createURL={restProps.createURL}
       {...restProps}
     >
-      <Configure hitsPerPage={9} />
+      <Configure hitsPerPage={9} filters="status:live" />
 
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8" ref={toTopRef}>
         <div className="relative z-10 flex gap-4 pt-0 pb-6">
@@ -54,7 +54,7 @@ const NFTMarketplace = ({
             open={mobileFiltersOpen}
             onClose={setMobileFiltersOpen}
           />
-        )} 
+        )}
 
         <section aria-labelledby="products-heading" className="pt-6 pb-24">
           <h2 id="products-heading" className="sr-only">
