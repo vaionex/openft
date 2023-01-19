@@ -19,7 +19,7 @@ export default function MoreNft({
       searchClient={searchClient}
       {...restProps}
     >
-      <Configure hitsPerPage={3} />
+      <Configure hitsPerPage={3} filters="status:live" />
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <section aria-labelledby="products-heading" className="pt-10">
           {/* Product grid */}
