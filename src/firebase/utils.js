@@ -520,6 +520,7 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
   const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(
     nftsRef,
+    where('status', '==', 'live'),
     orderBy('timestamp', 'desc'),
     limit(pageLimit),
   )
@@ -532,6 +533,7 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
 
   const next = query(
     nextRef,
+    where('status', '==', 'live'),
     orderBy('timestamp', 'desc'),
     startAfter(lastVisible || ''),
     limit(pageLimit),

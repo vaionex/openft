@@ -21,7 +21,7 @@ const TokenInfoCard = ({
         <div className="relative w-full cursor-pointer overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
           <NextLink href={`/user-settings/collection?current=${data?.tokenId}`}>
             {data?.image ? (
-              <>
+              <div>
                 <Image
                   src={data?.image || ''}
                   alt={data?.name}
@@ -31,7 +31,7 @@ const TokenInfoCard = ({
                   quality={70}
                 />
                 <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
-              </>
+              </div>
             ) : (
               <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
             )}

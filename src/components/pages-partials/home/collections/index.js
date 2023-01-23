@@ -33,7 +33,8 @@ const CollectionsSection = ({ nftsData }) => {
           </div>
         )}
       </div>
-      <div className=" py-12 mx-auto w-full max-w-7xl 3xlg:min-w-[1364px] ">
+      {/* 3xlg:min-w-[1364px] */}
+      <div className="py-12 mx-auto w-full max-w-7xl 2xl:min-w-full">
         <ProductsCarousel data={nftsData} />
       </div>
     </div>
