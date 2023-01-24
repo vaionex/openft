@@ -60,6 +60,7 @@ const UserSettingsWalletSection = () => {
     // resolver,
   })
   const { isSubmitting, isValid, errors } = formState
+  console.warn('rt', currentUser)
   const onSubmit = async (data) => {
     try {
       const amount = data.amount ? parseFloat(data.amount) : 0
@@ -164,14 +165,16 @@ const UserSettingsWalletSection = () => {
     }
   }, [wallethistory])
 
-  if (!currentUser.paymail) {
-    dispatch(
-      updateUser({
-        uid: currentUser.uid,
-        values: { paymail: paymail },
-      }),
-    )
-  }
+  useEffect(() => {
+    if (!currentUser.paymail) {
+      dispatch(
+        updateUser({
+          uid: currentUser.uid,
+          values: { paymail: paymail },
+        }),
+      )
+    }
+  }, [])
 
   const getTxName = (type, protocol) => {
     if (type == 'credit' && protocol == 'STAS') {
@@ -216,10 +219,7 @@ const UserSettingsWalletSection = () => {
   const SendNotificationByPaymail = async (address, message) => {
     const user = await firebaseGetUserByPaymail(address)
     const userId = user?.userData[0]?.uid
-    console.log(
-      '🚀 ~ file: index.js:220 ~ SendNotificationByPaymail ~ userId',
-      userId,
-    )
+
     if (userId) SendNotification(userId, message)
   }
   return (

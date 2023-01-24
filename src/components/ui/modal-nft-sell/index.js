@@ -31,9 +31,9 @@ const ModalNFTSell = ({ className, isOpen, onClose, data }) => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel
-                className={`relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl w-full max-w-lg md:max-w-6xl m-8 ${className} `}
+                className={`relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl w-full max-w-lg md:max-w-6xl  md:m-8 ${className} `}
               >
-                <div className="flex flex-col md:flex-row p-8 lg:p-16 gap-8">
+                <div className="flex flex-col md:flex-row p-6 sm:p-8 lg:p-16 gap-8">
                   <div className="w-full">
                     <div className="relative max-w-sm mx-auto md:mx-0 border border-gray-200 group rounded-xl flex flex-col">
                       <TokenInfoCard
