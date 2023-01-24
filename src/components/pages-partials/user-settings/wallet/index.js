@@ -60,7 +60,6 @@ const UserSettingsWalletSection = () => {
     // resolver,
   })
   const { isSubmitting, isValid, errors } = formState
-
   const onSubmit = async (data) => {
     try {
       const amount = data.amount ? parseFloat(data.amount) : 0
