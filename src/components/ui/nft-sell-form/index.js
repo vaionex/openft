@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { firebaseDb } from '@/firebase/init'
 import { toast } from 'react-toastify'
 
-const NFTSellForm = ({ onClose, data, tokenInfo }) => {
+const NFTSellForm = ({ onClose, data }) => {
   const resolver = useYupValidationResolver(validationSchema)
   const [bsvPrice, setBsvPrice] = useState('')
 
@@ -107,7 +107,7 @@ const NFTSellForm = ({ onClose, data, tokenInfo }) => {
           <Controller
             name="amount"
             control={control}
-            defaultValue={tokenInfo?.amount}
+            defaultValue={data?.amount}
             render={({ field }) => {
               return (
                 <InputMain.Input
@@ -134,7 +134,7 @@ const NFTSellForm = ({ onClose, data, tokenInfo }) => {
           <Controller
             name="description"
             control={control}
-            defaultValue={tokenInfo?.description}
+            defaultValue={data?.description}
             render={({ field }) => {
               return (
                 <InputMain.Textarea

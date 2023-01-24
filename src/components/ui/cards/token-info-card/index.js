@@ -1,5 +1,7 @@
+import userSelector from '@/redux/selectors/user'
 import Image from 'next/image'
 import NextLink from 'next/link'
+import { useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
 
 const TokenInfoCard = ({
@@ -9,9 +11,9 @@ const TokenInfoCard = ({
   isPrivate,
   handleModal,
 }) => {
+  const { currentUser } = useSelector(userSelector)
   return (
     <div
-      key={data?.id}
       className={twMerge(
         'relative border border-gray-200 group rounded-xl flex flex-col',
         type === 'carousel' ? 'sm:mr-5' : '',
@@ -20,10 +22,10 @@ const TokenInfoCard = ({
       <div className="relative">
         <div className="relative w-full cursor-pointer overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
           <NextLink href={`/user-settings/collection?current=${data?.tokenId}`}>
-            {data?.image ? (
+            {data?.imageURL ? (
               <div>
                 <Image
-                  src={data?.image || ''}
+                  src={data?.imageURL || ''}
                   alt={data?.name}
                   layout="fill"
                   className="absolute inset-0 object-cover object-center w-full h-full"
@@ -33,23 +35,33 @@ const TokenInfoCard = ({
                 <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
               </div>
             ) : (
-              <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 " />
+              <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300" />
             )}
           </NextLink>
+        </div>
+        <div
+          className={twMerge(
+            'absolute top-4 right-4 z-20 inline-flex py-1 px-2 font-semibold text-sm backdrop-blur-md bg-black/30 tracking-wide overflow-hidden rounded-lg border border-gray-200',
+            data.status === 'live'
+              ? 'text-green-500'
+              : ' text-gray-200 opacity-90',
+          )}
+        >
+          LIVE
         </div>
       </div>
       <div className="px-4 py-5">
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
             <span className="text-azul font-semibold text-sm">
-              {data.symbol}
+              {currentUser?.name}
             </span>
-            <span className="text-mirage text-lg font-medium">{data.name}</span>
+            <span className="text-mirage text-lg font-medium">
+              {data?.name}
+            </span>
           </div>
 
-          <span className="p-2 bg-vista-white rounded-lg">
-            {data.satsPerToken + '/' + data.sn[0]}
-          </span>
+          <span>${data?.amount}</span>
         </div>
 
         <div className="flex gap-1.5 mt-4">
