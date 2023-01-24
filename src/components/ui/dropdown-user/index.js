@@ -15,6 +15,7 @@ import {
   LifeBuoyIcon,
   LogOutIcon,
   SvgQRcodeIcon,
+  SvgCollectionIcon,
 } from '@/components/common/icons'
 import NextLink from 'next/link'
 
@@ -29,6 +30,12 @@ const dropdownRoutes = [
     url: '/user-settings/mint',
     name: 'Upload',
     icon: UploadBoxIcon,
+    desc: 'Upload your artwork and its details here.',
+  },
+  {
+    url: '/user-settings/collection',
+    name: 'Collection',
+    icon: SvgCollectionIcon,
     desc: 'Upload your artwork and its details here.',
   },
   {

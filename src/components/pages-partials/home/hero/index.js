@@ -16,7 +16,7 @@ const HeroSection = () => {
             <div className="lg:py-8">
               <NextLink href="https://github.com/vaionex/openft">
                 <a className="inline-flex items-center p-1 pr-2 text-[#004EEB] rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
-                  <span className="px-3 py-0.5 bg-white text-[#004EEB] font-medium leading-5 tracking-wide rounded-full">
+                  <span className="px-3 py-0.5 text-sm bg-white text-[#004EEB] font-medium leading-5 tracking-wide rounded-full">
                     It&apos;s free!
                   </span>
                   <span className="ml-4 text-sm font-medium text-[#004EEB]">
@@ -28,10 +28,10 @@ const HeroSection = () => {
                   />
                 </a>
               </NextLink>
-              <h1 className="mt-4 text-4xl tracking-[-2%] sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl xl:leading-[72px]">
+              <h1 className="mt-4 text-4xl text-[#101828] tracking-[-2%] sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl xl:leading-[72px]">
                 The new beyond-creative NFT Exchange.
               </h1>
-              <p className="text-base mt-6 sm:text-xl lg:max-w-[30rem] lg:text-lg xl:text-xl">
+              <p className="text-base mt-6 text-[#667085] sm:text-xl lg:max-w-[30rem] lg:text-lg xl:text-xl">
                 Nftana is a next-gen open source NFT Exchange marketplace that
                 anyone can contribute to develop or use this marketplace as
                 their framework.
@@ -66,16 +66,15 @@ const HeroSection = () => {
           </div>
           <div className="px-4 mt-16 mb-8 sm:my-16 lg:my-4">
             <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[600px] lg:max-w-[600px] sm:px-6 lg:px-0 rounded-3xl bg-white">
-               <Image
-                 src={`/images/hero${Math.floor(Math.random() * 3) + 1}.webp`}
-                 className="w-full h-full"
-                 alt="Nftana hero image"
-                 layout="fill"
-                 quality={100}
-                 objectFit="cover"
-                 priority={true}
-               />
-
+              <Image
+                src={`/images/hero${Math.floor(Math.random() * 3) + 1}.webp`}
+                className="w-full h-full"
+                alt="Nftana hero image"
+                layout="fill"
+                quality={100}
+                objectFit="cover"
+                priority={true}
+              />
             </div>
           </div>
         </div>
