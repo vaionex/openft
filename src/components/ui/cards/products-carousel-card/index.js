@@ -7,6 +7,7 @@ import {
   writeBatch,
   doc,
   Timestamp,
+  getDoc,
 } from 'firebase/firestore'
 import {
   firebaseAddDoc,
@@ -76,8 +77,26 @@ const ProductsCarouselCard = ({
   }, [dialogErrorMsg])
 
   const handleBuyNft = async () => {
+    console.warn('dtaa', data.objectID)
     try {
       setloadingPurchaseBtn(true)
+
+      //checking if nft status is private
+      const docRef = doc(firebaseDb, 'nfts', data.objectID)
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists() && docSnap.data()) {
+        const { status } = docSnap.data()
+        if (!status === 'live') {
+          setdialogErrorMsg('This NFT is not available for Purchase.')
+          setloadingPurchaseBtn(false)
+          return null
+        }
+      } else {
+        setdialogErrorMsg('We can not process your request at a moment.')
+
+        setloadingPurchaseBtn(false)
+        return null
+      }
 
       //checking if user own this nft
       if (data?.ownerId === currentUser?.uid) {

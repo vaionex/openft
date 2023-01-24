@@ -22,6 +22,10 @@ const ProfileRoutes = [
     name: 'Upload',
   },
   {
+    href: '/user-settings/collection',
+    name: 'Collection',
+  },
+  {
     href: '/user-settings/security',
     name: 'Security',
   },
