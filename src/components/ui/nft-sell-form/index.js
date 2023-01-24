@@ -157,7 +157,7 @@ const NFTSellForm = ({ onClose, data }) => {
           <button
             type="button"
             onClick={() => onClose()}
-            className="inline-flex justify-center w-fit px-4 py-2.5 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-0 sm:text-sm"
+            className="inline-flex text-xs justify-center items-center w-fit px-4 py-2.5 sm:text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-0 sm:text-sm"
           >
             Cancel
           </button>
@@ -165,7 +165,7 @@ const NFTSellForm = ({ onClose, data }) => {
         <ButtonWLoading
           type="submit"
           text="LIST ITEM ON MARKET"
-          className="font-normal"
+          className="font-normal text-xs sm:text-base"
         />
       </div>
     </form>
