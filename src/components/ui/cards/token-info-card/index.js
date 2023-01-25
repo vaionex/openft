@@ -1,7 +1,11 @@
+import { firebaseDb } from '@/firebase/init'
 import userSelector from '@/redux/selectors/user'
+import { doc, writeBatch } from 'firebase/firestore'
 import Image from 'next/image'
 import NextLink from 'next/link'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { twMerge } from 'tailwind-merge'
 
 const TokenInfoCard = ({
@@ -11,7 +15,40 @@ const TokenInfoCard = ({
   isPrivate,
   handleModal,
 }) => {
+  const [isLive, setIslive] = useState(data?.status === 'live')
   const { currentUser } = useSelector(userSelector)
+  const handleToggleIsLive = async () => {
+    try {
+      //updating database
+      console.log('updating database')
+
+      const batch = writeBatch(firebaseDb)
+      const tokenRef = doc(firebaseDb, 'nfts', data?.tokenId)
+
+      const tokenObj = {
+        status: 'private',
+      }
+
+      batch.update(tokenRef, tokenObj)
+      await batch.commit()
+
+      // updating status
+      setIslive(false)
+      toast.success('NFT Updated Successfully!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    } catch (err) {
+      console.log('err', err)
+    }
+  }
+
   return (
     <div
       className={twMerge(
@@ -42,9 +79,7 @@ const TokenInfoCard = ({
         <div
           className={twMerge(
             'absolute top-4 right-4 z-20 inline-flex py-1 px-2 font-semibold text-sm backdrop-blur-md bg-black/30 tracking-wide overflow-hidden rounded-lg border border-gray-200',
-            data.status === 'live'
-              ? 'text-green-500'
-              : ' text-gray-200 opacity-90',
+            isLive ? 'text-green-500' : ' text-gray-200 opacity-90',
           )}
         >
           LIVE
@@ -71,14 +106,24 @@ const TokenInfoCard = ({
             </a>
           </NextLink>
 
-          {isPrivate && (
+          {isLive ? (
             <button
               type="button"
-              onClick={() => handleModal()}
+              onClick={() => handleToggleIsLive()}
               className="bg-white rounded-lg border border-azul text-azul py-2.5 px-2 flex w-full justify-center items-center font-semibold"
             >
-              <span>Sell Nft</span>
+              <span>Delist Nft</span>
             </button>
+          ) : (
+            isPrivate && (
+              <button
+                type="button"
+                onClick={() => handleModal()}
+                className="bg-white rounded-lg border border-azul text-azul py-2.5 px-2 flex w-full justify-center items-center font-semibold"
+              >
+                <span>Sell Nft</span>
+              </button>
+            )
           )}
         </div>
       </div>
