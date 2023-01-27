@@ -21,16 +21,18 @@ export default function Social({ path }) {
       <Popover className="">
         {({ open }) => (
           <>
-            <Popover.Button
-              className={`
+            <span>
+              <Popover.Button
+                className={`
                 ${open ? '' : 'text-opacity-90'}
                 group items-center h-10 w-10 rounded-md text-base font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-            >
-              <ShareIcon
-                className="h-6 w-6 mx-auto text-blue-700"
-                aria-hidden="true"
-              />
-            </Popover.Button>
+              >
+                <ShareIcon
+                  className="h-6 w-6 mx-auto text-blue-700"
+                  aria-hidden="true"
+                />
+              </Popover.Button>
+            </span>
             <Transition
               as={Fragment}
               enter="transition ease-out duration-200"

@@ -812,6 +812,7 @@ const firebaseGetAuthorizedUser = () => {
         'notifications',
         userResponse.uid,
       )
+
       store.dispatch(
         setUserData({
           ...user,
@@ -819,6 +820,7 @@ const firebaseGetAuthorizedUser = () => {
           emailVerified: userResponse.emailVerified,
           phoneNumber: userResponse.phoneNumber,
           accessToken: userResponse.accessToken,
+          uid: userResponse.uid,
         }),
       )
       store.dispatch(

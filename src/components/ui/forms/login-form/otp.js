@@ -51,9 +51,9 @@ export default function OtpModal({
                     SMS Verification
                   </Dialog.Title>
 
-                  <div class="flex items-center flex-col mt-4">
+                  <div className="flex items-center flex-col mt-4">
                     <span>Enter the SMS you received</span>
-                    {/* <span class="font-bold">+91 ******876</span> */}
+                    {/* <span className="font-bold">+91 ******876</span> */}
                   </div>
                   <div className="mt-2">
                     <form

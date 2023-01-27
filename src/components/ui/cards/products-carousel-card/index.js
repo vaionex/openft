@@ -362,10 +362,10 @@ const ProductsCarouselCard = ({
           >
             Buy now
           </button>
-          <button className="border border-gray-200 rounded-md">
+          <span className="border border-gray-200 rounded-md">
             {/* <ShareIcon className="w-5 h-5 text-blue-700" aria-hidden="true" /> */}
             <Social path={`/discover/${data?.tokenId}`} />
-          </button>
+          </span>
         </div>
       </div>
       <ModalConfirm
