@@ -1,0 +1,74 @@
+[debug] [2023-01-17T12:40:08.699Z] ----------------------------------------------------------------------
+[debug] [2023-01-17T12:40:08.701Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init
+[debug] [2023-01-17T12:40:08.701Z] CLI Version:   11.14.4
+[debug] [2023-01-17T12:40:08.701Z] Platform:      linux
+[debug] [2023-01-17T12:40:08.701Z] Node Version:  v18.12.1
+[debug] [2023-01-17T12:40:08.702Z] Time:          Tue Jan 17 2023 17:40:08 GMT+0500 (Pakistan Standard Time)
+[debug] [2023-01-17T12:40:08.702Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-17T12:40:08.769Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-17T12:40:08.769Z] > authorizing via signed-in user (muhammad@vaionex.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/mshahzaib/Desktop/Vaionex/openft
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2023-01-17T12:40:10.427Z] Using project from CLI flag: vaionexalpha
+[debug] [2023-01-17T12:40:10.432Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vaionexalpha [none]
+[debug] [2023-01-17T12:40:11.165Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vaionexalpha 200
+[debug] [2023-01-17T12:40:11.165Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vaionexalpha {"projectId":"vaionexalpha","projectNumber":"1062576213072","displayName":"VaionexAlpha","name":"projects/vaionexalpha","resources":{"hostingSite":"vaionexalpha","storageBucket":"vaionexalpha.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_9128abbf-1889-481b-b990-e1f3246846e1"}
+[info] i  Using project vaionexalpha (VaionexAlpha) 
+[info] 
+=== Functions Setup
+[debug] [2023-01-17T12:40:11.172Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-17T12:40:11.173Z] > authorizing via signed-in user (muhammad@vaionex.com)
+[debug] [2023-01-17T12:40:11.173Z] [iam] checking project vaionexalpha for permissions ["firebase.projects.get"]
+[debug] [2023-01-17T12:40:11.174Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/vaionexalpha:testIamPermissions [none]
+[debug] [2023-01-17T12:40:11.174Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/vaionexalpha:testIamPermissions x-goog-quota-user=projects/vaionexalpha
+[debug] [2023-01-17T12:40:11.174Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vaionexalpha:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-01-17T12:40:14.007Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/vaionexalpha:testIamPermissions 200
+[debug] [2023-01-17T12:40:14.007Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vaionexalpha:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-01-17T12:40:14.009Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-01-17T12:40:14.009Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/vaionexalpha
+[debug] [2023-01-17T12:40:14.013Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-01-17T12:40:14.013Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/vaionexalpha
+[debug] [2023-01-17T12:40:15.967Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/runtimeconfig.googleapis.com 200
+[debug] [2023-01-17T12:40:15.967Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-01-17T12:40:15.970Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/cloudfunctions.googleapis.com 200
+[debug] [2023-01-17T12:40:15.970Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/vaionexalpha/services/cloudfunctions.googleapis.com [omitted]
+[info] 
+Detected existing codebase(s): default
+
+[info] 
+Overwriting codebase default...
+
+[info] i  Skipping write of functions/package.json 
+[info] i  Skipping write of functions/index.js 
+[info] i  Skipping write of functions/.gitignore 
+[info] 
+[info] i  Writing configuration info to firebase.json... 
+[debug] [2023-01-17T12:40:21.814Z] Error: EACCES: permission denied, open '/home/mshahzaib/Desktop/Vaionex/openft/firebase.json'
+    at Object.openSync (node:fs:600:3)
+    at Object.writeFileSync (node:fs:2221:35)
+    at Config.writeProjectFile (/usr/local/lib/node_modules/firebase-tools/lib/config.js:153:12)
+    at /usr/local/lib/node_modules/firebase-tools/lib/commands/init.js:170:16
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: An unexpected error has occurred.
