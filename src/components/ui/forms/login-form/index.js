@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAuthenticated, login } from '@/redux/slices/user'
-import { EyeIcon, EyeOffIcon, MenuIcon } from '@heroicons/react/outline'
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
 import NextLink from 'next/link'
 import Checkbox from '../../checkbox'
 import Alert from '../../alert'
@@ -11,20 +11,17 @@ import ButtonWLoading from '../../button-w-loading'
 import { firebaseLogin } from '@/firebase/utils'
 import OtpModal from './otp'
 
-function LoginForm() {
+function LoginForm({ setVerifyID, verifyID }) {
   const dispatch = useDispatch()
   const router = useRouter()
   const { isPending } = useSelector(userSelector)
   const [isOpen, setIsOpen] = useState(false)
-  const [verifyID, setVerifyID] = useState(null)
-  const [verifyCode, setVerifyCode] = useState({
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-    5: null,
-    6: null,
-  })
+  const [allowedCharacters, setAllowedCharacters] = useState('numeric')
+  const [otpNumber, setOtpNumber] = useState('')
+  const handleOnChange = (enteredOtp) => {
+    setOtpNumber(enteredOtp)
+  }
+
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
   const [error, setError] = useState(null)
@@ -41,7 +38,6 @@ function LoginForm() {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    const otpNumber = Object.values(verifyCode).join('')
     try {
       const user = await dispatch(
         login({
@@ -170,9 +166,10 @@ function LoginForm() {
       <OtpModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        handleOnChange={handleOnChange}
         handler={handleLogin}
-        verifyCode={verifyCode}
-        setVerifyCode={setVerifyCode}
+        allowedCharacters={allowedCharacters}
+        otpNumber={otpNumber}
       />
     </div>
   )

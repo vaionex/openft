@@ -26,7 +26,6 @@ const basketSlice = createSlice({
       state.basket = null
     },
   },
-  extraReducers: (builder) => {},
 })
 
 export default basketSlice

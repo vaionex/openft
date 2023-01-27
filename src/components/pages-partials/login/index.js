@@ -8,6 +8,7 @@ import LoginCarousel from '@/components/ui/carousels/login-carousel'
 import { useDispatch } from 'react-redux'
 import { loginWithGoogle } from '@/redux/slices/user'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 const testimonials = [
   {
@@ -35,10 +36,13 @@ const testimonials = [
 const Login = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const [verifyID, setVerifyID] = useState(null)
 
   const handleUserAuthWithGoogle = async () => {
-    dispatch(loginWithGoogle())
-    router.push('/')
+    const user = await dispatch(loginWithGoogle({ setVerifyID })).unwrap()
+    if (user && !user?.error) {
+      router.replace('/')
+    }
   }
 
   return (
@@ -55,7 +59,7 @@ const Login = () => {
               </div>
               <div className="mt-8">
                 <div className="mb-6">
-                  <LoginForm />
+                  <LoginForm setVerifyID={setVerifyID} verifyID={verifyID} />
                 </div>
                 <div id="2fa-captcha"></div>
                 <div>

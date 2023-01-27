@@ -225,7 +225,6 @@ const fireGetNftsFromFavList = async (favArray) => {
 }
 
 const firebaseIsUsernameExist = async (username) => {
-  console.log(username)
   const querySnapshot = await getDocs(collection(firebaseDb, 'users'))
   let isExist
 
@@ -307,59 +306,117 @@ const firebaseLogout = async () => {
   store.dispatch(clearRegistrationForm())
 }
 
-const firebaseLoginWithGoogle = async () => {
-  try {
-    const provider = new GoogleAuthProvider()
-    const { user } = await signInWithPopup(firebaseAuth, provider)
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
-    if (userFromDb) {
-      const userNotifications = await firebaseGetSingleDoc(
-        'notifications',
-        user.uid,
-      )
-      store.dispatch(setAuthenticated(!!user))
-      store.dispatch(
-        setNotifications({
-          'app-notification':
-            userNotifications && userNotifications['app-notification']
-              ? userNotifications['app-notification']
-              : null,
-          'email-notification':
-            userNotifications && userNotifications['email-notification']
-              ? userNotifications['email-notification']
-              : null,
-        }),
-      )
-      return userFromDb
-    } else {
-      const checkUsername = await firebaseIsUsernameExist(
-        user.email.split('@')[0],
-      )
-      const infos = {
-        displayName: user.displayName,
-        name: user.displayName,
-        email: user.email,
-        username: checkUsername ? '' : user.email.split('@')[0],
-        uid: user.uid,
-        createdAt: user.metadata.creationTime,
-        profileImage: user.photoURL,
-        coverImage: null,
-        bio: '',
-        jobTitle: '',
-        showJobTitle: false,
-        socialLinks: {
-          facebook: '',
-          instagram: '',
-          website: '',
-        },
+const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
+  const recaptchaVerifier = new RecaptchaVerifier(
+    '2fa-captcha',
+    {
+      callback: (verificationId) => setVerifyID(verificationId),
+      'expired-callback': () => setVerifyID(null),
+      size: 'invisible',
+    },
+    firebaseAuth,
+  )
+
+  const provider = new GoogleAuthProvider()
+  provider.addScope('email')
+  provider.addScope('profile')
+  const userInfo = await signInWithPopup(firebaseAuth, provider)
+    .then(async (result) => {
+      const user = result.user
+      apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+      if (userFromDb) {
+        const userNotifications = await firebaseGetSingleDoc(
+          'notifications',
+          user.uid,
+        )
+        store.dispatch(setAuthenticated(!!user))
+        store.dispatch(
+          setNotifications({
+            'app-notification':
+              userNotifications && userNotifications['app-notification']
+                ? userNotifications['app-notification']
+                : null,
+            'email-notification':
+              userNotifications && userNotifications['email-notification']
+                ? userNotifications['email-notification']
+                : null,
+          }),
+        )
+        return {
+          ...userFromDb,
+          ...user.reloadUserInfo,
+          emailVerified: user.emailVerified,
+          phoneNumber: user.phoneNumber,
+          accessToken: user.accessToken,
+        }
+      } else {
+        await updateEmail(user, user.providerData[0].email)
+        const checkUsername = await firebaseIsUsernameExist(
+          user?.email?.split('@')[0],
+        )
+        const infos = {
+          displayName: user.displayName,
+          name: user?.displayName,
+          email: user?.providerData[0].email,
+          username: checkUsername
+            ? ''
+            : user?.providerData[0].email?.split('@')[0],
+          uid: user.uid,
+          createdAt: user.metadata.creationTime,
+          profileImage: user.photoURL,
+          coverImage: null,
+          bio: '',
+          jobTitle: '',
+          showJobTitle: false,
+          socialLinks: {
+            facebook: '',
+            instagram: '',
+            website: '',
+          },
+        }
+        await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+        await firebaseAddDocWithID('notifications', notificationObj, user.uid)
+        return {
+          ...infos,
+          ...user.reloadUserInfo,
+          emailVerified: user.emailVerified,
+          phoneNumber: user.phoneNumber,
+          accessToken: user.accessToken,
+        }
       }
-      await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-      await firebaseAddDocWithID('notifications', notificationObj, user.uid)
-      return infos
-    }
-  } catch (error) {
-    return { error: 'Incorrect email or password.' }
-  }
+    })
+    .catch(async (error) => {
+      if (error.code == 'auth/multi-factor-auth-required') {
+        const resolver = getMultiFactorResolver(firebaseAuth, error)
+        // Ask user which second factor to use.
+
+        const phoneInfoOptions = {
+          multiFactorHint: resolver.hints[0],
+          session: resolver.session,
+        }
+        const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+        // Send SMS verification code
+        phoneAuthProvider
+          .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+          .then(function (verificationId) {
+            setVerifyID(verificationId)
+          })
+        rsl = resolver
+      } else if (error.code == 'auth/wrong-password') {
+        const errorMessage = error.message
+      }
+
+      const errorCode = error?.code
+      const errorMessage = error?.message
+      // The email of the user's account used.
+      const email = error?.email
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error)
+      console.error({ errorCode, errorMessage, email, credential })
+      return { error }
+    })
+  return userInfo
 }
 
 const firebaseChangePassword = async (user, newPassword) => {
@@ -828,6 +885,7 @@ const firebaseVerifyMail = async () => {
   const actionCodeSettings = {
     url: 'http://localhost:3000/user-settings/mfa',
   }
+
   const res = await sendEmailVerification(
     firebaseAuth.currentUser,
     actionCodeSettings,

@@ -75,9 +75,9 @@ export const register = createAsyncThunk(
 
 export const loginWithGoogle = createAsyncThunk(
   'auth/loginWithGoogle',
-  async (_, thunkAPI) => {
+  async (request, thunkAPI) => {
     try {
-      const user = await firebaseLoginWithGoogle()
+      const user = await firebaseLoginWithGoogle(request)
       if (user && !user?.error) return user
       else throw user?.error
     } catch (error) {
@@ -136,93 +136,94 @@ const userSlice = createSlice({
       state.mnemonicPopup = action.payload
     },
   },
-  extraReducers: {
-    [login.pending]: (state) => {
-      state.isPending = true
-      state.errorMessage = null
-      state.isError = false
-    },
-    [login.rejected]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.errorMessage = action.payload
-      state.isError = true
-    },
-    [login.fulfilled]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.currentUser = action.payload.user
-      state.notificationObj = action.payload.userNotifications
-    },
-    [register.pending]: (state) => {
-      state.isPending = true
-      state.errorMessage = null
-      state.isError = false
-    },
-    [register.rejected]: (state, action) => {
-      state.isUserPending = false
-      state.errorMessage = action.payload
-      state.isError = true
-    },
-    [register.fulfilled]: (state, action) => {
-      state.isUserPending = false
-      state.currentUser = action.payload
-    },
-    [logout.pending]: (state) => {
-      state.isPending = true
-      state.errorMessage = null
-      state.isError = false
-      state.isUserPending = true
-    },
-    [logout.rejected]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.errorMessage = action.payload
-      state.isError = true
-    },
-    [logout.fulfilled]: (state) => {
-      state.isPending = false
-      state.currentUser = null
-      state.isUserPending = false
-      state.errorMessage = null
-      state.isError = false
-      state.isAuthenticated = false
-    },
-    [updateUser.pending]: (state) => {
-      state.isPending = true
-      state.errorMessage = null
-      state.isError = false
-      state.isSuccess = false
-    },
-    [updateUser.rejected]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.errorMessage = action.payload
-      state.isError = true
-      state.isSuccess = false
-    },
-    [updateUser.fulfilled]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.currentUser = action.payload
-      state.isSuccess = true
-    },
-    [loginWithGoogle.pending]: (state) => {
-      state.isPending = true
-      state.errorMessage = null
-      state.isError = false
-    },
-    [loginWithGoogle.rejected]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.errorMessage = action.payload
-      state.isError = true
-    },
-    [loginWithGoogle.fulfilled]: (state, action) => {
-      state.isPending = false
-      state.isUserPending = false
-      state.currentUser = action.payload
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state, action) => {
+        state.isPending = true
+        state.errorMessage = null
+        state.isError = false
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.errorMessage = action.payload
+        state.isError = true
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.currentUser = action.payload.user
+        state.notificationObj = action.payload.userNotifications
+      })
+      .addCase(register.pending, (state, action) => {
+        state.isPending = true
+        state.errorMessage = null
+        state.isError = false
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.isUserPending = false
+        state.errorMessage = action.payload
+        state.isError = true
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.isUserPending = false
+        state.currentUser = action.payload
+      })
+      .addCase(logout.pending, (state, action) => {
+        state.isPending = true
+        state.errorMessage = null
+        state.isError = false
+        state.isUserPending = true
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.errorMessage = action.payload
+        state.isError = true
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.isPending = false
+        state.currentUser = null
+        state.isUserPending = false
+        state.errorMessage = null
+        state.isError = false
+        state.isAuthenticated = false
+      })
+      .addCase(updateUser.pending, (state, action) => {
+        state.isPending = true
+        state.errorMessage = null
+        state.isError = false
+        state.isSuccess = false
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.errorMessage = action.payload
+        state.isError = true
+        state.isSuccess = false
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.currentUser = action.payload
+        state.isSuccess = true
+      })
+      .addCase(loginWithGoogle.pending, (state, action) => {
+        state.isPending = true
+        state.errorMessage = null
+        state.isError = false
+      })
+      .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.errorMessage = action.payload
+        state.isError = true
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.isPending = false
+        state.isUserPending = false
+        state.currentUser = action.payload
+      })
   },
 })
 

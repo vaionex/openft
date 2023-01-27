@@ -237,3 +237,85 @@
 .mantine-1tngfw:checked ~ label {
   @apply !bg-blue-600;
 }
+
+/* otp css */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badges > * {
+  margin-right: 8px;
+}
+
+.container {
+  @apply py-10;
+}
+
+.input {
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  font-size: 24px;
+  text-align: center;
+  margin-right: 12px;
+  text-transform: uppercase;
+  color: #494949;
+  font-family: SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial,
+    sans-serif;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: #fff;
+  background-clip: padding-box;
+}
+@media only screen and (max-width: 500px) {
+  .input {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+  }
+
+  .container {
+    @apply py-5;
+  }
+}
+
+.input:focus {
+  appearance: none;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgb(131 192 253 / 50%);
+}
+
+button {
+  appearance: none;
+  background: #0071e3;
+  border-radius: 980px;
+  text-align: center;
+  border: none;
+  color: #fff;
+  margin: 8px;
+  padding: 4px 11px;
+}
+
+p {
+  font-size: 17px;
+  line-height: 1.47059;
+}
+
+.props {
+  border: 1px solid #d6d6d6;
+  padding: 8px 16px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.allowed-characters {
+  text-align: left;
+}
+
+/* otp css */
