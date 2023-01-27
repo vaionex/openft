@@ -85,7 +85,6 @@ const profile = {
 }
 
 export default function Header({ userInfo }) {
-  console.warn('userInfo', userInfo)
   return (
     <div>
       <div className="relative object-cover w-full h-44 sm:h-64 xl:h-[475px]">
