@@ -80,56 +80,56 @@ export default function OtpModal({
                     SMS Verification
                   </Dialog.Title>
 
-                  <div class="flex items-center flex-col mt-4">
+                  <div className="flex items-center flex-col mt-4">
                     <span>Enter the SMS you received</span>
-                    {/* <span class="font-bold">+91 ******876</span> */}
+                    {/* <span className="font-bold">+91 ******876</span> */}
                   </div>
                   <div className="mt-2">
                     <form
                       onSubmit={handler}
-                      class="flex flex-col justify-center text-center px-2 mt-5"
+                      className="flex flex-col justify-center text-center px-2 mt-5"
                     >
                       <div
-                        class="flex flex-row justify-center text-center px-2 mt-5"
+                        className="flex flex-row justify-center text-center px-2 mt-5"
                         id="otp"
                       >
                         <input
-                          class="m-2 border h-10 w-10 text-center form-control rounded"
+                          className="m-2 border h-10 w-10 text-center form-control rounded"
                           type="text"
                           ref={first}
                           onChange={(e) => otpInput(e, 1)}
                           maxlength="1"
                         />
                         <input
-                          class="m-2 border h-10 w-10 text-center form-control rounded"
+                          className="m-2 border h-10 w-10 text-center form-control rounded"
                           type="text"
                           ref={second}
                           onChange={(e) => otpInput(e, 2)}
                           maxlength="1"
                         />
                         <input
-                          class="m-2 border h-10 w-10 text-center form-control rounded"
+                          className="m-2 border h-10 w-10 text-center form-control rounded"
                           type="text"
                           ref={third}
                           onChange={(e) => otpInput(e, 3)}
                           maxlength="1"
                         />
                         <input
-                          class="m-2 border h-10 w-10 text-center form-control rounded"
+                          className="m-2 border h-10 w-10 text-center form-control rounded"
                           type="text"
                           ref={fourth}
                           onChange={(e) => otpInput(e, 4)}
                           maxlength="1"
                         />
                         <input
-                          class="m-2 border h-10 w-10 text-center form-control rounded"
+                          className="m-2 border h-10 w-10 text-center form-control rounded"
                           type="text"
                           ref={fifth}
                           onChange={(e) => otpInput(e, 5)}
                           maxlength="1"
                         />
                         <input
-                          class="m-2 border h-10 w-10 text-center form-control rounded"
+                          className="m-2 border h-10 w-10 text-center form-control rounded"
                           type="text"
                           ref={sixth}
                           onChange={(e) => otpInput(e, 6)}

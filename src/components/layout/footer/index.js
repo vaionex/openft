@@ -41,7 +41,7 @@ const Footer = ({ page }) => {
         </div>
         <div className="mt-8 md:mt-0 md:order-3">
           <p className="text-base text-center text-[#98A2B3] font-normal">
-            &copy; 2022 Vaionex
+            &copy; 2023 Vaionex
           </p>
         </div>
       </div>
