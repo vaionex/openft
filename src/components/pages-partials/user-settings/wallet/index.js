@@ -410,7 +410,7 @@ const UserSettingsWalletSection = () => {
             </div>
             <div className="mt-10 sm:border-t sm:border-gray-200 lg:w-screen">
               <div className="block mt-12 text-lg font-medium text-gray-900 max-w-[666px]">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
                   <div>
                     Transaction history
                     <span className="block text-sm font-normal text-gray-500">
@@ -421,7 +421,7 @@ const UserSettingsWalletSection = () => {
                   <button
                     type="button"
                     onClick={handleSort}
-                    className="font-medium cursor-pointer ml-1 mt-1.5 text-gray-700 text-xs py-2 px-3"
+                    className="font-medium cursor-pointer ml-auto mt-4 sm:mt-0 text-gray-700 text-xs py-2 px-3"
                   >
                     <span className="flex flex-row items-center gap-2">
                       {isAscending ? 'Ascending' : 'Descending'}

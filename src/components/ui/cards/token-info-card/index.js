@@ -76,14 +76,11 @@ const TokenInfoCard = ({
             )}
           </NextLink>
         </div>
-        <div
-          className={twMerge(
-            'absolute top-4 right-4 z-20 inline-flex py-1 px-2 font-semibold text-sm backdrop-blur-md bg-black/30 tracking-wide overflow-hidden rounded-lg border border-gray-200',
-            isLive ? 'text-green-500' : ' text-gray-200 opacity-90',
-          )}
-        >
-          LIVE
-        </div>
+        {isLive && (
+          <div className="absolute top-4 right-4 z-20 text-gray-200 inline-flex py-1 px-2 font-semibold text-xs backdrop-blur-md bg-black/30 tracking-widest overflow-hidden rounded-md">
+            LIVE
+          </div>
+        )}
       </div>
       <div className="px-4 py-5">
         <div className="flex justify-between items-center">
