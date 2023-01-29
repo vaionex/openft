@@ -14,26 +14,32 @@ import {
   RecaptchaVerifier,
   PhoneAuthProvider,
   multiFactor,
+  updatePhoneNumber,
+  PhoneMultiFactorGenerator,
 } from 'firebase/auth'
-import OtpModal from './otp'
+import OtpModal from '@/components/ui/otp'
 
 const UserSettingsMfaSection = () => {
   const [loading, setLoading] = useState(false)
   const [mfaLoading, setMfaLoading] = useState(false)
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [allowedCharacters, setAllowedCharacters] = useState('numeric')
+  const [otpNumber, setOtpNumber] = useState('')
   const [phone, setPhone] = useState(null)
-  const [updateType, setUpdateType] = useState(null)
+  const [type, setType] = useState('mfa')
   const [enrolLen, setEnrolLen] = useState(0)
   const [phoneErrorMessage, setPhoneErrorMessage] = useState(null)
   const [verifyID, setVerifyID] = useState(null)
-  const captchaContainer = useRef()
+
   const [msg, setMsg] = useState({
     type: null,
     content: null,
   })
   const { currentUser, isAuthenticated } = useSelector(userSelector)
-
+  const handleOnChange = (enteredOtp) => {
+    setOtpNumber(enteredOtp)
+  }
   const disableMfa = async () => {
     try {
       setMfaLoading(true)
@@ -69,9 +75,8 @@ const UserSettingsMfaSection = () => {
   }
 
   const enableMfa = async () => {
-    setUpdateType('mfa')
     setMfaLoading(true)
-
+    setType('mfa')
     const recaptchaVerifier = new RecaptchaVerifier(
       'recaptcha-container',
       {
@@ -114,9 +119,40 @@ const UserSettingsMfaSection = () => {
     }
   }
 
+  const mfaHandle = () => {
+    const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
+    const multiFactorAssertion =
+      PhoneMultiFactorGenerator.assertion(phoneCredential)
+    multiFactor(firebaseAuth?.currentUser)
+      .enroll(multiFactorAssertion, 'personel number')
+      .then(() => router.reload())
+      .catch((error) => {
+        if (error.code == 'auth/requires-recent-login') {
+          console.log('eeeeeeeeeee')
+        }
+      })
+  }
+
+  const phoneVerifyHandle = () => {
+    const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
+
+    updatePhoneNumber(firebaseAuth?.currentUser, phoneCredential)
+      .then(() => {
+        router.reload()
+      })
+      .catch((err) => {
+        if (err.code == 'auth/account-exists-with-different-credential') {
+          setPhoneErrorMessage(
+            'Please login again to be able to perform this operation!',
+          )
+        }
+        console.log(err)
+      })
+  }
+
   const verifyPhone = () => {
     if (isPossiblePhoneNumber(phone)) {
-      setUpdateType('mailVerify')
+      setType('phone')
       const recaptchaVerifier = new RecaptchaVerifier(
         'recaptcha-container',
         {
@@ -358,10 +394,10 @@ const UserSettingsMfaSection = () => {
             <OtpModal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              router={router}
-              verifyID={verifyID}
-              setPhoneErrorMessage={setPhoneErrorMessage}
-              type={updateType}
+              handleOnChange={handleOnChange}
+              handler={type === 'mfa' ? mfaHandle : phoneVerifyHandle}
+              allowedCharacters={allowedCharacters}
+              otpNumber={otpNumber}
             />
           </div>
         </div>

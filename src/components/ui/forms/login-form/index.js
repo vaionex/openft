@@ -9,7 +9,7 @@ import Alert from '../../alert'
 import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '../../button-w-loading'
 import { firebaseLogin } from '@/firebase/utils'
-import OtpModal from './otp'
+import OtpModal from '@/components/ui/otp'
 
 function LoginForm({ setVerifyID, verifyID }) {
   const dispatch = useDispatch()

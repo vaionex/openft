@@ -16,6 +16,11 @@ export default function OtpModal({
     setIsOpen(false)
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    handler()
+  }
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -57,7 +62,7 @@ export default function OtpModal({
                   </div>
                   <div className="mt-2">
                     <form
-                      onSubmit={handler}
+                      onSubmit={handleSubmit}
                       class="flex flex-col justify-center text-center sm:px-2 mt-5"
                     >
                       <AuthCode
