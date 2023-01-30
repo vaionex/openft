@@ -18,7 +18,7 @@ export default function OtpModal({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    handler()
+    handler(e)
   }
 
   return (

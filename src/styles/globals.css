@@ -281,28 +281,6 @@
   }
 }
 
-.input:focus {
-  appearance: none;
-  outline: 0;
-  box-shadow: 0 0 0 3px rgb(131 192 253 / 50%);
-}
-
-button {
-  appearance: none;
-  background: #0071e3;
-  border-radius: 980px;
-  text-align: center;
-  border: none;
-  color: #fff;
-  margin: 8px;
-  padding: 4px 11px;
-}
-
-p {
-  font-size: 17px;
-  line-height: 1.47059;
-}
-
 .props {
   border: 1px solid #d6d6d6;
   padding: 8px 16px;
