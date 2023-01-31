@@ -17,7 +17,7 @@ const RegistrationPageSidebar = () => {
             <RegistrationSteps stepsType="circle" />
           </div>
           <div className="flex justify-between gap-2 text-blue-200">
-            <span>© Vaionex 2022</span>
+            <span>© Vaionex 2023</span>
             <span>
               <a href="mailto:one@vaionex.com">
                 <span className="sr-only">Email</span>

@@ -325,6 +325,18 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
       const user = result.user
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+      if (!userFromDb) {
+        const userEmail = await firebaseGetUserDetailByEmail(
+          user.providerData[0].email,
+        )
+        if (userEmail.isExist) {
+          const error = {
+            errorMessage: 'This email is already registered',
+            code: 409,
+          }
+          return { error }
+        }
+      }
       if (userFromDb) {
         const userNotifications = await firebaseGetSingleDoc(
           'notifications',
@@ -351,7 +363,7 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
           accessToken: user.accessToken,
         }
       } else {
-        await updateEmail(user, user.providerData[0].email)
+        // await updateEmail(user, user.providerData[0].email)
         const checkUsername = await firebaseIsUsernameExist(
           user?.email?.split('@')[0],
         )
@@ -364,7 +376,8 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
             : user?.providerData[0].email?.split('@')[0],
           uid: user.uid,
           createdAt: user.metadata.creationTime,
-          profileImage: user.photoURL,
+          googleProfileImg: user.photoURL,
+          profileImage: null,
           coverImage: null,
           bio: '',
           jobTitle: '',
@@ -390,7 +403,6 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
       if (error.code == 'auth/multi-factor-auth-required') {
         const resolver = getMultiFactorResolver(firebaseAuth, error)
         // Ask user which second factor to use.
-
         const phoneInfoOptions = {
           multiFactorHint: resolver.hints[0],
           session: resolver.session,
@@ -406,7 +418,6 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
       } else if (error.code == 'auth/wrong-password') {
         const errorMessage = error.message
       }
-
       const errorCode = error?.code
       const errorMessage = error?.message
       // The email of the user's account used.
@@ -703,6 +714,23 @@ const firebaseGetUserDetailByUsername = async (username) => {
   }
 }
 
+const firebaseGetUserDetailByEmail = async (email) => {
+  const docRef = collection(firebaseDb, 'users')
+  const queryRef = query(docRef, where('email', '==', email))
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const userDetail = documentSnapshots.docs.map((doc) => {
+    const user = doc.data()
+    user.id = doc.id
+    return user
+  })
+
+  return {
+    userData: JSON.parse(JSON.stringify(userDetail)),
+    isExist: documentSnapshots.docs.length > 0 ? true : false,
+  }
+}
 const firebaseAddDocWithRandomID = async (collectionName, obj) => {
   try {
     const docRef = collection(firebaseDb, collectionName)
@@ -915,6 +943,7 @@ export {
   firebaseChangePassword,
   firebaseResetPassword,
   firebaseGetUserInfoFromDb,
+  firebaseGetUserDetailByEmail,
   firebaseGetNftProducts,
   firebaseGetFilteredNftProducts,
   firebaseIsUsernameExist,
