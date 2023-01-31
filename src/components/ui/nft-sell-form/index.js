@@ -15,7 +15,7 @@ import { toast } from 'react-toastify'
 const NFTSellForm = ({ onClose, data }) => {
   const resolver = useYupValidationResolver(validationSchema)
   const [bsvPrice, setBsvPrice] = useState('')
-
+  const [isLoading, setIsLoading] = useState(false)
   const textAreaRef = useRef(null)
   const usdBalance = usePriceConverter()
   const { currentUser } = useSelector(userSelector)
@@ -39,8 +39,10 @@ const NFTSellForm = ({ onClose, data }) => {
       setBsvPrice('0 BSV')
     }
   }, [usdBalance, usdPrice])
+
   const onSubmit = async (formData) => {
     try {
+      setIsLoading(true)
       let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
       //creating atomic swap offer
       console.log('creating offer hex')
@@ -83,6 +85,8 @@ const NFTSellForm = ({ onClose, data }) => {
 
       batch.update(tokenRef, tokenObj)
       await batch.commit()
+
+      setIsLoading(false)
       onClose()
 
       toast.success('NFT Updated Successfully!', {
@@ -163,6 +167,7 @@ const NFTSellForm = ({ onClose, data }) => {
           </button>
         )}
         <ButtonWLoading
+          isPending={isLoading}
           type="submit"
           text="LIST ITEM ON MARKET"
           className="font-normal text-xs sm:text-base"
