@@ -11,7 +11,7 @@ const navigation = [
 
 const Footer = ({ page }) => {
   if (page === 'login' || page === 'register') {
-    return <footer className="px-8 pb-8 bg-white">© 2022 Vaionex</footer>
+    return <footer className="px-8 pb-8 bg-white">© 2023 Vaionex</footer>
   }
 
   return (

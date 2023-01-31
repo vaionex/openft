@@ -6,159 +6,132 @@ const DocsMain = () => {
   return (
     <SharedLayout title="Privacy Policy">
       <div className="py-16 sm:py-24">
-        <div className="relative flex flex-col justify-between max-w-md px-4 mx-auto sm:max-w-4xl sm:px-6 ">
+        <div className="relative flex flex-col justify-between max-w-md px-4 mx-auto sm:max-w-4xl sm:px-6">
           <div className="px-4 mx-auto text-center sm:px-6 lg:px-8">
             <div>
-              <h2 className="text-lg font-semibold text-blue-600">Docs</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                We care about your privacy
-              </p>
-              <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
-                Your privacy is important to us at NFtana. We respect your
-                privacy regarding any information we may collect from you across
-                our website.
-              </p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Docs
+              </h2>
             </div>
           </div>
 
-          <div className="px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
+          <div className="px-4 py-8 sm:px-6 lg:px-8 mx-auto">
             <div>
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam
-                suspendisse morbi eleifend faucibus eget vestibulum felis.
-                Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam.
-                Mauris posuere vulputate arcu amet, vitae nisi, tellus
-                tincidunt. At feugiat sapien varius id.
+                Nftana is a marketplace for Non-Fungible Tokens (NFTs), which
+                are digital assets that represent ownership of a unique item,
+                such as artwork, music, videos, luxury goods, concert tickets,
+                cars, houses and more. The platform allows creators to mint
+                their own NFTs and sell them to buyers on the open marketplace.
               </p>
               <p className="max-w-2xl mt-6 tracking-wide text-gray-500">
-                Eget quis mi enim, leo lacinia pharetra, semper. Eget in
-                volutpat mollis at volutpat lectus velit, sed auctor. Porttitor
-                fames arcu quis fusce augue enim. Quis at habitant diam at.
-                Suscipit tristique risus, at donec. In turpis vel et quam
-                imperdiet. Ipsum molestie aliquet sodales id est ac volutpat.
+                The platform is open source with the code available at:{' '}
+                <a
+                  href="https://github.com/vaionex/openft"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline font-semibold"
+                >
+                  Openft Github
+                </a>
+                . Anyone can build their own version of NFTana that builds upon
+                the foundation that Openft provides. There is unlimited
+                potential for creative NFT & Token exchanges that open up new
+                opportunities for creators and consumers.
               </p>
             </div>
-            <div className="mt-12">
-              <h3 className="mb-6 text-2xl font-semibold">
-                What information do we collect?
-              </h3>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum,
-                nulla odio nisl vitae. In aliquet pellentesque aenean hac
-                vestibulum turpis mi bibendum diam. Tempor integer aliquam in
-                vitae malesuada fringilla.
-              </p>
-              <p className="max-w-2xl mt-6 tracking-wide text-gray-500">
-                Elit nisi in eleifend sed nisi. Pulvinar at orci, proin
-                imperdiet commodo consectetur convallis risus. Sed condimentum
-                enim dignissim adipiscing faucibus consequat, urna. Viverra
-                purus et erat auctor aliquam. Risus, volutpat vulputate posuere
-                purus sit congue convallis aliquet. Arcu id augue ut feugiat
-                donec porttitor neque. Mauris, neque ultricies eu vestibulum,
-                bibendum quam lorem id. Dolor lacus, eget nunc lectus in tellus,
-                pharetra, porttitor.
-              </p>
-              <p className="max-w-2xl mt-6 tracking-wide text-gray-500">
-                Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim
-                mauris id. Non pellentesque congue eget consectetur turpis.
-                Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt
-                aenean tempus. Quis velit eget ut tortor tellus. Sed vel, congue
-                felis elit erat nam nibh orci.
+                The process of minting an NFT on Nftana is simple and
+                straightforward. First, creators must upload their artwork,
+                along with a name, description, and price for the NFT. Once the
+                artwork has been uploaded and the information has been filled
+                out, the NFT is minted and added to your wallet. You can then
+                list it on the marketplace.
               </p>
             </div>
-
-            <div className="mt-12">
-              <h3 className="mb-6 text-2xl font-semibold">
-                How do we use your information?
-              </h3>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum,
-                nulla odio nisl vitae. In aliquet pellentesque aenean hac
-                vestibulum turpis mi bibendum diam. Tempor integer aliquam in
-                vitae malesuada fringilla.
-              </p>
-              <p className="max-w-2xl mt-6 tracking-wide text-gray-500">
-                Elit nisi in eleifend sed nisi. Pulvinar at orci, proin
-                imperdiet commodo consectetur convallis risus. Sed condimentum
-                enim dignissim adipiscing faucibus consequat, urna. Viverra
-                purus et erat auctor aliquam. Risus, volutpat vulputate posuere
-                purus sit congue convallis aliquet. Arcu id augue ut feugiat
-                donec porttitor neque. Mauris, neque ultricies eu vestibulum,
-                bibendum quam lorem id. Dolor lacus, eget nunc lectus in tellus,
-                pharetra, porttitor.
-              </p>
-              <p className="max-w-2xl mt-6 tracking-wide text-gray-500">
-                Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim
-                mauris id. Non pellentesque congue eget consectetur turpis.
-                Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt
-                aenean tempus. Quis velit eget ut tortor tellus. Sed vel, congue
-                felis elit erat nam nibh orci.
+                Buyers can browse the marketplace and view the available NFTs.
+                When a buyer finds an NFT they are interested in, they can
+                purchase it using Bitcoin SV or tokenized currency. Once the
+                transaction is complete, the buyer becomes the new owner of the
+                NFT.
               </p>
             </div>
-
-            <div className="mt-12">
-              <h4 className="mb-6 text-xl font-semibold">
-                Do we use cookies and other tracking technologies?
-              </h4>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Pharetra morbi libero id aliquam elit massa integer tellus. Quis
-                felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit
-                dictumst ut eget a, elementum eu. Maecenas est morbi mattis id
-                in ac pellentesque ac.
+                An important aspect of Nftana is that it provides a platform for
+                creators to showcase their work and reach new audiences. NFTs
+                provide a new way for creators to monetize their work and gain
+                recognition for their talents. Additionally, the platform allows
+                creators to build a community around their work, connecting with
+                fans and other creators.
               </p>
             </div>
-            <div className="mt-12">
-              <h4 className="mb-6 text-xl font-semibold">
-                How long do we keep your information?
-              </h4>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Pharetra morbi libero id aliquam elit massa integer tellus. Quis
-                felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit
-                dictumst ut eget a, elementum eu. Maecenas est morbi mattis id
-                in ac pellentesque ac.
+                We use the STAS token solution to enable creators and users to
+                mint, transfer, and redeem tokens using native Bitcoin based
+                STAS scripts.
               </p>
             </div>
-            <div className="mt-12">
-              <h4 className="mb-6 text-xl font-semibold">
-                How do we keep your information safe?
-              </h4>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Pharetra morbi libero id aliquam elit massa integer tellus. Quis
-                felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit
-                dictumst ut eget a, elementum eu. Maecenas est morbi mattis id
-                in ac pellentesque ac.
+                The STAS script uses the Bitcoin (BSV) protocol, a
+                permissionless public blockchain protocol that makes any asset
+                decentralized once processed and removes the need for any third
+                parties to be involved in moving said asset back and forth. A
+                token can represent a contractual claim over an asset and allow
+                any type of information and / or data to be tokenized.
               </p>
             </div>
-
-            <div className="mt-12">
-              <h3 className="mb-6 text-2xl font-semibold">
-                What are your privacy rights?
-              </h3>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Pharetra morbi libero id aliquam elit massa integer tellus. Quis
-                felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit
-                dictumst ut eget a, elementum eu. Maecenas est morbi mattis id
-                in ac pellentesque ac.
+                The STAS digital asset tokenization is an on-chain native
+                Bitcoin script-based solution. It enables you to build token
+                solutions for any number of use cases. You can read the
+                whitepaper at the link below:
               </p>
             </div>
-            <div className="mt-12">
-              <h4 className="mb-6 text-xl font-semibold">
-                How can you contact us about this policy?
-              </h4>
+            <div className="mt-6">
               <p className="max-w-2xl tracking-wide text-gray-500">
-                Sagittis et eu at elementum, quis in. Proin praesent volutpat
-                egestas sociis sit lorem nunc nunc sit. Eget diam curabitur mi
-                ac. Auctor rutrum lacus malesuada massa ornare et. Vulputate
-                consectetur ac ultrices at diam dui eget fringilla tincidunt.
-                Arcu sit dignissim massa erat cursus vulputate gravida id. Sed
-                quis auctor vulputate hac elementum gravida cursus dis.
+                <a
+                  href="https://www.taal.com/wp-content/uploads/2022/01/STAS_White-Paper_20211214_1.0_Finalweb4.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold underline"
+                >
+                  STAS White Paper
+                </a>
+              </p>
+            </div>
+            <div className="mt-6">
+              <p className="max-w-2xl tracking-wide text-gray-500">
+                In addition, Nftana also provides a way for buyers to collect
+                unique and one-of-a-kind digital assets. NFTs are unique and
+                cannot be replicated, making them highly sought after by
+                collectors. Additionally, NFTs provide a way for buyers to
+                support and invest in the work of the creators they admire.
+              </p>
+            </div>
+            <div className="mt-6">
+              <p className="max-w-2xl tracking-wide text-gray-500">
+                In conclusion, NFTANA is an innovative and user-friendly
+                platform that allows creators to mint and sell their own NFTs,
+                and buyers to purchase and own unique digital assets. It's a
+                great way for creators to monetize their work and reach new
+                audiences, while providing a safe and secure platform for buying
+                and selling NFTs. It also allows collectors to invest in unique
+                and one-of-a-kind digital assets and support the creators they
+                admire.
               </p>
             </div>
           </div>
         </div>
         <div
           aria-labelledby="faq-contact"
-          className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
+          className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 mt-8"
         >
           <div className="relative overflow-hidden rounded-lg ">
             <div className="absolute inset-0 bg-gray-900">

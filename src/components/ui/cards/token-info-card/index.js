@@ -16,8 +16,11 @@ const TokenInfoCard = ({
   handleModal,
 }) => {
   const [isLive, setIslive] = useState(data?.status === 'live')
+  const [delistModal, setDelistModal] = useState(false)
   const { currentUser } = useSelector(userSelector)
-  const handleToggleIsLive = async () => {
+  const handleToggleIsLive = () => {}
+
+  const updateNftStatus = async () => {
     try {
       //updating database
       console.log('updating database')
@@ -106,7 +109,7 @@ const TokenInfoCard = ({
           {isLive ? (
             <button
               type="button"
-              onClick={() => handleToggleIsLive()}
+              onClick={() => updateNftStatus()}
               className="bg-white rounded-lg border border-azul text-azul py-2.5 px-2 flex w-full justify-center items-center font-semibold"
             >
               <span>Delist Nft</span>
