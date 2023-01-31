@@ -21,7 +21,9 @@ const TokenInfoCard = ({
   const [isLoading, setIsLoading] = useState(false)
 
   const { currentUser } = useSelector(userSelector)
-  const handleToggleIsLive = async () => {
+  const handleToggleIsLive = () => {}
+
+  const updateNftStatus = async () => {
     try {
       setIsLoading(true)
       //updating database
