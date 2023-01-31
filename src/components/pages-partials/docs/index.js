@@ -119,7 +119,7 @@ const DocsMain = () => {
               <p className="max-w-2xl tracking-wide text-gray-500">
                 In conclusion, NFTANA is an innovative and user-friendly
                 platform that allows creators to mint and sell their own NFTs,
-                and buyers to purchase and own unique digital assets. It's a
+                and buyers to purchase and own unique digital assets. It&#39;s a
                 great way for creators to monetize their work and reach new
                 audiences, while providing a safe and secure platform for buying
                 and selling NFTs. It also allows collectors to invest in unique
