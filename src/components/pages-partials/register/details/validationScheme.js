@@ -1,4 +1,7 @@
-import { firebaseIsUsernameExist } from '@/firebase/utils'
+import {
+  firebaseGetUserDetailByEmail,
+  firebaseIsUsernameExist,
+} from '@/firebase/utils'
 import { getAuth, fetchSignInMethodsForEmail } from 'firebase/auth'
 import * as yup from 'yup'
 
@@ -41,16 +44,18 @@ const validationSchema = yup.object().shape({
       name: 'is-email-in-use',
       message: 'This email is already in use',
       test: async function (value) {
-        const auth = getAuth()
-        return fetchSignInMethodsForEmail(auth, value)
-          .then((data) => {
-            return !data.length
-          })
-          .catch((error) => {
-            if (error) {
-              return true
-            }
-          })
+        // const auth = getAuth()
+        // return fetchSignInMethodsForEmail(auth, value)
+        //   .then((data) => {
+        //     return !data.length
+        //   })
+        //   .catch((error) => {
+        //     if (error) {
+        //       return true
+        //     }
+        //   })
+        const user = await firebaseGetUserDetailByEmail(value)
+        return !user.isExist
       },
     })
     .required('Email is required'),
