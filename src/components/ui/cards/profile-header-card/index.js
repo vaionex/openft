@@ -15,6 +15,7 @@ import getFileExt from '@/utils/getFileExt'
 import ImageCropper from '../../image-cropper'
 import NextLink from 'next/link'
 import { toast } from 'react-toastify'
+import _ from 'lodash'
 
 const ProfileHeaderCard = ({
   user,

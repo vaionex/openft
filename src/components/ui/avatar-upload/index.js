@@ -11,6 +11,7 @@ import { firebaseDeleteImage, firebaseUploadUserImage } from '@/firebase/utils'
 import { useCallback } from 'react'
 import ModalConfirm from '../modal-confirm'
 import userSelector from '@/redux/selectors/user'
+import _ from 'lodash'
 
 export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   const { currentUser } = useSelector(userSelector)
