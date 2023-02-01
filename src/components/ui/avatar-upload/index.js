@@ -83,15 +83,15 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
   }
 
   const renderProfile = () => {
-    const userData = _.clone(currentUser)
-    userData.profileImage = userData.profileImage
-      ? userData.profileImage
-      : userData.googleProfileImg
-      ? userData.googleProfileImg
+    const userData = _.clone(currentUser) ? _.clone(currentUser) : {}
+    userData.profileImage = userData?.profileImage
+      ? userData?.profileImage
+      : userData?.googleProfileImg
+      ? userData?.googleProfileImg
       : ''
     return userData?.profileImage ? (
       <Image
-        src={userData.profileImage}
+        src={userData?.profileImage}
         alt="avatar preview"
         className="rounded-box"
         objectFit="cover"

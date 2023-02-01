@@ -81,14 +81,14 @@ const DropdownUser = ({ user }) => {
   }
 
   const renderProfile = () => {
-    const userData = _.clone(user)
-    userData.profileImage = userData.profileImage
-      ? userData.profileImage
-      : userData.googleProfileImg
-      ? userData.googleProfileImg
+    const userData = _.clone(user) ? _.clone(user) : {}
+    userData.profileImage = userData?.profileImage
+      ? userData?.profileImage
+      : userData?.googleProfileImg
+      ? userData?.googleProfileImg
       : ''
     return userData ? (
-      userData.profileImage ? (
+      userData?.profileImage ? (
         <Avatar
           className="w-10 h-10 bg-blue-700 sm:w-10 sm:h-10"
           user={userData}
@@ -96,7 +96,7 @@ const DropdownUser = ({ user }) => {
       ) : (
         <AvatarWithName
           className="w-10 h-10 text-xs sm:w-10 sm:h-10"
-          name={userData.name}
+          name={userData?.name}
         />
       )
     ) : (

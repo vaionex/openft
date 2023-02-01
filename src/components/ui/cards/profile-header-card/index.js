@@ -105,14 +105,14 @@ const ProfileHeaderCard = ({
   }
 
   const renderProfile = () => {
-    const userData = _.clone(user)
-    userData.profileImage = userData.profileImage
-      ? userData.profileImage
-      : user.googleProfileImg
-      ? user.googleProfileImg
+    const userData = _.clone(user) ? _.clone(user) : {}
+    userData.profileImage = userData?.profileImage
+      ? userData?.profileImage
+      : userData?.googleProfileImg
+      ? userData?.googleProfileImg
       : ''
     return userData ? (
-      userData.profileImage ? (
+      userData?.profileImage ? (
         <Avatar
           className="w-24 h-24 ml-4 bg-blue-700 sm:w-32 sm:h-32"
           user={userData}
@@ -120,7 +120,7 @@ const ProfileHeaderCard = ({
       ) : (
         <AvatarWithName
           className="w-24 h-24 ml-4 text-xl sm:w-32 sm:h-32"
-          name={userData.name}
+          name={userData?.name}
         />
       )
     ) : (
