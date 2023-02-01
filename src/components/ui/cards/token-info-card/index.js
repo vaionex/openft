@@ -1,13 +1,8 @@
-import { firebaseDb } from '@/firebase/init'
 import userSelector from '@/redux/selectors/user'
-import { doc, writeBatch } from 'firebase/firestore'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
 import { twMerge } from 'tailwind-merge'
-import ModalConfirm from '../../modal-confirm'
 
 const TokenInfoCard = ({
   data,
@@ -15,49 +10,10 @@ const TokenInfoCard = ({
   isInFirstThree,
   isPrivate,
   handleModal,
+  handleDelistModal,
+  isLive,
 }) => {
-  const [isLive, setIslive] = useState(data?.status === 'live')
-  const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
   const { currentUser } = useSelector(userSelector)
-  const handleToggleIsLive = () => {}
-
-  const updateNftStatus = async () => {
-    try {
-      setIsLoading(true)
-      //updating database
-      console.log('updating database')
-
-      const batch = writeBatch(firebaseDb)
-      const tokenRef = doc(firebaseDb, 'nfts', data?.tokenId)
-
-      const tokenObj = {
-        status: 'private',
-      }
-
-      batch.update(tokenRef, tokenObj)
-      await batch.commit()
-
-      // updating status
-      setIslive(false)
-      setIsOpen(false)
-      setIsLoading(false)
-      toast.success('NFT Delist Successfully!', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      })
-    } catch (err) {
-      setIsLoading(false)
-      console.log('err', err)
-    }
-  }
 
   return (
     <>
@@ -121,7 +77,7 @@ const TokenInfoCard = ({
             {isLive ? (
               <button
                 type="button"
-                onClick={() => setIsOpen(true)}
+                onClick={() => handleDelistModal()}
                 className="bg-white rounded-lg border border-azul text-azul py-2.5 px-2 flex w-full justify-center items-center font-semibold"
               >
                 <span>Delist Nft</span>
@@ -140,17 +96,6 @@ const TokenInfoCard = ({
           </div>
         </div>
       </div>
-      <ModalConfirm
-        isOpen={isOpen}
-        button1Text={'Confirm'}
-        button2Text={'Cancel'}
-        title={'Are you sure you want'}
-        secondTitle={'to Delist this NFT?'}
-        content={''}
-        onClose={() => setIsOpen(false)}
-        onConfirm={handleToggleIsLive}
-        isLoadingConfirmBtn={isLoading}
-      />
     </>
   )
 }
