@@ -82,23 +82,33 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
     }
   }
 
+  const renderProfile = () => {
+    const userData = _.clone(currentUser)
+    userData.profileImage = userData.profileImage
+      ? userData.profileImage
+      : userData.googleProfileImg
+      ? userData.googleProfileImg
+      : ''
+    return userData?.profileImage ? (
+      <Image
+        src={userData.profileImage}
+        alt="avatar preview"
+        className="rounded-box"
+        objectFit="cover"
+        layout="fill"
+        priority
+      />
+    ) : (
+      <AvatarWithName name={userData?.name} />
+    )
+  }
+
   return (
     <>
       <div className="flex items-start justify-between w-full gap-2">
         <div className="flex justify-center p-2">
           <div className="relative overflow-hidden bg-blue-700 rounded-full w-14 h-14 ring-offset-base-100 ring-offset-2">
-            {currentUser?.profileImage ? (
-              <Image
-                src={currentUser.profileImage}
-                alt="avatar preview"
-                className="rounded-box"
-                objectFit="cover"
-                layout="fill"
-                priority
-              />
-            ) : (
-              <AvatarWithName name={currentUser?.name} />
-            )}
+            {renderProfile()}
           </div>
         </div>
 

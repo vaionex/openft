@@ -322,6 +322,7 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
   provider.addScope('profile')
   const userInfo = await signInWithPopup(firebaseAuth, provider)
     .then(async (result) => {
+      console.log('result::', result)
       const user = result.user
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')

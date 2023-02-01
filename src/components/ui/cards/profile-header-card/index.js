@@ -24,6 +24,7 @@ const ProfileHeaderCard = ({
   isError,
   acceptableFileTypes = ['image/jpeg', 'image/png', 'image/webp'],
 }) => {
+  console.log('user:', user)
   const { currentUser } = useSelector(userSelector)
   const [isCropping, setIsCropping] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -103,6 +104,30 @@ const ProfileHeaderCard = ({
     }
   }
 
+  const renderProfile = () => {
+    const userData = _.clone(user)
+    userData.profileImage = userData.profileImage
+      ? userData.profileImage
+      : user.googleProfileImg
+      ? user.googleProfileImg
+      : ''
+    return userData ? (
+      userData.profileImage ? (
+        <Avatar
+          className="w-24 h-24 ml-4 bg-blue-700 sm:w-32 sm:h-32"
+          user={userData}
+        />
+      ) : (
+        <AvatarWithName
+          className="w-24 h-24 ml-4 text-xl sm:w-32 sm:h-32"
+          name={userData.name}
+        />
+      )
+    ) : (
+      <AvatarWithName className="w-24 h-24 ml-4 sm:w-32 sm:h-32 " />
+    )
+  }
+
   return (
     <div>
       <div className="relative w-full h-32 overflow-hidden rounded-lg group bg-gradient-to-tr opacity-80 from-blue-600 to-blue-300 lg:h-60">
@@ -168,21 +193,7 @@ const ProfileHeaderCard = ({
       </div>
       <div className="sm:px-6 lg:px-8">
         <div className="flex items-end -mt-12 sm:-mt-10 sm:space-x-5">
-          {user ? (
-            user.profileImage ? (
-              <Avatar
-                className="w-24 h-24 ml-4 bg-blue-700 sm:w-32 sm:h-32"
-                user={user}
-              />
-            ) : (
-              <AvatarWithName
-                className="w-24 h-24 ml-4 text-xl sm:w-32 sm:h-32"
-                name={user.name}
-              />
-            )
-          ) : (
-            <AvatarWithName className="w-24 h-24 ml-4 sm:w-32 sm:h-32 " />
-          )}
+          {renderProfile()}
 
           <div className="relative flex items-center justify-end flex-1 mt-6 space-x-4 sm:min-w-0 sm:pb-1">
             <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block max-w-[558px]">
