@@ -77,13 +77,13 @@ const ProductsCarouselCard = ({
   }, [dialogErrorMsg])
 
   const handleBuyNft = async () => {
-    console.warn('dtaa', data.objectID)
     try {
       setloadingPurchaseBtn(true)
 
       //checking if nft status is private
-      const docRef = doc(firebaseDb, 'nfts', data.objectID)
+      const docRef = doc(firebaseDb, 'nfts', data.tokenId)
       const docSnap = await getDoc(docRef)
+
       if (docSnap.exists() && docSnap.data()) {
         const { status } = docSnap.data()
         if (!status === 'live') {
@@ -99,6 +99,7 @@ const ProductsCarouselCard = ({
       }
 
       //checking if user own this nft
+
       if (data?.ownerId === currentUser?.uid) {
         setdialogErrorMsg('You own this NFT')
 

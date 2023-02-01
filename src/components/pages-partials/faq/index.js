@@ -11,7 +11,7 @@ import NextLink from 'next/link'
 
 const list = [
   {
-    name: 'Where can I get the Openft source code?',
+    name: 'Where can I get the Nftana source code?',
     description:
       'We developed the code in public, and the code is available for download at https://github.com/vaionex/openft.',
     icon: <CodeIcon className="w-12 h-12" />,
@@ -31,7 +31,7 @@ const list = [
   {
     name: 'How does it work?',
     description:
-      "Each sale is a atomic swap on the BSV blockchain, which the counter party can take without the risk of loosing money without receiving the NFT.",
+      'Each sale is a atomic swap on the BSV blockchain, which the counter party can take without the risk of loosing money without receiving the NFT.',
     icon: <DocIcon className="w-12 h-12" />,
   },
 ]
@@ -69,7 +69,7 @@ const FAQMain = () => {
               Frequently asked questions
             </h2>
             <p className="mt-4 text-xl text-gray-500">
-              Everything you need to know about the Openft and how to get the
+              Everything you need to know about the Nftana and how to get the
               source code. Can’t find the answer you’re looking for? Please{' '}
               <NextLink href="/contact">
                 <a className="underline">ask to our friendly team.</a>

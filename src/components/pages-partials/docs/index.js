@@ -32,10 +32,10 @@ const DocsMain = () => {
                   rel="noreferrer"
                   className="underline font-semibold"
                 >
-                  Openft Github
+                  Nftana Github
                 </a>
                 . Anyone can build their own version of NFTana that builds upon
-                the foundation that Openft provides. There is unlimited
+                the foundation that Nftana provides. There is unlimited
                 potential for creative NFT & Token exchanges that open up new
                 opportunities for creators and consumers.
               </p>
