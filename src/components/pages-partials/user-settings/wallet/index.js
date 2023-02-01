@@ -31,6 +31,7 @@ import userSelector from '@/redux/selectors/user'
 import { firebaseGetUserByPaymail } from '@/firebase/utils'
 import { SendNotification } from '@/services/novu-notifications'
 import { updateUser } from '@/redux/slices/user'
+import _ from 'lodash'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
