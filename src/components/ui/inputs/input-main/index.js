@@ -97,7 +97,7 @@ InputMain.Input = function InputMainInput(
         <div>
           <div
             className={twMerge(
-              'flex mt-1 rounded-md shadow-sm sm:mt-0',
+              'flex mt-1 rounded-md shadow-sm sm:mt-0 relative',
               inputContainer,
             )}
           >
@@ -126,7 +126,7 @@ InputMain.Input = function InputMainInput(
       {variant === 'add-on-reverse' && !!addon && (
         <div
           className={twMerge(
-            'flex mt-1 rounded-md shadow-sm sm:mt-0',
+            'flex mt-1 rounded-md shadow-sm sm:mt-0 relative',
             inputContainer,
           )}
         >
@@ -166,7 +166,7 @@ InputMain.Input = function InputMainInput(
         <>
           <div
             className={twMerge(
-              'flex mt-1 rounded-md shadow-sm sm:mt-0',
+              'flex mt-1 rounded-md shadow-sm sm:mt-0 relative',
               inputContainer,
             )}
           >
