@@ -6,9 +6,11 @@ import { GoogleIcon } from '@/components/common/icons'
 import Image from 'next/image'
 import LoginCarousel from '@/components/ui/carousels/login-carousel'
 import { useDispatch } from 'react-redux'
-import { loginWithGoogle } from '@/redux/slices/user'
+import { loginWithGoogle, logout } from '@/redux/slices/user'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { clearWalletData } from '@/redux/slices/wallet'
+import { toast } from 'react-toastify'
 
 const testimonials = [
   {
@@ -39,9 +41,27 @@ const Login = () => {
   const [verifyID, setVerifyID] = useState(null)
 
   const handleUserAuthWithGoogle = async () => {
-    const user = await dispatch(loginWithGoogle({ setVerifyID })).unwrap()
-    if (user && !user?.error) {
-      router.replace('/')
+    try {
+      const user = await dispatch(loginWithGoogle({ setVerifyID })).unwrap()
+      if (user && !user?.error) {
+        router.replace('/login')
+      }
+    } catch (error) {
+      if (error.code === 409) {
+        console.log('🚀 ~ error', error)
+        dispatch(logout())
+        dispatch(clearWalletData())
+        toast.error(error.errorMessage, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
+      }
     }
   }
 

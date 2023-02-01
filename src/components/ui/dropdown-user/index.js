@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import Image from 'next/image'
 import { logout } from '@/redux/slices/user'
 import { clearWalletData } from '@/redux/slices/wallet'
 import { Menu, Transition } from '@headlessui/react'
@@ -79,25 +80,35 @@ const DropdownUser = ({ user }) => {
     dispatch(clearWalletData())
   }
 
+  const renderProfile = () => {
+    const userData = _.clone(user) ? _.clone(user) : {}
+    userData.profileImage = userData?.profileImage
+      ? userData?.profileImage
+      : userData?.googleProfileImg
+      ? userData?.googleProfileImg
+      : ''
+    return userData ? (
+      userData?.profileImage ? (
+        <Avatar
+          className="w-10 h-10 bg-blue-700 sm:w-10 sm:h-10"
+          user={userData}
+        />
+      ) : (
+        <AvatarWithName
+          className="w-10 h-10 text-xs sm:w-10 sm:h-10"
+          name={userData?.name}
+        />
+      )
+    ) : (
+      <AvatarWithName className="w-10 h-10 sm:w-10 sm:h-10 " />
+    )
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full p-0.5 text-sm font-medium text-gray-700 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-          {user ? (
-            user.profileImage ? (
-              <Avatar
-                className="w-10 h-10 bg-blue-700 sm:w-10 sm:h-10"
-                user={user}
-              />
-            ) : (
-              <AvatarWithName
-                className="w-10 h-10 text-xs sm:w-10 sm:h-10"
-                name={user.name}
-              />
-            )
-          ) : (
-            <AvatarWithName className="w-10 h-10 sm:w-10 sm:h-10 " />
-          )}
+          {renderProfile()}
         </Menu.Button>
       </div>
 
@@ -111,7 +122,7 @@ const DropdownUser = ({ user }) => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1 px-1">
+          <div className="px-1 py-1">
             {dropdownRoutes.map((route) => {
               return (
                 <Menu.Item key={route.url}>
