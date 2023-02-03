@@ -15,7 +15,7 @@ const DocsMain = () => {
             </div>
           </div>
 
-          <div className="px-4 py-8 sm:px-6 lg:px-8 mx-auto">
+          <div className="px-4 py-8 mx-auto sm:px-6 lg:px-8">
             <div>
               <p className="max-w-2xl tracking-wide text-gray-500">
                 Nftana is a marketplace for Non-Fungible Tokens (NFTs), which
@@ -30,7 +30,7 @@ const DocsMain = () => {
                   href="https://github.com/vaionex/openft"
                   target="_blank"
                   rel="noreferrer"
-                  className="underline font-semibold"
+                  className="font-semibold underline"
                 >
                   Nftana Github
                 </a>
@@ -131,7 +131,7 @@ const DocsMain = () => {
         </div>
         <div
           aria-labelledby="faq-contact"
-          className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 mt-8"
+          className="px-4 mx-auto mt-8 max-w-7xl sm:px-6 lg:px-8"
         >
           <div className="relative overflow-hidden rounded-lg ">
             <div className="absolute inset-0 bg-gray-900">

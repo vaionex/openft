@@ -10,7 +10,7 @@ const HeroSection = () => {
   const { isAuthenticated } = useSelector(userSelector)
   return (
     <div className="pt-10 sm:pt-6 lg:pt-10 lg:pb-8 lg:overflow-hidden ">
-      <div className="mx-auto max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-7xl lg:px-6">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="lg:py-8">
@@ -64,7 +64,7 @@ const HeroSection = () => {
               </div>
             </div>
           </div>
-          <div className="px-4 mt-16 mb-8 sm:my-16 lg:my-4">
+          <div className="px-4 mt-16 mb-8 md:pr-0 sm:my-16 lg:my-4">
             <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[600px] lg:max-w-[600px] sm:px-6 lg:px-0 rounded-3xl bg-white">
               <Image
                 src={`/images/hero${Math.floor(Math.random() * 3) + 1}.webp`}

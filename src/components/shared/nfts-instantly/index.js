@@ -13,7 +13,7 @@ const NftsInstantly = ({
 
   return (
     <div className="lg:pt-12 lg:pb-24 lg:overflow-hidden">
-      <div className="mx-auto max-w-7xl lg:px-8 lg:py-24">
+      <div className="mx-auto max-w-7xl lg:px-6 lg:py-24">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="py-24 lg:py-0">

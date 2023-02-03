@@ -48,14 +48,14 @@ const Collection = ({ ...restProps }) => {
       {tokenInfo ? (
         <>
           <header>
-            <div className="mx-auto max-w-7xl lg:px-8 sm:px-6 px-4">
+            <div className="px-4 mx-auto max-w-7xl lg:px-8 sm:px-6">
               <div className="py-3">
                 <nav className="flex" aria-label="Breadcrumb">
                   <div className="flex sm:hidden">
                     <NextLink href="/user-settings/collection">
-                      <a className="group inline-flex space-x-3 text-sm font-medium text-gray-400 hover:text-gray-300">
+                      <a className="inline-flex space-x-3 text-sm font-medium text-gray-400 group hover:text-gray-300">
                         <ArrowLeftIcon
-                          className="h-5 w-5 flex-shrink-0 text-gray-300 group-hover:text-gray-400"
+                          className="flex-shrink-0 w-5 h-5 text-gray-300 group-hover:text-gray-400"
                           aria-hidden="true"
                         />
                         <span>Back to Collection</span>
@@ -68,11 +68,11 @@ const Collection = ({ ...restProps }) => {
                         <div className="flex items-center">
                           <NextLink href="/user-settings/collection">
                             <a
-                              className="flex space-x-2 items-center text-sm font-medium text-gray-500 hover:text-gray-600"
+                              className="flex items-center space-x-2 text-sm font-medium text-gray-500 hover:text-gray-600"
                               aria-current={'page'}
                             >
                               <ArrowLeftIcon
-                                className="h-5 w-5 flex-shrink-0 text-gray-300 group-hover:text-gray-400"
+                                className="flex-shrink-0 w-5 h-5 text-gray-300 group-hover:text-gray-400"
                                 aria-hidden="true"
                               />
                               <span>Collection</span>
@@ -84,7 +84,7 @@ const Collection = ({ ...restProps }) => {
                       <li>
                         <div className="flex items-center">
                           <svg
-                            className="h-5 w-5 flex-shrink-0 text-gray-300"
+                            className="flex-shrink-0 w-5 h-5 text-gray-300"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor"
                             viewBox="0 0 20 20"

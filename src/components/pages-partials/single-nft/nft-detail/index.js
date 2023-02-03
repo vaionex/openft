@@ -100,7 +100,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
 
   return (
     <div className="bg-white">
-      <div className="px-4 py-8 mx-auto mb-12 lg:mb-0 lg:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="px-4 py-8 mx-auto mb-12 lg:mb-0 lg:py-24 sm:px-6 lg:max-w-7xl lg:px-6">
         {/* Product */}
         <div className="lg:grid lg:grid-rows-1 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-10 ">
           {/* Product image */}

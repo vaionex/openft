@@ -16,7 +16,7 @@ const Footer = ({ page }) => {
 
   return (
     <footer className="bg-white">
-      <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+      <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:flex md:items-center md:justify-between lg:px-6">
         <div className="flex justify-center md:order-1">
           <div className="flex items-center cursor-pointer">
             <img
@@ -24,7 +24,7 @@ const Footer = ({ page }) => {
               src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
               alt="Relysia"
             />
-            <p className="pl-2 font-semibold text-xl text-blue-900">Nftana</p>
+            <p className="pl-2 text-xl font-semibold text-blue-900">Nftana</p>
           </div>
         </div>
         <div className="flex flex-wrap justify-center mt-8 space-x-8 md:mt-0 md:order-2">
