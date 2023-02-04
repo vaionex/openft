@@ -21,14 +21,15 @@ const SelectWImage = ({
   }, [])
 
   const filteredPeople =
-    query === ''
+    query.trim() === ''
       ? users
       : users.filter((person) =>
-        person.name
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(query.toLowerCase().replace(/\s+/g, '')),
-      )
+          person.name
+            ?.trim()
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(query.toLowerCase().replace(/\s+/g, '')),
+        )
 
   if (!mounted) return null
 
