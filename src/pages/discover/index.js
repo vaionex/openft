@@ -65,17 +65,18 @@ export default function DiscoverPage(props) {
   )
 }
 
-DiscoverPage.getInitialProps = async (context) => {
+export async function getServerSideProps(context) {
   const { req, res, query, ...restProps } = context
-
   const searchState = pathToSearchState(restProps.asPath)
   const resultsState = await findResultsState(NFTMarketplace, {
     ...defaultProps,
     searchState,
-  })
+  }).then((r) => JSON.parse(JSON.stringify(r)))
 
   return {
-    resultsState,
-    searchState,
+    props: {
+      resultsState,
+      searchState,
+    },
   }
 }
