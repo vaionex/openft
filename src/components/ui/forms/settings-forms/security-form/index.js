@@ -130,7 +130,8 @@ const SecurityForm = () => {
             }}
           />
           <span className="text-sm text-gray-500">
-            Your password must be minimum five characters.
+            Your password must be minimum five characters also must contain one
+            uppercase and one lowercase letter.
           </span>
         </InputMain>
 
