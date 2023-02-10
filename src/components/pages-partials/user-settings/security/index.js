@@ -11,7 +11,7 @@ const UserSettingsSecuritySection = () => {
             <div className="sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Password
-                <span className="block text-sm font-normal text-gray-500">
+                <span className="block text-sm font-normal text-mist">
                   Please enter your current password to change your password.
                 </span>
               </span>
