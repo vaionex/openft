@@ -7,10 +7,10 @@ const DiscoverBanner = ({ action, pages }) => {
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-6 ">
       <div className="relative overflow-hidden shadow-xl rounded-2xl ">
-        <div className="absolute left-0 -top-12 -bottom-0 -right-56">
+        <div className="absolute -left-16 -top-12 -bottom-0 -right-0">
           <Image
-            className="object-cover w-full h-full"
-            src="/images/discover-banner.jpg"
+            className="w-full h-full "
+            src="/images/discover-banner.webp"
             alt="People working on laptops"
             layout="fill"
             priority={true}
