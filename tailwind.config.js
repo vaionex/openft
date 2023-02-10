@@ -15,6 +15,7 @@ module.exports = {
         azul: '#155EEF',
         ultramarine: '#2d6ff1',
         'vista-white': '#F9FAFB',
+        'bright-gray': '#EAECF0',
       },
       screens: {
         xs: '475px',
@@ -57,6 +58,7 @@ module.exports = {
     aspectRatio: false,
   },
   plugins: [
+    require('@tailwindcss/line-clamp'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
     plugin(function ({ addUtilities, addComponents }) {

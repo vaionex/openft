@@ -297,3 +297,9 @@
 }
 
 /* otp css */
+
+@media screen and (max-width: 450px) {
+  .mantine-14tgpg6 {
+    @apply !left-0.5;
+  }
+}
