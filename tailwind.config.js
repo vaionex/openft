@@ -58,7 +58,6 @@ module.exports = {
     aspectRatio: false,
   },
   plugins: [
-    require('@tailwindcss/line-clamp'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
     plugin(function ({ addUtilities, addComponents }) {

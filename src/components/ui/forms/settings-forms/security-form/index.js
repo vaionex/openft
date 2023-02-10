@@ -166,8 +166,8 @@ const SecurityForm = () => {
         <InputMain className="border-none sm:grid-cols-1 sm:gap-2">
           <InputMain.Label label="Mnemonic" htmlFor="mnemonic" />
           <textarea
-            className="w-full text-gray-500 border border-gray-300 rounded-md shadow-sm resize-none disabled:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            rows={3}
+            className="w-full text-mist border border-gray-300 rounded-md shadow-sm resize-none disabled:bg-vista-white focus:ring-blue-500 focus:border-blue-500 sm:text-base"
+            rows={2}
             id="mnemonic"
             defaultValue={mnemonic || ''}
             disabled

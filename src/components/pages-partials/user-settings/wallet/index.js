@@ -230,7 +230,7 @@ const UserSettingsWalletSection = () => {
             <div className="sm:border-b sm:border-gray-200 sm:pb-5">
               <span className="block text-lg font-medium text-gray-700">
                 Wallet
-                <span className="block text-sm font-normal text-gray-500">
+                <span className="block text-sm font-normal text-mist">
                   Everything you get from the sale goes into your wallet
                   balance.
                 </span>
@@ -414,7 +414,7 @@ const UserSettingsWalletSection = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
                   <div>
                     Transaction history
-                    <span className="block text-sm font-normal text-gray-500">
+                    <span className="block text-sm font-normal text-mist">
                       Everything you get from the sale goes into your wallet
                       balance.
                     </span>

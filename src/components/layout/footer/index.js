@@ -37,7 +37,7 @@ const Footer = ({ page }) => {
         <div className="flex flex-wrap justify-center mt-8 space-x-8 md:mt-0 md:order-2">
           {navigation.map((item) => (
             <NextLink href={item.href} key={item.name}>
-              <a className="text-[#667085] text-base hover:text-gray-600">
+              <a className="text-mist text-base hover:text-gray-600 mt-2 sm:mt-0">
                 <span>{item.name}</span>
               </a>
             </NextLink>
