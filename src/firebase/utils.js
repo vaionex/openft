@@ -913,8 +913,9 @@ const firebaseGetNftImageUrl = async (userId, fileName, size) => {
 }
 
 const firebaseVerifyMail = async () => {
+  console.log('www', window.location.origin)
   const actionCodeSettings = {
-    url: 'http://localhost:3000/user-settings/mfa',
+    url: `${window.location.origin}/user-settings/mfa`,
   }
 
   const res = await sendEmailVerification(

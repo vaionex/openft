@@ -18,6 +18,7 @@ import {
   PhoneMultiFactorGenerator,
 } from 'firebase/auth'
 import OtpModal from '@/components/ui/otp'
+import { toast } from 'react-toastify'
 
 const UserSettingsMfaSection = () => {
   const [loading, setLoading] = useState(false)
@@ -46,7 +47,10 @@ const UserSettingsMfaSection = () => {
       const options = multiFactor(firebaseAuth.currentUser).enrolledFactors
       await multiFactor(firebaseAuth.currentUser)
         .unenroll(options[0])
-        .then(() => router.reload())
+        .then(() => {
+          toast.success('MFA disabled')
+          router.reload()
+        })
     } catch (error) {
       console.log(error)
       setPhoneErrorMessage(
@@ -77,67 +81,134 @@ const UserSettingsMfaSection = () => {
   const enableMfa = async () => {
     setMfaLoading(true)
     setType('mfa')
-    const recaptchaVerifier = new RecaptchaVerifier(
-      'recaptcha-container',
-      {
-        size: 'invisible',
-      },
-      firebaseAuth,
-    )
+    // if (!window.recaptchaVerifier) {
+    //   window.recaptchaVerifier = new RecaptchaVerifier(
+    //     'recaptcha-container',
+    //     {
+    //       size: 'invisible',
+    //     },
+    //     firebaseAuth,
+    //   )
+    // }
 
     try {
+      console.log(111)
       await multiFactor(firebaseAuth.currentUser)
         .getSession()
         .then(function (multiFactorSession) {
+          console.log(222)
+
           const phoneInfoOptions = {
             phoneNumber: currentUser?.phoneNumber,
             session: multiFactorSession,
           }
+          console.log('phoneInfoOptions', phoneInfoOptions)
           const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
           phoneAuthProvider
-            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+            .verifyPhoneNumber(phoneInfoOptions, window.recaptchaVerifier)
             .then((verificationId) => {
+              console.log(333)
+
               setVerifyID(verificationId)
               setIsOpen(true)
             })
             .catch((error) => {
+              console.log('Err 1', error)
               setPhoneErrorMessage(
                 'Please login again to be able to perform this operation!',
               )
-              recaptchaVerifier.render().then(function (widgetId) {
-                grecaptcha.reset(widgetId)
-              })
+              // window.recaptchaVerifier.render().then(function (widgetId) {
+              //   grecaptcha.reset(widgetId)
+              // })
             })
         })
         .catch((error) => {
-          console.log(error)
+          // recaptchaVerifier.clear()
+          // window.recaptchaVerifier.render().then(function (widgetId) {
+          //   grecaptcha.reset(widgetId)
+          // })
+          console.log('Err 2', error)
         })
     } catch (err) {
       console.log(err)
+      // recaptchaVerifier.render().then(function (widgetId) {
+      //   grecaptcha.reset(widgetId)
+      // })
     } finally {
       setMfaLoading(false)
     }
   }
 
-  const mfaHandle = () => {
+  const updatePhoneNumberMFA = () => {
+    if (isPossiblePhoneNumber(phone)) {
+      setType('phone')
+
+      // if (!window.recaptchaVerifier) {
+      //   window.recaptchaVerifier = new RecaptchaVerifier(
+      //     'recaptcha-container',
+      //     {
+      //       size: 'invisible',
+      //     },
+      //     firebaseAuth,
+      //   )
+      // }
+
+      try {
+        const provider = new PhoneAuthProvider(firebaseAuth)
+        provider
+          .verifyPhoneNumber(phone, window.recaptchaVerifier)
+          .then((verificationId) => {
+            setVerifyID(verificationId)
+            setIsOpen(true)
+          })
+          .catch((err) => {
+            console.log('err 111', err)
+            if (err.code === 'auth/invalid-phone-number') {
+              toast.error('Invalid phone number')
+            } else if (err.code == 'auth/code-expired') {
+              toast.error('Code expired')
+            }
+            // window.recaptchaVerifier.render().then(function (widgetId) {
+            //   grecaptcha.reset(widgetId)
+            // })
+          })
+      } catch (err) {
+        console.log('err 44', err)
+        // window.recaptchaVerifier.render().then(function (widgetId) {
+        //   grecaptcha.reset(widgetId)
+        // })
+      }
+    }
+  }
+
+  const verifymfacode = () => {
     const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
     const multiFactorAssertion =
       PhoneMultiFactorGenerator.assertion(phoneCredential)
     multiFactor(firebaseAuth?.currentUser)
       .enroll(multiFactorAssertion, 'personel number')
-      .then(() => router.reload())
+      .then(() => {
+        toast.success('MFA enabled')
+
+        router.reload()
+      })
       .catch((error) => {
+        console.log('err 2', error)
+
         if (error.code == 'auth/requires-recent-login') {
           console.log('eeeeeeeeeee')
+        } else if (error.code == 'auth/invalid-verification-code') {
+          toast.error('Invalid verification code')
         }
       })
   }
 
-  const phoneVerifyHandle = () => {
+  const verifyUpdateCode = () => {
     const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
 
     updatePhoneNumber(firebaseAuth?.currentUser, phoneCredential)
       .then(() => {
+        toast.success('Phone number added successfully!')
         router.reload()
       })
       .catch((err) => {
@@ -145,36 +216,13 @@ const UserSettingsMfaSection = () => {
           setPhoneErrorMessage(
             'Please login again to be able to perform this operation!',
           )
+        } else if (err.code == 'auth/invalid-verification-code') {
+          toast.error('Invalid verification code')
+        } else if (err.code == 'auth/code-expired') {
+          toast.error('Code expired')
         }
-        console.log(err)
+        console.log('err 999', err)
       })
-  }
-
-  const verifyPhone = () => {
-    if (isPossiblePhoneNumber(phone)) {
-      setType('phone')
-      const recaptchaVerifier = new RecaptchaVerifier(
-        'recaptcha-container',
-        {
-          size: 'invisible',
-        },
-        firebaseAuth,
-      )
-
-      const provider = new PhoneAuthProvider(firebaseAuth)
-      provider
-        .verifyPhoneNumber(phone, recaptchaVerifier)
-        .then((verificationId) => {
-          setVerifyID(verificationId)
-          setIsOpen(true)
-        })
-        .catch((err) => {
-          console.log(err)
-          recaptchaVerifier.render().then(function (widgetId) {
-            grecaptcha.reset(widgetId)
-          })
-        })
-    }
   }
 
   useEffect(() => {
@@ -184,6 +232,18 @@ const UserSettingsMfaSection = () => {
       setEnrolLen(mfaLen)
     }
   }, [])
+
+  useEffect(() => {
+    const appVerifier = new RecaptchaVerifier(
+      'recaptcha-container',
+      {
+        size: 'invisible',
+      },
+      firebaseAuth,
+    )
+    window.recaptchaVerifier = appVerifier
+  }, [])
+
   return (
     <UserSettingsLayout>
       <div>
@@ -381,7 +441,7 @@ const UserSettingsMfaSection = () => {
                         ? true
                         : false
                     }
-                    onClick={verifyPhone}
+                    onClick={updatePhoneNumberMFA}
                     text="Update"
                     type="button"
                   />
@@ -395,7 +455,7 @@ const UserSettingsMfaSection = () => {
               isOpen={isOpen}
               setIsOpen={setIsOpen}
               handleOnChange={handleOnChange}
-              handler={type === 'mfa' ? mfaHandle : phoneVerifyHandle}
+              handler={type === 'mfa' ? verifymfacode : verifyUpdateCode}
               allowedCharacters={allowedCharacters}
               otpNumber={otpNumber}
             />
