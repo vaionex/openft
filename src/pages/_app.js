@@ -13,13 +13,17 @@ import {
   firebaseOnIdTokenChange,
 } from '@/firebase/utils'
 import ProtectedRoute from '@/components/common/protected-route'
+import { disconnectRelysiaSocket } from '@/services/relysia-socket'
 
 function App({ Component, pageProps }) {
   useEffect(() => {
     const unsubscribe = firebaseGetAuthorizedUser()
     firebaseOnIdTokenChange()
 
-    return () => unsubscribe()
+    return () => {
+      unsubscribe()
+      disconnectRelysiaSocket()
+    }
   }, [])
 
   return (

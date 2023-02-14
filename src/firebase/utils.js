@@ -64,6 +64,7 @@ import {
   SendNotification,
   CreateNovuSubscriber,
 } from '@/services/novu-notifications'
+import { connectToRelysiaSocket } from '@/services/relysia-socket'
 
 const notificationObj = {
   'app-notification': {
@@ -836,6 +837,8 @@ const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
       apiConfig.defaults.headers.common['authToken'] = userResponse.accessToken
+      connectToRelysiaSocket(userResponse.accessToken)
+
       const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
       const userNotifications = await firebaseGetSingleDoc(
         'notifications',
@@ -884,6 +887,7 @@ const firebaseOnIdTokenChange = async () => {
     const address = store.getState().wallet.address
     if (user && !paymail && !address) {
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      connectToRelysiaSocket(user.accessToken)
       await getwalletDetails(store.dispatch)
       if (!paymail && !address) {
         const walletData = await getWalletAddressAndPaymail()

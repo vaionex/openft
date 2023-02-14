@@ -20,6 +20,7 @@ import {
 } from '@/components/common/icons'
 import NextLink from 'next/link'
 import _ from 'lodash'
+import { disconnectRelysiaSocket } from '@/services/relysia-socket'
 
 const dropdownRoutes = [
   {
@@ -77,6 +78,8 @@ const DropdownUser = ({ user }) => {
   const router = useRouter()
 
   const handleLogout = () => {
+    disconnectRelysiaSocket()
+
     dispatch(logout())
     dispatch(clearWalletData())
   }

@@ -8,6 +8,8 @@ const initialState = {
   wallethistory: [],
   walletid: '00000000-0000-0000-0000-000000000000',
   paymail: '',
+  addresses: [],
+  bsvRate: null,
 }
 
 const walletSlice = createSlice({
@@ -35,11 +37,17 @@ const walletSlice = createSlice({
     updateAddress: (state, action) => {
       state.address = action.payload
     },
+    updateAllAddresses: (state, action) => {
+      state.addresses = action.payload
+    },
     updateAddressPath0: (state, action) => {
       state.addressPath0 = action.payload
     },
     updatePaymail: (state, action) => {
       state.paymail = action.payload
+    },
+    updateBsvRate: (state, action) => {
+      state.bsvRate = action.payload
     },
   },
 })
@@ -53,4 +61,6 @@ export const {
   updateAddress,
   updateAddressPath0,
   updatePaymail,
+  updateAllAddresses,
+  updateBsvRate,
 } = walletSlice.actions

@@ -1,5 +1,6 @@
 import { envMODE } from '../config/envMode'
 import apiConfig from '@/config/relysiaApi'
+import { projectServiceId } from '@/config/relysiaApi'
 
 let config
 let storageBucket = ''
@@ -18,8 +19,7 @@ if (envMODE === 'DEV') {
   storageBucket =
     'https://firebasestorage.googleapis.com/v0/b/vaionexalpha.appspot.com/o/'
 
-  apiConfig.defaults.headers.common['serviceId'] =
-    '7a8ca3a7-02bb-42e8-9d70-dec87390c0fd'
+  apiConfig.defaults.headers.common['serviceId'] = projectServiceId
 }
 
 export default config
