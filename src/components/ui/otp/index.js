@@ -85,7 +85,6 @@ export default function OtpModal({
                               ? 'text-blue-900 focus-visible:ring-blue-500 hover:bg-blue-200'
                               : 'text-blue-200'
                           } focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
-                          onClick={closeModal}
                         >
                           Verify
                         </button>
