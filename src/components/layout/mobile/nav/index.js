@@ -12,6 +12,8 @@ import { logout } from '@/redux/slices/user'
 import { clearWalletData } from '@/redux/slices/wallet'
 import userSelector from '@/redux/selectors/user'
 import { twMerge } from 'tailwind-merge'
+import { disconnectRelysiaSocket } from '@/services/relysia-socket'
+
 const ProfileRoutes = [
   {
     href: '/user-settings',
@@ -50,6 +52,8 @@ const MobileNav = ({ navItems }) => {
   const router = useRouter()
 
   const handleLogout = () => {
+    disconnectRelysiaSocket()
+
     dispatch(logout())
     dispatch(clearWalletData())
   }

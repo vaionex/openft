@@ -32,6 +32,9 @@ import { firebaseGetUserByPaymail } from '@/firebase/utils'
 import { SendNotification } from '@/services/novu-notifications'
 import { updateUser } from '@/redux/slices/user'
 import _ from 'lodash'
+import { RefreshIcon } from '@heroicons/react/outline'
+import { getwalletBal, getwalletHistory } from '@/services/relysia-queries'
+import { async } from '@firebase/util'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -51,6 +54,9 @@ const UserSettingsWalletSection = () => {
   const [usdBalance, setUsdBalance] = useState(0)
   const [msg, setMsg] = useState(null)
   const [isAscending, setIsAscending] = useState(false)
+  const [balanceLoading, setbalanceLoading] = useState(false)
+  const [transLoading, settransLoading] = useState(false)
+
   const { paymail, address, balance, wallethistory } =
     useSelector(walletSelector)
   const { currentUser } = useSelector(userSelector)
@@ -109,9 +115,9 @@ const UserSettingsWalletSection = () => {
         SendNotification(currentUser.uid, senderMessage)
         SendNotificationByPaymail(data.address, receiverMessage)
 
-        setTimeout(() => {
-          getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
-        }, 2000)
+        // setTimeout(() => {
+        //   getwalletDetails('00000000-0000-0000-0000-000000000000', dispatch)
+        // }, 2000)
       }
     } catch (err) {
       await metricsApiWithoutBody()
@@ -222,6 +228,18 @@ const UserSettingsWalletSection = () => {
 
     if (userId) SendNotification(userId, message)
   }
+
+  const reloadBalance = async () => {
+    setbalanceLoading(true)
+    await getwalletBal(dispatch)
+    setbalanceLoading(false)
+  }
+  const reloadTrans = async () => {
+    settransLoading(true)
+    await getwalletHistory(dispatch)
+    settransLoading(false)
+  }
+
   return (
     <UserSettingsLayout>
       <div>
@@ -238,7 +256,22 @@ const UserSettingsWalletSection = () => {
             </div>
 
             <div>
-              <div className="relative flex flex-col items-center w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg lg:items-stretch md:flex-row">
+              <div
+                style={{ border: '2px solid red' }}
+                className="relative flex flex-col items-center w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg lg:items-stretch md:flex-row"
+              >
+                <div className="absolute right-8 z-[100]">
+                  <div>
+                    {balanceLoading ? (
+                      <Spinner className="h-4 w-4 m-0 p-0" />
+                    ) : (
+                      <RefreshIcon
+                        onClick={reloadBalance}
+                        className="cursor-pointer h-4 w-4"
+                      />
+                    )}
+                  </div>
+                </div>
                 <div className="flex flex-col justify-between flex-1">
                   <div className="font-medium">Wallet</div>
                   <div>
@@ -419,18 +452,32 @@ const UserSettingsWalletSection = () => {
                       balance.
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleSort}
-                    className="font-medium cursor-pointer ml-auto mt-4 sm:mt-0 text-gray-700 text-xs py-2 px-3"
-                  >
-                    <span className="flex flex-row items-center gap-2">
-                      {isAscending ? 'Ascending' : 'Descending'}
-                      <SvgAscendingIcon
-                        className={!isAscending && 'rotate-180 -scale-x-100'}
-                      />
-                    </span>
-                  </button>
+                  <div className="flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={handleSort}
+                      className="font-medium cursor-pointer ml-auto mt-4 sm:mt-0 text-gray-700 text-xs py-2 px-3"
+                    >
+                      <span className="flex flex-row items-center gap-2">
+                        {isAscending ? 'Ascending' : 'Descending'}
+                        <SvgAscendingIcon
+                          className={!isAscending && 'rotate-180 -scale-x-100'}
+                        />
+                      </span>
+                    </button>
+                    <div className=" z-[100]">
+                      <div>
+                        {transLoading ? (
+                          <Spinner className="h-4 w-4 m-0 p-0" />
+                        ) : (
+                          <RefreshIcon
+                            onClick={reloadTrans}
+                            className="cursor-pointer h-4 w-4"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               {!txLoading ? (

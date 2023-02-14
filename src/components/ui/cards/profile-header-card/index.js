@@ -234,6 +234,11 @@ const ProfileHeaderCard = ({
           <h2 className="text-2xl font-medium text-gray-900 truncate">
             {user?.name}
           </h2>
+          {user?.jobTitle && user?.showJobTitle && (
+            <h3 className="font-normal text-base text-[#667085]">
+              {user?.jobTitle}
+            </h3>
+          )}
           <h3 className="font-normal text-gray-500">{user?.title}</h3>
         </div>
       </div>

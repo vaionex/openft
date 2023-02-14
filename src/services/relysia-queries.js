@@ -1,6 +1,7 @@
 import apiConfig from '@/config/relysiaApi'
 import {
   updateAddress,
+  updateAllAddresses,
   updateAddressPath0,
   updatePaymail,
   updateBalance,
@@ -39,6 +40,28 @@ export const getwalletBal = async (dispatch) => {
     })
 }
 
+export const getwalletHistory = async (dispatch) => {
+  //wallet history
+  console.log('calling history api')
+  await apiConfig
+    .get('/v1/history', {
+      headers: {
+        walletID,
+      },
+    })
+    .then((res) => {
+      console.log('his res', res)
+      if (res.data.data.histories) {
+        dispatch(updateWalletHistory([...res.data.data.histories]))
+      } else {
+        dispatch(updateWalletHistory([]))
+      }
+    })
+    .catch((err) => {
+      console.log('his api err', err)
+    })
+}
+
 export const metricsApiWithoutBody = async () => {
   await apiConfig
     .get('/v1/metrics')
@@ -60,10 +83,23 @@ export const getwalletDetails = async (dispatch) => {
       dispatch(updatePaymail(res.data.data.paymail))
     })
     .catch((err) => {
-      console.log('address error', err, err.response)
+      console.log('address error 3', err, err.response)
       if (err?.response?.data?.data?.msg?.includes("you don't have 00000000")) {
         createwallet('default', dispatch)
       }
+    })
+
+  apiConfig
+    .get('/v1/allAddresses', {
+      headers: {
+        walletID,
+      },
+    })
+    .then((res) => {
+      dispatch(updateAllAddresses(res.data.data.addressess))
+    })
+    .catch((err) => {
+      console.log('address error 2', err, err.response)
     })
 
   apiConfig
@@ -76,7 +112,7 @@ export const getwalletDetails = async (dispatch) => {
       dispatch(updateAddressPath0(res.data.data.address))
     })
     .catch((err) => {
-      console.log('address error', err, err.response)
+      console.log('address error 1', err, err.response)
     })
 
   //wallet balance
@@ -97,22 +133,7 @@ export const getwalletDetails = async (dispatch) => {
     })
 
   //wallet history
-  apiConfig
-    .get('/v1/history', {
-      headers: {
-        walletID,
-      },
-    })
-    .then((res) => {
-      if (res.data.data.histories) {
-        dispatch(updateWalletHistory(res.data.data.histories))
-      } else {
-        dispatch(updateWalletHistory([]))
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  getwalletHistory(dispatch)
 }
 
 export const getWalletAddressAndPaymail = async () => {
