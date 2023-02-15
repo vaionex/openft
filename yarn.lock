@@ -1144,38 +1144,39 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@novu/client@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.npmjs.org/@novu/client/-/client-0.10.2.tgz"
-  integrity sha512-ugTYsYRHBVzWw8i3jK7Z+aBw2EcRRe6vjnVrJjQJYy7zS/aJ+ltjg+rIIe/4k38PRssMLc1G0BJ9SBUj3JvdOg==
+"@novu/client@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@novu/client/-/client-0.11.0.tgz#efd294f057a36b66e275a28f66732c8da7992491"
+  integrity sha512-vUonNXyK+yQsoyuwK86tULvWHIceQ6hWvjVLRzJDtbPs/DhoeEzI8vkB2ECvM6JdyMAPFGC7ylQpTfzrsHK2jA==
   dependencies:
-    "@novu/shared" "^0.10.2"
+    "@novu/shared" "^0.11.0"
     axios "^0.26.1"
 
-"@novu/node@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.npmjs.org/@novu/node/-/node-0.10.2.tgz"
-  integrity sha512-vVBflmloPtpA4jpxcil8WWgGkOryukMZDhwxgO99k9ZeCO7fZ0LTWZyPlraDYfzGVFOSgxDl3Sy0u16Xds8hSg==
+"@novu/node@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@novu/node/-/node-0.11.0.tgz#2f1bbcb0ddf059b98f308e276b4979d67bfc89c8"
+  integrity sha512-HW6LvYbrF3tN0PNKwh5uFqV+ZCuw1fZztif/weUbP9tbKJsK+lDjYmdLttXdnbW9hGMIzynxuz3WwGoLggo5eg==
   dependencies:
-    "@novu/shared" "^0.10.2"
+    "@novu/shared" "^0.11.0"
     axios "^0.26.1"
     handlebars "^4.7.7"
     lodash.get "^4.4.2"
     lodash.merge "^4.6.2"
 
-"@novu/notification-center@^0.10.3":
-  version "0.10.3"
-  resolved "https://registry.npmjs.org/@novu/notification-center/-/notification-center-0.10.3.tgz"
-  integrity sha512-+xjCTcRYONi2O8htO/Z1pJJ+3O5jPGcjuFnOguQkH8+fJM3jTOeRmU21ZJ0WKsnvKJbYSKYO7nExzUi9aiAagg==
+"@novu/notification-center@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@novu/notification-center/-/notification-center-0.11.0.tgz#08659024de01756ba284e15c3d6e55ad422fc1d8"
+  integrity sha512-fQzNc71ryKuMjLB11XrM0IjFlRfjlBWX1EhFNVgJV1Eb6PGpSSVbbnmbaDuDk3UrneKIKQ/2UHyyWv4uhQq0nA==
   dependencies:
     "@emotion/css" "^11.10.5"
     "@emotion/react" "^11.7.1"
     "@emotion/styled" "^11.6.0"
     "@mantine/core" "^5.7.1"
     "@mantine/hooks" "^5.7.1"
-    "@novu/client" "^0.10.2"
-    "@novu/shared" "^0.10.2"
+    "@novu/client" "^0.11.0"
+    "@novu/shared" "^0.11.0"
     "@rollup/plugin-babel" "^6.0.3"
+    "@tanstack/react-query" "^4.20.4"
     acorn-jsx "^5.3.2"
     axios "^0.26.1"
     chroma-js "^2.4.2"
@@ -1183,19 +1184,18 @@
     lodash.clonedeep "^4.5.0"
     lodash.merge "^4.6.2"
     react-infinite-scroll-component "^6.0.0"
-    react-query "^3.34.19"
     socket.io-client "4.5.4"
     tslib "^2.3.1"
     webfontloader "^1.6.28"
 
-"@novu/shared@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.npmjs.org/@novu/shared/-/shared-0.10.2.tgz"
-  integrity sha512-1a1HZML8olJC5Inn90wXTID+mGsYWbLkxAPh/EixY5cucwbO6DjueETMrReYsZrH9ehvmuGFwz8DoTZilVVk+g==
+"@novu/shared@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@novu/shared/-/shared-0.11.0.tgz#dd56d06f48490645e1b1d92b341dc408a4e885cc"
+  integrity sha512-z2pXMbNbDxjjl0chphWHbjcOoZ3WkTyZTS9VYwRgBdPXtsAOiMKw7yTzXZrYz9BHT2WF4h98r25axD/djNWDKg==
   dependencies:
     axios "^0.26.1"
     class-transformer "0.5.1"
-    class-validator "0.13.2"
+    class-validator "0.14.0"
     mixpanel "^0.13.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
@@ -1510,6 +1510,19 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
+"@tanstack/query-core@4.24.6":
+  version "4.24.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.24.6.tgz#8f102bc922308f0c6c5ddea34fe253688314265a"
+  integrity sha512-Tfru6YTDTCpX7dKVwHp/sosw/dNjEdzrncduUjIkQxn7n7u+74HT2ZrGtwwrU6Orws4x7zp3FKRqBPWVVhpx9w==
+
+"@tanstack/react-query@^4.20.4":
+  version "4.24.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.24.6.tgz#ec406e59314ae13d31a2c82eed0043bb0b67ba2e"
+  integrity sha512-pbJUVZCS4pcXS0kZiY+mVJ01ude0GrH5OXT2g9whcqSveRG/YVup/XdA9NdRpSMGkP2HxDRxxRNsTXkniWeIIA==
+  dependencies:
+    "@tanstack/query-core" "4.24.6"
+    use-sync-external-store "^1.2.0"
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-2.0.0.tgz"
@@ -1689,6 +1702,11 @@
   dependencies:
     "@types/mime" "*"
     "@types/node" "*"
+
+"@types/validator@^13.7.10":
+  version "13.7.12"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.12.tgz#a285379b432cc8d103b69d223cbb159a253cf2f7"
+  integrity sha512-YVtyAPqpefU+Mm/qqnOANW6IkqKpCSrarcyV269C8MA8Ux0dbkEuQwM/4CjL47kVEM2LgBef/ETfkH+c6+moFA==
 
 "@typescript-eslint/parser@^5.21.0":
   version "5.50.0"
@@ -2223,12 +2241,13 @@ class-transformer@0.5.1:
   resolved "https://registry.npmjs.org/class-transformer/-/class-transformer-0.5.1.tgz"
   integrity sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==
 
-class-validator@0.13.2:
-  version "0.13.2"
-  resolved "https://registry.npmjs.org/class-validator/-/class-validator-0.13.2.tgz"
-  integrity sha512-yBUcQy07FPlGzUjoLuUfIOXzgynnQPPruyK1Ge2B74k9ROwnle1E+NxLWnUv5OLU8hA/qL5leAE9XnXq3byaBw==
+class-validator@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.14.0.tgz#40ed0ecf3c83b2a8a6a320f4edb607be0f0df159"
+  integrity sha512-ct3ltplN8I9fOwUd8GrP8UQixwff129BkEtuWDKL5W45cQuLd19xqmTLu5ge78YDm/fdje6FMt0hGOhl0lii3A==
   dependencies:
-    libphonenumber-js "^1.9.43"
+    "@types/validator" "^13.7.10"
+    libphonenumber-js "^1.10.14"
     validator "^13.7.0"
 
 classnames@^2.2.5, classnames@^2.2.6, classnames@^2.3.1:
@@ -4225,9 +4244,9 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.10.19, libphonenumber-js@^1.9.43:
+libphonenumber-js@^1.10.14, libphonenumber-js@^1.10.19:
   version "1.10.19"
-  resolved "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.19.tgz"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.19.tgz#e18970c8d566fbfb1f88e688345f0512e126712e"
   integrity sha512-MDZ1zLIkfSDZV5xBta3nuvbEOlsnKCPe4z5r3hyup/AXveevkl9A1eSWmLhd2FX4k7pJDe4MrLeQsux0HI/VWg==
 
 lilconfig@^2.0.5, lilconfig@^2.0.6:
@@ -5269,7 +5288,7 @@ react-phone-number-input@^3.2.15:
     libphonenumber-js "^1.10.19"
     prop-types "^15.8.1"
 
-react-query@^3.34.19, react-query@^3.39.2:
+react-query@^3.39.2:
   version "3.39.3"
   resolved "https://registry.npmjs.org/react-query/-/react-query-3.39.3.tgz"
   integrity sha512-nLfLz7GiohKTJDuT4us4X3h/8unOh+00MLb2yJoGTPjxKs2bc1iDhkNx2bd5MKklXnOD3NrVZ+J2UXujA5In4g==
@@ -6114,6 +6133,11 @@ use-latest@^1.2.1:
   integrity sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==
   dependencies:
     use-isomorphic-layout-effect "^1.1.1"
+
+use-sync-external-store@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2:
   version "1.0.2"
