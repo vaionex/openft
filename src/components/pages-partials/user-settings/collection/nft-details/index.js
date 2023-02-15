@@ -177,6 +177,7 @@ export default function Details({ nft }) {
                           <a
                             href={`https://whatsonchain.com/tx/${nft.contract_txs[0]}`}
                             rel="noopener noreferrer"
+                            target="_blank"
                             className="underline flex underline-offset-2 decoration-gray-700"
                           >
                             {nft.contract_txs[0]}
@@ -192,6 +193,7 @@ export default function Details({ nft }) {
                           <a
                             href={`https://whatsonchain.com/tx/${nft.issuance_txs}`}
                             rel="noopener noreferrer"
+                            target="_blank"
                             className="underline flex underline-offset-2 decoration-gray-700"
                           >
                             {nft.issuance_txs}

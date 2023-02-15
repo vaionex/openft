@@ -7,17 +7,17 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateBsvRate } from '@/redux/slices/wallet'
 
 const usePriceConverter = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const [usdBalance, setUsdBalance] = useState(null)
 
-  const { bsvRate } = useSelector(walletSelector)
+  // const { bsvRate } = useSelector(walletSelector)
 
   const getUsdBalance = async () => {
     try {
-      if (bsvRate) {
-        setUsdBalance(bsvRate)
-        return
-      }
+      // if (bsvRate) {
+      // setUsdBalance(bsvRate)
+      // return
+      // }
 
       const {
         data: { data },
@@ -30,7 +30,7 @@ const usePriceConverter = () => {
 
       let balance = parseFloat(data.balance) * 100000000
       setUsdBalance(balance)
-      dispatch(updateBsvRate(balance))
+      // dispatch(updateBsvRate(balance))
     } catch (error) {
       console.log('error usd hook', error)
     }
