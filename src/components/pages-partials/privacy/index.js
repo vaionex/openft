@@ -12,7 +12,7 @@ const PrivacyMain = () => {
               <h2 className="text-base font-semibold text-azul">
                 Privacy Policy
               </h2>
-              <p className="mt-3 sm:leading-[60px] text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+              <p className="mt-3 sm:leading-[60px] text-3xl font-semibold tracking-tight text-mirage sm:text-5xl">
                 We care about your privacy
               </p>
               <p className="mx-auto mt-6 text-xl text-mist max-w-prose">
@@ -33,7 +33,7 @@ const PrivacyMain = () => {
               </p>
             </div>
             <div className="mt-12">
-              <h3 className="mb-6 text-[30px] font-semibold">
+              <h3 className="mb-6 text-[30px] font-semibold text-mirage">
                 What information do we collect?
               </h3>
               <p className="max-w-2xl text-lg text-mist">
@@ -68,7 +68,7 @@ const PrivacyMain = () => {
             </div>
 
             <div className="mt-12">
-              <h3 className="mb-6 text-[30px] font-semibold">
+              <h3 className="mb-6 text-[30px] font-semibold text-mirage">
                 How do we use your information?
               </h3>
               <p className="max-w-2xl text-lg text-mist">
@@ -90,7 +90,7 @@ const PrivacyMain = () => {
             </div>
 
             <div className="mt-12">
-              <h4 className="mb-6 text-xl font-semibold">
+              <h4 className="mb-6 text-xl font-semibold text-mirage">
                 How do we keep your information safe?
               </h4>
               <p className="max-w-2xl mt-6 text-lg text-mist">
@@ -117,7 +117,7 @@ const PrivacyMain = () => {
             </div>
 
             <div className="mt-12">
-              <h4 className="mb-6 text-xl font-semibold">
+              <h4 className="mb-6 text-xl font-semibold text-mirage">
                 How can you contact us about this policy?
               </h4>
               <p className="max-w-2xl text-lg text-mist">
@@ -133,7 +133,7 @@ const PrivacyMain = () => {
           className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
         >
           <div className="relative overflow-hidden rounded-lg ">
-            <div className="absolute inset-0 bg-gray-900">
+            <div className="absolute inset-0 bg-mirage">
               <Image
                 src="/images/faq-bottom.jpg"
                 alt=""

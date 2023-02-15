@@ -17,7 +17,7 @@ const Footer = ({ page }) => {
   return (
     <footer className="bg-white">
       <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:flex md:items-center md:justify-between lg:px-6">
-        <div className="flex justify-center md:order-1">
+        <div className="flex justify-center">
           <div className="flex items-center cursor-pointer">
             <NextLink href={'/'}>
               <a className="flex items-center cursor-pointer">
@@ -34,7 +34,7 @@ const Footer = ({ page }) => {
             </NextLink>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center mt-8 space-x-8 md:mt-0 md:order-2">
+        <div className="flex flex-wrap justify-center mt-8 gap-x-8 w-72 xs:w-auto mx-auto md:mt-0">
           {navigation.map((item) => (
             <NextLink href={item.href} key={item.name}>
               <a className="text-mist text-base hover:text-gray-600 mt-2 sm:mt-0">
@@ -43,7 +43,7 @@ const Footer = ({ page }) => {
             </NextLink>
           ))}
         </div>
-        <div className="mt-8 md:mt-0 md:order-3">
+        <div className="mt-8 md:mt-0">
           <p className="text-base text-center text-[#98A2B3] font-normal">
             &copy; 2023 Vaionex
           </p>
