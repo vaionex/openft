@@ -65,6 +65,7 @@ import {
   CreateNovuSubscriber,
 } from '@/services/novu-notifications'
 import { connectToRelysiaSocket } from '@/services/relysia-socket'
+import getRandomNum from '@/utils/getRanNum'
 
 const notificationObj = {
   'app-notification': {
@@ -374,7 +375,7 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
           name: user?.displayName,
           email: user?.providerData[0].email,
           username: checkUsername
-            ? ''
+            ? user?.providerData[0].email?.split('@')[0] + getRandomNum()
             : user?.providerData[0].email?.split('@')[0],
           uid: user.uid,
           createdAt: user.metadata.creationTime,
