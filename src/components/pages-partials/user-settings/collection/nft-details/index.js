@@ -279,6 +279,7 @@ export default function Details({ nft }) {
                               <div>
                                 <a
                                   href={`https://whatsonchain.com/tx/${item}`}
+                                  target="_blank"
                                   rel="noopener noreferrer"
                                   className="underline flex underline-offset-2 decoration-gray-700 text-sm break-all text-gray-500"
                                 >
