@@ -7,11 +7,26 @@ const ResetPasswordSide = () => {
     <div className="hidden max-w-lg col-span-4 md:block">
       <div className="w-full h-full bg-bottom bg-no-repeat bg-cover bg-reset-password-bg">
         <div className="flex flex-col justify-between h-full px-4 py-6 mx-auto md:py-10 sm:px-6 lg:px-8">
-          <NextLink href="/">
+          {/* <NextLink href="/">
             <a className="inline-block">
               <span className="sr-only">Workflow</span>
               <RegisterLogo />
             </a>
+          </NextLink> */}
+          <NextLink href="/" className="outline-none inline-block">
+            <div className="flex items-center cursor-pointer">
+              <span className="sr-only">Workflow</span>
+              <div className="w-5 h-5">
+                <img
+                  className="h-5 pb-0.5 flex-none"
+                  src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
+                  alt="Relysia"
+                />
+              </div>
+              <p className="pl-2 font-semibold text-xl text-bright-gray">
+                Nftana
+              </p>
+            </div>
           </NextLink>
           <div className="flex-1 mt-20">
             <RegistrationSteps stepsType="circle" />
