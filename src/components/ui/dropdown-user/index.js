@@ -94,7 +94,7 @@ const DropdownUser = ({ user }) => {
     return userData ? (
       userData?.profileImage ? (
         <Avatar
-          className="w-10 h-10 bg-blue-700 sm:w-10 sm:h-10"
+          className="w-10 h-10 bg-white sm:w-10 sm:h-10"
           user={userData}
         />
       ) : (

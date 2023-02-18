@@ -20,11 +20,20 @@ const RegistrationLayout = ({ children }) => {
         <RegistrationPageSidebar />
         <div className="col-span-12 md:col-span-8">
           <div className="px-4 mx-auto md:hidden sm:px-6 lg:px-8">
-            <NextLink href="/">
-              <a className="inline-block mt-10">
+            <NextLink href="/" className="outline-none inline-block">
+              <div className="flex items-center cursor-pointer mt-10">
                 <span className="sr-only">Nftana Logo</span>
-                <Logo />
-              </a>
+                <div className="w-5 h-5">
+                  <img
+                    className="h-5 pb-0.5 flex-none"
+                    src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
+                    alt="Relysia"
+                  />
+                </div>
+                <p className="pl-2 font-semibold text-xl text-blue-900">
+                  Nftana
+                </p>
+              </div>
             </NextLink>
           </div>
           <div className="flex flex-col h-full py-12 sm:gap-8 sm:px-6 lg:px-8">

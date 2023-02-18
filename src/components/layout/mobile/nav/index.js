@@ -74,9 +74,21 @@ const MobileNav = ({ navItems }) => {
       >
         <div className="overflow-hidden bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="flex items-center justify-between px-5 pt-4">
-            <div>
-              <Logo />
-            </div>
+            <NextLink href="/" className="outline-none inline-block">
+              <div className="flex items-center cursor-pointer">
+                <span className="sr-only">Nftana Logo</span>
+                <div className="w-5 h-5">
+                  <img
+                    className="h-5 pb-0.5 flex-none"
+                    src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
+                    alt="Relysia"
+                  />
+                </div>
+                <p className="pl-2 font-semibold text-xl text-blue-900">
+                  Nftana
+                </p>
+              </div>
+            </NextLink>
             <div className="-mr-2">
               <Popover.Button className="p-2 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-blue-50">
                 <span className="sr-only">Close menu</span>
