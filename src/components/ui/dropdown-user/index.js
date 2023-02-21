@@ -89,8 +89,8 @@ const DropdownUser = ({ user }) => {
     userData.profileImage = userData?.profileImage
       ? userData?.profileImage
       : userData?.googleProfileImg
-      ? userData?.googleProfileImg
-      : ''
+        ? userData?.googleProfileImg
+        : ''
     return userData ? (
       userData?.profileImage ? (
         <Avatar
@@ -137,7 +137,7 @@ const DropdownUser = ({ user }) => {
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'px-4 py-2 text-sm hover:bg-gray-100 rounded-md flex ',
+                          'px-4 py-2 text-sm hover:bg-vista-white rounded-md flex ',
                         )}
                       >
                         <div className="shrink-0">
@@ -149,7 +149,7 @@ const DropdownUser = ({ user }) => {
 
                         <div className="flex flex-col">
                           <span className="font-semibold">{route.name}</span>
-                          <p className="mt-1 text-xs">{route.desc}</p>
+                          <p className="mt-1 text-sm text-mist">{route.desc}</p>
                         </div>
                       </a>
                     </NextLink>
