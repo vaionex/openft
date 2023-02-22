@@ -6,9 +6,10 @@ export default function useRedeemToken() {
 
   async function redeemToken(tokenID, serialNumber, amount) {
     setLoading(true)
+    let message
     let error
     try {
-      await apiConfig.post('/v1/redeem', {
+      let response = await apiConfig.post('/v1/redeem', {
         dataArray: [
           {
             amount,
@@ -17,12 +18,13 @@ export default function useRedeemToken() {
           },
         ],
       })
+      message = response?.data?.data?.msg || 'Operation completed successfully'
     } catch (e) {
       error = e
     }
 
     setLoading(false)
-    return { error }
+    return { error, message }
   }
 
   return { redeemToken, loading }

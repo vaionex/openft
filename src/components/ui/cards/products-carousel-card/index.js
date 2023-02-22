@@ -12,6 +12,7 @@ import {
 import {
   firebaseAddDoc,
   firebaseAddNewNotification,
+  firebaseDeleteDoc,
   firebaseGetSingleDoc,
   firebaseUpdateDoc,
 } from '@/firebase/utils'
@@ -28,7 +29,7 @@ import ModalConfirm from '../../modal-confirm'
 import useArtistData from '@/hooks/useArtistData'
 import walletSelector from '@/redux/selectors/wallet'
 import Alert from '@/components/ui/alert'
-import { FeaturedIcon } from '@/components/common/icons'
+import { CustomTrashIcon, FeaturedIcon } from '@/components/common/icons'
 import { swapNft, createAtomicSwapOffer } from '@/services/relysia-queries'
 import { firebaseDb } from '@/firebase/init'
 import { v4 as uuidv4 } from 'uuid'
@@ -36,6 +37,9 @@ import Social from '../../popover'
 import { setOpen } from '@/redux/slices/basket'
 import { async } from '@firebase/util'
 import { SendNotification } from '@/services/novu-notifications'
+import useToken from '@/hooks/useTokenDetails'
+import useRedeemToken from '@/hooks/useReedemToken'
+import ReactTooltip from 'react-tooltip'
 
 // import { async } from 'functions/node_modules/@firebase/util/dist/util-public'
 
@@ -55,6 +59,8 @@ const ProductsCarouselCard = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isDestory, setIsDestory] = useState(false)
+  const [isDestorySuccess, setIsDestorySuccess] = useState(false)
   const isInFirstThree = idx < 3
   const router = useRouter()
   const [hasLike, setHasLike] = useState(false)
@@ -63,9 +69,12 @@ const ProductsCarouselCard = ({
     useSelector(userSelector)
   const { paymail, address, balance } = useSelector(walletSelector)
   const [loadingPurchaseBtn, setloadingPurchaseBtn] = useState(false)
+  const [loadingDestoryBtn, setLoadingDestoryBtn] = useState(false)
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
   const [successTx, setsuccessTx] = useState(null)
   const [totalLikes, setTotalLikes] = useState(data?.likes)
+  const { token } = useToken(router.query?.slug)
+  const { redeemToken } = useRedeemToken()
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -244,6 +253,30 @@ const ProductsCarouselCard = ({
     }
   }
 
+  const handleDestoryNft = async () => {
+    setLoadingDestoryBtn(true)
+
+    const { error, message } = await redeemToken(
+      token.token_id,
+      token.sats_per_token,
+      token.total_supply,
+    )
+
+    if (message) {
+      await firebaseDeleteDoc("nfts", data?.id)
+      SendNotification(currentUser?.uid, `Your ${data?.name} has been destroyed!`)
+      setIsDestorySuccess(true)
+      setIsDestory(false)
+      setLoadingDestoryBtn(false)
+    }
+
+    if (error) {
+      setdialogErrorMsg('We were unable to destroy your NFT. Please try again later')
+      setIsDestorySuccess(false)
+      setLoadingDestoryBtn(false)
+    }
+  }
+
   useEffect(() => {
     if (!favouriteNfts) return
     const isLike =
@@ -287,6 +320,7 @@ const ProductsCarouselCard = ({
     }
   }
 
+
   return (
     <div
       key={data?.id}
@@ -312,7 +346,7 @@ const ProductsCarouselCard = ({
                   {/* <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" /> */}
                 </>
               ) : (
-                <div className="h-full w-full bg-gradient-to-tr from-blue-600 to-blue-300" />
+                <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-blue-300" />
               )}
             </a>
           </NextLink>
@@ -320,6 +354,28 @@ const ProductsCarouselCard = ({
         <div className="absolute bottom-0 right-0 z-20 inline-flex p-4 overflow-hidden rounded-lg">
           <CardLikeButton likeNfts={likeNfts} hasLike={hasLike} />
         </div>
+        {(singleNFT && data?.ownerId === currentUser?.uid) && (
+          <div className="absolute bottom-0 z-20 inline-flex p-4 overflow-hidden rounded-lg right-[3.3rem]">
+            <div
+              onClick={() => setIsDestory(true)}
+              className="inline-flex items-center justify-center border border-white rounded-md cursor-pointer bg-opacity-40 hover:bg-opacity-30 hover:bg-white w-11 h-11"
+            >
+              <CustomTrashIcon />
+              <div
+                data-tip
+                data-for={'delete'}
+                className="absolute inset-y-0 z-10 inline-flex items-center pl-5 cursor-pointer group"
+              >
+                <ReactTooltip
+                  className="react-tooltip !text-sm !max-w-xs !rounded !text-white !bg-gray-900"
+                  id={'delete'}
+                >
+                  <h4> Destroy this NFT </h4>
+                </ReactTooltip>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex flex-col flex-1 px-4 py-5">
         <div className="flex items-center justify-between">
@@ -389,6 +445,27 @@ const ProductsCarouselCard = ({
         isLoadingConfirmBtn={loadingPurchaseBtn}
       />
       <ModalConfirm
+        isDestory={true}
+        isOpen={isDestory}
+        button1Text={'Destory'}
+        button2Text={'Cancel'}
+        title={'Are you sure you want'}
+        secondTitle={'to destory this NFT?'}
+        description={'Destroyed NFTs cannot be restored.'}
+        content={
+          <Card
+            data={data}
+            artistData={artistData}
+            usdBalance={usdBalance}
+            dialogErrorMsg={dialogErrorMsg}
+            totalLikes={totalLikes}
+          />
+        }
+        onClose={() => setIsDestory(false)}
+        onConfirm={handleDestoryNft}
+        isLoadingConfirmBtn={loadingDestoryBtn}
+      />
+      <ModalConfirm
         isOpen={isSuccess}
         className="sm:max-w-[304px] max-w-[304px] "
         button1Text={'Dismis'}
@@ -425,6 +502,59 @@ const ProductsCarouselCard = ({
         onConfirm={() => {
           setIsSuccess(false)
           // setIsOpen(false)
+        }}
+      />
+      <ModalConfirm
+        isOpen={isDestorySuccess}
+        className="sm:max-w-[304px] max-w-[304px]"
+        button1Text={'Close'}
+        icon={
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="4"
+              y="4"
+              width="48"
+              height="48"
+              rx="24"
+              fill="#D1FADF"
+            />
+            <path
+              d="M25 19H31M19 22H37M35 22L34.2987 32.5193C34.1935 34.0975 34.1409 34.8867 33.8 35.485C33.4999 36.0118 33.0472 36.4353 32.5017 36.6997C31.882 37 31.0911 37 29.5093 37H26.4907C24.9089 37 24.118 37 23.4983 36.6997C22.9528 36.4353 22.5001 36.0118 22.2 35.485C21.8591 34.8867 21.8065 34.0975 21.7013 32.5193L21 22M26 26.5V31.5M30 26.5V31.5"
+              stroke="#039855"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <rect
+              x="4"
+              y="4"
+              width="48"
+              height="48"
+              rx="24"
+              stroke="#ECFDF3"
+              strokeWidth="8"
+            />
+          </svg>
+        }
+        cancelButton={false}
+        title={'Success'}
+        content={
+          <div>
+            You have successfully destroyed <br /> &apos;{data?.name}&apos; NFT.
+          </div>
+        }
+        onClose={() => {
+          setIsDestorySuccess(false)
+        }}
+        onConfirm={() => {
+          setIsDestorySuccess(false)
+          router.push("/discover")
         }}
       />
     </div>
