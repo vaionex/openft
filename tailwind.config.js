@@ -13,6 +13,7 @@ module.exports = {
         mist: '#667085',
         bluewood: '#344054',
         azul: '#155EEF',
+        warning: '#F04438',
         ultramarine: '#2d6ff1',
         'vista-white': '#F9FAFB',
         'bright-gray': '#EAECF0',

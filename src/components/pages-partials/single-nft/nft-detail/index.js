@@ -57,7 +57,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists() && docSnap.data()) {
-      setnftData(docSnap.data())
+      setnftData({ id: docSnap.id, ...docSnap.data() })
     }
   }
 

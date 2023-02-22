@@ -3,12 +3,14 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/outline'
 import { FeaturedIcon } from '@/components/common/icons'
 import ButtonWLoading from '@/components/ui/button-w-loading'
+import { twMerge } from 'tailwind-merge'
 
 const ModalConfirm = ({
   className,
   isOpen,
   onClose,
   onConfirm,
+  isDestory = false,
   isLoadingConfirmBtn = false,
   content,
   title,
@@ -16,6 +18,7 @@ const ModalConfirm = ({
   button1Text = 'Delete',
   button2Text = 'Cancel',
   icon = null,
+  description,
   cancelButton = true,
   deleteButton = true,
 }) => {
@@ -63,6 +66,9 @@ const ModalConfirm = ({
                     >
                       {icon && <div className="pb-5">{icon}</div>}
                       {title} <br /> {secondTitle}
+                      {description && (
+                        <p className='mt-1 text-sm'> {description}</p>
+                      )}
                     </Dialog.Title>
                     <div className="mt-2">
                       <div className="text-sm text-gray-500">{content}</div>
@@ -70,25 +76,30 @@ const ModalConfirm = ({
                   </div>
                 </div>
                 <div
-                  className={`mt-5 sm:mt-6 ${
-                    deleteButton && cancelButton
-                      ? 'sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense'
-                      : 'flex justify-center items-center max-w-xs mx-auto'
-                  }`}
+                  className={`mt-5 sm:mt-6  ${deleteButton && cancelButton
+                    ? 'sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense '
+                    : 'flex justify-center items-center max-w-xs mx-auto'
+                    }`}
                 >
                   {deleteButton && (
                     <ButtonWLoading
                       isPending={isLoadingConfirmBtn}
                       text={button1Text}
                       type="button"
-                      className="inline-flex justify-center w-full px-4 py-[11px] text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                      className={twMerge(
+                        "inline-flex justify-center w-full px-4 py-[11px] text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 sm:col-start-2 sm:text-sm",
+                        isDestory ? 'bg-warning hover:bg-warning/70 sm:col-start-1' : 'hover:bg-blue-700 focus:ring-blue-500'
+                      )}
                       onClick={onConfirm}
                     />
                   )}
                   {cancelButton && (
                     <button
                       type="button"
-                      className="inline-flex justify-center w-full px-4 py-[11px] mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                      className={twMerge(
+                        "inline-flex justify-center w-full px-4 py-[11px] mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm",
+                        isDestory && 'sm:col-start-2'
+                      )}
                       onClick={onClose}
                       ref={cancelButtonRef}
                     >
