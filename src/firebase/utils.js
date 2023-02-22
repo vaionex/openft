@@ -661,9 +661,13 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   }
 }
 
-const firebaseGetNftByUsername = async (username) => {
+const firebaseGetNftByUsername = async (slug, type) => {
+  let queryRef
   const nftsRef = collection(firebaseDb, 'nfts')
-  const queryRef = query(nftsRef, where('username', '==', username))
+
+  type == 'id'
+    ? queryRef = query(nftsRef, where('ownerId', '==', slug))
+    : queryRef = query(nftsRef, where('username', '==', slug))
 
   const documentSnapshots = await getDocs(queryRef)
 
@@ -699,9 +703,13 @@ const firebaseGetUserByPaymail = async (paymail) => {
   }
 }
 
-const firebaseGetUserDetailByUsername = async (username) => {
+const firebaseGetUserDetailByUsername = async (slug, type) => {
+  let queryRef
   const nftsRef = collection(firebaseDb, 'users')
-  const queryRef = query(nftsRef, where('username', '==', username))
+
+  type == 'id'
+    ? queryRef = query(nftsRef, where('uid', '==', slug))
+    : queryRef = query(nftsRef, where('username', '==', slug))
 
   const documentSnapshots = await getDocs(queryRef)
 

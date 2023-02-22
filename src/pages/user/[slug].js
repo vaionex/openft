@@ -15,7 +15,7 @@ const UserOverviewPage = ({ nftInfo, userDetail }) => {
   const userInfo = userDetail.nftsData[0]
   useEffect(() => {
     if (nftInfo.collectionSize !== 0) {
-      ;(async () => {
+      ; (async () => {
         const favIdList = await firebaseGetUserInfoFromDb(
           nftInfo.nftsData[0].ownerId,
           'favourites',
@@ -40,8 +40,8 @@ const UserOverviewPage = ({ nftInfo, userDetail }) => {
 }
 
 export const getServerSideProps = async ({ query }) => {
-  const userDetail = await firebaseGetUserDetailByUsername(query.slug)
-  const nftInfo = await firebaseGetNftByUsername(query.slug)
+  const userDetail = await firebaseGetUserDetailByUsername(query.slug, query?.type)
+  const nftInfo = await firebaseGetNftByUsername(query.slug, query?.type)
   return {
     props: { nftInfo, userDetail },
   }

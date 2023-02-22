@@ -128,7 +128,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
 
               <div className="flex items-center mt-4 space-x-4">
                 <NextLink
-                  href={`/user/${artistData?.username}`}
+                  href={`/user/${artistData?.username ? artistData?.username + '?type=username' : artistData?.uid + '?type=id'}`}
                   className="h-8"
                 >
                   <a>
@@ -148,7 +148,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                     )}
                   </a>
                 </NextLink>
-                <NextLink href={`/user/${artistData?.username}`}>
+                <NextLink href={`/user/${artistData?.username ? artistData?.username + '?type=username' : artistData?.uid + '?type=id'}`}>
                   <a>
                     <span className="text-lg font-medium my-auto text-[#155EEF]">
                       {artistData?.name}
