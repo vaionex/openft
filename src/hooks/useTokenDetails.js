@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-export default function useToken(id) {
+export default function useToken(id, singleNFT) {
     const [token, setToken] = useState({})
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -12,8 +12,8 @@ export default function useToken(id) {
     }
 
     useEffect(() => {
-        if (!id) return
-
+        if (!id || !singleNFT) return
+        
         fetchTokenDetails().then().catch(setError).finally(() => setLoading(false))
     }, [id])
 

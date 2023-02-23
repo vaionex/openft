@@ -73,7 +73,8 @@ const ProductsCarouselCard = ({
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
   const [successTx, setsuccessTx] = useState(null)
   const [totalLikes, setTotalLikes] = useState(data?.likes)
-  const { token } = useToken(router.query?.slug)
+  const { token } = useToken(router.query?.slug, singleNFT)
+
   const { redeemToken } = useRedeemToken()
 
   const dispatch = useDispatch()
