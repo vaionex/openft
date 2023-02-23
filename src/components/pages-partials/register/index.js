@@ -25,8 +25,8 @@ const RegistrationFormMain = () => {
   const dispatch = useDispatch()
   const [mnemonicStatus, setMnemonicStatus] = useState(false)
   const step = router.query.step ?? '1'
-  const { mnemonic } = useSelector(walletSelector)
-  const { isPending, isError, errorMessage } = useSelector(userSelector)
+  const { mnemonic, paymail } = useSelector(walletSelector)
+  const { currentUser, isPending, isError, errorMessage } = useSelector(userSelector)
   const {
     detailsValues,
     // socialsValues,
@@ -108,6 +108,8 @@ const RegistrationFormMain = () => {
           mnemonicStatus={mnemonicStatus}
           setMnemonicStatus={setMnemonicStatus}
           mnemonic={mnemonic}
+          paymail={paymail}
+          currentUser={currentUser}
         />
       )
     // if (step === '4')

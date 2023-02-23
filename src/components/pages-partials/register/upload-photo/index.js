@@ -16,6 +16,8 @@ import { setMnemonicPopup } from '@/redux/slices/user'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { createRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { firebaseUpdateDoc } from '@/firebase/utils'
+import { useEffect } from 'react'
 
 const defaultMnemonics = ['', '', '', '', '', '', '', '', '', '', '', '']
 
@@ -53,6 +55,8 @@ const RegistrationUploadPhoto = ({
   mnemonicStatus,
   setMnemonicStatus,
   mnemonic,
+  paymail,
+  currentUser
 }) => {
   const dispatch = useDispatch()
   const recaptchaRef = createRef()
@@ -104,6 +108,16 @@ const RegistrationUploadPhoto = ({
     setCaptcha(captchaCode)
   }
 
+  useEffect(() => {
+    if (mnemonic) {
+      (async () => {
+        if (paymail) {
+          await firebaseUpdateDoc("users", currentUser?.uid, { paymail })
+        }
+      })()
+    }
+  }, [mnemonic])
+
   return (
     <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -111,7 +125,7 @@ const RegistrationUploadPhoto = ({
         <h2 className="mt-6 text-3xl font-semibold text-center text-gray-900">
           Upload your photo
         </h2>
-        <p className="mt-3 text-gray-500 font-normal text-base text-center">
+        <p className="mt-3 text-base font-normal text-center text-gray-500">
           Beautify your profile, it also will
           <br /> be visible to the public
         </p>
@@ -180,15 +194,15 @@ const RegistrationUploadPhoto = ({
               secret phrase. Write down or copy these words in the right order
               and save them somewhere safe.
             </div>
-            <div className="mt-5 grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4 mt-5">
               {(mnemonic?.split(' ') ?? defaultMnemonics).map((mnc, idx) => {
                 return (
                   <div
                     key={idx}
-                    className="col-span-1 bg-gray-200 rounded-xl py-3 flex"
+                    className="flex col-span-1 py-3 bg-gray-200 rounded-xl"
                   >
                     <div className="w-4 pl-1">{idx + 1}</div>
-                    <div className="flex justify-center items-center flex-1 text-gray-700">
+                    <div className="flex items-center justify-center flex-1 text-gray-700">
                       {mnc}
                       {!mnemonic && (
                         <div className="flex flex-col justify-center flex-1 mt-5 sm:mt-0 item-center">
@@ -205,14 +219,14 @@ const RegistrationUploadPhoto = ({
                 )
               })}
             </div>
-            <div className="mt-10 text-start border-2 p-4 rounded-2xl">
+            <div className="p-4 mt-10 border-2 text-start rounded-2xl">
               <WarningIcon
                 className="w-12 h-12 text-red-500"
                 aria-hidden="true"
               />
 
               <div className="ml-1">
-                <h3 className="text-gray-700 font-medium text-lg mt-2">
+                <h3 className="mt-2 text-lg font-medium text-gray-700">
                   Do not share your secret phrase!
                 </h3>
                 <p className="mt-3">
