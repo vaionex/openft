@@ -56,6 +56,7 @@ const ProductsCarouselCard = ({
   setDataArr,
   singleNFT = false,
   setnftHistory,
+  isUserDetails
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -73,7 +74,7 @@ const ProductsCarouselCard = ({
   const [dialogErrorMsg, setdialogErrorMsg] = useState(null)
   const [successTx, setsuccessTx] = useState(null)
   const [totalLikes, setTotalLikes] = useState(data?.likes)
-  const { token } = useToken(router.query?.slug, singleNFT)
+  const { token } = useToken(router.query?.slug, isUserDetails)
 
   const { redeemToken } = useRedeemToken()
 
@@ -258,7 +259,7 @@ const ProductsCarouselCard = ({
     setLoadingDestoryBtn(true)
 
     const { error, message } = await redeemToken(
-      token.token_id,
+      data?.tokenId,
       token.sats_per_token,
       token.total_supply,
     )
@@ -555,7 +556,7 @@ const ProductsCarouselCard = ({
         }}
         onConfirm={() => {
           setIsDestorySuccess(false)
-          router.push("/discover")
+          router.push("/discover").then(() => router.reload())
         }}
       />
     </div>
