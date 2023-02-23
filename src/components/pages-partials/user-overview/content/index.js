@@ -24,7 +24,7 @@ function classNames(...classes) {
 
 const itemsPerPage = 9
 
-export default function Content({ nftInfo, userFavList }) {
+export default function Content({ nftInfo, userFavList, isUserDetails }) {
   const usdBalance = usePriceConverter()
   const { currentUser } = useSelector(userSelector)
   const router = useRouter()
@@ -200,6 +200,7 @@ export default function Content({ nftInfo, userFavList }) {
               userFavList &&
               userFavList.nftsData.map((hit, index) => (
                 <ProductsCarouselCard
+                  isUserDetails
                   favouriteNfts={favouriteNfts}
                   setFavouriteNfts={setFavouriteNfts}
                   key={index + 'fav'}
@@ -213,6 +214,7 @@ export default function Content({ nftInfo, userFavList }) {
               router.query.current === 'artworks') &&
               filteredNfts?.map((hit, index) => (
                 <ProductsCarouselCard
+                  isUserDetails
                   favouriteNfts={favouriteNfts}
                   setFavouriteNfts={setFavouriteNfts}
                   key={index + 'nor'}
@@ -225,7 +227,7 @@ export default function Content({ nftInfo, userFavList }) {
           </div>
         </div>
         {filteredNfts.length > 0 ? (
-          <div className="mt-12 w-full flex justify-center pagination-wrapper">
+          <div className="flex justify-center w-full mt-12 pagination-wrapper">
             <ReactPaginate
               breakLabel={'...'}
               nextLabel={
