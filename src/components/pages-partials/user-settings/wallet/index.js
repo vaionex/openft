@@ -56,6 +56,7 @@ const UserSettingsWalletSection = () => {
   const [isAscending, setIsAscending] = useState(false)
   const [balanceLoading, setbalanceLoading] = useState(false)
   const [transLoading, settransLoading] = useState(false)
+  const [isTransicationSuccess, setIsTransactionSuccess] = useState(false)
 
   const { paymail, address, balance, wallethistory } =
     useSelector(walletSelector)
@@ -105,6 +106,7 @@ const UserSettingsWalletSection = () => {
       ) {
         reset({ address: '', amount: '' })
         setMsg({ type: 'success', content: 'The transfer was successful' })
+        setIsTransactionSuccess(true)
 
         const senderMessage = `${Number(
           (Number(amount) / bsvRate).toFixed(8),
@@ -124,10 +126,10 @@ const UserSettingsWalletSection = () => {
       console.log('err', err.message, err.response, err)
       let errMsg =
         err &&
-        err.response &&
-        err.response.data &&
-        err.response.data.data &&
-        err.response.data.data.msg
+          err.response &&
+          err.response.data &&
+          err.response.data.data &&
+          err.response.data.data.msg
           ? err.response.data.data.msg
           : null
       if (
@@ -157,7 +159,7 @@ const UserSettingsWalletSection = () => {
         setLoading(false)
       }
     }
-  }, [balance, bsvRate])
+  }, [balance, bsvRate, isTransicationSuccess])
 
   useEffect(() => {
     if (wallethistory.length > 0) {
@@ -169,7 +171,7 @@ const UserSettingsWalletSection = () => {
     } else {
       setTxLoading(false)
     }
-  }, [wallethistory])
+  }, [wallethistory, isTransicationSuccess])
 
   useEffect(() => {
     if (!currentUser.paymail) {
@@ -229,6 +231,15 @@ const UserSettingsWalletSection = () => {
     if (userId) SendNotification(userId, message)
   }
 
+  useEffect(() => {
+    if (isTransicationSuccess) {
+      (async () => {
+        await Promise.all([reloadBalance(), reloadTrans()])
+          .finally(() => setIsTransactionSuccess(false))
+      })()
+    }
+  }, [isTransicationSuccess])
+
   const reloadBalance = async () => {
     setbalanceLoading(true)
     await getwalletBal(dispatch)
@@ -263,11 +274,11 @@ const UserSettingsWalletSection = () => {
                 <div className="absolute right-8 z-[100]">
                   <div>
                     {balanceLoading ? (
-                      <Spinner className="h-4 w-4 m-0 p-0" />
+                      <Spinner className="w-4 h-4 p-0 m-0" />
                     ) : (
                       <RefreshIcon
                         onClick={reloadBalance}
-                        className="cursor-pointer h-4 w-4"
+                        className="w-4 h-4 cursor-pointer"
                       />
                     )}
                   </div>
@@ -365,6 +376,7 @@ const UserSettingsWalletSection = () => {
                       setIsSend(false)
                       reset({ address: '', amount: '' })
                       setMsg(null)
+                      reloadBalance()
                     }}
                     title={'Transfer'}
                     deleteButton={false}
@@ -407,7 +419,7 @@ const UserSettingsWalletSection = () => {
                             type="submit"
                             className={`w-full font-semibold relative ${
                               isSubmitting ? 'btn-secondary' : 'btn-primary'
-                            }`}
+                              }`}
                           >
                             Send
                             {isSubmitting && (
@@ -444,7 +456,7 @@ const UserSettingsWalletSection = () => {
             </div>
             <div className="mt-10 sm:border-t sm:border-gray-200 lg:w-screen">
               <div className="block mt-12 text-lg font-medium text-gray-900 max-w-[666px]">
-                <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
+                <div className="flex flex-col items-center justify-between mb-4 sm:flex-row">
                   <div>
                     Transaction history
                     <span className="block text-sm font-normal text-mist">
@@ -456,7 +468,7 @@ const UserSettingsWalletSection = () => {
                     <button
                       type="button"
                       onClick={handleSort}
-                      className="font-medium cursor-pointer ml-auto mt-4 sm:mt-0 text-gray-700 text-xs py-2 px-3"
+                      className="px-3 py-2 mt-4 ml-auto text-xs font-medium text-gray-700 cursor-pointer sm:mt-0"
                     >
                       <span className="flex flex-row items-center gap-2">
                         {isAscending ? 'Ascending' : 'Descending'}
@@ -468,11 +480,11 @@ const UserSettingsWalletSection = () => {
                     <div className=" z-[100]">
                       <div>
                         {transLoading ? (
-                          <Spinner className="h-4 w-4 m-0 p-0" />
+                          <Spinner className="w-4 h-4 p-0 m-0" />
                         ) : (
                           <RefreshIcon
                             onClick={reloadTrans}
-                            className="cursor-pointer h-4 w-4"
+                            className="w-4 h-4 cursor-pointer"
                           />
                         )}
                       </div>
@@ -516,9 +528,9 @@ const UserSettingsWalletSection = () => {
                             <SvgCheckCircleIcon
                               className={`w-4 h-4 ${
                                 items.type === 'debit'
-                                  ? 'text-red-400'
-                                  : 'text-green-400'
-                              }`}
+                                ? 'text-red-400'
+                                : 'text-green-400'
+                                }`}
                               aria-hidden="true"
                             />
                             <span className="ml-2 text-sm font-normal text-gray-500">

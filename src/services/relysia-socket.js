@@ -3,6 +3,7 @@ import store from '@/redux/store'
 import { updateBalance } from '../redux/slices/wallet'
 import { toast } from 'react-toastify'
 import { projectServiceId } from '@/config/relysiaApi'
+import { getwalletHistory } from './relysia-queries'
 
 var relysiaSocket = null
 const relysiaEndpoint = 'api.relysia.com'
@@ -79,15 +80,20 @@ export const connectToRelysiaSocket = async (token) => {
       }
     })
     // listen for balance and log them on balance arrive
-    relysiaSocket.on('balance', function (balance) {
+    relysiaSocket.on('balance', async function (balance) {
       console.log('event received balance', balance)
 
-      if (balance?.totalBalance?.balance && store.getState().wallet.bsvRate) {
-        let bsvRate = store.getState().wallet.bsvRate
+      try {
+        if (balance?.totalBalance?.balance && store.getState().wallet.bsvRate) {
+          let bsvRate = store.getState().wallet.bsvRate
 
-        let bal = Number((balance.totalBalance.balance / bsvRate).toFixed(8))
-        console.log('bal event', bal)
-        store.dispatch(updateBalance(bal))
+          let bal = Number((balance.totalBalance.balance / bsvRate).toFixed(8))
+          console.log('bal event', bal)
+          store.dispatch(updateBalance(bal))
+          await getwalletHistory(store.dispatch)
+        }
+      } catch (error) {
+        console.log(error)
       }
     })
     // listen for history and log them on history arrive
