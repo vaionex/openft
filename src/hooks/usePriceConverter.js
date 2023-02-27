@@ -8,7 +8,6 @@ import { updateBsvRate } from '@/redux/slices/wallet'
 
 const usePriceConverter = () => {
   // const dispatch = useDispatch()
-  // console.log('dispatch--->', dispatch)
   const [usdBalance, setUsdBalance] = useState(null)
 
   // const { bsvRate } = useSelector(walletSelector)

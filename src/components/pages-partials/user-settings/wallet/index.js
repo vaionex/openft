@@ -35,6 +35,7 @@ import _ from 'lodash'
 import { RefreshIcon } from '@heroicons/react/outline'
 import { getwalletBal, getwalletHistory } from '@/services/relysia-queries'
 import { async } from '@firebase/util'
+import { updateBsvRate } from '@/redux/slices/wallet'
 
 const inputAttributes = [
   { type: 'text', placeholder: 'Address or paymail', name: 'address' },
@@ -152,6 +153,12 @@ const UserSettingsWalletSection = () => {
 
   useEffect(() => {
     if (balance !== null && bsvRate) {
+      dispatch(updateBsvRate(bsvRate))
+    }
+  }, [bsvRate])
+
+  useEffect(() => {
+    if (balance !== null && bsvRate) {
       if (balance > 0) {
         setUsdBalance((balance * bsvRate).toFixed(2))
         setLoading(false)
@@ -174,14 +181,14 @@ const UserSettingsWalletSection = () => {
   }, [wallethistory, isTransicationSuccess])
 
   useEffect(() => {
-    if (!currentUser.paymail) {
-      dispatch(
-        updateUser({
-          uid: currentUser.uid,
-          values: { paymail: paymail },
-        }),
-      )
-    }
+    // if (!currentUser.paymail || !currentUser.address) {
+    dispatch(
+      updateUser({
+        uid: currentUser.uid,
+        values: { paymail: paymail, address: address },
+      }),
+    )
+    // }
   }, [])
 
   const getTxName = (type, protocol) => {

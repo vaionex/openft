@@ -686,7 +686,10 @@ const firebaseGetNftByUsername = async (slug, type) => {
 const firebaseGetUserByPaymail = async (paymail) => {
   try {
     const paymailRef = collection(firebaseDb, 'users')
-    const queryRef = query(paymailRef, where('paymail', '==', paymail))
+    let queryRef
+    paymail.includes("@")
+      ? queryRef = query(paymailRef, where('paymail', '==', paymail))
+      : queryRef = query(paymailRef, where('address', '==', paymail))
     const documentSnapshots = await getDocs(queryRef)
 
     const userData = documentSnapshots.docs.map((doc) => {
