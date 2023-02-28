@@ -131,7 +131,9 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                   href={`/user/${
                     artistData?.username
                       ? artistData?.username + '?type=username'
-                      : artistData?.uid + '?type=id'
+                      : `${
+                          artistData?.uid ? artistData?.uid : nftData?.ownerId
+                        }?type=id`
                   }`}
                   className="h-8"
                 >

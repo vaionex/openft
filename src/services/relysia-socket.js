@@ -47,8 +47,8 @@ export const connectToRelysiaSocket = async (token) => {
       let msg = null
 
       if (message.type === 'BSV') {
-        console.log('event received notification', message)
-        console.log(paymail, addresses)
+        // console.log('event received notification', message)
+        // console.log(paymail, addresses)
         if (
           message.sender === paymail ||
           (addresses && addresses.includes(message.sender))
