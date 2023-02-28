@@ -280,7 +280,7 @@ const UserSettingsWalletSection = () => {
               <div>
                 <div
                   style={{ border: '2px solid red' }}
-                  className="relative flex flex-col items-center w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg lg:items-stretch md:flex-row"
+                  className="relative flex flex-col items-center w-full gap-6 p-6 mt-6 border border-gray-200 rounded-lg md:items-stretch "
                 >
                   <div className="absolute right-8 z-[100]">
                     <div>
@@ -540,7 +540,7 @@ const UserSettingsWalletSection = () => {
                             </div>
                             <div className="flex flex-col ml-4">
                               {getTxName(items?.type, items?.protocol)}
-                              <span className="mt-2 text-sm font-normal text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis resize-x max-w-[200px] ">
+                              <span className="mt-2 pb-2 pr-2 text-sm font-normal text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis resize-x max-w-[200px] ">
                                 {items?.type === 'debit' ? items.to : items.to}
                               </span>
                             </div>

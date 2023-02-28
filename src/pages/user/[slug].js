@@ -13,14 +13,17 @@ const UserOverviewPage = ({ nftInfo, userDetail }) => {
   const router = useRouter()
   const [userFavList, setUserFavList] = useState(null)
   const userInfo = userDetail.nftsData[0]
+
   useEffect(() => {
     if (nftInfo.collectionSize !== 0) {
-      ; (async () => {
+      ;(async () => {
         const favIdList = await firebaseGetUserInfoFromDb(
           nftInfo.nftsData[0].ownerId,
           'favourites',
         )
-        if (favIdList) {
+
+        console.log('favIdList', favIdList)
+        if (favIdList && favIdList.length > 0) {
           const nfts = await fireGetNftsFromFavList(favIdList.nfts)
           setUserFavList(nfts)
         }
@@ -40,7 +43,10 @@ const UserOverviewPage = ({ nftInfo, userDetail }) => {
 }
 
 export const getServerSideProps = async ({ query }) => {
-  const userDetail = await firebaseGetUserDetailByUsername(query.slug, query?.type)
+  const userDetail = await firebaseGetUserDetailByUsername(
+    query.slug,
+    query?.type,
+  )
   const nftInfo = await firebaseGetNftByUsername(query.slug, query?.type)
   return {
     props: { nftInfo, userDetail },
