@@ -25,7 +25,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-3 font-bold text-white bg-[#155EEF] rounded-lg hover:opacity-90 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center px-4 py-3 font-bold text-white bg-azul rounded-lg hover:opacity-90 disabled:opacity-50 disabled:pointer-events-none;
   }
 
   .PhoneInput > input {

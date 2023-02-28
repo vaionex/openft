@@ -60,7 +60,7 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
           </div>
         )}
       </InputMain>
-      <button className="p-3 rounded-md bg-[#155EEF] hover:bg-[#2d6ff1]">
+      <button className="p-3 rounded-md bg-azul hover:bg-ultramarine">
         <span className="sr-only">Search Button</span>
         <MagnifyGlassIcon className="w-5 h-5 text-white" />
       </button>

@@ -352,7 +352,7 @@ const UserSettingsMfaSection = () => {
                     defaultCountry="US"
                     countryCallingCodeEditable={false}
                     placeholder="Enter phone number"
-                    className="focus:ring-blue-500 focus:border-blue-500 w-full sm:text-sm border-[#EAECF0]  rounded-md"
+                    className="focus:ring-blue-500 focus:border-blue-500 w-full sm:text-sm border-bright-gray rounded-md"
                     value={phone}
                     onChange={setPhone}
                   />

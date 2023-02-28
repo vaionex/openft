@@ -179,7 +179,7 @@ const MyProfileForm = ({
               onChange={handleInputChange}
               maxLength={BIO_MAX_LENGTH}
             ></textarea>
-            <p className="mt-2 text-sm text-[#667085]">
+            <p className="mt-2 text-sm text-mist">
               {BIO_MAX_LENGTH - formValues?.bio.length} characters left
             </p>
           </div>

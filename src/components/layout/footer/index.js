@@ -1,4 +1,3 @@
-import { Logo } from '@/components/common/svgs'
 import NextLink from 'next/link'
 
 const navigation = [
@@ -11,7 +10,11 @@ const navigation = [
 
 const Footer = ({ page }) => {
   if (page === 'login' || page === 'register') {
-    return <footer className="px-8 pb-8 bg-white">© 2023 Vaionex</footer>
+    return (
+      <footer className="px-8 pb-8 bg-white">
+        &copy; {new Date().getFullYear()} Vaionex
+      </footer>
+    )
   }
 
   return (
@@ -44,8 +47,8 @@ const Footer = ({ page }) => {
           ))}
         </div>
         <div className="mt-8 md:mt-0">
-          <p className="text-base text-center text-[#98A2B3] font-normal">
-            &copy; 2023 Vaionex
+          <p className="text-base text-center text-cadet-gray font-normal">
+            &copy; {new Date().getFullYear()} Vaionex
           </p>
         </div>
       </div>

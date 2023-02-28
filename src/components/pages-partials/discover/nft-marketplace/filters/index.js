@@ -48,7 +48,7 @@ const NFTMarketplaceFilters = () => {
         <li className="flex gap-4 leading-[12px] pt-6">
           <CustomClearRefinements />
           <button
-            className="py-[9px] px-4 text-base font-medium lg:w-full text-white bg-[#155EEF] hover:bg-[#2d6ff1] rounded-lg border border-[#155EEF]"
+            className="py-[9px] px-4 text-base font-medium lg:w-full text-white bg-azul hover:bg-ultramarine rounded-lg border border-azul"
             onClick={handleSubmit}
           >
             Apply Filters

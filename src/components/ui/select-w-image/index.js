@@ -35,7 +35,7 @@ const SelectWImage = ({
 
   return (
     <Combobox as="div" value={selectedUser} onChange={setSelectedUser}>
-      <Combobox.Label className="block text-sm text-[#344054]">
+      <Combobox.Label className="block text-sm text-bluewood">
         {label}
       </Combobox.Label>
       <div className="relative mt-1">

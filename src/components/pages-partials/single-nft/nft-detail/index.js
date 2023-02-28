@@ -120,15 +120,19 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
           <div className="w-full max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
             <div className="flex flex-col">
               <div>
-                <span className="inline-flex items-center px-[10.2px] py-1 rounded-full text-sm font-medium bg-[#F2F4F7] text-[#667085]">
-                  <BadgeCheckIcon className="-ml-1 mr-1.5 h-4 w-4 text-[#0788F5]" />
+                <span className="inline-flex items-center px-[10.2px] py-1 rounded-full text-sm font-medium bg-fantasy text-mist">
+                  <BadgeCheckIcon className="-ml-1 mr-1.5 h-4 w-4 text-azure" />
                   Verified
                 </span>
               </div>
 
               <div className="flex items-center mt-4 space-x-4">
                 <NextLink
-                  href={`/user/${artistData?.username ? artistData?.username + '?type=username' : artistData?.uid + '?type=id'}`}
+                  href={`/user/${
+                    artistData?.username
+                      ? artistData?.username + '?type=username'
+                      : artistData?.uid + '?type=id'
+                  }`}
                   className="h-8"
                 >
                   <a>
@@ -148,9 +152,15 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                     )}
                   </a>
                 </NextLink>
-                <NextLink href={`/user/${artistData?.username ? artistData?.username + '?type=username' : artistData?.uid + '?type=id'}`}>
+                <NextLink
+                  href={`/user/${
+                    artistData?.username
+                      ? artistData?.username + '?type=username'
+                      : artistData?.uid + '?type=id'
+                  }`}
+                >
                   <a>
-                    <span className="text-lg font-medium my-auto text-[#155EEF]">
+                    <span className="text-lg font-medium my-auto text-azul">
                       {artistData?.name}
                     </span>
                   </a>
@@ -168,7 +178,7 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
               </div>
             </div>
 
-            <p className="mt-6 text-xl font-normal text-[#667085] leading-[30px] max-w-[480px]">
+            <p className="mt-6 text-xl font-normal text-mist leading-[30px] max-w-[480px]">
               {nftData?.description}
             </p>
             <div className="mt-3">
@@ -206,10 +216,8 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                     <h3 className="sr-only">Transactions Information</h3>
 
                     <dl className="flex flex-col text-sm font-medium text-gray-500 break-all mt-7">
-                      <dt className="text-[#344054]">
-                        Contract Transaction ID
-                      </dt>
-                      <dd className="mb-5 text-[#667085]">
+                      <dt className="text-bluewood">Contract Transaction ID</dt>
+                      <dd className="mb-5 text-mist">
                         <a
                           href={
                             'https://whatsonchain.com/tx/' +
@@ -222,10 +230,8 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                           {nftData?.contractTxid}
                         </a>
                       </dd>
-                      <dt className="text-[#344054]">
-                        Issuance Transaction ID
-                      </dt>
-                      <dd className="mb-5 text-[#667085]">
+                      <dt className="text-bluewood">Issuance Transaction ID</dt>
+                      <dd className="mb-5 text-mist">
                         <a
                           href={
                             'https://whatsonchain.com/tx/' + nftData?.issueTxid
@@ -237,16 +243,16 @@ export default function NftDetail({ favouriteNfts, setFavouriteNfts }) {
                           {nftData?.issueTxid}
                         </a>
                       </dd>
-                      <dt className="text-[#344054]">
+                      <dt className="text-bluewood">
                         {transactionData.protocol.name}
                       </dt>
-                      <dd className="mb-5 text-[#667085]">
+                      <dd className="mb-5 text-mist">
                         {transactionData.protocol.content}
                       </dd>
-                      <dt className="text-[#344054]">
+                      <dt className="text-bluewood">
                         {transactionData.schema.name}
                       </dt>
-                      <dd className="text-[#667085]">
+                      <dd className="text-mist">
                         {transactionData.schema.content}
                       </dd>
                     </dl>

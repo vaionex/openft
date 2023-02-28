@@ -18,7 +18,7 @@ const Checkbox = ({
           id={id}
           type="checkbox"
           className={twMerge(
-            'w-4 h-4 text-white bg-[#F9F5FF] rounded cursor-pointer checked:bg-center checked:border-blue-500 checked:bg-checkbox-icon checked:bg-auto focus:ring-blue-300 focus:ring-1',
+            'w-4 h-4 text-white bg-tropical-blue rounded cursor-pointer checked:bg-center checked:border-blue-500 checked:bg-checkbox-icon checked:bg-auto focus:ring-blue-300 focus:ring-1',
             checkboxClassName,
           )}
           checked={checked}

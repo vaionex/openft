@@ -250,7 +250,7 @@ const GenerateForm = () => {
           <div className="flex space-x-3">
             <div className="rounded-md">
               <Link href="/">
-                <a className="flex items-center leading-5 justify-center w-full px-4 py-[10px] text-sm font-medium text-[#344054] bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+                <a className="flex items-center leading-5 justify-center w-full px-4 py-[10px] text-sm font-medium text-bluewood bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                   Cancel
                 </a>
               </Link>

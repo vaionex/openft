@@ -198,18 +198,18 @@ const ProfileHeaderCard = ({
 
           <div className="relative flex items-center justify-end flex-1 mt-6 space-x-4 sm:min-w-0 sm:pb-1">
             <div className="flex-1 hidden min-w-0 mb-6 sm:mb-0 md:block max-w-[558px]">
-              <h2 className="text-[30px] leading-[38px] font-medium text-[#101828] mb-1 truncate">
+              <h2 className="text-[30px] leading-[38px] font-medium text-mirage mb-1 truncate">
                 {user?.name}
               </h2>
               {user?.jobTitle && user?.showJobTitle && (
-                <h3 className="font-normal text-base text-[#667085]">
+                <h3 className="font-normal text-base text-mist">
                   {user?.jobTitle}
                 </h3>
               )}
             </div>
             <div className="flex flex-col items-center justify-stretch sm:mr-3 sm:flex-row sm:space-y-0 sm:space-x-4">
               <NextLink href="/">
-                <a className="text-sm text-[#344054] font-medium hover:text-gradient-primary-hover px-[15.5px] py-[9px] border border-solid rounded-lg border-[#D0D5DD] hover:shadow-[0_0px_1px_2px_rgba(16,24,40,0.05)]">
+                <a className="text-sm text-bluewood font-medium hover:text-gradient-primary-hover px-[15.5px] py-[9px] border border-solid rounded-lg border-iron hover:shadow-[0_0px_1px_2px_rgba(16,24,40,0.05)]">
                   Cancel
                 </a>
               </NextLink>
@@ -235,7 +235,7 @@ const ProfileHeaderCard = ({
             {user?.name}
           </h2>
           {user?.jobTitle && user?.showJobTitle && (
-            <h3 className="font-normal text-base text-[#667085]">
+            <h3 className="font-normal text-base text-mist">
               {user?.jobTitle}
             </h3>
           )}

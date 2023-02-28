@@ -127,10 +127,10 @@ const UserSettingsWalletSection = () => {
       console.log('err', err.message, err.response, err)
       let errMsg =
         err &&
-          err.response &&
-          err.response.data &&
-          err.response.data.data &&
-          err.response.data.data.msg
+        err.response &&
+        err.response.data &&
+        err.response.data.data &&
+        err.response.data.data.msg
           ? err.response.data.data.msg
           : null
       if (
@@ -240,9 +240,10 @@ const UserSettingsWalletSection = () => {
 
   useEffect(() => {
     if (isTransicationSuccess) {
-      (async () => {
-        await Promise.all([reloadBalance(), reloadTrans()])
-          .finally(() => setIsTransactionSuccess(false))
+      ;(async () => {
+        await Promise.all([reloadBalance(), reloadTrans()]).finally(() =>
+          setIsTransactionSuccess(false),
+        )
       })()
     }
   }, [isTransicationSuccess])
@@ -373,7 +374,7 @@ const UserSettingsWalletSection = () => {
                     onClick={() => {
                       setIsSend(true)
                     }}
-                    className="btn-secondary py-2.5 border border-[#EAECF0] text-sm font-medium"
+                    className="btn-secondary py-2.5 border border-bright-gray text-sm font-medium"
                   >
                     Transfer
                   </button>
@@ -426,7 +427,7 @@ const UserSettingsWalletSection = () => {
                             type="submit"
                             className={`w-full font-semibold relative ${
                               isSubmitting ? 'btn-secondary' : 'btn-primary'
-                              }`}
+                            }`}
                           >
                             Send
                             {isSubmitting && (
@@ -535,9 +536,9 @@ const UserSettingsWalletSection = () => {
                             <SvgCheckCircleIcon
                               className={`w-4 h-4 ${
                                 items.type === 'debit'
-                                ? 'text-red-400'
-                                : 'text-green-400'
-                                }`}
+                                  ? 'text-red-400'
+                                  : 'text-green-400'
+                              }`}
                               aria-hidden="true"
                             />
                             <span className="ml-2 text-sm font-normal text-gray-500">

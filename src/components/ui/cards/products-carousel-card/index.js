@@ -56,7 +56,7 @@ const ProductsCarouselCard = ({
   setDataArr,
   singleNFT = false,
   setnftHistory,
-  isUserDetails
+  isUserDetails,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -265,15 +265,20 @@ const ProductsCarouselCard = ({
     )
 
     if (message) {
-      await firebaseDeleteDoc("nfts", data?.id)
-      SendNotification(currentUser?.uid, `Your ${data?.name} has been destroyed!`)
+      await firebaseDeleteDoc('nfts', data?.id)
+      SendNotification(
+        currentUser?.uid,
+        `Your ${data?.name} has been destroyed!`,
+      )
       setIsDestorySuccess(true)
       setIsDestory(false)
       setLoadingDestoryBtn(false)
     }
 
     if (error) {
-      setdialogErrorMsg('We were unable to destroy your NFT. Please try again later')
+      setdialogErrorMsg(
+        'We were unable to destroy your NFT. Please try again later',
+      )
       setIsDestorySuccess(false)
       setLoadingDestoryBtn(false)
     }
@@ -322,7 +327,6 @@ const ProductsCarouselCard = ({
     }
   }
 
-
   return (
     <div
       key={data?.id}
@@ -356,7 +360,7 @@ const ProductsCarouselCard = ({
         <div className="absolute bottom-0 right-0 z-20 inline-flex p-4 overflow-hidden rounded-lg">
           <CardLikeButton likeNfts={likeNfts} hasLike={hasLike} />
         </div>
-        {(singleNFT && data?.ownerId === currentUser?.uid) && (
+        {singleNFT && data?.ownerId === currentUser?.uid && (
           <div className="absolute bottom-0 z-20 inline-flex p-4 overflow-hidden rounded-lg right-[3.3rem]">
             <div
               onClick={() => setIsDestory(true)}
@@ -382,14 +386,14 @@ const ProductsCarouselCard = ({
       <div className="flex flex-col flex-1 px-4 py-5">
         <div className="flex items-center justify-between">
           {/* {totalLikes > 0 && (
-            <p className="px-3 py-2 rounded-lg text-[#667085] bg-gray-50">
+            <p className="px-3 py-2 rounded-lg text-mist bg-gray-50">
               {totalLikes}
             </p>
           )} */}
-          <p className="py-2 text-xl font-medium text-[#101828]">
+          <p className="py-2 text-xl font-medium text-mirage">
             <span className="mr-2">${data?.amount}</span>
           </p>
-          <p className="py-2 text-xl font-medium text-[#101828]">
+          <p className="py-2 text-xl font-medium text-mirage">
             <span>
               {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
             </span>{' '}
@@ -400,10 +404,10 @@ const ProductsCarouselCard = ({
           <div className="flex-1 my-6">
             <NextLink href={`/discover/${data?.tokenId}`}>
               <a className="cursor-pointer">
-                <h3 className="text-sm text-[#155EEF] min-h-[20px]">
+                <h3 className="text-sm text-azul min-h-[20px]">
                   {artistData?.name}
                 </h3>
-                <p className="h-10 mt-1 text-lg text-gray-800">{data?.name}</p>
+                <p className="h-10 mt-1 text-lg text-mirage">{data?.name}</p>
               </a>
             </NextLink>
           </div>
@@ -417,7 +421,7 @@ const ProductsCarouselCard = ({
                 router.push('/login')
               }
             }}
-            className="bg-[#155EEF] hover:bg-[#2d6ff1] rounded-lg text-white py-2.5 flex w-full border-none justify-center items-center font-normal"
+            className="bg-azul hover:bg-ultramarine rounded-lg text-white py-2.5 flex w-full border-none justify-center items-center font-normal"
           >
             Buy now
           </button>
@@ -487,7 +491,7 @@ const ProductsCarouselCard = ({
               <div className="inline-flex items-center space-x-1">
                 <span>Tx id:</span>
                 <a
-                  className="font-normal text-[#155EEF] max-w-[100px] text-ellipsis overflow-hidden"
+                  className="font-normal text-azul max-w-[100px] text-ellipsis overflow-hidden"
                   href={`https://whatsonchain.com/tx/${successTx}`}
                 >
                   {successTx}
@@ -518,14 +522,7 @@ const ProductsCarouselCard = ({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <rect
-              x="4"
-              y="4"
-              width="48"
-              height="48"
-              rx="24"
-              fill="#D1FADF"
-            />
+            <rect x="4" y="4" width="48" height="48" rx="24" fill="#D1FADF" />
             <path
               d="M25 19H31M19 22H37M35 22L34.2987 32.5193C34.1935 34.0975 34.1409 34.8867 33.8 35.485C33.4999 36.0118 33.0472 36.4353 32.5017 36.6997C31.882 37 31.0911 37 29.5093 37H26.4907C24.9089 37 24.118 37 23.4983 36.6997C22.9528 36.4353 22.5001 36.0118 22.2 35.485C21.8591 34.8867 21.8065 34.0975 21.7013 32.5193L21 22M26 26.5V31.5M30 26.5V31.5"
               stroke="#039855"
@@ -556,7 +553,7 @@ const ProductsCarouselCard = ({
         }}
         onConfirm={() => {
           setIsDestorySuccess(false)
-          router.push("/discover").then(() => router.reload())
+          router.push('/discover').then(() => router.reload())
         }}
       />
     </div>
@@ -604,14 +601,14 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
         <div className="flex flex-col flex-1 px-4 py-5">
           <div className="flex items-center justify-between">
             {/* {totalLikes > 0 && (
-              <p className="px-3 py-2 text-base font-normal text-[#667085] rounded-lg bg-gray-50">
+              <p className="px-3 py-2 text-base font-normal text-mist rounded-lg bg-gray-50">
                 {totalLikes}
               </p>
             )} */}
-            <p className="py-2 text-xl font-medium text-[#101828]">
+            <p className="py-2 text-xl font-medium text-mirage">
               <span className="mr-2">${data?.amount}</span>
             </p>
-            <p className="py-2 text-xl font-medium text-[#101828]">
+            <p className="py-2 text-xl font-medium text-mirage">
               BSV
               <span>
                 {data?.amount && Number((data.amount / usdBalance).toFixed(4))}

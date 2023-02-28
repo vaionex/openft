@@ -17,10 +17,10 @@ const NftsInstantly = ({
         <div className="lg:grid lg:grid-cols-2 lg:gap-16">
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="py-24 lg:py-0">
-              <h2 className="mt-1 font-semibold text-4xl text-[#101828] tracking-[-2%] sm:text-5xl xl:leading-tight">
+              <h2 className="mt-1 font-semibold text-4xl text-mirage tracking-[-2%] sm:text-5xl xl:leading-tight">
                 Create your own next-gen NFTs instantly.
               </h2>
-              <p className="text-base mt-6 sm:text-xl lg:text-lg xl:text-xl font-normal text-[#101828]">
+              <p className="text-base mt-6 sm:text-xl lg:text-lg xl:text-xl font-normal text-mirage">
                 Upload your work (image, video, audio, or 3D art), add a title
                 and description, and customize your NFTs with properties, stats,
                 and unlockable content.
@@ -29,7 +29,7 @@ const NftsInstantly = ({
                 {discover && (
                   <div className="my-3 rounded-md sm:my-0">
                     <NextLink href="/discover">
-                      <a className="flex items-center gap-2 justify-center w-full px-5 py-3 text-base font-medium text-[#344054] bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+                      <a className="flex items-center gap-2 justify-center w-full px-5 py-3 text-base font-medium text-bluewood bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                         {!isHomePage ? 'Learn more' : 'Discover more'}
                       </a>
                     </NextLink>

@@ -15,11 +15,11 @@ const HeroSection = () => {
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="lg:py-8">
               <NextLink href="https://github.com/vaionex/openft">
-                <a className="inline-flex items-center p-1 pr-2 text-[#004EEB] rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
-                  <span className="px-3 py-0.5 text-sm bg-white text-[#004EEB] font-medium leading-5 tracking-wide rounded-full">
+                <a className="inline-flex items-center p-1 pr-2 text-ocean-blue rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
+                  <span className="px-3 py-0.5 text-sm bg-white text-ocean-blue font-medium leading-5 tracking-wide rounded-full">
                     It&apos;s free!
                   </span>
-                  <span className="ml-4 text-sm font-medium text-[#004EEB]">
+                  <span className="ml-4 text-sm font-medium text-ocean-blue">
                     Github Code
                   </span>
                   <ArrowRightIcon
@@ -28,10 +28,10 @@ const HeroSection = () => {
                   />
                 </a>
               </NextLink>
-              <h1 className="mt-4 text-4xl text-[#101828] tracking-[-2%] sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl xl:leading-[72px]">
+              <h1 className="mt-4 text-4xl text-mirage tracking-[-2%] sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl xl:leading-[72px]">
                 The new beyond-creative NFT Exchange.
               </h1>
-              <p className="text-base mt-6 text-[#667085] sm:text-xl lg:max-w-[30rem] lg:text-lg xl:text-xl">
+              <p className="text-base mt-6 text-mist sm:text-xl lg:max-w-[30rem] lg:text-lg xl:text-xl">
                 Nftana is a next-gen open source NFT Exchange marketplace that
                 anyone can contribute to develop or use this marketplace as
                 their framework.
@@ -39,7 +39,7 @@ const HeroSection = () => {
               <div className="mt-10 sm:flex sm:gap-3 sm:justify-center lg:justify-start">
                 <div className="my-3 rounded-md sm:my-0">
                   <NextLink href="/discover">
-                    <a className="flex items-center justify-center w-full py-4 text-base font-medium text-[#475467] bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-[15px] md:text-lg md:px-8">
+                    <a className="flex items-center justify-center w-full py-4 text-base font-medium text-river-bed bg-white border border-gray-200 rounded-md px-7 hover:bg-gray-50 md:py-[15px] md:text-lg md:px-8">
                       <PlayCircleIcon
                         className="w-5 h-5 mr-2"
                         aria-hidden="true"
@@ -53,7 +53,7 @@ const HeroSection = () => {
                     <NextLink href="/register">
                       <a
                         className={twMerge(
-                          'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white bg-[#155EEF] hover:bg-[#2d6ff1] md:py-[15px] md:text-lg md:px-7 ',
+                          'w-full flex items-center justify-center px-7 py-4 border border-transparent text-base font-medium rounded-md text-white bg-azul hover:bg-ultramarine md:py-[15px] md:text-lg md:px-7 ',
                         )}
                       >
                         Sign up
