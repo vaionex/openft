@@ -10,6 +10,8 @@ import {
 } from '../redux/slices/wallet'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
+import store from '@/redux/store'
+
 const axiosRetry = require('axios-retry')
 
 const walletID = '00000000-0000-0000-0000-000000000000'
@@ -383,4 +385,42 @@ export const chackBalancefromApi = async () => {
         })
       }
     })
+}
+
+export const updatePaymailApi = async (paymail) => {
+  try {
+    console.log('paymail', paymail)
+    let apiRes = await apiConfig.put(
+      'v1/paymail',
+      {
+        newPaymailId: paymail,
+      },
+      {
+        headers: {
+          walletID,
+        },
+      },
+    )
+
+    if (apiRes?.data?.data?.status === 'success') {
+      if (apiRes?.data?.data?.paymail) {
+        store.dispatch(updatePaymail(apiRes.data.data.paymail))
+      }
+
+      return {
+        ...apiRes.data.data,
+      }
+    } else {
+      throw 'An error occured!'
+    }
+  } catch (error) {
+    console.log('updatePaymail error', error, error?.response?.data)
+
+    return {
+      status: 'error',
+      msg: error?.response?.data?.data?.msg
+        ? error?.response?.data?.data?.msg
+        : 'An error occured!',
+    }
+  }
 }
