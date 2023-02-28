@@ -30,7 +30,7 @@ const Pagination = ({ pageLimit, productCount }) => {
         <li className="flex ">
           {currentPage > 1 ? (
             <NextLink href={url(currentPage - 1)} passHref prefetch={false}>
-              <a className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-[#667085]">
+              <a className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-mist">
                 <LeftIcon className="w-5 h-5 " aria-hidden="true" />
                 Previous
               </a>
@@ -51,7 +51,7 @@ const Pagination = ({ pageLimit, productCount }) => {
           pageNumber === '...' ? (
             <li
               key={pageNumber}
-              className="inline-flex items-center px-4 pt-4 text-sm font-medium text-[#667085]"
+              className="inline-flex items-center px-4 pt-4 text-sm font-medium text-mist"
             >
               ...
             </li>
@@ -66,7 +66,7 @@ const Pagination = ({ pageLimit, productCount }) => {
                 </a>
               ) : (
                 <NextLink href={url(pageNumber)} passHref prefetch={false}>
-                  <a className="inline-flex items-center px-4 pt-4 text-sm font-medium text-[#667085]">
+                  <a className="inline-flex items-center px-4 pt-4 text-sm font-medium text-mist">
                     {pageNumber}
                   </a>
                 </NextLink>
@@ -78,7 +78,7 @@ const Pagination = ({ pageLimit, productCount }) => {
         <li className="flex justify-end ">
           {!isLastPage ? (
             <NextLink href={url(currentPage + 1)} passHref prefetch={false}>
-              <a className="inline-flex items-center pt-4 pl-1 text-sm font-medium text-[#667085]">
+              <a className="inline-flex items-center pt-4 pl-1 text-sm font-medium text-mist">
                 Next
                 <RightIcon className="w-5 h-5 " aria-hidden="true" />
               </a>

@@ -16,7 +16,7 @@ const UserSettingsHeader = () => {
     <div className="relative pt-12 pb-6">
       <div className="flex flex-col justify-between px-4 mx-auto xs:flex-row max-w-7xl sm:px-0">
         <div className="flex items-center justify-between gap-4 mb-3 xs:mb-0">
-          <h1 className="text-3xl font-medium text-[#101828]">Settings</h1>
+          <h1 className="text-3xl font-medium text-mirage">Settings</h1>
         </div>
         <div>
           <form className="flex items-center w-full gap-3">

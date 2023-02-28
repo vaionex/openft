@@ -9,7 +9,7 @@ const InputMain = ({ className, children }) => {
   return (
     <div
       className={twMerge(
-        'sm:grid sm:gap-4 sm:items-start sm:border-b sm:border-[#EAECF0] pb-5',
+        'sm:grid sm:gap-4 sm:items-start sm:border-b sm:border-bright-gray pb-5',
         className,
       )}
     >
@@ -33,7 +33,7 @@ InputMain.Label = function InputMainLabel({
       <label
         htmlFor={htmlFor}
         className={twMerge(
-          ' block text-sm font-medium text-[#344054] sm:mt-px',
+          ' block text-sm font-medium text-bluewood sm:mt-px',
           !sublabel && 'sm:pt-2',
           className,
         )}
@@ -64,7 +64,7 @@ InputMain.Label = function InputMainLabel({
         </span>
 
         {sublabel && (
-          <span className="block font-normal text-[#667085]">{sublabel}</span>
+          <span className="block font-normal text-mist">{sublabel}</span>
         )}
         {required && <span className="pl-1 text-red-600">*</span>}
       </label>
@@ -101,16 +101,16 @@ InputMain.Input = function InputMainInput(
               inputContainer,
             )}
           >
-            <span className="inline-flex items-center px-3 md:py-[10px] text-sm md:text-base text-[#667085] border border-r-0 border-[#EAECF0] rounded-l-md bg-[#F9FAFB]">
+            <span className="inline-flex items-center px-3 md:py-[10px] text-sm md:text-base text-mist border border-r-0 border-bright-gray rounded-l-md bg-vista-white">
               {addon}
             </span>
             <input
               id={id}
               type={inputType}
               className={twMerge(
-                'flex-1 block w-full min-w-0 border-[#EAECF0] rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
+                'flex-1 block w-full min-w-0 border-bright-gray rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm',
                 inputClassName,
-                props.disabled && 'bg-[#F9FAFB]',
+                props.disabled && 'bg-vista-white',
               )}
               ref={ref}
               {...props}
@@ -135,9 +135,9 @@ InputMain.Input = function InputMainInput(
               id={id}
               type={inputType}
               className={twMerge(
-                'flex-1 block w-full min-w-0 border-[#EAECF0] rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-l-md sm:text-sm',
+                'flex-1 block w-full min-w-0 border-bright-gray rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-l-md sm:text-sm',
                 inputClassName,
-                props.disabled && 'bg-[#F9FAFB]',
+                props.disabled && 'bg-vista-white',
               )}
               ref={ref}
               {...props}
@@ -150,7 +150,7 @@ InputMain.Input = function InputMainInput(
                 setTimeout(() => setMessage(false), 3000)
               }}
               type="button"
-              className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-[#344054] border border-gray-300 rounded-r-md bg-[#F9FAFB] hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-bluewood border border-gray-300 rounded-r-md bg-vista-white hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             >
               {addon}
             </button>
@@ -174,10 +174,10 @@ InputMain.Input = function InputMainInput(
               id={id}
               type={inputType}
               className={twMerge(
-                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-[#EAECF0]  rounded-md',
+                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-bright-gray  rounded-md',
                 inputClassName,
                 inputIcon && 'pl-7',
-                props.disabled && 'bg-[#F9FAFB]',
+                props.disabled && 'bg-vista-white',
               )}
               onChange={props.onChange}
               ref={ref}
@@ -207,7 +207,7 @@ InputMain.Input = function InputMainInput(
 
             {!!inputIcon && (
               <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
-                <span className="text-[#667085] sm:text-sm">{inputIcon}</span>
+                <span className="text-mist sm:text-sm">{inputIcon}</span>
               </div>
             )}
           </div>
@@ -236,9 +236,9 @@ InputMain.Textarea = function InputMainTextarea(
           id={id}
           type="text"
           className={twMerge(
-            'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-[#EAECF0] resize-none rounded-md',
+            'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-bright-gray resize-none rounded-md',
             textareaClassName,
-            props.disabled && 'bg-[#F9FAFB]',
+            props.disabled && 'bg-vista-white',
           )}
           onChange={props.onChange}
           rows={rows}

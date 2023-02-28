@@ -104,10 +104,10 @@ export default function Form() {
         <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left">
           <div className="">
             <div className="max-w-md mx-auto sm:max-w-lg xl:max-w-[480px] lg:mx-0">
-              <h2 className="text-3xl text-[#101828] font-semibold tracking-tight sm:text-4xl">
+              <h2 className="text-3xl text-mirage font-semibold tracking-tight sm:text-4xl">
                 Contact us
               </h2>
-              <p className="mt-4 text-lg text-[#667085] sm:mt-3">
+              <p className="mt-4 text-lg text-mist sm:mt-3">
                 Ask everything about how Nftana can work for you.
               </p>
               <form
@@ -267,16 +267,13 @@ export default function Form() {
                       errors['privacy']?.message ? '-mt-2.5' : ''
                     } inset-0 absolute text-sm text-left`}
                   >
-                    <label
-                      htmlFor="privacy"
-                      className="font-medium text-[#667085]"
-                    >
+                    <label htmlFor="privacy" className="font-medium text-mist">
                       You agree to our friendly{' '}
                     </label>
                     <NextLink href="/privacy">
                       <a
                         id="privacy-policy"
-                        className="font-medium underline text-[#667085]"
+                        className="font-medium underline text-mist"
                       >
                         privacy policy.
                       </a>

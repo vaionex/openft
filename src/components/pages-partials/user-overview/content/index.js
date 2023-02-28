@@ -137,8 +137,8 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
                     <a
                       className={classNames(
                         tab.status
-                          ? 'border-blue-500 text-[#155EEF]'
-                          : 'border-transparent text-[#475467] hover:text-gray-700 hover:border-gray-300',
+                          ? 'border-blue-500 text-azul'
+                          : 'border-transparent text-river-bed hover:text-gray-700 hover:border-gray-300',
                         'whitespace-nowrap flex space-x-2 pb-4 px-1 border-b-2 font-medium text-sm',
                       )}
                       aria-current={tab.status ? 'page' : undefined}
@@ -146,8 +146,8 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
                       <tab.icon
                         className={classNames(
                           tab.status
-                            ? 'text-[#155EEF] stroke-blue-600'
-                            : 'text-[#475467] stroke-gray-500',
+                            ? 'text-azul stroke-blue-600'
+                            : 'text-river-bed stroke-gray-500',
                           'w-5 h-5',
                         )}
                         aria-hidden="true"
@@ -183,7 +183,7 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
               onChange={(e) => setsearchState(e.target.value)}
             />
           </InputMain>
-          <button className="p-[14px] rounded-md bg-[#155EEF] hover:bg-[#2d6ff1]">
+          <button className="p-[14px] rounded-md bg-azul hover:bg-ultramarine">
             <span className="sr-only">Search Button</span>
             <MagnifyGlassIcon className="w-4 h-4 text-white" />
           </button>
@@ -231,7 +231,7 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
             <ReactPaginate
               breakLabel={'...'}
               nextLabel={
-                <span className="flex gap-1 text-[#667085]">
+                <span className="flex gap-1 text-mist">
                   Next
                   <RightIcon
                     className="w-5 h-5 hover:text-gray-500"
@@ -242,7 +242,7 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
               onPageChange={handlePageClick}
               pageCount={pageCount}
               previousLabel={
-                <span className="flex gap-1 text-[#667085]">
+                <span className="flex gap-1 text-mist">
                   <LeftIcon
                     className="w-5 h-5 hover:text-gray-500"
                     aria-hidden="true"

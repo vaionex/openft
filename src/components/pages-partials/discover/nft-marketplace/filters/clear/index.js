@@ -2,7 +2,7 @@ import { connectCurrentRefinements } from 'react-instantsearch-dom'
 
 const ClearRefinements = ({ items, refine }) => (
   <button
-    className="py-[10px] px-[18px] text-base font-medium border border-[#EAECF0] rounded-lg text-[#344054]"
+    className="py-[10px] px-[18px] text-base font-medium border border-bright-gray rounded-lg text-bluewood"
     onClick={() => refine(items)}
     disabled={!items.length}
   >

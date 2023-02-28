@@ -32,7 +32,7 @@ const UserSettingsSidebar = () => {
               className={twMerge(
                 pathname === item.href
                   ? 'bg-blue-50 border-blue-500 text-blue-700 hover:bg-blue-50 hover:text-teal-700'
-                  : 'border-transparent text-[#667085] hover:bg-gray-50 hover:text-gray-700',
+                  : 'border-transparent text-mist hover:bg-gray-50 hover:text-gray-700',
                 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium',
               )}
               aria-current={item.href === pathname ? 'page' : null}

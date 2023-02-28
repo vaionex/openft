@@ -37,7 +37,7 @@ export default function MoreNft({
           </div>
           <div className="flex items-center justify-center rounded-md my-14">
             <NextLink href="/discover">
-              <a className="max-w-[151px] flex items-center justify-center w-full text-base font-medium text-[#344054] bg-white border border-gray-200 rounded-md px-3 hover:bg-gray-50 py-[11px]">
+              <a className="max-w-[151px] flex items-center justify-center w-full text-base font-medium text-bluewood bg-white border border-gray-200 rounded-md px-3 hover:bg-gray-50 py-[11px]">
                 Discover More
               </a>
             </NextLink>
