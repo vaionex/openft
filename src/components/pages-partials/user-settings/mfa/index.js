@@ -141,42 +141,46 @@ const UserSettingsMfaSection = () => {
 
   const updatePhoneNumberMFA = () => {
     if (isPossiblePhoneNumber(phone)) {
-      setType('phone')
+      if (enrolLen === 0) {
+        setType('phone')
 
-      // if (!window.recaptchaVerifier) {
-      //   window.recaptchaVerifier = new RecaptchaVerifier(
-      //     'recaptcha-container',
-      //     {
-      //       size: 'invisible',
-      //     },
-      //     firebaseAuth,
-      //   )
-      // }
+        // if (!window.recaptchaVerifier) {
+        //   window.recaptchaVerifier = new RecaptchaVerifier(
+        //     'recaptcha-container',
+        //     {
+        //       size: 'invisible',
+        //     },
+        //     firebaseAuth,
+        //   )
+        // }
 
-      try {
-        const provider = new PhoneAuthProvider(firebaseAuth)
-        provider
-          .verifyPhoneNumber(phone, window.recaptchaVerifier)
-          .then((verificationId) => {
-            setVerifyID(verificationId)
-            setIsOpen(true)
-          })
-          .catch((err) => {
-            console.log('err 111', err)
-            if (err.code === 'auth/invalid-phone-number') {
-              toast.error('Invalid phone number')
-            } else if (err.code == 'auth/code-expired') {
-              toast.error('Code expired')
-            }
-            // window.recaptchaVerifier.render().then(function (widgetId) {
-            //   grecaptcha.reset(widgetId)
-            // })
-          })
-      } catch (err) {
-        console.log('err 44', err)
-        // window.recaptchaVerifier.render().then(function (widgetId) {
-        //   grecaptcha.reset(widgetId)
-        // })
+        try {
+          const provider = new PhoneAuthProvider(firebaseAuth)
+          provider
+            .verifyPhoneNumber(phone, window.recaptchaVerifier)
+            .then((verificationId) => {
+              setVerifyID(verificationId)
+              setIsOpen(true)
+            })
+            .catch((err) => {
+              console.log('err 111', err)
+              if (err.code === 'auth/invalid-phone-number') {
+                toast.error('Invalid phone number')
+              } else if (err.code == 'auth/code-expired') {
+                toast.error('Code expired')
+              }
+              // window.recaptchaVerifier.render().then(function (widgetId) {
+              //   grecaptcha.reset(widgetId)
+              // })
+            })
+        } catch (err) {
+          console.log('err 44', err)
+          // window.recaptchaVerifier.render().then(function (widgetId) {
+          //   grecaptcha.reset(widgetId)
+          // })
+        }
+      } else {
+        toast.error('In order to perform this process, you must close the MFA.')
       }
     }
   }
