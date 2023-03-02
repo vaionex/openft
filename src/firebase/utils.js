@@ -367,18 +367,19 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
         }
       } else {
         // await updateEmail(user, user.providerData[0].email)
-        const checkUsername = await firebaseIsUsernameExist(
-          user?.email?.split('@')[0],
-        )
+        // const checkUsername = await firebaseIsUsernameExist(
+        //   user?.email?.split('@')[0],
+        // )
         const infos = {
           displayName: user.displayName,
-          name: user?.displayName,
+          // name: user?.displayName,
           email: user?.providerData[0].email,
-          username: checkUsername
-            ? user?.providerData[0].email?.split('@')[0] + getRandomNum()
-            : user?.providerData[0].email?.split('@')[0],
+          // username: checkUsername
+          //   ? user?.providerData[0].email?.split('@')[0] + getRandomNum()
+          //   : user?.providerData[0].email?.split('@')[0],
           uid: user.uid,
           createdAt: user.metadata.creationTime,
+          isGoogleUser: true,
           googleProfileImg: user.photoURL,
           profileImage: null,
           coverImage: null,
@@ -530,14 +531,44 @@ const firebaseDeleteImage = async ({ uid, imageType }) => {
   })
 }
 
-const firebaseUpdateProfile = async ({ uid, values }) => {
+const firebaseUpdateProfile = async ({ uid, values, isGoogleUser, coverImageForUpload, profileImageForUpload }) => {
   try {
     const userInfoFromDb = await firebaseGetUserInfoFromDb(uid, 'users')
     const mergedValues = { ...userInfoFromDb, ...values }
     const userRef = doc(firebaseDb, 'users', uid)
     await updateDoc(userRef, mergedValues, uid)
-    store.dispatch(setUserData(mergedValues))
-    return mergedValues
+    if (isGoogleUser) {
+      store.dispatch(setMnemonicPopup(true))
+      await CreateNovuSubscriber(uid, values.email, values.username)
+      await SendNotification(
+        uid,
+        'Your wallet has been created successfully',
+      )
+    }
+
+    let userFromDb
+    if (profileImageForUpload || coverImageForUpload) {
+      userFromDb = await firebaseGetUserInfoFromDb(uid, 'users').then(
+        async (user) => {
+          profileImageForUpload &&
+            (await firebaseUploadUserImage({
+              user,
+              imageFile: profileImageForUpload.file,
+              imageType: 'profileImage',
+            }))
+
+          coverImageForUpload &&
+            (await firebaseUploadUserImage({
+              user,
+              imageFile: coverImageForUpload.file,
+              imageType: 'coverImage',
+            }))
+        },
+      )
+    }
+
+    store.dispatch(setUserData(userFromDb ? userFromDb : mergedValues))
+    return userFromDb ? userFromDb : mergedValues
   } catch (error) {
     console.log(error)
     return { error: error.message }

@@ -2,7 +2,7 @@ import RegistrationLayout from '@/components/layout/registration-layout'
 import { firebaseUploadUserImage } from '@/firebase/utils'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import userSelector from '@/redux/selectors/user'
-import { register, setPending } from '@/redux/slices/user'
+import { register, setPending, updateUser } from '@/redux/slices/user'
 import { createwallet } from '@/services/relysia-queries'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { useRouter } from 'next/router'
@@ -35,6 +35,8 @@ const RegistrationFormMain = () => {
     readyToGo,
   } = useSelector(registrationFormSelector)
 
+  const isGoogleUser = currentUser?.isGoogleUser
+
   useEffect(() => {
     if (readyToGo) {
       registerUser()
@@ -49,7 +51,7 @@ const RegistrationFormMain = () => {
   }, [isPending])
 
   const registerUser = async () => {
-    setPending(true)
+    dispatch(setPending(true))
     const { coverImage, profileImage } = photoValues
     const coverImageForUpload = coverImage
       ? await getCroppedImg(coverImage, coverImage.croppedAreaPixels)
@@ -64,13 +66,28 @@ const RegistrationFormMain = () => {
       // ...socialsValues,
     }
 
+    const updatedValues = {
+      username: detailsValues.username,
+      name: detailsValues.name
+    }
+
     try {
-      dispatch(
-        register({
-          dataForServer,
-          coverImageForUpload,
-          profileImageForUpload,
-        }),
+      dispatch(isGoogleUser
+        ? (
+          updateUser({
+            uid: currentUser.uid,
+            values: updatedValues,
+            coverImageForUpload,
+            profileImageForUpload,
+            isGoogleUser
+          })
+        ) : (
+          register({
+            dataForServer,
+            coverImageForUpload,
+            profileImageForUpload,
+          })
+        )
       )
 
       if (isError) {
@@ -99,7 +116,13 @@ const RegistrationFormMain = () => {
   }
 
   const renderComponent = () => {
-    if (step === '1') return <RegistrationDetails goToStep={goToStep} />
+    if (step === '1') return (
+      <RegistrationDetails
+        currentUser={currentUser}
+        isGoogleUser={isGoogleUser}
+        goToStep={goToStep}
+      />
+    )
     if (step === '2') return <RegistrationChoosePassword goToStep={goToStep} />
     if (step === '3')
       return (
@@ -110,6 +133,7 @@ const RegistrationFormMain = () => {
           mnemonic={mnemonic}
           paymail={paymail}
           currentUser={currentUser}
+          isGoogleUser={isGoogleUser}
         />
       )
     // if (step === '4')
