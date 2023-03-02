@@ -1,4 +1,5 @@
 import NextLink from 'next/link'
+import Image from 'next/image'
 import { Popover } from '@headlessui/react'
 import { CogIcon, MenuIcon, ShoppingCartIcon } from '@heroicons/react/outline'
 import MobileNav from '../mobile/nav'
@@ -52,16 +53,18 @@ const Header = () => {
         >
           <div className="flex items-center flex-1">
             <div className="flex items-center justify-between w-full md:w-auto">
-              <NextLink href="/" className="outline-none inline-block">
+              <NextLink href="/" className="inline-block outline-none">
                 <div className="flex items-center cursor-pointer">
                   <div className="w-5 h-5">
-                    <img
+                    <Image
                       className="h-5 pb-0.5 flex-none"
                       src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                       alt="Relysia"
+                      height='20px'
+                      width='17px'
                     />
                   </div>
-                  <p className="pl-2 font-semibold text-xl text-blue-900">
+                  <p className="pl-2 text-xl font-semibold text-blue-900">
                     Nftana
                   </p>
                 </div>

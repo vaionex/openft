@@ -1,5 +1,6 @@
 import { RegisterLogo } from '@/components/common/svgs'
 import NextLink from 'next/link'
+import Image from 'next/image'
 import RegistrationSteps from '../steps'
 
 const RegistrationPageSidebar = () => {
@@ -7,17 +8,19 @@ const RegistrationPageSidebar = () => {
     <div className="hidden max-w-lg col-span-4 md:block">
       <div className="w-full h-full bg-bottom bg-no-repeat bg-cover bg-registration-bg">
         <div className="flex flex-col h-full px-4 py-6 mx-auto md:py-10 sm:px-6 lg:px-8">
-          <NextLink href="/" className="outline-none inline-block">
+          <NextLink href="/" className="inline-block outline-none">
             <div className="flex items-center cursor-pointer">
               <span className="sr-only">Workflow</span>
               <div className="w-5 h-5">
-                <img
+                <Image
                   className="h-5 pb-0.5 flex-none"
                   src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                   alt="Relysia"
+                  height='20px'
+                  width='17px'
                 />
               </div>
-              <p className="pl-2 font-semibold text-xl text-bright-gray">
+              <p className="pl-2 text-xl font-semibold text-bright-gray">
                 Nftana
               </p>
             </div>
