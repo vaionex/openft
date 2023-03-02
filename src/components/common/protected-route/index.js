@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux'
 import LoadingBars from '../loading-bars'
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isUserPending, mnemonicPopup } =
+  const { currentUser, isAuthenticated, isUserPending, mnemonicPopup } =
     useSelector(userSelector)
 
+  const isGoogleUser = currentUser?.isGoogleUser
   const router = useRouter()
 
   const authRoute =
@@ -22,10 +23,16 @@ const ProtectedRoute = ({ children }) => {
       router.push('/login')
     }
 
-    if (authRoute && isAuthenticated && !isUserPending && !mnemonicPopup) {
+    if (isGoogleUser && !mnemonicPopup && !currentUser?.username) {
+      router.push("/register")
+    }
+
+    if (authRoute && isAuthenticated && !isUserPending && !mnemonicPopup && (isGoogleUser ? currentUser?.username : true)) {
       router.push('/')
     }
-  }, [isUserPending, router, isAuthenticated, mnemonicPopup])
+  }, [isUserPending, router.pathname, isAuthenticated, mnemonicPopup])
+
+  if (isGoogleUser && !currentUser?.username && router.pathname === '/register') return <>{children}</>
 
   if (
     isUserPending ||

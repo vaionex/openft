@@ -43,8 +43,10 @@ const Login = () => {
   const handleUserAuthWithGoogle = async () => {
     try {
       const user = await dispatch(loginWithGoogle({ setVerifyID })).unwrap()
-      if (user && !user?.error) {
-        router.replace('/login')
+      if (user && !user?.error && user?.username) {
+        router.replace('/')
+      } else {
+        router.replace('/register')
       }
     } catch (error) {
       if (error.code === 409) {
@@ -99,7 +101,7 @@ const Login = () => {
                   </NextLink>
                 </p>
                 <NextLink href="/">
-                  <p className="text-center text-gray-400 font-normal cursor-pointer pt-2 hover:text-gray-600 hover:duration-300">
+                  <p className="pt-2 font-normal text-center text-gray-400 cursor-pointer hover:text-gray-600 hover:duration-300">
                     {' '}
                     back{' '}
                   </p>

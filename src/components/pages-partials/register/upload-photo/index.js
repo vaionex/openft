@@ -56,8 +56,10 @@ const RegistrationUploadPhoto = ({
   setMnemonicStatus,
   mnemonic,
   paymail,
-  currentUser
+  currentUser,
+  isGoogleUser
 }) => {
+  const router = useRouter()
   const dispatch = useDispatch()
   const recaptchaRef = createRef()
   const [captcha, setCaptcha] = useState('')
@@ -155,7 +157,7 @@ const RegistrationUploadPhoto = ({
               <button
                 type="button"
                 className="w-full font-semibold btn-secondary"
-                onClick={() => goToStep(2)}
+                onClick={() => isGoogleUser ? goToStep(1) : goToStep(2)}
               >
                 Back
               </button>
@@ -176,10 +178,12 @@ const RegistrationUploadPhoto = ({
         onClose={() => {
           setMnemonicStatus(false)
           dispatch(setMnemonicPopup(false))
+          isGoogleUser && router.push('/')
         }}
         onConfirm={() => {
           setMnemonicStatus(false)
           dispatch(setMnemonicPopup(false))
+          isGoogleUser && router.push('/')
         }}
         button1Text={"I've already backed it up"}
         cancelButton={false}
