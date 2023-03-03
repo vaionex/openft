@@ -129,10 +129,10 @@ const UserSettingsWalletSection = () => {
       console.log('err', err.message, err.response, err)
       let errMsg =
         err &&
-        err.response &&
-        err.response.data &&
-        err.response.data.data &&
-        err.response.data.data.msg
+          err.response &&
+          err.response.data &&
+          err.response.data.data &&
+          err.response.data.data.msg
           ? err.response.data.data.msg
           : null
       if (
@@ -242,7 +242,7 @@ const UserSettingsWalletSection = () => {
 
   useEffect(() => {
     if (isTransicationSuccess) {
-      ;(async () => {
+      ; (async () => {
         await Promise.all([reloadBalance(), reloadTrans()]).finally(() =>
           setIsTransactionSuccess(false),
         )
@@ -350,7 +350,7 @@ const UserSettingsWalletSection = () => {
                         )
                       }
                       value={paymail}
-                      onChange={() => {}}
+                      onChange={() => { }}
                       className="sm:col-span-2"
                       disabled
                     />
@@ -379,7 +379,7 @@ const UserSettingsWalletSection = () => {
                         )
                       }
                       defaultValue={address}
-                      onChange={() => {}}
+                      onChange={() => { }}
                       className="sm:col-span-2"
                       disabled
                     />
@@ -442,9 +442,8 @@ const UserSettingsWalletSection = () => {
                             )}
                             <button
                               type="submit"
-                              className={`w-full font-semibold relative ${
-                                isSubmitting ? 'btn-secondary' : 'btn-primary'
-                              }`}
+                              className={`w-full font-semibold relative ${isSubmitting ? 'btn-secondary' : 'btn-primary'
+                                }`}
                             >
                               Send
                               {isSubmitting && (
@@ -489,11 +488,11 @@ const UserSettingsWalletSection = () => {
                         balance.
                       </span>
                     </div>
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center mt-4">
                       <button
                         type="button"
                         onClick={handleSort}
-                        className="px-3 py-2 mt-4 ml-auto text-xs font-medium text-gray-700 cursor-pointer sm:mt-0"
+                        className="px-3 py-2 ml-auto text-xs font-medium text-gray-700 cursor-pointer sm:mt-0"
                       >
                         <span className="flex flex-row items-center gap-2">
                           {isAscending ? 'Ascending' : 'Descending'}
@@ -553,11 +552,10 @@ const UserSettingsWalletSection = () => {
                             </span>
                             <span className="flex items-center mt-2">
                               <SvgCheckCircleIcon
-                                className={`w-4 h-4 ${
-                                  items.type === 'debit'
+                                className={`w-4 h-4 ${items.type === 'debit'
                                     ? 'text-red-400'
                                     : 'text-green-400'
-                                }`}
+                                  }`}
                                 aria-hidden="true"
                               />
                               <span className="ml-2 text-sm font-normal text-gray-500">
