@@ -15,6 +15,7 @@ module.exports = {
         azul: '#155EEF',
         warning: '#F04438',
         ultramarine: '#2d6ff1',
+        lightgray: '#EAECF5',
         azure: '#0788F5',
         fantasy: '#F2F4F7',
         'vista-white': '#F9FAFB',

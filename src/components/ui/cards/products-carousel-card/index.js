@@ -364,7 +364,7 @@ const ProductsCarouselCard = ({
           <div className="absolute bottom-0 z-20 inline-flex p-4 overflow-hidden rounded-lg right-[3.3rem]">
             <div
               onClick={() => setIsDestory(true)}
-              className="inline-flex items-center justify-center border border-white rounded-md cursor-pointer bg-opacity-40 hover:bg-opacity-30 hover:bg-white w-11 h-11"
+              className="inline-flex items-center justify-center bg-[hsl(231,6%,75%)] border border-lightgray rounded-md cursor-pointer bg-opacity-40 hover:bg-opacity-30 hover:bg-lightgray w-11 h-11"
             >
               <CustomTrashIcon />
               <div
