@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-
+import Image from 'next/image'
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
@@ -24,12 +24,13 @@ const Footer = ({ page }) => {
           <div className="flex items-center cursor-pointer">
             <NextLink href={'/'}>
               <a className="flex items-center cursor-pointer">
-                <img
+                <Image
                   className="h-5 pb-0.5 flex-none"
                   src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                   alt="Relysia"
+                  height='20px'
+                  width='17px'
                 />
-
                 <span className="pl-2 text-xl font-semibold text-blue-900">
                   Nftana
                 </span>
@@ -37,17 +38,17 @@ const Footer = ({ page }) => {
             </NextLink>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center mt-8 gap-x-8 w-72 xs:w-auto mx-auto md:mt-0">
+        <div className="flex flex-wrap justify-center mx-auto mt-8 gap-x-8 w-72 xs:w-auto md:mt-0">
           {navigation.map((item) => (
             <NextLink href={item.href} key={item.name}>
-              <a className="text-mist text-base hover:text-gray-600 mt-2 sm:mt-0">
+              <a className="mt-2 text-base text-mist hover:text-gray-600 sm:mt-0">
                 <span>{item.name}</span>
               </a>
             </NextLink>
           ))}
         </div>
         <div className="mt-8 md:mt-0">
-          <p className="text-base text-center text-cadet-gray font-normal">
+          <p className="text-base font-normal text-center text-cadet-gray">
             &copy; {new Date().getFullYear()} Vaionex
           </p>
         </div>

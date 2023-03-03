@@ -15,7 +15,7 @@ const HeroSection = () => {
           <div className="max-w-md px-4 mx-auto sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center lg:z-20">
             <div className="lg:py-8">
               <NextLink href="https://github.com/vaionex/openft">
-                <a className="inline-flex items-center p-1 pr-2 text-ocean-blue rounded-full bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
+                <a className="inline-flex items-center p-1 pr-2 rounded-full text-ocean-blue bg-blue-50 sm:text-base lg:text-sm xl:text-base hover:text-blue-600">
                   <span className="px-3 py-0.5 text-sm bg-white text-ocean-blue font-medium leading-5 tracking-wide rounded-full">
                     It&apos;s free!
                   </span>
@@ -68,9 +68,9 @@ const HeroSection = () => {
             <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[600px] lg:max-w-[600px] sm:px-6 lg:px-0 rounded-3xl bg-white">
               <Image
                 src={`/images/hero${Math.floor(Math.random() * 3) + 1}.webp`}
-                className="w-full h-full"
+                className="rounded-3xl"
                 alt="Nftana hero image"
-                layout="fill"
+                layout='fill'
                 quality={100}
                 objectFit="cover"
                 priority={true}

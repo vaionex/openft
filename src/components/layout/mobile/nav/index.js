@@ -3,6 +3,7 @@ import { Menu, Popover, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { Logo } from '@/components/common/svgs'
 import NextLink from 'next/link'
+import Image from 'next/image'
 import ActiveLink from '@/components/common/active-link'
 import DropdownUser from '@/components/ui/dropdown-user'
 import { LogOutIcon } from '@/components/common/icons'
@@ -74,17 +75,19 @@ const MobileNav = ({ navItems }) => {
       >
         <div className="overflow-hidden bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="flex items-center justify-between px-5 pt-4">
-            <NextLink href="/" className="outline-none inline-block">
+            <NextLink href="/" className="inline-block outline-none">
               <div className="flex items-center cursor-pointer">
                 <span className="sr-only">Nftana Logo</span>
                 <div className="w-5 h-5">
-                  <img
+                  <Image
                     className="h-5 pb-0.5 flex-none"
                     src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                     alt="Relysia"
+                    height='20px'
+                    width='17px'
                   />
                 </div>
-                <p className="pl-2 font-semibold text-xl text-blue-900">
+                <p className="pl-2 text-xl font-semibold text-blue-900">
                   Nftana
                 </p>
               </div>
@@ -113,7 +116,7 @@ const MobileNav = ({ navItems }) => {
             {isAuthenticated ? (
               <div className="pt-3 pb-6">
                 <div className="px-3 space-y-1">
-                  <p className="text-lg font-bold px-2 text-black">
+                  <p className="px-2 text-lg font-bold text-black">
                     User settings
                   </p>
                   {ProfileRoutes.map((item) => (

@@ -1,5 +1,6 @@
 import { RegisterLogo } from '@/components/common/svgs'
 import NextLink from 'next/link'
+import Image from 'next/image'
 import RegistrationSteps from '../steps'
 
 const ResetPasswordSide = () => {
@@ -13,17 +14,19 @@ const ResetPasswordSide = () => {
               <RegisterLogo />
             </a>
           </NextLink> */}
-          <NextLink href="/" className="outline-none inline-block">
+          <NextLink href="/" className="inline-block outline-none">
             <div className="flex items-center cursor-pointer">
               <span className="sr-only">Workflow</span>
               <div className="w-5 h-5">
-                <img
+                <Image
                   className="h-5 pb-0.5 flex-none"
                   src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                   alt="Relysia"
+                  height='20px'
+                  width='17px'
                 />
               </div>
-              <p className="pl-2 font-semibold text-xl text-bright-gray">
+              <p className="pl-2 text-xl font-semibold text-bright-gray">
                 Nftana
               </p>
             </div>
