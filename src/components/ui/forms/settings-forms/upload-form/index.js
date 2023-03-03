@@ -234,7 +234,7 @@ const UploadForm = () => {
       SendNotification(currentUser.uid, 'Your NFT has been created!')
 
       resetAllData()
-      router.push('/discover')
+      router.push('/discover').then(() => router.reload())
     } catch (error) {
       if (error?.message) {
         setIsError(true)
@@ -301,7 +301,7 @@ const UploadForm = () => {
                     id="name"
                     className="sm:col-span-2"
                     placeholder="e.g. My artwork"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     inputContainer="md:h-11"
                     error={errors['name']?.message}
                     disabled={isPending}
@@ -331,7 +331,7 @@ const UploadForm = () => {
                   name="description"
                   rows={3}
                   placeholder="Write a short description of your artwork."
-                  onChange={() => {}}
+                  onChange={() => { }}
                   error={errors['description']?.message}
                   maxLength={DESC_MAX_LENGTH}
                   disabled={isPending}
