@@ -7,8 +7,11 @@ import ModalConfirm from '../../modal-confirm'
 import { doc, writeBatch } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { setDelist } from '@/redux/slices/user'
 
 const TokenCard = ({ data, idx }) => {
+  const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenDelist, setIsOpenDelist] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -34,6 +37,7 @@ const TokenCard = ({ data, idx }) => {
       setIslive(false)
       setIsOpenDelist(false)
       setIsLoading(false)
+      dispatch(setDelist(true))
       toast.success('NFT Delist Successfully!', {
         position: 'top-right',
         autoClose: 5000,

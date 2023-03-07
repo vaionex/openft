@@ -32,6 +32,7 @@ const initialState = {
   isAuthenticated: false,
   isSuccess: false,
   mnemonicPopup: false,
+  dilist: false,
 }
 
 export const login = createAsyncThunk(
@@ -135,6 +136,9 @@ const userSlice = createSlice({
     setMnemonicPopup: (state, action) => {
       state.mnemonicPopup = action.payload
     },
+    setDelist: (state, action) => {
+      state.dilist = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -238,4 +242,5 @@ export const {
   setPending,
   setUserPending,
   setMnemonicPopup,
+  setDelist
 } = userSlice.actions
