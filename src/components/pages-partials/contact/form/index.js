@@ -107,7 +107,7 @@ export default function Form() {
               <h2 className="text-3xl text-mirage font-semibold tracking-tight sm:text-4xl">
                 Contact us
               </h2>
-              <p className="mt-4 text-lg text-mist sm:mt-3">
+              <p className="mt-4 text-lg text-mist sm:mt-3 2xl:my-4">
                 Ask everything about how Nftana can work for you.
               </p>
               <form
@@ -128,7 +128,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="first-name"
-                            className="sm:col-span-2"
+                            className="sm:col-span-2 2xl:my-2"
                             inputClassName="md:h-11"
                             placeholder="First name"
                             onChange={() => {}}
@@ -154,7 +154,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="last-name"
-                            className="sm:col-span-2"
+                            className="sm:col-span-2 2xl:my-2"
                             inputClassName="md:h-11"
                             placeholder="Last name"
                             onChange={() => {}}
@@ -176,7 +176,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="email"
-                            className="w-full sm:col-span-2"
+                            className="w-full sm:col-span-2 2xl:my-2"
                             inputClassName="md:h-11"
                             placeholder="you@company.com"
                             onChange={() => {}}
@@ -202,7 +202,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="company"
-                            className="w-full sm:col-span-2"
+                            className="w-full sm:col-span-2 2xl:my-2"
                             inputClassName="md:h-11"
                             placeholder="Your company"
                             onChange={() => {}}
@@ -228,7 +228,7 @@ export default function Form() {
                         return (
                           <InputMain.Textarea
                             id="message"
-                            className="w-full"
+                            className="w-full 2xl:my-2"
                             placeholder="Type here..."
                             rows={6}
                             onChange={() => {}}
@@ -242,7 +242,7 @@ export default function Form() {
                   </InputMain>
                 </div>
                 <div className="relative flex  my-2 sm:col-span-2">
-                  <div className="flex items-center h-4 sm:h-5 ">
+                  <div className="flex items-center h-4 sm:h-5 2xl:my-2 ">
                     <Controller
                       name={'privacy'}
                       control={control}
