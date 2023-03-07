@@ -88,9 +88,9 @@ export default function Form() {
     }, 5000)
   }
   return (
-    <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6">
-      <div className="lg:grid-cols-2 lg:grid lg:gap-16 xl:gap-[112px] min-h-[calc(100vh-(6rem+8rem))]">
-        <div className="relative hidden mt-12 sm:max-w-lg xl:max-w-[576px] min-h-[816px] sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block">
+    <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6  2xl:mt-14">
+      <div className="lg:grid-cols-2 lg:grid lg:gap-x-16 xl:gap-x-[112px]">
+        <div className="relative hidden mt-12 sm:max-w-lg xl:max-w-[576px] min-h-[816px] sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block 2xl:flex 2xl:items-center ">
           <div className="relative w-full h-full mx-auto">
             <Image
               className="relative object-cover block w-full h-full overflow-hidden bg-white rounded-3xl"
@@ -101,7 +101,7 @@ export default function Form() {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left">
+        <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left ">
           <div className="">
             <div className="max-w-md mx-auto sm:max-w-lg xl:max-w-[480px] lg:mx-0">
               <h2 className="text-3xl text-mirage font-semibold tracking-tight sm:text-4xl">
