@@ -114,7 +114,7 @@ export default function Form() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid grid-cols-1 mt-9 gap-y-3 sm:grid-cols-2 sm:gap-x-8"
               >
-                <div>
+                <div className='2xl:my-1'>
                   <InputMain className="relative pb-2 border-none sm:gap-1">
                     <InputMain.Label
                       label="First name"
@@ -128,7 +128,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="first-name"
-                            className="sm:col-span-2 2xl:my-2"
+                            className="sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="First name"
                             onChange={() => {}}
@@ -140,7 +140,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div>
+                <div className='2xl:my-1'>
                   <InputMain className="relative border-none sm:pb-2 sm:gap-1">
                     <InputMain.Label
                       label="Last name"
@@ -154,7 +154,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="last-name"
-                            className="sm:col-span-2 2xl:my-2"
+                            className="sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="Last name"
                             onChange={() => {}}
@@ -166,7 +166,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 2xl:my-1">
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label label="Email" htmlFor="email" required />
                     <Controller
@@ -176,7 +176,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="email"
-                            className="w-full sm:col-span-2 2xl:my-2"
+                            className="w-full sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="you@company.com"
                             onChange={() => {}}
@@ -188,7 +188,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 2xl:my-1">
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label
                       label="Company"
@@ -202,7 +202,7 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="company"
-                            className="w-full sm:col-span-2 2xl:my-2"
+                            className="w-full sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="Your company"
                             onChange={() => {}}
@@ -214,7 +214,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 2xl:my-1">
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label
                       label="Ask everything"
@@ -228,7 +228,7 @@ export default function Form() {
                         return (
                           <InputMain.Textarea
                             id="message"
-                            className="w-full 2xl:my-2"
+                            className="w-full 2xl:my-1"
                             placeholder="Type here..."
                             rows={6}
                             onChange={() => {}}
@@ -241,8 +241,8 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="relative flex  my-2 sm:col-span-2">
-                  <div className="flex items-center h-4 sm:h-5 2xl:my-2 ">
+                <div className="relative flex  my-2 sm:col-span-2 2xl:my-2">
+                  <div className="flex items-center h-4 sm:h-5 ">
                     <Controller
                       name={'privacy'}
                       control={control}
@@ -253,7 +253,7 @@ export default function Form() {
                             type="checkbox"
                             checked={checked}
                             inputContainer={'sm:w-5 w-4'}
-                            inputClassName="cursor-pointer w-4 sm:w-5 w-4 sm:h-5 text-blue-600 rounded-md border-gray-300 focus:ring-blue-500"
+                            inputClassName="cursor-pointer w-4 sm:w-5 w-4 sm:h-5 text-blue-600 rounded-md border-gray-300 focus:ring-blue-500 2xl:my-1"
                             onClick={() => setChecked(!checked)}
                             error={errors['privacy']?.message}
                             {...field}
@@ -289,7 +289,7 @@ export default function Form() {
                 ) : (
                   ''
                 )}
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 2xl:my-2">
                   <ButtonWLoading type="submit" fullWidth text="Send message" />
                 </div>
                 {message && (
