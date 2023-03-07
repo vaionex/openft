@@ -205,6 +205,7 @@ const MyProfileForm = ({
                 text="Show my job title in my profile"
                 className="mt-4"
                 labelClassName="font-normal text-bluewood"
+                checkboxClassName="bg-ghost-white checked:border-[1.5px] checked:border-azul"
                 checked={formValues.showJobTitle}
                 onChange={handleInputChange}
               />

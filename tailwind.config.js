@@ -24,6 +24,7 @@ module.exports = {
         'ocean-blue': '#004EEB',
         'river-bed': '#475467',
         'tropical-blue': '#D1E0FF',
+        'ghost-white': '#F9F5FF',
         iron: '#D0D5DD',
       },
       screens: {
