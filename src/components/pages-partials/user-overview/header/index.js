@@ -173,7 +173,7 @@ export default function Header({ userInfo }) {
       </div>
       <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
         <div className="flex justify-center -mt-10 sm:-mt-20 sm:space-x-5">
-          <div className="relative z-10 flex w-20 h-20 bg-blue-500 rounded-xl ring-4 ring-white sm:h-40 sm:w-40">
+          <div className="relative z-10 flex justify-center w-20 h-20 bg-blue-500 rounded-xl ring-4 ring-white sm:h-40 sm:w-40">
             {userInfo ? (
               userInfo.profileImage ? (
                 <Image
@@ -181,7 +181,7 @@ export default function Header({ userInfo }) {
                   objectFit="cover"
                   layout="fill"
                   src={userInfo.profileImage}
-                  alt=""
+                  alt="user-avatar"
                 />
               ) : (
                 <AvatarWithName
@@ -196,7 +196,7 @@ export default function Header({ userInfo }) {
               >
                 <svg
                   aria-hidden="true"
-                  className="w-16 h-16 mr-2 text-gray-200 animate-spin fill-blue-600"
+                  className="w-12 h-12 sm:w-16 sm:h-16 text-gray-200 animate-spin fill-blue-600"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
