@@ -580,8 +580,8 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
           'relative border border-gray-200 group rounded-xl flex flex-col',
         )}
       >
-        <div className="relative h-[280px]">
-          <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square h-[280px] group-hover:opacity-75">
+        <div className="relative h-[380px]">
+          <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square h-[380px] group-hover:opacity-75">
             {data?.imageURL ? (
               <>
                 <Image
