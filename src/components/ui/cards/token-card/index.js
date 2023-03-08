@@ -68,6 +68,7 @@ const TokenCard = ({ data, idx }) => {
       <ModalNFTSell
         data={data}
         isOpen={isOpen}
+        setIslive={setIslive}
         onClose={() => setIsOpen(false)}
       />
       <ModalConfirm

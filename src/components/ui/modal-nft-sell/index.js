@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import TokenInfoCard from '../cards/token-info-card'
 import NFTSellForm from '../nft-sell-form'
 
-const ModalNFTSell = ({ className, isOpen, onClose, data }) => {
+const ModalNFTSell = ({ className, isOpen, setIslive, onClose, data }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-30" onClose={onClose}>
@@ -59,7 +59,7 @@ const ModalNFTSell = ({ className, isOpen, onClose, data }) => {
                         digital creations.
                       </p>
                     </div>
-                    <NFTSellForm onClose={onClose} data={data} />
+                    <NFTSellForm setIslive={setIslive} onClose={onClose} data={data} />
                   </div>
                 </div>
               </Dialog.Panel>

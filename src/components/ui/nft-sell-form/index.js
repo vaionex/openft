@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { firebaseDb } from '@/firebase/init'
 import { toast } from 'react-toastify'
 
-const NFTSellForm = ({ onClose, data }) => {
+const NFTSellForm = ({ onClose, data, setIslive }) => {
   const resolver = useYupValidationResolver(validationSchema)
   const [bsvPrice, setBsvPrice] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -87,6 +87,7 @@ const NFTSellForm = ({ onClose, data }) => {
       await batch.commit()
 
       setIsLoading(false)
+      setIslive(true)
       onClose()
 
       toast.success('NFT Updated Successfully!', {
