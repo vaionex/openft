@@ -18,6 +18,7 @@ export default function Form() {
   const [submitCounter, setSubmitCounter] = useState(0)
   const [checked, setChecked] = useState(false)
   const [message, setMessage] = useState(false)
+  const [height, setHeight] = useState(window.innerHeight)
   const resolver = useYupValidationResolver(validationSchema)
   const {
     control,
@@ -28,6 +29,10 @@ export default function Form() {
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     resolver,
+  })
+
+  window.addEventListener('resize', () => {
+    setHeight(window.innerHeight)
   })
 
   const onReCAPTCHAChange = (captchaCode) => {
@@ -104,7 +109,7 @@ export default function Form() {
         <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left">
           <div className="">
             <div className="max-w-md mx-auto sm:max-w-lg xl:max-w-[480px] lg:mx-0">
-              <h2 className="text-3xl text-mirage font-semibold tracking-tight sm:text-4xl">
+              <h2 className={`${height > 900 && "mb-7"} text-3xl text-mirage font-semibold tracking-tight sm:text-4xl `}>
                 Contact us
               </h2>
               <p className="mt-4 text-lg text-mist sm:mt-3">
@@ -114,7 +119,7 @@ export default function Form() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid grid-cols-1 mt-9 gap-y-3 sm:grid-cols-2 sm:gap-x-8"
               >
-                <div>
+                <div className={`${height > 900 && "mb-6"}`}>
                   <InputMain className="relative pb-2 border-none sm:gap-1">
                     <InputMain.Label
                       label="First name"
@@ -140,7 +145,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div>
+                <div className={`${height > 900 && "mb-6"}`}>
                   <InputMain className="relative border-none sm:pb-2 sm:gap-1">
                     <InputMain.Label
                       label="Last name"
@@ -166,7 +171,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="sm:col-span-2">
+                <div className={`${height > 900 && "mb-6"} sm:col-span-2`}> 
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label label="Email" htmlFor="email" required />
                     <Controller
@@ -188,7 +193,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="sm:col-span-2">
+                <div className={`${height > 900 && "mb-6"} sm:col-span-2`}>
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label
                       label="Company"
@@ -214,7 +219,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="sm:col-span-2">
+                <div className={`${height > 900 && "mb-6"} sm:col-span-2`}>
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label
                       label="Ask everything"
