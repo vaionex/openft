@@ -24,7 +24,7 @@ function classNames(...classes) {
 
 const itemsPerPage = 9
 
-export default function Content({ nftInfo, userFavList, isUserDetails }) {
+export default function Content({ nftInfo, userInfo, userFavList, isUserDetails }) {
   const usdBalance = usePriceConverter()
   const { currentUser } = useSelector(userSelector)
   const router = useRouter()
@@ -36,7 +36,7 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
     {
       name: 'Artworks',
       icon: CryptoIcon,
-      href: '?current=artworks',
+      href: userInfo?.uid == router.query.id ? '?type=id' : '?current=artworks',
       hrefName: 'artworks',
       status: true,
     },
@@ -82,9 +82,10 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
   }, [currentUser])
 
   useEffect(() => {
-    if (router.query.current) {
+    if (router.query.current || router.query.type == 'id') {
       const newTabs = tabs.reduce((prev, current) => {
-        if (current.hrefName === router.query.current) {
+        if (current.hrefName === router.query.current ||
+          current.href.includes(router.query.type)) {
           return [...prev, { ...current, status: true }]
         } else {
           return [...prev, { ...current, status: false }]
@@ -117,7 +118,7 @@ export default function Content({ nftInfo, userFavList, isUserDetails }) {
                 id="current-tab"
                 name="current-tab"
                 className="block w-full py-2 pl-3 pr-10 text-base border-gray-300 rounded-md focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                defaultValue={tabs.find((tab) => tab.status).name}
+                defaultValue={tabs.find((tab) => tab.status)?.name}
                 onChange={(e) => switchTab(e.target.value)}
               >
                 {tabs.map((tab) => (
