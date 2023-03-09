@@ -109,9 +109,9 @@ const ProfileHeaderCard = ({
     const userData = _.clone(user) ? _.clone(user) : {}
     userData.profileImage = userData?.profileImage
       ? userData?.profileImage
-      : userData?.googleProfileImg
-      ? userData?.googleProfileImg
-      : ''
+      : (userData?.googleProfileImg || userData?.photoURL)
+        ? (userData?.googleProfileImg || userData?.photoURL)
+        : ''
     return userData ? (
       userData?.profileImage ? (
         <Avatar

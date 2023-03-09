@@ -35,7 +35,7 @@ const RegistrationFormMain = () => {
     readyToGo,
   } = useSelector(registrationFormSelector)
 
-  const isGoogleUser = currentUser?.isGoogleUser
+  const isGoogleUser = currentUser?.isGoogleUser || currentUser?.isSocialUser
 
   useEffect(() => {
     if (readyToGo) {

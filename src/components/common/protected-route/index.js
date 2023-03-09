@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const { currentUser, isAuthenticated, isUserPending, mnemonicPopup } =
     useSelector(userSelector)
 
-  const isGoogleUser = currentUser?.isGoogleUser
+  const isGoogleUser = currentUser?.isGoogleUser || currentUser?.isSocialUser
   const router = useRouter()
 
   const authRoute =
