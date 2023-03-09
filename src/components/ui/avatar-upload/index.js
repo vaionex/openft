@@ -87,9 +87,9 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
     const userData = _.clone(currentUser) ? _.clone(currentUser) : {}
     userData.profileImage = userData?.profileImage
       ? userData?.profileImage
-      : userData?.googleProfileImg
-      ? userData?.googleProfileImg
-      : ''
+      : (userData?.googleProfileImg || userData?.photoURL)
+        ? (userData?.googleProfileImg || userData?.photoURL)
+        : ''
     return userData?.profileImage ? (
       <Image
         src={userData?.profileImage}
