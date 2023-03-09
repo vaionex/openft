@@ -6,7 +6,7 @@ const UserOverviewMain = ({ nftInfo, userFavList, userInfo }) => {
   return (
     <SharedLayout title="Profile-Overview">
       <Header userInfo={userInfo} />
-      <Content isUserDetails nftInfo={nftInfo} userFavList={userFavList} />
+      <Content userInfo={userInfo} isUserDetails nftInfo={nftInfo} userFavList={userFavList} />
     </SharedLayout>
   )
 }
