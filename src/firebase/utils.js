@@ -563,12 +563,13 @@ const firebaseUpdateProfile = async ({ uid, values, isGoogleUser, coverImageForU
               imageFile: coverImageForUpload.file,
               imageType: 'coverImage',
             }))
+          return user
         },
       )
     }
 
-    store.dispatch(setUserData(userFromDb ? userFromDb : mergedValues))
-    return userFromDb ? userFromDb : mergedValues
+    store.dispatch(setUserData({ ...mergedValues }))
+    if (!isGoogleUser) return mergedValues
   } catch (error) {
     console.log(error)
     return { error: error.message }
