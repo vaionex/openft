@@ -95,8 +95,15 @@ const RegistrationFormMain = () => {
         throw new Error(errorMessage)
       }
 
-      dispatch(setPending(false))
-      setMnemonicStatus(true)
+      if (isGoogleUser) {
+        setTimeout(() => {
+          dispatch(setPending(false))
+          setMnemonicStatus(true)
+        }, 4000)
+      } else {
+        dispatch(setPending(false))
+        setMnemonicStatus(true)
+      }
       document.body.style.pointerEvents = 'auto'
       document.body.style.touchAction = 'auto'
 
