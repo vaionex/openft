@@ -30,7 +30,7 @@ import moment from 'moment'
 import userSelector from '@/redux/selectors/user'
 import { firebaseGetUserByPaymail } from '@/firebase/utils'
 import { SendNotification } from '@/services/novu-notifications'
-import { updateUser } from '@/redux/slices/user'
+import { setSuccess, updateUser } from '@/redux/slices/user'
 import _ from 'lodash'
 import { RefreshIcon } from '@heroicons/react/outline'
 import { getwalletBal, getwalletHistory } from '@/services/relysia-queries'
@@ -63,7 +63,7 @@ const UserSettingsWalletSection = () => {
 
   const { paymail, address, balance, wallethistory } =
     useSelector(walletSelector)
-  const { currentUser } = useSelector(userSelector)
+  const { currentUser, isSuccess } = useSelector(userSelector)
   // const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState, reset } = useForm({
     mode: 'onSubmit',
@@ -183,15 +183,17 @@ const UserSettingsWalletSection = () => {
   }, [wallethistory, isTransicationSuccess])
 
   useEffect(() => {
-    // if (!currentUser.paymail || !currentUser.address) {
-    dispatch(
-      updateUser({
-        uid: currentUser.uid,
-        values: { paymail: paymail, address: address },
-      }),
-    )
-    // }
-  }, [])
+    if (!currentUser.paymail || address !== currentUser.address || !currentUser.address) {
+      dispatch(
+        updateUser({
+          uid: currentUser.uid,
+          values: { paymail: paymail, address: address },
+        }),
+      )
+    }
+
+    return () => isSuccess && dispatch(setSuccess(false))
+  }, [isSuccess])
 
   const getTxName = (type, protocol) => {
     if (type == 'credit' && protocol == 'STAS') {
@@ -327,7 +329,7 @@ const UserSettingsWalletSection = () => {
                         onClick={() => {
                           setpaymailModal(true)
                         }}
-                        className="ml-1 text-xs font-medium text-blue-500 hover:underline focus:underline cursor-pointer"
+                        className="ml-1 text-xs font-medium text-blue-500 cursor-pointer hover:underline focus:underline"
                       >
                         (update)
                       </div>
@@ -553,8 +555,8 @@ const UserSettingsWalletSection = () => {
                             <span className="flex items-center mt-2">
                               <SvgCheckCircleIcon
                                 className={`w-4 h-4 ${items.type === 'debit'
-                                    ? 'text-red-400'
-                                    : 'text-green-400'
+                                  ? 'text-red-400'
+                                  : 'text-green-400'
                                   }`}
                                 aria-hidden="true"
                               />
