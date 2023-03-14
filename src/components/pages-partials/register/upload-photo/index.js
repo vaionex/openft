@@ -66,6 +66,7 @@ const RegistrationUploadPhoto = ({
   const [submitCounter, setSubmitCounter] = useState(0)
   const { isPending, isError } = useSelector(userSelector)
   const { photoValues } = useSelector(registrationFormSelector)
+  const [mnemonicLoading, setMnemonicLoading] = useState(true)
 
   const handleClear = (id) => {
     dispatch(clearPhotoValues(id))
@@ -109,6 +110,13 @@ const RegistrationUploadPhoto = ({
     if (!captchaCode) return
     setCaptcha(captchaCode)
   }
+
+  useEffect(() => {
+    if (mnemonicStatus)
+      setTimeout(() => {
+        setMnemonicLoading(false)
+      }, 3000)
+  }, [mnemonicStatus])
 
   useEffect(() => {
     if (mnemonic) {
@@ -174,7 +182,11 @@ const RegistrationUploadPhoto = ({
       </div>
       <ModalConfirm
         isOpen={mnemonicStatus}
-        isLoadingConfirmBtn={mnemonic ? false : true}
+        isLoadingConfirmBtn={
+          isGoogleUser
+            ? (!mnemonicLoading && mnemonic) ? false : true
+            : mnemonic ? false : true
+        }
         onClose={() => {
           setMnemonicStatus(false)
           dispatch(setMnemonicPopup(false))

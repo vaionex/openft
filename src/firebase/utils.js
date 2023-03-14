@@ -381,8 +381,8 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
           createdAt: user.metadata.creationTime,
           isGoogleUser: true,
           googleProfileImg: user.photoURL,
-          profileImage: null,
-          coverImage: null,
+          // profileImage: null,
+          // coverImage: null,
           bio: '',
           jobTitle: '',
           showJobTitle: false,
@@ -546,29 +546,23 @@ const firebaseUpdateProfile = async ({ uid, values, isGoogleUser, coverImageForU
       )
     }
 
-    let userFromDb
     if (profileImageForUpload || coverImageForUpload) {
-      userFromDb = await firebaseGetUserInfoFromDb(uid, 'users').then(
-        async (user) => {
-          profileImageForUpload &&
-            (await firebaseUploadUserImage({
-              user,
-              imageFile: profileImageForUpload.file,
-              imageType: 'profileImage',
-            }))
+      profileImageForUpload &&
+        (await firebaseUploadUserImage({
+          user: mergedValues,
+          imageFile: profileImageForUpload.file,
+          imageType: 'profileImage',
+        }))
 
-          coverImageForUpload &&
-            (await firebaseUploadUserImage({
-              user,
-              imageFile: coverImageForUpload.file,
-              imageType: 'coverImage',
-            }))
-          return user
-        },
-      )
+      coverImageForUpload &&
+        (await firebaseUploadUserImage({
+          user: mergedValues,
+          imageFile: coverImageForUpload.file,
+          imageType: 'coverImage',
+        }))
     }
 
-    store.dispatch(setUserData({ ...mergedValues }))
+    store.dispatch(setUserData(mergedValues))
     if (!isGoogleUser) return mergedValues
   } catch (error) {
     console.log(error)
