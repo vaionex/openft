@@ -53,6 +53,7 @@ const UserSettingsMfaSection = () => {
         })
     } catch (error) {
       console.log(error)
+
       setPhoneErrorMessage(
         'Please login again to be able to perform this operation!',
       )
@@ -81,15 +82,6 @@ const UserSettingsMfaSection = () => {
   const enableMfa = async () => {
     setMfaLoading(true)
     setType('mfa')
-    // if (!window.recaptchaVerifier) {
-    //   window.recaptchaVerifier = new RecaptchaVerifier(
-    //     'recaptcha-container',
-    //     {
-    //       size: 'invisible',
-    //     },
-    //     firebaseAuth,
-    //   )
-    // }
 
     try {
       console.log(111)
@@ -144,41 +136,29 @@ const UserSettingsMfaSection = () => {
       if (enrolLen === 0) {
         setType('phone')
 
-        // if (!window.recaptchaVerifier) {
-        //   window.recaptchaVerifier = new RecaptchaVerifier(
-        //     'recaptcha-container',
-        //     {
-        //       size: 'invisible',
-        //     },
-        //     firebaseAuth,
-        //   )
-        // }
-
-        try {
-          const provider = new PhoneAuthProvider(firebaseAuth)
-          provider
-            .verifyPhoneNumber(phone, window.recaptchaVerifier)
-            .then((verificationId) => {
-              setVerifyID(verificationId)
-              setIsOpen(true)
-            })
-            .catch((err) => {
-              console.log('err 111', err)
-              if (err.code === 'auth/invalid-phone-number') {
-                toast.error('Invalid phone number')
-              } else if (err.code == 'auth/code-expired') {
-                toast.error('Code expired')
-              }
-              // window.recaptchaVerifier.render().then(function (widgetId) {
-              //   grecaptcha.reset(widgetId)
-              // })
-            })
-        } catch (err) {
-          console.log('err 44', err)
-          // window.recaptchaVerifier.render().then(function (widgetId) {
-          //   grecaptcha.reset(widgetId)
-          // })
-        }
+        const provider = new PhoneAuthProvider(firebaseAuth)
+        provider
+          .verifyPhoneNumber(phone, window.recaptchaVerifier)
+          .then((verificationId) => {
+            setVerifyID(verificationId)
+            setIsOpen(true)
+          })
+          .catch((err) => {
+            console.log('err 111', err)
+            if (err.code == 'auth/account-exists-with-different-credential') {
+              toast.error(
+                'Phone number already associated with a different account!',
+              )
+            }
+            if (err.code === 'auth/invalid-phone-number') {
+              toast.error('Invalid phone number')
+            } else if (err.code == 'auth/code-expired') {
+              toast.error('Code expired')
+            }
+            // window.recaptchaVerifier.render().then(function (widgetId) {
+            //   grecaptcha.reset(widgetId)
+            // })
+          })
       } else {
         toast.error('In order to perform this process, you must close the MFA.')
       }
@@ -217,9 +197,10 @@ const UserSettingsMfaSection = () => {
       })
       .catch((err) => {
         if (err.code == 'auth/account-exists-with-different-credential') {
-          setPhoneErrorMessage(
-            'Please login again to be able to perform this operation!',
+          toast.error(
+            'Phone number already associated with a different account!',
           )
+          setIsOpen(false)
         } else if (err.code == 'auth/invalid-verification-code') {
           toast.error('Invalid verification code')
         } else if (err.code == 'auth/code-expired') {
