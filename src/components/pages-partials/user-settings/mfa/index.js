@@ -275,9 +275,9 @@ const UserSettingsMfaSection = () => {
                     msg.type === 'success'
                       ? 'text-green-700'
                       : msg.type === 'error'
-                      ? 'text-red-700'
-                      : 'text-blue-700'
-                  } rounded-lg`}
+                        ? 'text-red-700'
+                        : 'text-blue-700'
+                    } rounded-lg`}
                   role="alert"
                 >
                   <svg
@@ -302,7 +302,7 @@ const UserSettingsMfaSection = () => {
                     </span>
                   </div>
                 </div>
-                <div className="mt-2 flex justify-end">
+                <div className="flex justify-end mt-2">
                   <ButtonWLoading
                     isPending={loading}
                     onClick={verifyMailHandler}
@@ -314,30 +314,32 @@ const UserSettingsMfaSection = () => {
               </div>
             ) : (
               <>
-                <InputMain className="sm:flex sm:justify-between sm:gap-8 mt-5">
-                  <InputMain.Label
-                    label="Phone Number"
-                    htmlFor="name"
-                    className="sm:w-[280px]"
-                  />
-                  <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
-                    <InputMain.Input
-                      id="name"
-                      className="sm:col-span-2"
-                      placeholder={currentUser?.phoneNumber}
-                      onChange={() => {}}
-                      inputContainer="md:h-11"
-                      disabled={true}
+                {currentUser?.phoneNumber && (
+                  <InputMain className="mt-5 sm:flex sm:justify-between sm:gap-8">
+                    <InputMain.Label
+                      label="Phone Number"
+                      htmlFor="name"
+                      className="sm:w-[280px]"
                     />
-                  </div>
-                </InputMain>
+                    <div className="mt-1 sm:mt-0 sm:w-full sm:max-w-[666px]">
+                      <InputMain.Input
+                        id="name"
+                        className="sm:col-span-2"
+                        placeholder={currentUser?.phoneNumber}
+                        onChange={() => { }}
+                        inputContainer="md:h-11"
+                        disabled={true}
+                      />
+                    </div>
+                  </InputMain>
+                )}
                 <div className="flex mt-10 rounded-md">
                   <PhoneInput
                     international
                     defaultCountry="US"
                     countryCallingCodeEditable={false}
                     placeholder="Enter phone number"
-                    className="focus:ring-blue-500 focus:border-blue-500 w-full sm:text-sm border-bright-gray rounded-md"
+                    className="w-full rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-bright-gray"
                     value={phone}
                     onChange={setPhone}
                   />
@@ -346,7 +348,7 @@ const UserSettingsMfaSection = () => {
                 <div
                   className={`flex py-2 mb-2 text-sm ${
                     enrolLen > 0 ? 'text-green-500' : 'text-yellow-500'
-                  } rounded-lg`}
+                    } rounded-lg`}
                   role="alert"
                 >
                   <svg
@@ -392,7 +394,7 @@ const UserSettingsMfaSection = () => {
                   </div>
                 )}
 
-                <div className="flex justify-end gap-3 border-none mt-10">
+                <div className="flex justify-end gap-3 mt-10 border-none">
                   {currentUser?.phoneNumber &&
                     currentUser?.emailVerified &&
                     enrolLen === 0 && (
@@ -421,8 +423,8 @@ const UserSettingsMfaSection = () => {
                     isPending={loading}
                     disabled={
                       loading ||
-                      !phone ||
-                      (phone && !isPossiblePhoneNumber(phone))
+                        !phone ||
+                        (phone && !isPossiblePhoneNumber(phone))
                         ? true
                         : false
                     }
