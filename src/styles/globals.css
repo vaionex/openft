@@ -303,3 +303,8 @@
     @apply !left-0.5;
   }
 }
+
+#headlessui-portal-root {
+  position: relative !important;
+  z-index: 9999999999 !important;
+}
