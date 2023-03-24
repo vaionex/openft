@@ -22,8 +22,7 @@ const UserOverviewPage = ({ nftInfo, userDetail }) => {
           'favourites',
         )
 
-        console.log('favIdList', favIdList)
-        if (favIdList && favIdList.length > 0) {
+        if (favIdList && favIdList.nfts.length > 0) {
           const nfts = await fireGetNftsFromFavList(favIdList.nfts)
           setUserFavList(nfts)
         }
