@@ -24,7 +24,12 @@ function classNames(...classes) {
 
 const itemsPerPage = 9
 
-export default function Content({ nftInfo, userInfo, userFavList, isUserDetails }) {
+export default function Content({
+  nftInfo,
+  userInfo,
+  userFavList,
+  isUserDetails,
+}) {
   const usdBalance = usePriceConverter()
   const { currentUser } = useSelector(userSelector)
   const router = useRouter()
@@ -84,8 +89,10 @@ export default function Content({ nftInfo, userInfo, userFavList, isUserDetails 
   useEffect(() => {
     if (router.query.current || router.query.type == 'id') {
       const newTabs = tabs.reduce((prev, current) => {
-        if (current.hrefName === router.query.current ||
-          current.href.includes(router.query.type)) {
+        if (
+          current.hrefName === router.query.current ||
+          current.href.includes(router.query.type)
+        ) {
           return [...prev, { ...current, status: true }]
         } else {
           return [...prev, { ...current, status: false }]
@@ -213,18 +220,22 @@ export default function Content({ nftInfo, userInfo, userFavList, isUserDetails 
               ))}
             {(router.query.current === undefined ||
               router.query.current === 'artworks') &&
-              filteredNfts?.map((hit, index) => (
-                <ProductsCarouselCard
-                  isUserDetails
-                  favouriteNfts={favouriteNfts}
-                  setFavouriteNfts={setFavouriteNfts}
-                  key={index + 'nor'}
-                  data={hit}
-                  usdBalance={usdBalance}
-                  type="list"
-                  view="product"
-                />
-              ))}
+              filteredNfts?.map((hit, index) => {
+                if (hit.likes == 0) {
+                  return (
+                    <ProductsCarouselCard
+                      isUserDetails
+                      favouriteNfts={favouriteNfts}
+                      setFavouriteNfts={setFavouriteNfts}
+                      key={index + 'nor'}
+                      data={hit}
+                      usdBalance={usdBalance}
+                      type="list"
+                      view="product"
+                    />
+                  )
+                }
+              })}
           </div>
         </div>
         {filteredNfts.length > 0 ? (
