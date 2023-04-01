@@ -14,6 +14,8 @@ import {
 } from '@/firebase/utils'
 import ProtectedRoute from '@/components/common/protected-route'
 import { disconnectRelysiaSocket } from '@/services/relysia-socket'
+import NextSeo from 'next-seo'
+import RootLayout from '../components/layout/RootLayout' // Import RootLayout component
 
 function App({ Component, pageProps }) {
   useEffect(() => {
@@ -28,9 +30,11 @@ function App({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
-      <ProtectedRoute>
-        <Component {...pageProps} />
-      </ProtectedRoute>
+      <RootLayout>
+        <ProtectedRoute>
+          <Component {...pageProps} />
+        </ProtectedRoute>
+      </RootLayout>
     </Provider>
   )
 }

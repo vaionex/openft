@@ -67,7 +67,7 @@ const HeroSection = () => {
           <div className="px-4 mt-16 mb-8 md:pr-0 sm:my-16 lg:my-4">
             <div className="relative px-4 mx-auto overflow-hidden max-w-lg h-[480px] sm:h-[600px] lg:max-w-[600px] sm:px-6 lg:px-0 rounded-3xl bg-white">
               <Image
-                src={`/images/hero${Math.floor(Math.random() * 3) + 1}.webp`}
+                src={`/images/hero3.webp`}
                 className="rounded-3xl"
                 alt="Nftana hero image"
                 layout='fill'
