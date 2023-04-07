@@ -324,22 +324,21 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
   provider.addScope('profile')
   const userInfo = await signInWithPopup(firebaseAuth, provider)
     .then(async (result) => {
-      console.log('result::', result)
       const user = result.user
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
-      if (!userFromDb) {
-        const userEmail = await firebaseGetUserDetailByEmail(
-          user.providerData[0].email,
-        )
-        if (userEmail.isExist) {
-          const error = {
-            errorMessage: 'This email is already registered',
-            code: 409,
-          }
-          return { error }
-        }
-      }
+      // if (!userFromDb) {
+      //   const userEmail = await firebaseGetUserDetailByEmail(
+      //     user.providerData[0].email,
+      //   )
+      //   if (userEmail.isExist) {
+      //     const error = {
+      //       errorMessage: 'This email is already registered',
+      //       code: 409,
+      //     }
+      //     return { error }
+      //   }
+      // }
       if (userFromDb) {
         const userNotifications = await firebaseGetSingleDoc(
           'notifications',
@@ -531,7 +530,13 @@ const firebaseDeleteImage = async ({ uid, imageType }) => {
   })
 }
 
-const firebaseUpdateProfile = async ({ uid, values, isGoogleUser, coverImageForUpload, profileImageForUpload }) => {
+const firebaseUpdateProfile = async ({
+  uid,
+  values,
+  isGoogleUser,
+  coverImageForUpload,
+  profileImageForUpload,
+}) => {
   try {
     const userInfoFromDb = await firebaseGetUserInfoFromDb(uid, 'users')
     const mergedValues = { ...userInfoFromDb, ...values }
@@ -540,10 +545,7 @@ const firebaseUpdateProfile = async ({ uid, values, isGoogleUser, coverImageForU
     if (isGoogleUser) {
       store.dispatch(setMnemonicPopup(true))
       await CreateNovuSubscriber(uid, values.email, values.username)
-      await SendNotification(
-        uid,
-        'Your wallet has been created successfully',
-      )
+      await SendNotification(uid, 'Your wallet has been created successfully')
     }
 
     if (profileImageForUpload || coverImageForUpload) {
@@ -692,8 +694,8 @@ const firebaseGetNftByUsername = async (slug, type) => {
   const nftsRef = collection(firebaseDb, 'nfts')
 
   type == 'id'
-    ? queryRef = query(nftsRef, where('ownerId', '==', slug))
-    : queryRef = query(nftsRef, where('username', '==', slug))
+    ? (queryRef = query(nftsRef, where('ownerId', '==', slug)))
+    : (queryRef = query(nftsRef, where('username', '==', slug)))
 
   const documentSnapshots = await getDocs(queryRef)
 
@@ -713,9 +715,9 @@ const firebaseGetUserByPaymail = async (paymail) => {
   try {
     const paymailRef = collection(firebaseDb, 'users')
     let queryRef
-    paymail.includes("@")
-      ? queryRef = query(paymailRef, where('paymail', '==', paymail))
-      : queryRef = query(paymailRef, where('address', '==', paymail))
+    paymail.includes('@')
+      ? (queryRef = query(paymailRef, where('paymail', '==', paymail)))
+      : (queryRef = query(paymailRef, where('address', '==', paymail)))
     const documentSnapshots = await getDocs(queryRef)
 
     const userData = documentSnapshots.docs.map((doc) => {
@@ -737,8 +739,8 @@ const firebaseGetUserDetailByUsername = async (slug, type) => {
   const nftsRef = collection(firebaseDb, 'users')
 
   type == 'id'
-    ? queryRef = query(nftsRef, where('uid', '==', slug))
-    : queryRef = query(nftsRef, where('username', '==', slug))
+    ? (queryRef = query(nftsRef, where('uid', '==', slug)))
+    : (queryRef = query(nftsRef, where('username', '==', slug)))
 
   const documentSnapshots = await getDocs(queryRef)
 
