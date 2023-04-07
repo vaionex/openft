@@ -14,6 +14,7 @@ const links = [
   // },
   { name: '2-Factor Auth', href: '/user-settings/mfa', current: false },
   { name: 'Wallet', href: '/user-settings/wallet', current: false },
+  { name: 'Top-up', href: '/user-settings/topup', current: false },
 ]
 
 const UserSettingsSidebar = () => {
