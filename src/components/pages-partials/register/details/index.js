@@ -162,8 +162,7 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
                 className="w-full text-base font-medium text-gray-700 bg-white border border-gray-300 btn-primary hover:bg-gray-100"
                 onClick={signInWithGoogle}
               >
-                <GoogleIcon className="w-6 h-6" />
-                Sign Up with Google
+                <GoogleIcon className="w-6 h-6" /> &nbsp; Sign Up with Google
               </button>
             </div>
           </form>
