@@ -1,3 +1,13 @@
+const securityHeaders = [
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN',
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: "frame-ancestors 'self';",
+  },
+]
 module.exports = {
   reactStrictMode: true,
   images: {
@@ -14,5 +24,14 @@ module.exports = {
     images: {
       allowFutureImage: true,
     },
+  },
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes in your application.
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ]
   },
 }
