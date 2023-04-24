@@ -876,18 +876,10 @@ const firebaseDeleteDoc = async (collectionName, id) => {
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
-      apiConfig.defaults.headers.common['authToken'] = userResponse.accessToken
-      connectToRelysiaSocket(userResponse.accessToken)
-
-      const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
-      const userNotifications = await firebaseGetSingleDoc(
-        'notifications',
-        userResponse.uid,
-      )
-
+      store.dispatch(setUserPending(false))
+      store.dispatch(setAuthenticated(true))
       store.dispatch(
         setUserData({
-          ...user,
           ...userResponse.reloadUserInfo,
           emailVerified: userResponse.emailVerified,
           phoneNumber: userResponse.phoneNumber,
@@ -895,6 +887,19 @@ const firebaseGetAuthorizedUser = () => {
           uid: userResponse.uid,
         }),
       )
+      apiConfig.defaults.headers.common['authToken'] = userResponse.accessToken
+      connectToRelysiaSocket(userResponse.accessToken)
+      const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
+      store.dispatch(
+        setUserData({
+          ...user,
+        }),
+      )
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        userResponse.uid,
+      )
+
       store.dispatch(
         setNotifications({
           'app-notification':
@@ -907,8 +912,6 @@ const firebaseGetAuthorizedUser = () => {
               : null,
         }),
       )
-      store.dispatch(setAuthenticated(true))
-      store.dispatch(setUserPending(false))
     } else {
       console.log('not auth')
       store.dispatch(setAuthenticated(false))
