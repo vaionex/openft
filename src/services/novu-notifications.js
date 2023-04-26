@@ -38,3 +38,4 @@ export async function CreateNovuSubscriber(userId, userEmail, userName) {
     console.error('error::', err)
   }
 }
+

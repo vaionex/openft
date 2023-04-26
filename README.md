@@ -1,1 +1,4 @@
-# nftana
+## OpenNFT
+
+- yarn install 
+- yarn run dev
