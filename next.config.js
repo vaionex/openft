@@ -18,6 +18,7 @@ module.exports = {
       'dummyimage.com',
       'www.relysia.com',
       'upload.wikimedia.org',
+      'localhost',
     ],
   },
   experimental: {

@@ -370,16 +370,16 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
         //   user?.email?.split('@')[0],
         // )
         const infos = {
-          displayName: user.displayName,
+          displayName: user?.displayName,
           // name: user?.displayName,
-          email: user?.providerData[0].email,
+          email: user?.providerData[0]?.email,
           // username: checkUsername
           //   ? user?.providerData[0].email?.split('@')[0] + getRandomNum()
           //   : user?.providerData[0].email?.split('@')[0],
-          uid: user.uid,
-          createdAt: user.metadata.creationTime,
+          uid: user?.uid,
+          createdAt: user?.metadata?.creationTime,
           isGoogleUser: true,
-          googleProfileImg: user.photoURL,
+          googleProfileImg: user?.photoURL,
           // profileImage: null,
           // coverImage: null,
           bio: '',
@@ -391,14 +391,14 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
             website: '',
           },
         }
-        await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-        await firebaseAddDocWithID('notifications', notificationObj, user.uid)
+        await setDoc(doc(firebaseDb, 'users', user?.uid), infos)
+        await firebaseAddDocWithID('notifications', notificationObj, user?.uid)
         return {
           ...infos,
-          ...user.reloadUserInfo,
-          emailVerified: user.emailVerified,
-          phoneNumber: user.phoneNumber,
-          accessToken: user.accessToken,
+          ...user?.reloadUserInfo,
+          emailVerified: user?.emailVerified,
+          phoneNumber: user?.phoneNumber,
+          accessToken: user?.accessToken,
         }
       }
     })
