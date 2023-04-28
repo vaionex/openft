@@ -160,7 +160,8 @@ const firebaseLogin = async ({
   rememberMe,
   setVerifyID,
   setError,
-  setUid
+  setUid,
+  setFactors
 }) => {
   const recaptchaVerifier = new RecaptchaVerifier(
     '2fa-captcha',
@@ -208,20 +209,16 @@ const firebaseLogin = async ({
         console.log(error)
         if (error.code == 'auth/multi-factor-auth-required') {
           const resolver = getMultiFactorResolver(firebaseAuth, error)
-          console.log("🚀 ~ file: utils.js:175 ~ ).then ~ resolver:", resolver)
           const resolvers = resolver.hints
           const totpEnabled = resolverVerifier(resolvers, TotpMultiFactorGenerator.FACTOR_ID)
-          console.log("🚀 ~ file: utils.js:177 ~ ).then ~ totpEnabled:", totpEnabled)
-          console.log("🚀 ~ file: utils.js:199 ~ ).then ~ smsEnabled:", smsEnabled)
 
           const smsEnabled = resolverVerifier(resolvers, PhoneMultiFactorGenerator.FACTOR_ID)          // if (resolvers?.length > 1) {
           if (totpEnabled && smsEnabled) {
-
+            setFactors(true)
           } else if (totpEnabled) {
             const totpResolver = returnResolver(resolvers, TotpMultiFactorGenerator.FACTOR_ID)
             setUid(totpResolver?.uid)
           } else if (smsEnabled) {
-            console.log("🚀 ~ file: utils.js:190 ~ ).", returnResolver(resolvers, PhoneMultiFactorGenerator.FACTOR_ID))
             const phoneInfoOptions = {
               multiFactorHint: returnResolver(resolvers, PhoneMultiFactorGenerator.FACTOR_ID),
               session: resolver.session,
@@ -233,17 +230,8 @@ const firebaseLogin = async ({
               .then(function (verificationId) {
                 setVerifyID(verificationId)
               })
-
           }
           rsl = resolver
-          // }else if(resolvers?.length > 1)
-          // if (resolvers) {
-          //   resolverModifier(resolvers, PhoneMultiFactorGenerator.FACTOR_ID)
-          // }
-
-          // console.log("🚀 ~ file: utils.js:173 ~ ).then ~ resolver:", resolver)
-          // Ask user which second factor to use.
-
         } else if (error.code == 'auth/wrong-password') {
           setError('The password is incorrect.')
         } else if (error.code == 'auth/user-not-found') {
@@ -253,6 +241,35 @@ const firebaseLogin = async ({
     return usr
   })
   return user
+}
+
+const verifyWithSelectedMfa = (selectedOption, setVerifyID, setUid) => {
+  if (selectedOption === TotpMultiFactorGenerator.FACTOR_ID) {
+    const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
+    setUid(totpResolver?.uid)
+  } else if (selectedOption === PhoneMultiFactorGenerator.FACTOR_ID) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      '2fa-captcha',
+      {
+        callback: (verificationId) => setVerifyID(verificationId),
+        'expired-callback': () => setVerifyID(null),
+        size: 'invisible',
+      },
+      firebaseAuth,
+    )
+    const phoneInfoOptions = {
+      multiFactorHint: returnResolver(rsl?.hints, PhoneMultiFactorGenerator.FACTOR_ID),
+      session: rsl.session,
+    }
+    const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+    // Send SMS verification code
+    phoneAuthProvider
+      .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+      .then(function (verificationId) {
+        setVerifyID(verificationId)
+      })
+
+  }
 }
 
 const userCreateNotification = {
@@ -1087,5 +1104,6 @@ export {
   firebaseGetUserDetailByUsername,
   firebaseVerifyMail,
   firebaseGetUserByPaymail,
-  refreshSignIn
+  refreshSignIn,
+  verifyWithSelectedMfa
 }

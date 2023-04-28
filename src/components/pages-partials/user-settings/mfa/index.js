@@ -580,7 +580,7 @@ const UserSettingsMfaSection = () => {
                   <div className="flex justify-end gap-3 mt-10 border-none">
                     {currentUser?.phoneNumber &&
                       currentUser?.emailVerified &&
-                      (!getEnroll("phone") && !getEnroll("totp")) && (
+                      (!getEnroll("phone")) && (
                         <ButtonWLoading
                           isPending={mfaLoading}
                           disabled={mfaLoading ? true : false}
@@ -591,7 +591,7 @@ const UserSettingsMfaSection = () => {
                       )}
                     {currentUser?.phoneNumber &&
                       currentUser?.emailVerified &&
-                      (!getEnroll("totp") && !getEnroll("phone")) && (
+                      (!getEnroll("totp")) && (
                         <ButtonWLoading
                           isPending={totpLoading}
                           disabled={totpLoading ? true : false}

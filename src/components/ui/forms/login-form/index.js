@@ -8,8 +8,9 @@ import Checkbox from '../../checkbox'
 import Alert from '../../alert'
 import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '../../button-w-loading'
-import { firebaseLogin } from '@/firebase/utils'
+import { firebaseLogin, verifyWithSelectedMfa } from '@/firebase/utils'
 import OtpModal from '@/components/ui/otp'
+import MfaSelection from '../../otp/MfaSelection'
 
 function LoginForm({ setVerifyID, verifyID }) {
   const dispatch = useDispatch()
@@ -22,6 +23,8 @@ function LoginForm({ setVerifyID, verifyID }) {
   const handleOnChange = (enteredOtp) => {
     setOtpNumber(enteredOtp)
   }
+  const [selectedFactor, setSelectedFactor] = useState()
+  const [factors, setFactors] = useState(false)
   const [uid, setUid] = useState(null)
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
@@ -62,8 +65,10 @@ function LoginForm({ setVerifyID, verifyID }) {
       }
     }
   }
-
-  const handleSubmit = async (e) => {
+  const handleSubmitMfaType = (e) => {
+    verifyWithSelectedMfa(e, setVerifyID, setUid)
+  }
+  const handleSubmit = async (e, option) => {
     e.preventDefault()
     try {
       await firebaseLogin({
@@ -71,7 +76,9 @@ function LoginForm({ setVerifyID, verifyID }) {
         rememberMe,
         setVerifyID,
         setError,
-        setUid
+        setUid,
+        setFactors,
+
       })
     } catch (e) {
       console.log('login error', e)
@@ -185,6 +192,12 @@ function LoginForm({ setVerifyID, verifyID }) {
         handler={handleLogin}
         allowedCharacters={allowedCharacters}
         otpNumber={otpNumber}
+      />
+      <MfaSelection
+        setSelectedFactor={setSelectedFactor}
+        isOpen={factors}
+        setIsOpen={setFactors}
+        handler={handleSubmitMfaType}
       />
     </div>
   )
