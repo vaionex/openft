@@ -98,7 +98,7 @@ export default function MfaSelection({
                                 <>
                                   {checkBox?.map((data, index) => (
 
-                                    <div className="relative flex items-start">
+                                    <div key={index} className="relative flex items-start">
                                       <Checkbox
                                         type="checkbox"
                                         name={name}
