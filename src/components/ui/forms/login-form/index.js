@@ -16,12 +16,13 @@ function LoginForm({ setVerifyID, verifyID }) {
   const router = useRouter()
   const { isPending } = useSelector(userSelector)
   const [isOpen, setIsOpen] = useState(false)
+  const [isTotp, setIsTotp] = useState(false)
   const [allowedCharacters, setAllowedCharacters] = useState('numeric')
   const [otpNumber, setOtpNumber] = useState('')
   const handleOnChange = (enteredOtp) => {
     setOtpNumber(enteredOtp)
   }
-
+  const [uid, setUid] = useState(null)
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
   const [error, setError] = useState(null)
@@ -43,15 +44,22 @@ function LoginForm({ setVerifyID, verifyID }) {
         login({
           verificationId: verifyID,
           verificationCode: otpNumber,
+          uid
         }),
       ).unwrap()
       if (user && !user?.error) {
         dispatch(setAuthenticated(true))
         router.replace('/')
       }
-    } catch (e) {
-      console.log('error', e)
-      setError(e)
+    } catch (err) {
+      if (err.code == 'auth/invalid-verification-code') {
+        setError('Invalid verification code')
+      } else if (err.code == 'auth/code-expired') {
+        setError('Code expired')
+      } else {
+        console.log('error', e)
+        setError(err)
+      }
     }
   }
 
@@ -63,6 +71,7 @@ function LoginForm({ setVerifyID, verifyID }) {
         rememberMe,
         setVerifyID,
         setError,
+        setUid
       })
     } catch (e) {
       console.log('login error', e)
@@ -75,7 +84,12 @@ function LoginForm({ setVerifyID, verifyID }) {
       setIsOpen(true)
     }
   }, [verifyID])
-
+  useEffect(() => {
+    if (uid) {
+      setIsOpen(true)
+      setIsTotp(true)
+    }
+  }, [uid])
   return (
     <div>
       <form className="space-y-6" onSubmit={handleSubmit}>
@@ -164,6 +178,7 @@ function LoginForm({ setVerifyID, verifyID }) {
         </div>
       </form>
       <OtpModal
+        isTotp={isTotp}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         handleOnChange={handleOnChange}

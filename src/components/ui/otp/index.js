@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useRef, useState } from 'react'
+import QRCode from "react-qr-code";
 import AuthCode from '@/utils/otpInput'
 
 export default function OtpModal({
@@ -9,7 +10,10 @@ export default function OtpModal({
   allowedCharacters,
   handleOnChange,
   otpNumber,
+  qrcode,
+  isTotp
 }) {
+  console.log("🚀 ~ file: index.js:15 ~ qrCode:", qrcode)
   const AuthInputRef = useRef(null)
 
   function closeModal() {
@@ -41,18 +45,19 @@ export default function OtpModal({
                     as="h3"
                     className="text-2xl font-bold text-center leading-6 text-gray-900"
                   >
-                    SMS Verification
+                    {isTotp ? "TOTP Verification" : "SMS Verification"}
                   </Dialog.Title>
 
                   <div className="flex items-center flex-col mt-4">
-                    <span>Enter the SMS you received</span>
+                    <span>{isTotp?"Enter the SMS from Authenticator App":"Enter the SMS you received"}</span>
                     {/* <span className="font-bold">+91 ******876</span> */}
                   </div>
                   <div className="mt-2">
                     <form
                       onSubmit={handleSubmit}
-                      class="flex flex-col justify-center text-center sm:px-2 mt-5"
+                      class="flex flex-col justify-center items-center text-center sm:px-2 mt-5"
                     >
+                      {qrcode && <QRCode value={qrcode} />}
                       <AuthCode
                         key={allowedCharacters}
                         allowedCharacters={allowedCharacters}
