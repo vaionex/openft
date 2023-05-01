@@ -641,6 +641,7 @@ const UserSettingsMfaSection = () => {
               <div id="recaptcha-container"></div>
             </div>
             <OtpModal
+              setQrcode={setQrcode}
               qrcode={qrCode}
               isOpen={isOpen}
               setIsOpen={setIsOpen}
