@@ -42,6 +42,9 @@ import {
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
   RecaptchaVerifier,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  TotpMultiFactorGenerator,
 } from 'firebase/auth'
 import store from '@/redux/store'
 import {
@@ -66,6 +69,7 @@ import {
 } from '@/services/novu-notifications'
 import { connectToRelysiaSocket } from '@/services/relysia-socket'
 import getRandomNum from '@/utils/getRanNum'
+import resolverModifier, { resolverVerifier, returnResolver } from '@/utils/resolverModifier'
 
 const notificationObj = {
   'app-notification': {
@@ -83,34 +87,69 @@ const notificationObj = {
 }
 
 let rsl
-const firebaseLoginMfa = async ({ verificationId, verificationCode }) => {
-  const cred = PhoneAuthProvider.credential(verificationId, verificationCode)
-  const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred)
-  // Complete sign-in.
-  const { user } = await rsl.resolveSignIn(multiFactorAssertion)
-  if (user) {
-    apiConfig.defaults.headers.common['authToken'] = user.accessToken
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
-    const userNotifications = await firebaseGetSingleDoc(
-      'notifications',
-      user.uid,
-    )
-    return {
-      user: {
-        ...userFromDb,
-        ...user.reloadUserInfo,
-        accessToken: user.accessToken,
-      },
-      userNotifications: {
-        'app-notification':
-          userNotifications && userNotifications['app-notification']
-            ? userNotifications['app-notification']
-            : null,
-        'email-notification':
-          userNotifications && userNotifications['email-notification']
-            ? userNotifications['email-notification']
-            : null,
-      },
+const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
+  if (verificationId && !uid) {
+
+    const cred = PhoneAuthProvider.credential(verificationId, verificationCode)
+    const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred)
+    // Complete sign-in.
+    const { user } = await rsl.resolveSignIn(multiFactorAssertion)
+    if (user) {
+      apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        user.uid,
+      )
+      return {
+        user: {
+          ...userFromDb,
+          ...user.reloadUserInfo,
+          accessToken: user.accessToken,
+        },
+        userNotifications: {
+          'app-notification':
+            userNotifications && userNotifications['app-notification']
+              ? userNotifications['app-notification']
+              : null,
+          'email-notification':
+            userNotifications && userNotifications['email-notification']
+              ? userNotifications['email-notification']
+              : null,
+        },
+      }
+    }
+  } else if (!verificationId && uid) {
+    console.log("🚀 ~ file: utils.js:124 ~ firebaseLoginMfa ~ rsl:", rsl)
+    const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
+
+    const multiFactorAssertion = TotpMultiFactorGenerator.assertionForSignIn(totpResolver.uid, verificationCode);
+    // Finalize the sign-in.
+    const { user } = await rsl.resolveSignIn(multiFactorAssertion)
+    if (user) {
+      apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        user.uid,
+      )
+      return {
+        user: {
+          ...userFromDb,
+          ...user.reloadUserInfo,
+          accessToken: user.accessToken,
+        },
+        userNotifications: {
+          'app-notification':
+            userNotifications && userNotifications['app-notification']
+              ? userNotifications['app-notification']
+              : null,
+          'email-notification':
+            userNotifications && userNotifications['email-notification']
+              ? userNotifications['email-notification']
+              : null,
+        },
+      }
     }
   }
 }
@@ -121,6 +160,8 @@ const firebaseLogin = async ({
   rememberMe,
   setVerifyID,
   setError,
+  setUid,
+  setFactors
 }) => {
   const recaptchaVerifier = new RecaptchaVerifier(
     '2fa-captcha',
@@ -168,19 +209,28 @@ const firebaseLogin = async ({
         console.log(error)
         if (error.code == 'auth/multi-factor-auth-required') {
           const resolver = getMultiFactorResolver(firebaseAuth, error)
-          // Ask user which second factor to use.
+          const resolvers = resolver.hints
+          const totpEnabled = resolverVerifier(resolvers, TotpMultiFactorGenerator.FACTOR_ID)
 
-          const phoneInfoOptions = {
-            multiFactorHint: resolver.hints[0],
-            session: resolver.session,
+          const smsEnabled = resolverVerifier(resolvers, PhoneMultiFactorGenerator.FACTOR_ID)          // if (resolvers?.length > 1) {
+          if (totpEnabled && smsEnabled) {
+            setFactors(true)
+          } else if (totpEnabled) {
+            const totpResolver = returnResolver(resolvers, TotpMultiFactorGenerator.FACTOR_ID)
+            setUid(totpResolver?.uid)
+          } else if (smsEnabled) {
+            const phoneInfoOptions = {
+              multiFactorHint: returnResolver(resolvers, PhoneMultiFactorGenerator.FACTOR_ID),
+              session: resolver.session,
+            }
+            const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+            // Send SMS verification code
+            phoneAuthProvider
+              .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+              .then(function (verificationId) {
+                setVerifyID(verificationId)
+              })
           }
-          const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
-          // Send SMS verification code
-          phoneAuthProvider
-            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
-            .then(function (verificationId) {
-              setVerifyID(verificationId)
-            })
           rsl = resolver
         } else if (error.code == 'auth/wrong-password') {
           setError('The password is incorrect.')
@@ -191,6 +241,35 @@ const firebaseLogin = async ({
     return usr
   })
   return user
+}
+
+const verifyWithSelectedMfa = (selectedOption, setVerifyID, setUid) => {
+  if (selectedOption === TotpMultiFactorGenerator.FACTOR_ID) {
+    const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
+    setUid(totpResolver?.uid)
+  } else if (selectedOption === PhoneMultiFactorGenerator.FACTOR_ID) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      '2fa-captcha',
+      {
+        callback: (verificationId) => setVerifyID(verificationId),
+        'expired-callback': () => setVerifyID(null),
+        size: 'invisible',
+      },
+      firebaseAuth,
+    )
+    const phoneInfoOptions = {
+      multiFactorHint: returnResolver(rsl?.hints, PhoneMultiFactorGenerator.FACTOR_ID),
+      session: rsl.session,
+    }
+    const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+    // Send SMS verification code
+    phoneAuthProvider
+      .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+      .then(function (verificationId) {
+        setVerifyID(verificationId)
+      })
+
+  }
 }
 
 const userCreateNotification = {
@@ -876,8 +955,6 @@ const firebaseDeleteDoc = async (collectionName, id) => {
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
-      store.dispatch(setUserPending(false))
-      store.dispatch(setAuthenticated(true))
       store.dispatch(
         setUserData({
           ...userResponse.reloadUserInfo,
@@ -887,6 +964,8 @@ const firebaseGetAuthorizedUser = () => {
           uid: userResponse.uid,
         }),
       )
+      store.dispatch(setAuthenticated(true))
+      store.dispatch(setUserPending(false))
       apiConfig.defaults.headers.common['authToken'] = userResponse.accessToken
       connectToRelysiaSocket(userResponse.accessToken)
       const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
@@ -943,7 +1022,18 @@ const firebaseOnIdTokenChange = async () => {
     }
   })
 }
+const refreshSignIn = async (password) => {
+  const user = firebaseAuth.currentUser;
+  var oldCredential = EmailAuthProvider.credential(user.email, password);
 
+  var errMessage;
+  try {
+    await reauthenticateWithCredential(user, oldCredential);
+  } catch (err) {
+    errMessage = err;
+  }
+  return errMessage;
+};
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
@@ -1014,4 +1104,6 @@ export {
   firebaseGetUserDetailByUsername,
   firebaseVerifyMail,
   firebaseGetUserByPaymail,
+  refreshSignIn,
+  verifyWithSelectedMfa
 }
