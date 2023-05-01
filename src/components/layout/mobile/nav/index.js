@@ -44,6 +44,10 @@ const ProfileRoutes = [
     href: '/contact',
     name: 'Help and support',
   },
+  {
+    href: '/user-settings/topup',
+    name: 'Top Up',
+  },
 ]
 
 const MobileNav = ({ navItems }) => {
