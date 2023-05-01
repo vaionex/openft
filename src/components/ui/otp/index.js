@@ -45,11 +45,11 @@ export default function OtpModal({
                     as="h3"
                     className="text-2xl font-bold text-center leading-6 text-gray-900"
                   >
-                    {isTotp ? "TOTP Verification" : "SMS Verification"}
+                    {isTotp ? "TOTP Verification" : qrcode ? "Configure Authenticor" : "SMS Verification"}
                   </Dialog.Title>
 
-                  <div className="flex items-center flex-col mt-4">
-                    <span>{isTotp?"Enter the SMS from Authenticator App":"Enter the SMS you received"}</span>
+                  <div className="flex items-center flex-col mt-4 text-center">
+                    <span>{isTotp ? "Enter the SMS from Authenticator App" : qrcode ? "Scan this QR in your authenticator app and enter code shown in the authenticator." : "Enter the SMS you received"}</span>
                     {/* <span className="font-bold">+91 ******876</span> */}
                   </div>
                   <div className="mt-2">
@@ -73,11 +73,10 @@ export default function OtpModal({
                         <button
                           type="submit"
                           disabled={otpNumber.length === 6 ? false : true}
-                          className={`inline-flex justify-center rounded-md border border-transparent duration-300 bg-blue-100 px-4 py-2 text-sm font-medium ${
-                            otpNumber.length === 6
-                              ? 'text-blue-900 focus-visible:ring-blue-500 hover:bg-blue-200'
-                              : 'text-blue-200'
-                          } focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
+                          className={`inline-flex justify-center rounded-md border border-transparent- duration-300 bg-blue-100 px-4 py-2 text-sm font-medium ${otpNumber.length === 6
+                            ? 'text-blue-900 focus-visible:ring-blue-500 hover:bg-blue-200'
+                            : 'text-blue-200'
+                            } focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
                         >
                           Verify
                         </button>
