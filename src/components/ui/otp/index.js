@@ -11,12 +11,14 @@ export default function OtpModal({
   handleOnChange,
   otpNumber,
   qrcode,
-  isTotp
+  isTotp,
+  setQrcode = () => { }
 }) {
   console.log("🚀 ~ file: index.js:15 ~ qrCode:", qrcode)
   const AuthInputRef = useRef(null)
 
   function closeModal() {
+    setQrcode()
     setIsOpen(false)
   }
 
