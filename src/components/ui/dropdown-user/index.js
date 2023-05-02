@@ -21,6 +21,7 @@ import {
 import NextLink from 'next/link'
 import _ from 'lodash'
 import { disconnectRelysiaSocket } from '@/services/relysia-socket'
+import TopUpIcon from '@/components/common/icons/topup-icon'
 
 const dropdownRoutes = [
   {
@@ -70,6 +71,12 @@ const dropdownRoutes = [
     name: 'Help and support',
     icon: LifeBuoyIcon,
     desc: 'Fix a problem, and get answers to your questions.',
+  },
+  {
+    url: '/user-settings/topup',
+    name: 'Top Up',
+    icon: TopUpIcon,
+    desc: 'Quickly add Bitcoin SV to your wallet.',
   },
 ]
 
