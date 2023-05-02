@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { firebaseVerifyMail, refreshSignIn } from '@/firebase/utils'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '@/components/ui/button-w-loading'
 import { InputMain } from '@/components/ui/inputs'
@@ -25,6 +25,8 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { Controller, useForm } from 'react-hook-form'
+import { errorMessage } from '@/utils/error-message'
+import { setUserData } from '@/redux/slices/user'
 let applicationVer
 let totpSecret
 const UserSettingsMfaSection = () => {
@@ -38,6 +40,7 @@ const UserSettingsMfaSection = () => {
   const [phone, setPhone] = useState(null)
   const [type, setType] = useState('mfa')
   const [enrolLen, setEnrolLen] = useState(0)
+  const dispatch = useDispatch()
 
   const [passwordVisible, setPasswordVisible] = useState(false)
   const captchaContainer = useRef()
@@ -69,6 +72,7 @@ const UserSettingsMfaSection = () => {
     content: null,
   })
   const { currentUser, isAuthenticated } = useSelector(userSelector)
+  console.log("🚀 ~ file: index.js:73 ~ UserSettingsMfaSection ~ currentUser:", currentUser)
   useEffect(() => {
     if (currentUser?.phoneNumber) {
 
@@ -81,11 +85,15 @@ const UserSettingsMfaSection = () => {
   const disableMfa = async () => {
     try {
       setMfaLoading(true)
-      const options = multiFactor(firebaseAuth.currentUser).enrolledFactors
+      const options = multiFactor(firebaseAuth.currentUser).enrolledFactors.find(data => data.factorId === PhoneMultiFactorGenerator.FACTOR_ID)
+
+      // const options = multiFactor(firebaseAuth.currentUser).enrolledFactors
       await multiFactor(firebaseAuth.currentUser)
-        .unenroll(options[0])
+        .unenroll(options)
         .then(() => {
           toast.success('MFA disabled')
+          setEnrol()
+
           // router.reload()
         })
     } catch (error) {
@@ -101,12 +109,14 @@ const UserSettingsMfaSection = () => {
   const disableTotp = async () => {
     try {
       setTotpLoading(true)
-      const options = multiFactor(firebaseAuth.currentUser).enrolledFactors.find(data => data.factorId === 'totp')
+      const options = multiFactor(firebaseAuth.currentUser).enrolledFactors.find(data => data.factorId === TotpMultiFactorGenerator.FACTOR_ID)
       await multiFactor(firebaseAuth.currentUser)
 
         .unenroll(options)
         .then(() => {
           toast.success('Totp disabled')
+          setEnrol()
+
           // router.reload()
         })
     } catch (error) {
@@ -187,6 +197,10 @@ const UserSettingsMfaSection = () => {
       setMfaLoading(false)
     }
   }
+  function handleError(error) {
+    let msg = errorMessage[error.code] || error.message
+    toast.error(msg)
+  }
   const enableTotp = async () => {
     setTotpLoading(true)
     setType('TOTP')
@@ -199,23 +213,16 @@ const UserSettingsMfaSection = () => {
           totpSecret = await TotpMultiFactorGenerator.generateSecret(
             multiFactorSession
           );
-          const url = totpSecret.generateQrCodeUrl(firebaseAuth.currentUser.uid, "openft");
+          const url = totpSecret.generateQrCodeUrl(firebaseAuth.currentUser.email, "openft");
           setIsOpen(true)
 
           setQrcode(url)
         })
         .catch((error) => {
-          // recaptchaVerifier.clear()
-          // window.recaptchaVerifier.render().then(function (widgetId) {
-          //   grecaptcha.reset(widgetId)
-          // })
-          console.log('Err 2', error)
+          handleError(error)
         })
     } catch (err) {
-      console.log(err)
-      // recaptchaVerifier.render().then(function (widgetId) {
-      //   grecaptcha.reset(widgetId)
-      // })
+      handleError(err)
     } finally {
       setTotpLoading(false)
     }
@@ -247,20 +254,7 @@ const UserSettingsMfaSection = () => {
         console.log('works')
       })
       .catch((err) => {
-        console.log('err 111', err)
-        if (err.code == 'auth/account-exists-with-different-credential') {
-          toast.error(
-            'Phone number already associated with a different account!',
-          )
-        }
-        if (err.code === 'auth/invalid-phone-number') {
-          toast.error('Invalid phone number')
-        } else if (err.code == 'auth/code-expired') {
-          toast.error('Code expired')
-        }
-        // window.recaptchaVerifier.render().then(function (widgetId) {
-        //   grecaptcha.reset(widgetId)
-        // })
+        handleError(err)
       })
   }
   const verifyTotpCode = () => {
@@ -276,17 +270,12 @@ const UserSettingsMfaSection = () => {
       .enroll(multiFactorAssertion, "Totp device")
       .then(() => {
         toast.success('TOTP enabled')
+        setEnrol()
         setIsOpen(false)
         setQrcode()
       })
       .catch((error) => {
-        console.log('err 2', error)
-
-        if (error.code == 'auth/requires-recent-login') {
-          console.log('eeeeeeeeeee')
-        } else if (error.code == 'auth/invalid-verification-code') {
-          toast.error('Invalid verification code')
-        }
+        handleError(error)
       })
 
 
@@ -299,52 +288,43 @@ const UserSettingsMfaSection = () => {
       .enroll(multiFactorAssertion, 'personel number')
       .then(() => {
         toast.success('MFA enabled')
-
+        setEnrol()
         // router.reload()
       })
       .catch((error) => {
-        console.log('err 2', error)
-
-        if (error.code == 'auth/requires-recent-login') {
-          console.log('eeeeeeeeeee')
-        } else if (error.code == 'auth/invalid-verification-code') {
-          toast.error('Invalid verification code')
-        }
+        handleError(error)
       })
   }
-
   const verifyUpdateCode = () => {
     const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
+    console.log("🚀 ~ file: index.js:324 ~ verifyUpdateCode ~ phoneCredential:", phoneCredential)
 
     updatePhoneNumber(firebaseAuth?.currentUser, phoneCredential)
       .then(() => {
         toast.success('Phone number added successfully!')
+        dispatch(setUserData({ phoneNumber: getValues("phone_number") }))
+        setIsOpen(false)
+
         // router.reload()
       })
       .catch((err) => {
-        if (err.code == 'auth/account-exists-with-different-credential') {
-          toast.error(
-            'Phone number already associated with a different account!',
-          )
-          setIsOpen(false)
-        } else if (err.code == 'auth/invalid-verification-code') {
-          toast.error('Invalid verification code')
-        } else if (err.code == 'auth/code-expired') {
-          toast.error('Code expired')
-        }
-        console.log('err 999', err)
+        handleError(err)
       })
   }
   const getEnroll = (type) => {
     const mfaLen = multiFactor(firebaseAuth.currentUser).enrolledFactors
     return mfaLen.some(data => data.factorId === type)
   }
-
-  useEffect(() => {
+  const setEnrol = () => {
     if (firebaseAuth?.currentUser) {
       const mfaLen = multiFactor(firebaseAuth.currentUser).enrolledFactors
         .length
       setEnrolLen(mfaLen)
+    }
+  }
+  useEffect(() => {
+    if (firebaseAuth?.currentUser) {
+      setEnrol()
     }
   }, [])
 
@@ -428,7 +408,7 @@ const UserSettingsMfaSection = () => {
                     <span className="font-medium">
                       {msg.type
                         ? msg.content
-                        : 'Verify your email address to use the multi factor feature.'}
+                        : 'Verify your email address to use the multi factor features.'}
                     </span>
                   </div>
                 </div>
@@ -553,7 +533,7 @@ const UserSettingsMfaSection = () => {
                         ? 'The multi factor authentication operation is currently open.'
                         : 'The multi factor authentication operation is currently closed. We recommend used it for safety.'}
                     </div>
-                  </div>
+                  </div>  
                   {phoneErrorMessage && (
                     <div
                       className="flex py-1 mb-2 text-sm text-red-500 rounded-lg"
@@ -589,7 +569,7 @@ const UserSettingsMfaSection = () => {
                           type="button"
                         />
                       )}
-                    {currentUser?.phoneNumber &&
+                    {
                       currentUser?.emailVerified &&
                       (!getEnroll("totp")) && (
                         <ButtonWLoading
@@ -612,7 +592,7 @@ const UserSettingsMfaSection = () => {
                           type="button"
                         />
                       )}
-                    {currentUser?.phoneNumber &&
+                    {
                       currentUser?.emailVerified &&
                       getEnroll("totp") && (
                         <ButtonWLoading
