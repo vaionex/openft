@@ -4,17 +4,18 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getWalletAddressAndPaymail } from '@/services/relysia-queries'
 import userSelector from '@/redux/selectors/user'
+import walletSelector from '@/redux/selectors/wallet'
 
 const UserSettingsTopupSection = () => {
   const [topupUrl, setTopupUrl] = useState(null)
 
   const { currentUser } = useSelector(userSelector)
-
+  const { paymail } = useSelector(walletSelector)
   useEffect(() => {
     async function fetchTopupUrl() {
       const response = await fetch(
         `/api/topup?PAYMAIL=${encodeURIComponent(
-          currentUser?.paymail,
+          paymail,
         )}&EMAIL=${encodeURIComponent(currentUser?.email)}`,
       )
 

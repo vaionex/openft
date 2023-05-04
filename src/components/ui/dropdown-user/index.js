@@ -22,6 +22,9 @@ import NextLink from 'next/link'
 import _ from 'lodash'
 import { disconnectRelysiaSocket } from '@/services/relysia-socket'
 import TopUpIcon from '@/components/common/icons/topup-icon'
+import { multiFactor } from 'firebase/auth'
+import { firebaseAuth } from '@/firebase/init'
+import { toast } from 'react-toastify'
 
 const dropdownRoutes = [
   {
@@ -84,6 +87,24 @@ const DropdownUser = ({ user }) => {
   const dispatch = useDispatch()
   const router = useRouter()
 
+  const checkMFAStatus = async (href) => {
+    const options = multiFactor(firebaseAuth.currentUser).enrolledFactors.length
+    if (options === 0) {
+      toast.error('please enable MFA For this operation', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    } else {
+      router.push(href)
+    }
+  }
+
   const handleLogout = () => {
     disconnectRelysiaSocket()
 
@@ -95,9 +116,9 @@ const DropdownUser = ({ user }) => {
     const userData = _.clone(user) ? _.clone(user) : {}
     userData.profileImage = userData?.profileImage
       ? userData?.profileImage
-      : (userData?.googleProfileImg || userData?.photoURL)
-        ? (userData?.googleProfileImg || userData?.photoURL)
-        : ''
+      : userData?.googleProfileImg || userData?.photoURL
+      ? userData?.googleProfileImg || userData?.photoURL
+      : ''
     return userData ? (
       userData?.profileImage ? (
         <Avatar
@@ -138,28 +159,30 @@ const DropdownUser = ({ user }) => {
               return (
                 <Menu.Item key={route.url}>
                   {({ active }) => (
-                    <NextLink href={route.url}>
-                      <a
-                        className={twMerge(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'px-4 py-2 text-sm hover:bg-vista-white rounded-md flex ',
-                        )}
-                      >
-                        <div className="shrink-0">
-                          <route.icon
-                            className="w-6 h-6 mr-2 stroke-blue-600"
-                            aria-hidden="true"
-                          />
-                        </div>
+                    <a
+                      className={twMerge(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'px-4 py-2 text-sm hover:bg-vista-white rounded-md flex cursor-pointer', // Add cursor-pointer here
+                      )}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        route.name === 'Top Up'
+                          ? checkMFAStatus(route.url)
+                          : router.push(route.url)
+                      }}
+                    >
+                      <div className="shrink-0">
+                        <route.icon
+                          className="w-6 h-6 mr-2 stroke-blue-600"
+                          aria-hidden="true"
+                        />
+                      </div>
 
-                        <div className="flex flex-col">
-                          <span className="font-semibold">{route.name}</span>
-                          <p className="mt-1 text-sm text-mist">{route.desc}</p>
-                        </div>
-                      </a>
-                    </NextLink>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{route.name}</span>
+                        <p className="mt-1 text-sm text-mist">{route.desc}</p>
+                      </div>
+                    </a>
                   )}
                 </Menu.Item>
               )
