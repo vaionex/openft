@@ -2,7 +2,7 @@ import RegistrationLayout from '@/components/layout/registration-layout'
 import { firebaseUploadUserImage } from '@/firebase/utils'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import userSelector from '@/redux/selectors/user'
-import { register, setPending, updateUser } from '@/redux/slices/user'
+import { register, setMnemonicPopup, setPending, updateUser } from '@/redux/slices/user'
 import { createwallet } from '@/services/relysia-queries'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { useRouter } from 'next/router'
@@ -17,22 +17,23 @@ import {
   setDetailsValues,
   setPasswordValues,
   setPhotoValues,
+  setReadyToGo,
+  setStep,
   // setSocialsValues,
 } from '@/redux/slices/registration-form'
 
 const RegistrationFormMain = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const [mnemonicStatus, setMnemonicStatus] = useState(false)
-  const step = router.query.step ?? '1'
   const { mnemonic, paymail } = useSelector(walletSelector)
-  const { currentUser, isPending, isError, errorMessage } = useSelector(userSelector)
+  const { currentUser, isPending, isError, errorMessage, mnemonicPopup: mnemonicStatus } = useSelector(userSelector)
   const {
     detailsValues,
     // socialsValues,
     passwordValues,
     photoValues,
     readyToGo,
+    step
   } = useSelector(registrationFormSelector)
 
   const isGoogleUser = currentUser?.isGoogleUser || currentUser?.isSocialUser
@@ -70,7 +71,6 @@ const RegistrationFormMain = () => {
       username: detailsValues.username,
       name: detailsValues.name
     }
-
     try {
       dispatch(isGoogleUser
         ? (
@@ -98,16 +98,15 @@ const RegistrationFormMain = () => {
       if (isGoogleUser) {
         setTimeout(() => {
           dispatch(setPending(false))
-          setMnemonicStatus(true)
+          dispatch(setMnemonicPopup(true))
         }, 4000)
       } else {
         dispatch(setPending(false))
-        setMnemonicStatus(true)
+        // dispatch(setMnemonicPopup(true))
       }
       document.body.style.pointerEvents = 'auto'
       document.body.style.touchAction = 'auto'
-
-      //router.push('/')
+      dispatch(setReadyToGo(false))
     } catch (error) {
       console.log(error.message)
       dispatch(setPending(false))
@@ -119,76 +118,32 @@ const RegistrationFormMain = () => {
   /// registration end ///
 
   const goToStep = (step) => {
-    router.push(`${router.pathname}?step=${step}`)
+    dispatch(setStep(step))
   }
 
-  const renderComponent = () => {
-    if (step === '1') return (
-      <RegistrationDetails
-        currentUser={currentUser}
-        isGoogleUser={isGoogleUser}
-        goToStep={goToStep}
-      />
-    )
-    if (step === '2') return <RegistrationChoosePassword goToStep={goToStep} />
-    if (step === '3')
-      return (
-        <RegistrationUploadPhoto
-          goToStep={goToStep}
-          mnemonicStatus={mnemonicStatus}
-          setMnemonicStatus={setMnemonicStatus}
-          mnemonic={mnemonic}
-          paymail={paymail}
-          currentUser={currentUser}
-          isGoogleUser={isGoogleUser}
-        />
-      )
-    // if (step === '4')
-    // return (
-    //   <RegistrationAddSocials
-    //     goToStep={goToStep}
-    //     mnemonicStatus={mnemonicStatus}
-    //     setMnemonicStatus={setMnemonicStatus}
-    //     mnemonic={mnemonic}
-    //   />
-    // )
-    resetAllSates()
-  }
 
-  const resetAllSates = () => {
-    dispatch(
-      setDetailsValues({
-        name: '',
-        username: '',
-        email: '',
-        role: '',
-      }),
-    )
-    dispatch(
-      setPasswordValues({
-        password: '',
-        confirmPassword: '',
-      }),
-    )
-    dispatch(
-      setPhotoValues({
-        coverImage: null,
-        profileImage: null,
-      }),
-    )
-    // dispatch(
-    //   setSocialsValues({
-    //     facebook: '',
-    //     instagram: '',
-    //     website: '',
-    //   }),
-    // )
 
-    router.push('/')
-  }
+  
   return (
     <RegistrationLayout goToStep={goToStep}>
-      {renderComponent()}
+      {
+        {
+          1: <RegistrationDetails
+            currentUser={currentUser}
+            isGoogleUser={isGoogleUser}
+            goToStep={goToStep}
+          />,
+          2: <RegistrationChoosePassword goToStep={goToStep} />,
+          3: <RegistrationUploadPhoto
+            goToStep={goToStep}
+            mnemonicStatus={mnemonicStatus}
+            mnemonic={mnemonic}
+            paymail={paymail}
+            currentUser={currentUser}
+            isGoogleUser={isGoogleUser}
+          />
+        }[step]
+      }
     </RegistrationLayout>
   )
 }

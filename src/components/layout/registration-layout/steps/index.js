@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import LineSteps from './line'
 import BoxSteps from './box'
 import CircleSteps from './circle'
+import { useDispatch, useSelector } from 'react-redux'
+import registrationFormSelector from '@/redux/selectors/registration-form'
+import { setStep } from '@/redux/slices/registration-form'
 
 const steps = [
   {
@@ -39,14 +42,12 @@ const steps = [
 const RegistrationSteps = ({ stepsType }) => {
   const stepsEls = [1, 2, 3, 4]
   const router = useRouter()
-  const currentStep = router.query.step ?? 1
+  const dispatch = useDispatch()
   const [stepList, setStepList] = useState(steps)
-
-  useEffect(() => {
-    if (router.asPath !== '/register') {
-      router.push('/register')
-    }
-  }, [])
+  const {
+    step: currentStep
+  } = useSelector(registrationFormSelector)
+ 
 
   useEffect(() => {
     if (!stepsEls.includes(+currentStep)) {
@@ -68,7 +69,7 @@ const RegistrationSteps = ({ stepsType }) => {
   }, [currentStep, router])
 
   const goTo = (step) => {
-    router.push(`${router.pathname}?step=${step}`)
+    dispatch(setStep(step))
   }
 
   switch (stepsType) {
