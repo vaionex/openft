@@ -21,6 +21,7 @@ const initialState = {
     website: '',
   },
   readyToGo: false,
+  step: 1,
 }
 
 const registrationFormSlice = createSlice({
@@ -46,7 +47,9 @@ const registrationFormSlice = createSlice({
     setReadyToGo: (state, action) => {
       state.readyToGo = action.payload
     },
-
+    setStep: (state, action) => {
+      state.step = action.payload
+    },
     clearRegistrationForm: (state) => {
       state.detailsValues.name = ''
       state.detailsValues.username = ''
@@ -59,6 +62,7 @@ const registrationFormSlice = createSlice({
       state.socialsValues.facebook = ''
       state.socialsValues.instagram = ''
       state.socialsValues.website = ''
+      state.step = 1
     },
   },
 })
@@ -73,4 +77,5 @@ export const {
   setCurrentStep,
   clearPhotoValues,
   clearRegistrationForm,
+  setStep
 } = registrationFormSlice.actions

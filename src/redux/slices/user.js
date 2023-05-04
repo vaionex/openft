@@ -65,7 +65,6 @@ export const register = createAsyncThunk(
     try {
       const user = await firebaseRegister(request)
       if (user && !user?.error) {
-        await createwallet()
         return user
       } else throw user?.error
     } catch (error) {

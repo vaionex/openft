@@ -59,6 +59,7 @@ import {
   createwallet,
   getWalletAddressAndPaymail,
   getwalletDetails,
+  getWallets,
 } from '@/services/relysia-queries'
 import apiConfig from '@/config/relysiaApi'
 import { storageBucketUrl } from './config'
@@ -322,60 +323,55 @@ const firebaseRegister = async (data) => {
   const { coverImageForUpload, profileImageForUpload, dataForServer } = data
   const { email, password, username, name } = dataForServer
   try {
-    const response = await createUserWithEmailAndPassword(
+    createUserWithEmailAndPassword(
       firebaseAuth,
       email,
       password,
-    )
-
-    const { user } = response
-
-    if (user) {
-      store.dispatch(setMnemonicPopup(true))
-      store.dispatch(setAuthenticated(!!user))
-    }
-
-    const infos = {
-      displayName: name,
-      name: name,
-      email: user.email,
-      username: username,
-      uid: user.uid,
-      createdAt: user.metadata.creationTime,
-      profileImage: null,
-      coverImage: null,
-      socialLinks: {
-        facebook: dataForServer.facebook || '',
-        instagram: dataForServer.instagram || '',
-        website: dataForServer.website || '',
-      },
-    }
-    await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-    await firebaseAddDocWithID('notifications', notificationObj, user.uid)
-    await CreateNovuSubscriber(user.uid, user.email, username)
-    await SendNotification(
-      user.uid,
-      'Your wallet has been created successfully',
-    )
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
-      async (user) => {
-        profileImageForUpload &&
-          (await firebaseUploadUserImage({
-            user,
-            imageFile: profileImageForUpload.file,
-            imageType: 'profileImage',
-          }))
-
-        coverImageForUpload &&
-          (await firebaseUploadUserImage({
-            user,
-            imageFile: coverImageForUpload.file,
-            imageType: 'coverImage',
-          }))
-      },
-    )
-
-    return userFromDb
+    ).then(async ({ user }) => {
+      if (user) {
+        store.dispatch(setMnemonicPopup(true))
+        store.dispatch(setAuthenticated(!!user))
+        const infos = {
+          displayName: name,
+          name: name,
+          email: user.email,
+          username: username,
+          uid: user.uid,
+          createdAt: user.metadata.creationTime,
+          profileImage: null,
+          coverImage: null,
+          socialLinks: {
+            facebook: dataForServer.facebook || '',
+            instagram: dataForServer.instagram || '',
+            website: dataForServer.website || '',
+          },
+        }
+        await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+        await firebaseAddDocWithID('notifications', notificationObj, user.uid)
+        await CreateNovuSubscriber(user.uid, user.email, username)
+        await SendNotification(
+          user.uid,
+          'Your wallet has been created successfully',
+        )
+        const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
+          async (user) => {
+            profileImageForUpload &&
+              (await firebaseUploadUserImage({
+                user,
+                imageFile: profileImageForUpload.file,
+                imageType: 'profileImage',
+              }))
+            coverImageForUpload &&
+              (await firebaseUploadUserImage({
+                user,
+                imageFile: coverImageForUpload.file,
+                imageType: 'coverImage',
+              }))
+          },
+        )
+        return userFromDb
+      }
+    })
   } catch (error) {
     console.log(error)
     return error.message
@@ -1010,15 +1006,7 @@ const firebaseOnIdTokenChange = async () => {
     if (user && !paymail && !address) {
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       connectToRelysiaSocket(user.accessToken)
-      await getwalletDetails(store.dispatch)
-      if (!paymail && !address) {
-        const walletData = await getWalletAddressAndPaymail()
-        if (walletData.address && walletData.paymail) {
-          getwalletDetails(store.dispatch)
-        } else {
-          createwallet('default', store.dispatch)
-        }
-      }
+      await getWallets()
     }
   })
 }
@@ -1028,7 +1016,15 @@ const refreshSignIn = async (password) => {
 
   var errMessage;
   try {
-    await reauthenticateWithCredential(user, oldCredential);
+    const { user: userResponse } = await reauthenticateWithCredential(user, oldCredential);
+    store.dispatch(
+      setUserData({
+        emailVerified: userResponse.emailVerified,
+        phoneNumber: userResponse.phoneNumber,
+        accessToken: userResponse.accessToken,
+        uid: userResponse.uid,
+      }),
+    )
   } catch (err) {
     errMessage = err;
   }
