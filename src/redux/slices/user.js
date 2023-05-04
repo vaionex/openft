@@ -65,7 +65,6 @@ export const register = createAsyncThunk(
     try {
       const user = await firebaseRegister(request)
       if (user && !user?.error) {
-        await createwallet()
         return user
       } else throw user?.error
     } catch (error) {
@@ -105,6 +104,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action) => {
+      console.log(state, action, "state, action")
       state.currentUser = { ...state.currentUser, ...action.payload }
     },
     setAuthenticated: (state, action) => {
@@ -209,7 +209,7 @@ const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isPending = false
         state.isUserPending = false
-        state.currentUser = action.payload
+        state.currentUser = { ...state.currentUser, ...action.payload }
         state.isSuccess = true
       })
       .addCase(loginWithGoogle.pending, (state, action) => {
