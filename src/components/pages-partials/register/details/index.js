@@ -59,6 +59,23 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
   const { errors } = formState
 
   const onSubmit = async (data) => {
+    // Check if any required fields are empty
+    const emptyFields = inputAttributes
+      .filter((input) => input.required && !data[input.name])
+      .map((input) => input.name)
+
+    if (emptyFields.length > 0) {
+      // Set validation error messages for empty fields
+      emptyFields.forEach((fieldName) => {
+        setError(fieldName, {
+          message: `${
+            fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+          } is required`,
+        })
+      })
+      return
+    }
+
     const usr = await fetchSignInMethodsForEmail(firebaseAuth, data.email)
     if (usr.length) {
       setError('email', { message: 'Email already registered' })

@@ -151,9 +151,9 @@ function LoginForm({ setVerifyID, verifyID }) {
               onClick={() => setPasswordVisible(!passwordVisible)}
             >
               {passwordVisible ? (
-                <EyeOffIcon className="w-6 h-6 text-gray-400" />
-              ) : (
                 <EyeIcon className="w-6 h-6 text-gray-400" />
+              ) : (
+                <EyeOffIcon className="w-6 h-6 text-gray-400" />
               )}
             </span>
           </div>

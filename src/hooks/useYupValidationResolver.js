@@ -15,16 +15,20 @@ const useYupValidationResolver = (validationSchema) =>
       } catch (errors) {
         return {
           values: {},
-          errors: errors?.inner?.reduce(
-            (allErrors, currentError) => ({
+          errors: errors?.inner?.reduce((allErrors, currentError) => {
+            // Ignore validation for empty fields
+            if (data[currentError.path] === '') {
+              return allErrors
+            }
+
+            return {
               ...allErrors,
               [currentError.path]: {
                 type: currentError.type ?? 'validation',
                 message: currentError.message,
               },
-            }),
-            {},
-          ),
+            }
+          }, {}),
         }
       }
     },
