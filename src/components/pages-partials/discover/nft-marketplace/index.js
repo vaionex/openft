@@ -65,6 +65,7 @@ const NFTMarketplace = () => {
   useEffect(async () => {
     if (isEmpty(router?.query)) {
       const { nftsData, collectionSize } = await firebaseGetNfts(pageLimit, currentPage === 0 ? 1 : currentPage);
+      console.log("🚀 ~ file: index.js:68 ~ useEffect ~ collectionSize:", collectionSize)
       dispatch(setNfts(nftsData))
       dispatch(setTotalPages(Math.ceil(collectionSize / pageLimit)))
     } else {

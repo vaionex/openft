@@ -719,7 +719,7 @@ const firebaseGetNftCount = async () => {
     const queryRef = query(
       nftsRef,
       where('status', '==', 'live'),
-      where('ownerId', '!=', store.getState().user.currentUser.uid),
+      where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
       orderBy('ownerId', 'desc'),
       // orderBy('timestamp', 'desc'),
     )
