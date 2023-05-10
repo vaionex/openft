@@ -16,6 +16,8 @@ import {
   updateDoc,
   where,
   Timestamp,
+  collectionGroup,
+  getCountFromServer,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -71,6 +73,7 @@ import {
 import { connectToRelysiaSocket } from '@/services/relysia-socket'
 import getRandomNum from '@/utils/getRanNum'
 import resolverModifier, { resolverVerifier, returnResolver } from '@/utils/resolverModifier'
+import { setLastDoc } from '@/redux/slices/nft'
 
 const notificationObj = {
   'app-notification': {
@@ -287,7 +290,30 @@ const firebaseGetUserInfoFromDb = async (id, collection) => {
     console.error(error)
   }
 }
+const firebaseGetUserInfoFromDbByArray = async (ids, collectionName, collectionKey) => {
+  try {
 
+    const nftsRef = collection(firebaseDb, collectionName)
+    const queryRef = query(nftsRef, where(collectionKey, 'in', ids))
+
+    const documentSnapshots = await getDocs(queryRef)
+
+    const users = documentSnapshots.docs.map((doc) => {
+      const artist = doc.data()
+      return {
+
+        name: artist.name,
+        profileImage: artist.profileImage,
+        username: artist?.username,
+        userId: artist.uid,
+      }
+    })
+    console.log("🚀 ~ file: utils.js:305 ~ users ~ users:", users)
+    return users
+  } catch (error) {
+    console.error(error)
+  }
+}
 const fireGetNftsFromFavList = async (favArray) => {
   const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(nftsRef, where('tokenId', 'in', [...favArray]))
@@ -676,7 +702,6 @@ const firebaseGetSingleDoc = async (collectionName, id) => {
     console.error(error)
   }
 }
-
 const firebaseGetNftProductsCount = async () => {
   try {
     const querySnapshot = await getDocs(collection(firebaseDb, 'nftCounter'))
@@ -687,7 +712,23 @@ const firebaseGetNftProductsCount = async () => {
     console.error(error.message)
   }
 }
+const firebaseGetNftCount = async () => {
+  try {
 
+    const nftsRef = collection(firebaseDb, 'nfts')
+    const queryRef = query(
+      nftsRef,
+      where('status', '==', 'live'),
+      where('ownerId', '!=', store.getState().user.currentUser.uid),
+      orderBy('ownerId', 'desc'),
+      // orderBy('timestamp', 'desc'),
+    )
+    const snapshot = await getCountFromServer(queryRef);
+    return snapshot.data().count
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 const firebaseGetNftProducts = async (pageLimit, page) => {
   const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
 
@@ -723,7 +764,51 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
 
   return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
+const firebaseGetNfts = async (pageLimit, page) => {
+  const start = page > 1 && (pageLimit * parseInt(page)) - (pageLimit - 1)
 
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(
+    nftsRef,
+    where('status', '==', 'live'),
+    where('ownerId', '!=', store.getState().user.currentUser.uid),
+    orderBy('ownerId', 'desc'),
+    limit(pageLimit * page),
+  )
+  const collectionSize = await firebaseGetNftCount()
+  const documentSnapshots = await getDocs(queryRef)
+
+  const lastVisible = documentSnapshots.docs[start - 1]
+  let next
+  if (lastVisible) {
+
+    next = query(
+      nftsRef,
+      where('status', '==', 'live'),
+      where('ownerId', '!=', store.getState().user.currentUser.uid),
+      orderBy('ownerId', 'desc'),
+      startAt(lastVisible || ''),
+      limit(pageLimit),
+    )
+  } else {
+    next = query(
+      nftsRef,
+      where('status', '==', 'live'),
+      where('ownerId', '!=', store.getState().user.currentUser.uid),
+      orderBy('ownerId', 'desc'),
+      limit(pageLimit),
+    )
+  }
+
+  const nextSnapshots = await getDocs(next)
+  const nfts = nextSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return { nftsData: nfts, collectionSize }
+}
 const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   const { minPrice, maxPrice } = priceRange
   const start = page > 1 && pageLimit * +page - pageLimit - 1
@@ -1101,5 +1186,7 @@ export {
   firebaseVerifyMail,
   firebaseGetUserByPaymail,
   refreshSignIn,
-  verifyWithSelectedMfa
+  verifyWithSelectedMfa,
+  firebaseGetNfts,
+  firebaseGetUserInfoFromDbByArray
 }

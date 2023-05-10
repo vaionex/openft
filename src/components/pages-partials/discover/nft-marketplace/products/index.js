@@ -3,19 +3,24 @@ import { ProductsCarouselCard } from '@/components/ui/cards'
 import { connectHits } from 'react-instantsearch-dom'
 import NFTMarketplacePagination from '../pagination'
 import usePriceConverter from '@/hooks/usePriceConverter'
+import { useSelector } from 'react-redux'
+import nftSelector from '@/redux/selectors/nft'
 
 const NFTMarketplaceProducts = ({
   hits,
   favouriteNfts,
   toTopRef,
   setFavouriteNfts,
+
 }) => {
   const usdBalance = usePriceConverter()
-  const [productsArr, setproductsArr] = useState([])
+  const {  nft } = useSelector(nftSelector)
 
+  const [productsArr, setproductsArr] = useState([])
   useEffect(() => {
-    setproductsArr(hits)
-  }, [hits])
+    if (!!nft)
+      setproductsArr(nft)
+  }, [nft])
   return (
     <>
       {productsArr.length > 0 ? (
@@ -48,4 +53,4 @@ const NFTMarketplaceProducts = ({
   )
 }
 
-export default connectHits(NFTMarketplaceProducts)
+export default NFTMarketplaceProducts

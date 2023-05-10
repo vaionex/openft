@@ -1,18 +1,20 @@
 import { LeftIcon, RightIcon } from '@/components/common/icons'
+import nftSelector from '@/redux/selectors/nft'
+import { setCurrentPage } from '@/redux/slices/nft'
 import React from 'react'
 import { connectPagination } from 'react-instantsearch-dom'
 import ReactPaginate from 'react-paginate'
+import { useDispatch, useSelector } from 'react-redux'
 
 const NFTMarketplacePagination = ({
-  currentRefinement,
-  nbPages,
-  refine,
   toTopRef,
 }) => {
+  const dispatch = useDispatch()
   const handlePageClick = (data) => {
-    refine(data.selected + 1)
+    dispatch(setCurrentPage(data.selected + 1))
     toTopRef.current.scrollIntoView({ behavior: 'smooth' })
   }
+  const {  totalPage } = useSelector(nftSelector)
 
   return (
     <div className="pagination-wrapper">
@@ -35,17 +37,16 @@ const NFTMarketplacePagination = ({
             />
           </span>
         }
-        pageCount={nbPages}
+        pageCount={totalPage}
         onPageChange={handlePageClick}
         breakLabel={'...'}
         marginPagesDisplayed={2}
         pageRangeDisplayed={0}
         containerClassName={'pagination'}
         activeClassName={'active'}
-        forcePage={currentRefinement - 1}
       />
     </div>
   )
 }
 
-export default connectPagination(NFTMarketplacePagination)
+export default NFTMarketplacePagination

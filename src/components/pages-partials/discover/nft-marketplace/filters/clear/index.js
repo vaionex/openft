@@ -1,15 +1,22 @@
-import { connectCurrentRefinements } from 'react-instantsearch-dom'
+import nftSelector from '@/redux/selectors/nft'
+import { removeQuery } from '@/redux/slices/nft'
+import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
 
-const ClearRefinements = ({ items, refine }) => (
-  <button
-    className="py-[10px] px-[18px] text-base font-medium border border-bright-gray rounded-lg text-bluewood"
-    onClick={() => refine(items)}
-    disabled={!items.length}
-  >
-    Clear
-  </button>
-)
+const CustomClearRefinements = ({ items, refine }) => {
+  const dispatch = useDispatch()
+  const { query } = useSelector(nftSelector)
+  const router = useRouter()
+  return (
+    <button
+      className="py-[10px] px-[18px] text-base font-medium border border-bright-gray rounded-lg text-bluewood"
+      onClick={() => { dispatch(removeQuery({})), router.replace("/discover") }}
+      disabled={!Object.keys(router?.query)?.length}
+    >
+      Clear
+    </button>
+  )
+}
 
-const CustomClearRefinements = connectCurrentRefinements(ClearRefinements)
 
 export default CustomClearRefinements

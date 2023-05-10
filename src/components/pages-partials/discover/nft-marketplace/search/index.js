@@ -1,16 +1,23 @@
 import { MagnifyGlassIcon } from '@/components/common/icons'
 import { InputMain } from '@/components/ui/inputs'
+import { setQuery } from '@/redux/slices/nft'
 import { XCircleIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { connectSearchBox } from 'react-instantsearch-dom'
+import { useDispatch } from 'react-redux'
 
 //eslint-disable-next-line
 const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
-  const { currentRefinement, refinementBrand, refine } = props
-  const [searchState, setSearchState] = useState(currentRefinement)
-  const [showChild, setShowChild] = useState(false)
+  const router = useRouter()
+  const [searchState, setSearchState] = useState("")
   const [mounted, setMounted] = useState(false)
-
+  useEffect(() => {
+    if (router?.query?.search) {
+      setSearchState(router?.query?.search)
+    } else {
+      setSearchState("")
+    }
+  }, [router?.query])
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -18,17 +25,16 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
   const handleChange = (e) => {
     setSearchState(e.target.value)
   }
-
-  const handleSubmit = (e, val) => {
+  const dispatch = useDispatch()
+  const handleSubmit = async (e, val) => {
     e.preventDefault()
-    refine(val)
+    dispatch(setQuery({ search: val }))
+
+
   }
 
   const handleClear = () => {
-    setSearchState('')
-    if (currentRefinement.length > 0) {
-      refine('')
-    }
+    dispatch(setQuery({ search: "" }))
   }
 
   if (!mounted) return null
@@ -68,4 +74,4 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
   )
 })
 
-export default connectSearchBox(NFTMarketplaceSearch)
+export default NFTMarketplaceSearch
