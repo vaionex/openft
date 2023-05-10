@@ -771,7 +771,7 @@ const firebaseGetNfts = async (pageLimit, page) => {
   const queryRef = query(
     nftsRef,
     where('status', '==', 'live'),
-    where('ownerId', '!=', store.getState().user.currentUser.uid),
+    where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
     orderBy('ownerId', 'desc'),
     limit(pageLimit * page),
   )
@@ -785,7 +785,7 @@ const firebaseGetNfts = async (pageLimit, page) => {
     next = query(
       nftsRef,
       where('status', '==', 'live'),
-      where('ownerId', '!=', store.getState().user.currentUser.uid),
+      where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
       orderBy('ownerId', 'desc'),
       startAt(lastVisible || ''),
       limit(pageLimit),
@@ -794,7 +794,7 @@ const firebaseGetNfts = async (pageLimit, page) => {
     next = query(
       nftsRef,
       where('status', '==', 'live'),
-      where('ownerId', '!=', store.getState().user.currentUser.uid),
+      where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
       orderBy('ownerId', 'desc'),
       limit(pageLimit),
     )

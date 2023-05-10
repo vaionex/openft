@@ -1,6 +1,7 @@
 import SelectWImage from '@/components/ui/select-w-image'
 import { firebaseGetUserInfoFromDbByArray } from '@/firebase/utils'
 import nftSelector from '@/redux/selectors/nft'
+import userSelector from '@/redux/selectors/user'
 import { setQuery } from '@/redux/slices/nft'
 import { algoliaIndex } from '@/services/algolia'
 import removeDuplicates from '@/utils/removeDuplicates'
@@ -34,6 +35,7 @@ const NftMarketplaceArtistFilter = (props) => {
     return uniqueArray;
   }
   const [hasMore, setHasMore] = useState(false)
+  const { currentUser } = useSelector(userSelector)
 
   const [artistIds, setArtistsIds] = useState([])
   useEffect(async () => {
@@ -44,7 +46,7 @@ const NftMarketplaceArtistFilter = (props) => {
         'minterId',
         "",
         {
-          filters: 'NOT status:private'
+          filters: `NOT status:private ${currentUser?.uid ? `AND minterId:${currentUser?.uid}` : ""}`
         }
       )
     setArtistsIds(getUniqueValuesByKey(artistIds.facetHits, "value"))

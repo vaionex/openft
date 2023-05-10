@@ -31,7 +31,6 @@ const NFTMarketplace = () => {
   useEffect(() => {
     if (!isEmpty(query)) {
       router.replace(`/discover${queryGenerator(cleanObject(query))}`)
-
     }
   }, [query])
   function createAlgoliaFilter(filterObj) {
