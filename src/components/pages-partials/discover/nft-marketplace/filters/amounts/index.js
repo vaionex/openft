@@ -1,16 +1,31 @@
 import { useCallback, useEffect, useState } from 'react'
 import { InputMain } from '@/components/ui/inputs'
-import { connectRange } from 'react-instantsearch-dom'
+import { useDispatch } from 'react-redux'
+import { setQuery } from '@/redux/slices/nft'
+import { useRouter } from 'next/router'
 
 const NFTMarketplaceAmountFilter = (props) => {
-  const { currentRefinement, refine, onAmountFilter } = props
-
+  const { onAmountFilter } = props
+  const router = useRouter()
   const [errorMessage, setErrorMessage] = useState(null)
+  const dispatch = useDispatch()
   const [values, setValues] = useState({
-    min: '',
-    max: '',
+    min: "",
+    max: "",
   })
-
+  useEffect(() => {
+    if (router?.query?.min || router?.query?.max) {
+      setValues({
+        min: router?.query?.min || "",
+        max: router?.query?.max || "",
+      })
+    } else {
+      setValues({
+        min: "",
+        max: "",
+      })
+    }
+  }, [router?.query])
   useEffect(() => {
     console.log(values)
     onAmountFilter.current = () => {
@@ -22,18 +37,13 @@ const NFTMarketplaceAmountFilter = (props) => {
         })
       } else {
         setErrorMessage('')
-        refine({ min: values.min, max: values.max })
+        dispatch(setQuery({ min: values.min, max: values.max }))
+
+        // refine({ min: values.min, max: values.max })
       }
     }
   }, [values])
 
-  useEffect(() => {
-    if (currentRefinement.min || currentRefinement.max) {
-      setValues({ min: currentRefinement.min, max: currentRefinement.max })
-    } else {
-      setValues({ min: '', max: '' })
-    }
-  }, [currentRefinement.min, currentRefinement.max])
 
   const onInput = (e) => {
     e.target.validity.valid || (e.target.value = '')
@@ -98,4 +108,4 @@ const NFTMarketplaceAmountFilter = (props) => {
   )
 }
 
-export default connectRange(NFTMarketplaceAmountFilter)
+export default NFTMarketplaceAmountFilter

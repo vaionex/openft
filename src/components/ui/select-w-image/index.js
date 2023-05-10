@@ -4,6 +4,7 @@ import { CheckIcon, XCircleIcon } from '@heroicons/react/outline'
 import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
 import { Avatar, AvatarWithName } from '../avatars'
+import InfiniteScroll from "react-infinite-scroller";
 
 const SelectWImage = ({
   users,
@@ -12,6 +13,8 @@ const SelectWImage = ({
   selectedUser,
   setSelectedUser,
   clearSelectedUser,
+  loadMore,
+  hasMore
 }) => {
   const [query, setQuery] = useState('')
   const [mounted, setMounted] = useState(false)
@@ -24,12 +27,12 @@ const SelectWImage = ({
     query.trim() === ''
       ? users
       : users.filter((person) =>
-          person.name
-            ?.trim()
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, '')),
-        )
+        person.name
+          ?.trim()
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(query.toLowerCase().replace(/\s+/g, '')),
+      )
 
   if (!mounted) return null
 
@@ -72,73 +75,85 @@ const SelectWImage = ({
         )}
 
         {users.length > 0 && (
-          <Combobox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredPeople.map((user) => (
-              <span key={user.userId}>
-                <Combobox.Option
-                  value={user}
-                  className={({ active }) =>
-                    twMerge(
-                      'relative cursor-default select-none py-2 pl-3 pr-9',
-                      active ? 'bg-blue-500 text-white' : 'text-gray-900',
-                    )
-                  }
-                >
-                  {({ active, selected }) => (
-                    <>
-                      <div className="flex items-center cursor-pointer">
-                        <div className="min-w-[40px]">
-                          {user.profileImage ? (
-                            <Avatar
-                              user={user}
-                              className="w-10 h-10 sm:w-10 sm:h-10"
-                            />
-                          ) : (
-                            <AvatarWithName
-                              name={user.name}
-                              className="w-10 h-10 sm:w-10 sm:h-10"
-                            />
-                          )}
-                        </div>
-                        <div className="flex flex-col">
-                          <span
-                            className={twMerge(
-                              'ml-3 truncate text-sm',
-                              selected && 'font-semibold',
-                            )}
-                          >
-                            {user.name}
-                          </span>
-                          <span
-                            className={twMerge(
-                              'ml-3 truncate text-sm',
-                              active ? 'text-gray-200' : 'text-gray-500',
-                            )}
-                          >
-                            @{user.username}
-                          </span>
-                        </div>
-                      </div>
 
-                      {selectedUser?.userId === user.userId && (
-                        <span
-                          className={twMerge(
-                            'absolute inset-y-0 right-0 flex items-center pr-4',
-                            active ? 'text-white' : 'text-blue-500',
-                          )}
-                        >
-                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                        </span>
-                      )}
-                    </>
-                  )}
-                </Combobox.Option>
-              </span>
-            ))}
+          <Combobox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <InfiniteScroll
+              key="componentA"
+              initialLoad={false}
+              useWindow={false}
+              dataLength={filteredPeople.length}
+              loadMore={loadMore}
+              hasMore={hasMore}
+            // threshold={10}
+            >
+              {filteredPeople.map((user) => (
+                <span key={user.userId}>
+                  <Combobox.Option
+                    value={user}
+                    className={({ active }) =>
+                      twMerge(
+                        'relative cursor-default select-none py-2 pl-3 pr-9',
+                        active ? 'bg-blue-500 text-white' : 'text-gray-900',
+                      )
+                    }
+                  >
+                    {({ active, selected }) => (
+                      <>
+                        <div className="flex items-center cursor-pointer">
+                          <div className="min-w-[40px]">
+                            {user.profileImage ? (
+                              <Avatar
+                                user={user}
+                                className="w-10 h-10 sm:w-10 sm:h-10"
+                              />
+                            ) : (
+                              <AvatarWithName
+                                name={user.name}
+                                className="w-10 h-10 sm:w-10 sm:h-10"
+                              />
+                            )}
+                          </div>
+                          <div className="flex flex-col">
+                            <span
+                              className={twMerge(
+                                'ml-3 truncate text-sm',
+                                selected && 'font-semibold',
+                              )}
+                            >
+                              {user.name}
+                            </span>
+                            <span
+                              className={twMerge(
+                                'ml-3 truncate text-sm',
+                                active ? 'text-gray-200' : 'text-gray-500',
+                              )}
+                            >
+                              @{user.username}
+                            </span>
+                          </div>
+                        </div>
+
+                        {selectedUser?.userId === user.userId && (
+                          <span
+                            className={twMerge(
+                              'absolute inset-y-0 right-0 flex items-center pr-4',
+                              active ? 'text-white' : 'text-blue-500',
+                            )}
+                          >
+                            <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </Combobox.Option>
+                </span>
+              ))}
+            </InfiniteScroll>
+
           </Combobox.Options>
         )}
       </div>
-    </Combobox>
+    </Combobox >
   )
 }
 
