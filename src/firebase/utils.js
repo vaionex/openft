@@ -124,7 +124,6 @@ const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
       }
     }
   } else if (!verificationId && uid) {
-    console.log("🚀 ~ file: utils.js:124 ~ firebaseLoginMfa ~ rsl:", rsl)
     const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
 
     const multiFactorAssertion = TotpMultiFactorGenerator.assertionForSignIn(totpResolver.uid, verificationCode);
@@ -308,7 +307,6 @@ const firebaseGetUserInfoFromDbByArray = async (ids, collectionName, collectionK
         userId: artist.uid,
       }
     })
-    console.log("🚀 ~ file: utils.js:305 ~ users ~ users:", users)
     return users
   } catch (error) {
     console.error(error)

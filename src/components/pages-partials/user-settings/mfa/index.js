@@ -72,7 +72,6 @@ const UserSettingsMfaSection = () => {
     content: null,
   })
   const { currentUser, isAuthenticated } = useSelector(userSelector)
-  console.log("🚀 ~ file: index.js:73 ~ UserSettingsMfaSection ~ currentUser:", currentUser)
   useEffect(() => {
     if (currentUser?.phoneNumber) {
 
@@ -297,7 +296,6 @@ const UserSettingsMfaSection = () => {
   }
   const verifyUpdateCode = () => {
     const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
-    console.log("🚀 ~ file: index.js:324 ~ verifyUpdateCode ~ phoneCredential:", phoneCredential)
 
     updatePhoneNumber(firebaseAuth?.currentUser, phoneCredential)
       .then(() => {

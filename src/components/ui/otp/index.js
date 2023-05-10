@@ -14,7 +14,6 @@ export default function OtpModal({
   isTotp,
   setQrcode = () => { }
 }) {
-  console.log("🚀 ~ file: index.js:15 ~ qrCode:", qrcode)
   const AuthInputRef = useRef(null)
 
   function closeModal() {

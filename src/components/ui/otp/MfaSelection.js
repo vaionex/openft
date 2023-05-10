@@ -44,7 +44,6 @@ export default function MfaSelection({
     reValidateMode: 'onChange',
   })
   const onSubmit = (e) => {
-    console.log("🚀 ~ file: MfaSelection.js:47 ~ onSubmit ~ e:", e)
     handler(e.checkbox)
     closeModal()
   }

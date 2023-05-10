@@ -27,7 +27,7 @@ const NFTMarketplace = () => {
   const dispatch = useDispatch()
   const { currentPage, query } = useSelector(nftSelector)
   const isEmpty = obj => Object.keys(obj).length === 0;
-
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (!isEmpty(query)) {
       router.replace(`/discover${queryGenerator(cleanObject(query))}`)
@@ -52,6 +52,8 @@ const NFTMarketplace = () => {
     return filters.join(' AND ');
   }
   const fetchDataFromAlgolia = async () => {
+    setLoading(true)
+
     const params = cleanObject(router?.query)
     delete params?.search
     const dataMain = await algoliaIndex.search(router?.query?.search, {
@@ -61,13 +63,17 @@ const NFTMarketplace = () => {
     })
     dispatch(setNfts(dataMain?.hits))
     dispatch(setTotalPages(dataMain?.nbPages))
+    setLoading(false)
+
   }
   useEffect(async () => {
     if (isEmpty(router?.query)) {
+      setLoading(true)
       const { nftsData, collectionSize } = await firebaseGetNfts(pageLimit, currentPage === 0 ? 1 : currentPage);
-      console.log("🚀 ~ file: index.js:68 ~ useEffect ~ collectionSize:", collectionSize)
       dispatch(setNfts(nftsData))
       dispatch(setTotalPages(Math.ceil(collectionSize / pageLimit)))
+      setLoading(false)
+
     } else {
 
       fetchDataFromAlgolia()
@@ -99,6 +105,7 @@ const NFTMarketplace = () => {
 
           <div className="lg:col-span-3">
             <NFTMarketplaceProducts
+              loading={loading}
               favouriteNfts={favouriteNfts}
               setFavouriteNfts={setFavouriteNfts}
               toTopRef={toTopRef}
