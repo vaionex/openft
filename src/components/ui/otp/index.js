@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useRef, useState } from 'react'
+import QRCode from "react-qr-code";
 import AuthCode from '@/utils/otpInput'
 
 export default function OtpModal({
@@ -9,10 +10,14 @@ export default function OtpModal({
   allowedCharacters,
   handleOnChange,
   otpNumber,
+  qrcode,
+  isTotp,
+  setQrcode = () => { }
 }) {
   const AuthInputRef = useRef(null)
 
   function closeModal() {
+    setQrcode()
     setIsOpen(false)
   }
 
@@ -41,18 +46,19 @@ export default function OtpModal({
                     as="h3"
                     className="text-2xl font-bold text-center leading-6 text-gray-900"
                   >
-                    SMS Verification
+                    {isTotp ? "TOTP Verification" : qrcode ? "Configure Authenticor" : "SMS Verification"}
                   </Dialog.Title>
 
-                  <div className="flex items-center flex-col mt-4">
-                    <span>Enter the SMS you received</span>
+                  <div className="flex items-center flex-col mt-4 text-center">
+                    <span>{isTotp ? "Enter the SMS from Authenticator App" : qrcode ? "Scan this QR in your authenticator app and enter code shown in the authenticator." : "Enter the SMS you received"}</span>
                     {/* <span className="font-bold">+91 ******876</span> */}
                   </div>
                   <div className="mt-2">
                     <form
                       onSubmit={handleSubmit}
-                      class="flex flex-col justify-center text-center sm:px-2 mt-5"
+                      class="flex flex-col justify-center items-center text-center sm:px-2 mt-5"
                     >
+                      {qrcode && <QRCode value={qrcode} />}
                       <AuthCode
                         key={allowedCharacters}
                         allowedCharacters={allowedCharacters}
@@ -68,11 +74,10 @@ export default function OtpModal({
                         <button
                           type="submit"
                           disabled={otpNumber.length === 6 ? false : true}
-                          className={`inline-flex justify-center rounded-md border border-transparent duration-300 bg-blue-100 px-4 py-2 text-sm font-medium ${
-                            otpNumber.length === 6
-                              ? 'text-blue-900 focus-visible:ring-blue-500 hover:bg-blue-200'
-                              : 'text-blue-200'
-                          } focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
+                          className={`inline-flex justify-center rounded-md border border-transparent- duration-300 bg-blue-100 px-4 py-2 text-sm font-medium ${otpNumber.length === 6
+                            ? 'text-blue-900 focus-visible:ring-blue-500 hover:bg-blue-200'
+                            : 'text-blue-200'
+                            } focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
                         >
                           Verify
                         </button>

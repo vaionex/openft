@@ -10,12 +10,21 @@ const initialState = {
   paymail: '',
   addresses: [],
   bsvRate: null,
+  walletData: null,
+  checked: 1,
+
 }
 
 const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
+    updateWalletDataAction: (state, action) => {
+      console.log(state, action, 'state, actionstate, action')
+        ; (state.walletData =
+          action.payload === null ? null : { ...action.payload }),
+          (state.checked = state.checked + 1)
+    },
     updateWalletHistory: (state, action) => {
       state.wallethistory = action.payload
     },
@@ -55,6 +64,7 @@ const walletSlice = createSlice({
 export default walletSlice
 export const {
   updateWalletHistory,
+  updateWalletDataAction,
   clearWalletData,
   updateMnemonic,
   updateBalance,

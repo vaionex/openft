@@ -16,6 +16,8 @@ import {
   updateDoc,
   where,
   Timestamp,
+  collectionGroup,
+  getCountFromServer,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -42,6 +44,9 @@ import {
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
   RecaptchaVerifier,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  TotpMultiFactorGenerator,
 } from 'firebase/auth'
 import store from '@/redux/store'
 import {
@@ -56,6 +61,7 @@ import {
   createwallet,
   getWalletAddressAndPaymail,
   getwalletDetails,
+  getWallets,
 } from '@/services/relysia-queries'
 import apiConfig from '@/config/relysiaApi'
 import { storageBucketUrl } from './config'
@@ -66,6 +72,8 @@ import {
 } from '@/services/novu-notifications'
 import { connectToRelysiaSocket } from '@/services/relysia-socket'
 import getRandomNum from '@/utils/getRanNum'
+import resolverModifier, { resolverVerifier, returnResolver } from '@/utils/resolverModifier'
+import { setLastDoc } from '@/redux/slices/nft'
 
 const notificationObj = {
   'app-notification': {
@@ -83,34 +91,68 @@ const notificationObj = {
 }
 
 let rsl
-const firebaseLoginMfa = async ({ verificationId, verificationCode }) => {
-  const cred = PhoneAuthProvider.credential(verificationId, verificationCode)
-  const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred)
-  // Complete sign-in.
-  const { user } = await rsl.resolveSignIn(multiFactorAssertion)
-  if (user) {
-    apiConfig.defaults.headers.common['authToken'] = user.accessToken
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
-    const userNotifications = await firebaseGetSingleDoc(
-      'notifications',
-      user.uid,
-    )
-    return {
-      user: {
-        ...userFromDb,
-        ...user.reloadUserInfo,
-        accessToken: user.accessToken,
-      },
-      userNotifications: {
-        'app-notification':
-          userNotifications && userNotifications['app-notification']
-            ? userNotifications['app-notification']
-            : null,
-        'email-notification':
-          userNotifications && userNotifications['email-notification']
-            ? userNotifications['email-notification']
-            : null,
-      },
+const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
+  if (verificationId && !uid) {
+
+    const cred = PhoneAuthProvider.credential(verificationId, verificationCode)
+    const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred)
+    // Complete sign-in.
+    const { user } = await rsl.resolveSignIn(multiFactorAssertion)
+    if (user) {
+      apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        user.uid,
+      )
+      return {
+        user: {
+          ...userFromDb,
+          ...user.reloadUserInfo,
+          accessToken: user.accessToken,
+        },
+        userNotifications: {
+          'app-notification':
+            userNotifications && userNotifications['app-notification']
+              ? userNotifications['app-notification']
+              : null,
+          'email-notification':
+            userNotifications && userNotifications['email-notification']
+              ? userNotifications['email-notification']
+              : null,
+        },
+      }
+    }
+  } else if (!verificationId && uid) {
+    const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
+
+    const multiFactorAssertion = TotpMultiFactorGenerator.assertionForSignIn(totpResolver.uid, verificationCode);
+    // Finalize the sign-in.
+    const { user } = await rsl.resolveSignIn(multiFactorAssertion)
+    if (user) {
+      apiConfig.defaults.headers.common['authToken'] = user.accessToken
+      const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users')
+      const userNotifications = await firebaseGetSingleDoc(
+        'notifications',
+        user.uid,
+      )
+      return {
+        user: {
+          ...userFromDb,
+          ...user.reloadUserInfo,
+          accessToken: user.accessToken,
+        },
+        userNotifications: {
+          'app-notification':
+            userNotifications && userNotifications['app-notification']
+              ? userNotifications['app-notification']
+              : null,
+          'email-notification':
+            userNotifications && userNotifications['email-notification']
+              ? userNotifications['email-notification']
+              : null,
+        },
+      }
     }
   }
 }
@@ -121,6 +163,8 @@ const firebaseLogin = async ({
   rememberMe,
   setVerifyID,
   setError,
+  setUid,
+  setFactors
 }) => {
   const recaptchaVerifier = new RecaptchaVerifier(
     '2fa-captcha',
@@ -168,19 +212,28 @@ const firebaseLogin = async ({
         console.log(error)
         if (error.code == 'auth/multi-factor-auth-required') {
           const resolver = getMultiFactorResolver(firebaseAuth, error)
-          // Ask user which second factor to use.
+          const resolvers = resolver.hints
+          const totpEnabled = resolverVerifier(resolvers, TotpMultiFactorGenerator.FACTOR_ID)
 
-          const phoneInfoOptions = {
-            multiFactorHint: resolver.hints[0],
-            session: resolver.session,
+          const smsEnabled = resolverVerifier(resolvers, PhoneMultiFactorGenerator.FACTOR_ID)          // if (resolvers?.length > 1) {
+          if (totpEnabled && smsEnabled) {
+            setFactors(true)
+          } else if (totpEnabled) {
+            const totpResolver = returnResolver(resolvers, TotpMultiFactorGenerator.FACTOR_ID)
+            setUid(totpResolver?.uid)
+          } else if (smsEnabled) {
+            const phoneInfoOptions = {
+              multiFactorHint: returnResolver(resolvers, PhoneMultiFactorGenerator.FACTOR_ID),
+              session: resolver.session,
+            }
+            const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+            // Send SMS verification code
+            phoneAuthProvider
+              .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+              .then(function (verificationId) {
+                setVerifyID(verificationId)
+              })
           }
-          const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
-          // Send SMS verification code
-          phoneAuthProvider
-            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
-            .then(function (verificationId) {
-              setVerifyID(verificationId)
-            })
           rsl = resolver
         } else if (error.code == 'auth/wrong-password') {
           setError('The password is incorrect.')
@@ -191,6 +244,35 @@ const firebaseLogin = async ({
     return usr
   })
   return user
+}
+
+const verifyWithSelectedMfa = (selectedOption, setVerifyID, setUid) => {
+  if (selectedOption === TotpMultiFactorGenerator.FACTOR_ID) {
+    const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
+    setUid(totpResolver?.uid)
+  } else if (selectedOption === PhoneMultiFactorGenerator.FACTOR_ID) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      '2fa-captcha',
+      {
+        callback: (verificationId) => setVerifyID(verificationId),
+        'expired-callback': () => setVerifyID(null),
+        size: 'invisible',
+      },
+      firebaseAuth,
+    )
+    const phoneInfoOptions = {
+      multiFactorHint: returnResolver(rsl?.hints, PhoneMultiFactorGenerator.FACTOR_ID),
+      session: rsl.session,
+    }
+    const phoneAuthProvider = new PhoneAuthProvider(firebaseAuth)
+    // Send SMS verification code
+    phoneAuthProvider
+      .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+      .then(function (verificationId) {
+        setVerifyID(verificationId)
+      })
+
+  }
 }
 
 const userCreateNotification = {
@@ -207,7 +289,29 @@ const firebaseGetUserInfoFromDb = async (id, collection) => {
     console.error(error)
   }
 }
+const firebaseGetUserInfoFromDbByArray = async (ids, collectionName, collectionKey) => {
+  try {
 
+    const nftsRef = collection(firebaseDb, collectionName)
+    const queryRef = query(nftsRef, where(collectionKey, 'in', ids))
+
+    const documentSnapshots = await getDocs(queryRef)
+
+    const users = documentSnapshots.docs.map((doc) => {
+      const artist = doc.data()
+      return {
+
+        name: artist.name,
+        profileImage: artist.profileImage,
+        username: artist?.username,
+        userId: artist.uid,
+      }
+    })
+    return users
+  } catch (error) {
+    console.error(error)
+  }
+}
 const fireGetNftsFromFavList = async (favArray) => {
   const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(nftsRef, where('tokenId', 'in', [...favArray]))
@@ -243,60 +347,55 @@ const firebaseRegister = async (data) => {
   const { coverImageForUpload, profileImageForUpload, dataForServer } = data
   const { email, password, username, name } = dataForServer
   try {
-    const response = await createUserWithEmailAndPassword(
+    createUserWithEmailAndPassword(
       firebaseAuth,
       email,
       password,
-    )
-
-    const { user } = response
-
-    if (user) {
-      store.dispatch(setMnemonicPopup(true))
-      store.dispatch(setAuthenticated(!!user))
-    }
-
-    const infos = {
-      displayName: name,
-      name: name,
-      email: user.email,
-      username: username,
-      uid: user.uid,
-      createdAt: user.metadata.creationTime,
-      profileImage: null,
-      coverImage: null,
-      socialLinks: {
-        facebook: dataForServer.facebook || '',
-        instagram: dataForServer.instagram || '',
-        website: dataForServer.website || '',
-      },
-    }
-    await setDoc(doc(firebaseDb, 'users', user.uid), infos)
-    await firebaseAddDocWithID('notifications', notificationObj, user.uid)
-    await CreateNovuSubscriber(user.uid, user.email, username)
-    await SendNotification(
-      user.uid,
-      'Your wallet has been created successfully',
-    )
-    const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
-      async (user) => {
-        profileImageForUpload &&
-          (await firebaseUploadUserImage({
-            user,
-            imageFile: profileImageForUpload.file,
-            imageType: 'profileImage',
-          }))
-
-        coverImageForUpload &&
-          (await firebaseUploadUserImage({
-            user,
-            imageFile: coverImageForUpload.file,
-            imageType: 'coverImage',
-          }))
-      },
-    )
-
-    return userFromDb
+    ).then(async ({ user }) => {
+      if (user) {
+        store.dispatch(setMnemonicPopup(true))
+        store.dispatch(setAuthenticated(!!user))
+        const infos = {
+          displayName: name,
+          name: name,
+          email: user.email,
+          username: username,
+          uid: user.uid,
+          createdAt: user.metadata.creationTime,
+          profileImage: null,
+          coverImage: null,
+          socialLinks: {
+            facebook: dataForServer.facebook || '',
+            instagram: dataForServer.instagram || '',
+            website: dataForServer.website || '',
+          },
+        }
+        await setDoc(doc(firebaseDb, 'users', user.uid), infos)
+        await firebaseAddDocWithID('notifications', notificationObj, user.uid)
+        await CreateNovuSubscriber(user.uid, user.email, username)
+        await SendNotification(
+          user.uid,
+          'Your wallet has been created successfully',
+        )
+        const userFromDb = await firebaseGetUserInfoFromDb(user.uid, 'users').then(
+          async (user) => {
+            profileImageForUpload &&
+              (await firebaseUploadUserImage({
+                user,
+                imageFile: profileImageForUpload.file,
+                imageType: 'profileImage',
+              }))
+            coverImageForUpload &&
+              (await firebaseUploadUserImage({
+                user,
+                imageFile: coverImageForUpload.file,
+                imageType: 'coverImage',
+              }))
+          },
+        )
+        return userFromDb
+      }
+    })
   } catch (error) {
     console.log(error)
     return error.message
@@ -601,7 +700,6 @@ const firebaseGetSingleDoc = async (collectionName, id) => {
     console.error(error)
   }
 }
-
 const firebaseGetNftProductsCount = async () => {
   try {
     const querySnapshot = await getDocs(collection(firebaseDb, 'nftCounter'))
@@ -612,7 +710,23 @@ const firebaseGetNftProductsCount = async () => {
     console.error(error.message)
   }
 }
+const firebaseGetNftCount = async () => {
+  try {
 
+    const nftsRef = collection(firebaseDb, 'nfts')
+    const queryRef = query(
+      nftsRef,
+      where('status', '==', 'live'),
+      where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
+      orderBy('ownerId', 'desc'),
+      // orderBy('timestamp', 'desc'),
+    )
+    const snapshot = await getCountFromServer(queryRef);
+    return snapshot.data().count
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 const firebaseGetNftProducts = async (pageLimit, page) => {
   const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
 
@@ -648,7 +762,51 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
 
   return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
+const firebaseGetNfts = async (pageLimit, page) => {
+  const start = page > 1 && (pageLimit * parseInt(page)) - (pageLimit - 1)
 
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(
+    nftsRef,
+    where('status', '==', 'live'),
+    where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
+    orderBy('ownerId', 'desc'),
+    limit(pageLimit * page),
+  )
+  const collectionSize = await firebaseGetNftCount()
+  const documentSnapshots = await getDocs(queryRef)
+
+  const lastVisible = documentSnapshots.docs[start - 1]
+  let next
+  if (lastVisible) {
+
+    next = query(
+      nftsRef,
+      where('status', '==', 'live'),
+      where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
+      orderBy('ownerId', 'desc'),
+      startAt(lastVisible || ''),
+      limit(pageLimit),
+    )
+  } else {
+    next = query(
+      nftsRef,
+      where('status', '==', 'live'),
+      where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
+      orderBy('ownerId', 'desc'),
+      limit(pageLimit),
+    )
+  }
+
+  const nextSnapshots = await getDocs(next)
+  const nfts = nextSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return { nftsData: nfts, collectionSize }
+}
 const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   const { minPrice, maxPrice } = priceRange
   const start = page > 1 && pageLimit * +page - pageLimit - 1
@@ -876,8 +1034,6 @@ const firebaseDeleteDoc = async (collectionName, id) => {
 const firebaseGetAuthorizedUser = () => {
   const fn = firebaseAuth.onAuthStateChanged(async (userResponse) => {
     if (userResponse) {
-      store.dispatch(setUserPending(false))
-      store.dispatch(setAuthenticated(true))
       store.dispatch(
         setUserData({
           ...userResponse.reloadUserInfo,
@@ -887,6 +1043,8 @@ const firebaseGetAuthorizedUser = () => {
           uid: userResponse.uid,
         }),
       )
+      store.dispatch(setAuthenticated(true))
+      store.dispatch(setUserPending(false))
       apiConfig.defaults.headers.common['authToken'] = userResponse.accessToken
       connectToRelysiaSocket(userResponse.accessToken)
       const user = await firebaseGetUserInfoFromDb(userResponse.uid, 'users')
@@ -931,19 +1089,30 @@ const firebaseOnIdTokenChange = async () => {
     if (user && !paymail && !address) {
       apiConfig.defaults.headers.common['authToken'] = user.accessToken
       connectToRelysiaSocket(user.accessToken)
-      await getwalletDetails(store.dispatch)
-      if (!paymail && !address) {
-        const walletData = await getWalletAddressAndPaymail()
-        if (walletData.address && walletData.paymail) {
-          getwalletDetails(store.dispatch)
-        } else {
-          createwallet('default', store.dispatch)
-        }
-      }
+      await getWallets()
     }
   })
 }
+const refreshSignIn = async (password) => {
+  const user = firebaseAuth.currentUser;
+  var oldCredential = EmailAuthProvider.credential(user.email, password);
 
+  var errMessage;
+  try {
+    const { user: userResponse } = await reauthenticateWithCredential(user, oldCredential);
+    store.dispatch(
+      setUserData({
+        emailVerified: userResponse.emailVerified,
+        phoneNumber: userResponse.phoneNumber,
+        accessToken: userResponse.accessToken,
+        uid: userResponse.uid,
+      }),
+    )
+  } catch (err) {
+    errMessage = err;
+  }
+  return errMessage;
+};
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
@@ -1014,4 +1183,8 @@ export {
   firebaseGetUserDetailByUsername,
   firebaseVerifyMail,
   firebaseGetUserByPaymail,
+  refreshSignIn,
+  verifyWithSelectedMfa,
+  firebaseGetNfts,
+  firebaseGetUserInfoFromDbByArray
 }

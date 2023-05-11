@@ -7,6 +7,7 @@ import {
   updateBalance,
   updateMnemonic,
   updateWalletHistory,
+  updateWalletDataAction,
 } from '../redux/slices/wallet'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
@@ -26,8 +27,8 @@ export const getwalletBal = async (dispatch) => {
     })
     .then((res) => {
       let balInBsv =
-        res?.data?.data?.data?.balance / 100000000
-          ? res.data.data.data.balance / 100000000
+        res?.data?.data?.balance / 100000000
+          ? res.data.data.balance / 100000000
           : 0
 
       dispatch(updateBalance(balInBsv))
@@ -67,12 +68,47 @@ export const getwalletHistory = async (dispatch) => {
 export const metricsApiWithoutBody = async () => {
   await apiConfig
     .get('/v1/metrics')
-    .then((res) => {})
+    .then((res) => { })
     .catch((err) => {
       console.log('without body', err)
     })
 }
+export const getWallets = async () => {
+  const defaultWallet = '00000000-0000-0000-0000-000000000000'
+  await apiConfig
+    .get('/v1/wallets')
+    .then((data) => {
+      if (
+        data &&
+        data.data &&
+        data.data.data &&
+        data.data.data.status === 'success'
+      ) {
+        const wallet = [...data.data.data.wallets]
 
+        if (wallet.length === 0) {
+          createwallet('default', store.dispatch)
+          // createNewDefaultWallet(accessToken)
+          return
+        } else {
+          const checkDefault = wallet.find((a) => a.walletID === defaultWallet)
+          if (!checkDefault) {
+            createwallet('default', store.dispatch)
+            return
+          }
+
+          store.dispatch(updateWalletDataAction(wallet))
+
+          getwalletDetails(store.dispatch)
+        }
+
+      }
+    })
+    .catch((err, data) => {
+      console.log(data)
+      console.log(err)
+    })
+}
 export const getwalletDetails = async (dispatch) => {
   apiConfig
     .get('/v1/address', {

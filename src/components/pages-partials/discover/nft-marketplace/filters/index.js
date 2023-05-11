@@ -15,10 +15,8 @@ const NFTMarketplaceFilters = () => {
 
   const handleSubmit = () => {
     onArtistFilter.current()
+    onAmountFilter.current()
 
-    setTimeout(() => {
-      onAmountFilter.current()
-    }, 500)
   }
 
   return (

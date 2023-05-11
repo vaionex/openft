@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router'
 import { twMerge } from 'tailwind-merge'
 import NextLink from 'next/link'
-
+import { firebaseAuth } from '@/firebase/init'
+import { multiFactor } from 'firebase/auth'
+import { toast } from 'react-toastify'
 const links = [
   { name: 'My profile', href: '/user-settings', current: false },
   { name: 'Collection', href: '/user-settings/collection', current: false },
@@ -18,29 +20,49 @@ const links = [
 ]
 
 const UserSettingsSidebar = () => {
-  const { pathname } = useRouter()
+  const router = useRouter()
+
+  const checkMFAStatus = async (href) => {
+    const options = multiFactor(firebaseAuth.currentUser).enrolledFactors.length
+    if (options === 0) {
+      toast.error('please enable MFA For this operation', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    } else {
+      router.push(href)
+    }
+  }
 
   return (
     <aside className="py-6 lg:py-8 lg:pr-12 lg:col-span-2">
       <nav className="space-y-1">
         {links.map((item) => (
-          <NextLink
+          <a
             href={item.href}
-            scroll={false}
             key={`${item.name}-${Math.random() * 100}`}
+            className={twMerge(
+              router.pathname === item.href
+                ? 'bg-blue-50 border-blue-500 text-blue-700 hover:bg-blue-50 hover:text-teal-700'
+                : 'border-transparent text-mist hover:bg-gray-50 hover:text-gray-700',
+              'group border-l-4 px-3 py-2 flex items-center text-sm font-medium',
+            )}
+            aria-current={item.href === router.pathname ? 'page' : null}
+            onClick={(e) => {
+              e.preventDefault()
+              item.name === 'Top-up'
+                ? checkMFAStatus(item.href)
+                : router.push(item.href)
+            }}
           >
-            <a
-              className={twMerge(
-                pathname === item.href
-                  ? 'bg-blue-50 border-blue-500 text-blue-700 hover:bg-blue-50 hover:text-teal-700'
-                  : 'border-transparent text-mist hover:bg-gray-50 hover:text-gray-700',
-                'group border-l-4 px-3 py-2 flex items-center text-sm font-medium',
-              )}
-              aria-current={item.href === pathname ? 'page' : null}
-            >
-              <span className="truncate">{item.name}</span>
-            </a>
-          </NextLink>
+            <span className="truncate">{item.name}</span>
+          </a>
         ))}
       </nav>
     </aside>

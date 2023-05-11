@@ -1,4 +1,4 @@
-import algoliasearchLite from 'algoliasearch/lite'
+import algoliasearch from 'algoliasearch';
 
 const fullTextSearch = {
   appId: process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
@@ -8,9 +8,11 @@ const fullTextSearch = {
 const indexName = fullTextSearch.indexName // `notes`, `customers`, etc.
 const searchKey = fullTextSearch.searchKey
 
-const searchClientLite = algoliasearchLite(
+const searchClientLite = algoliasearch(
   fullTextSearch.appId,
   fullTextSearch.key,
 )
 
-export { indexName, searchKey, searchClientLite }
+const algoliaIndex = searchClientLite.initIndex("nfts");
+
+export { indexName, searchKey, searchClientLite, algoliaIndex }

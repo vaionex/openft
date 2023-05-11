@@ -8,20 +8,24 @@ import Checkbox from '../../checkbox'
 import Alert from '../../alert'
 import userSelector from '@/redux/selectors/user'
 import ButtonWLoading from '../../button-w-loading'
-import { firebaseLogin } from '@/firebase/utils'
+import { firebaseLogin, verifyWithSelectedMfa } from '@/firebase/utils'
 import OtpModal from '@/components/ui/otp'
+import MfaSelection from '../../otp/MfaSelection'
 
 function LoginForm({ setVerifyID, verifyID }) {
   const dispatch = useDispatch()
   const router = useRouter()
   const { isPending } = useSelector(userSelector)
   const [isOpen, setIsOpen] = useState(false)
+  const [isTotp, setIsTotp] = useState(false)
   const [allowedCharacters, setAllowedCharacters] = useState('numeric')
   const [otpNumber, setOtpNumber] = useState('')
   const handleOnChange = (enteredOtp) => {
     setOtpNumber(enteredOtp)
   }
-
+  const [selectedFactor, setSelectedFactor] = useState()
+  const [factors, setFactors] = useState(false)
+  const [uid, setUid] = useState(null)
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
   const [error, setError] = useState(null)
@@ -43,19 +47,28 @@ function LoginForm({ setVerifyID, verifyID }) {
         login({
           verificationId: verifyID,
           verificationCode: otpNumber,
+          uid
         }),
       ).unwrap()
       if (user && !user?.error) {
         dispatch(setAuthenticated(true))
         router.replace('/')
       }
-    } catch (e) {
-      console.log('error', e)
-      setError(e)
+    } catch (err) {
+      if (err.code == 'auth/invalid-verification-code') {
+        setError('Invalid verification code')
+      } else if (err.code == 'auth/code-expired') {
+        setError('Code expired')
+      } else {
+        console.log('error', e)
+        setError(err)
+      }
     }
   }
-
-  const handleSubmit = async (e) => {
+  const handleSubmitMfaType = (e) => {
+    verifyWithSelectedMfa(e, setVerifyID, setUid)
+  }
+  const handleSubmit = async (e, option) => {
     e.preventDefault()
     try {
       await firebaseLogin({
@@ -63,6 +76,9 @@ function LoginForm({ setVerifyID, verifyID }) {
         rememberMe,
         setVerifyID,
         setError,
+        setUid,
+        setFactors,
+
       })
     } catch (e) {
       console.log('login error', e)
@@ -75,7 +91,12 @@ function LoginForm({ setVerifyID, verifyID }) {
       setIsOpen(true)
     }
   }, [verifyID])
-
+  useEffect(() => {
+    if (uid) {
+      setIsOpen(true)
+      setIsTotp(true)
+    }
+  }, [uid])
   return (
     <div>
       <form className="space-y-6" onSubmit={handleSubmit}>
@@ -130,9 +151,9 @@ function LoginForm({ setVerifyID, verifyID }) {
               onClick={() => setPasswordVisible(!passwordVisible)}
             >
               {passwordVisible ? (
-                <EyeOffIcon className="w-6 h-6 text-gray-400" />
-              ) : (
                 <EyeIcon className="w-6 h-6 text-gray-400" />
+              ) : (
+                <EyeOffIcon className="w-6 h-6 text-gray-400" />
               )}
             </span>
           </div>
@@ -164,12 +185,19 @@ function LoginForm({ setVerifyID, verifyID }) {
         </div>
       </form>
       <OtpModal
+        isTotp={isTotp}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         handleOnChange={handleOnChange}
         handler={handleLogin}
         allowedCharacters={allowedCharacters}
         otpNumber={otpNumber}
+      />
+      <MfaSelection
+        setSelectedFactor={setSelectedFactor}
+        isOpen={factors}
+        setIsOpen={setFactors}
+        handler={handleSubmitMfaType}
       />
     </div>
   )

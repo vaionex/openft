@@ -8,8 +8,9 @@ import { InputMain } from '@/components/ui/inputs'
 import { UserCircleIcon } from '@/components/common/icons'
 import { GoogleIcon } from '@/components/common/icons'
 import { loginWithGoogle, logout } from '@/redux/slices/user'
-
+import { fetchSignInMethodsForEmail } from 'firebase/auth'
 import validationSchema from './validationScheme'
+import { firebaseAuth } from '@/firebase/init'
 
 const inputAttributes = [
   {
@@ -48,7 +49,7 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
   const [verifyID, setVerifyID] = useState(null)
 
   const resolver = useYupValidationResolver(validationSchema(isGoogleUser))
-  const { control, handleSubmit, formState, reset } = useForm({
+  const { control, handleSubmit, formState, reset, setError } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: detailsValues,
@@ -57,7 +58,30 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
 
   const { errors } = formState
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    // Check if any required fields are empty
+    const emptyFields = inputAttributes
+      .filter((input) => input.required && !data[input.name])
+      .map((input) => input.name)
+
+    if (emptyFields.length > 0) {
+      // Set validation error messages for empty fields
+      emptyFields.forEach((fieldName) => {
+        setError(fieldName, {
+          message: `${
+            fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+          } is required`,
+        })
+      })
+      return
+    }
+
+    const usr = await fetchSignInMethodsForEmail(firebaseAuth, data.email)
+    if (usr.length) {
+      setError('email', { message: 'Email already registered' })
+      return
+    }
+
     dispatch(setDetailsValues(data))
     isGoogleUser ? goToStep(3) : goToStep(2)
   }

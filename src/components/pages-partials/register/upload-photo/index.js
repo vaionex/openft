@@ -53,7 +53,6 @@ const ImageInputAttributes = [
 const RegistrationUploadPhoto = ({
   goToStep,
   mnemonicStatus,
-  setMnemonicStatus,
   mnemonic,
   paymail,
   currentUser,
@@ -188,12 +187,12 @@ const RegistrationUploadPhoto = ({
             : mnemonic ? false : true
         }
         onClose={() => {
-          setMnemonicStatus(false)
+
           dispatch(setMnemonicPopup(false))
           isGoogleUser && router.push('/')
         }}
         onConfirm={() => {
-          setMnemonicStatus(false)
+
           dispatch(setMnemonicPopup(false))
           isGoogleUser && router.push('/')
         }}
