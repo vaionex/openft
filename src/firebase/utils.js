@@ -74,6 +74,7 @@ import { connectToRelysiaSocket } from '@/services/relysia-socket'
 import getRandomNum from '@/utils/getRanNum'
 import resolverModifier, { resolverVerifier, returnResolver } from '@/utils/resolverModifier'
 import { setLastDoc } from '@/redux/slices/nft'
+import { uniqBy } from 'lodash'
 
 const notificationObj = {
   'app-notification': {
@@ -846,7 +847,44 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
     collectionSize: documentSnapshots.docs.length,
   }
 }
+const firebaseGetCollection = async (id, page, startAFterParams = []) => {
+  console.log("🚀 ~ file: utils.js:851 ~ firebaseGetCollection ~ startAFterParams:", startAFterParams)
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRefownerIdStartAdter = startAFterParams?.[0]
+  const queryRefminterIdStartAdter = startAFterParams?.[1]
+  const queryRefownerId = query(
+    nftsRef,
+    where('ownerId', '==', id),
+    orderBy('timestamp', 'desc'),
+    // startAfter(queryRefownerIdStartAdter || ""),
+    // limit(10),
+  )
+  const queryRefminterId = query(
+    nftsRef,
+    where('minterId', '==', id),
+    orderBy('timestamp', 'desc'),
+    // startAfter(queryRefminterIdStartAdter || ""),
+    // limit(10),
 
+
+  )
+  const [ownerNfts, minterNfts] = await Promise.all([getDocs(queryRefownerId), getDocs(queryRefminterId)])
+  console.log("🚀 ~ file: utils.js:862 ~ firebaseGetCollection ~ ownerNfts, minterNfts:", ownerNfts, minterNfts)
+  const ownerNftsArray = ownerNfts.docs;
+  const minterNftsArray = minterNfts.docs;
+
+  const collectionNfts = ownerNftsArray.concat(minterNftsArray);
+  const uniqueData = _.uniqBy(collectionNfts, "id");
+
+  return {
+    data: uniqueData.map(data => data?.data()),
+    startAFterParams: [
+      ownerNfts.docs[ownerNfts.docs?.length - 1],
+      minterNfts.docs[minterNfts.docs?.length - 1]
+    ]
+  };
+
+}
 const firebaseGetNftByUsername = async (slug, type) => {
   let queryRef
   const nftsRef = collection(firebaseDb, 'nfts')
@@ -1186,5 +1224,6 @@ export {
   refreshSignIn,
   verifyWithSelectedMfa,
   firebaseGetNfts,
-  firebaseGetUserInfoFromDbByArray
+  firebaseGetUserInfoFromDbByArray,
+  firebaseGetCollection
 }
