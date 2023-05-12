@@ -9,7 +9,7 @@ const UserSettingsHeader = () => {
   const keyDownHandler = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      router.push(`/discover?query=${event.target.value}`)
+      router.push(`/discover?search=${event.target.value}`)
     }
   }
   return (

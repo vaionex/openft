@@ -121,7 +121,7 @@ const ProfileHeaderCard = ({
       ) : (
         <AvatarWithName
           className="w-24 h-24 ml-4 text-xl sm:w-32 sm:h-32"
-          name={userData?.name}
+          name={userData?.displayName}
         />
       )
     ) : (

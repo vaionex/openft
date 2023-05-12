@@ -100,7 +100,7 @@ export const AvatarUpload = ({ limits, aspect, acceptableFileTypes }) => {
         priority
       />
     ) : (
-      <AvatarWithName name={userData?.name} />
+      <AvatarWithName name={userData?.displayName} />
     )
   }
 
