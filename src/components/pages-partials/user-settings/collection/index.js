@@ -32,7 +32,7 @@ const Collection = ({ ...restProps }) => {
 
   useEffect(() => {
     if (nftId) {
-      ;(async () => {
+      ; (async () => {
         const { data } = await apiConfig.get(
           `https://api.relysia.com/v1/token/${nftId}`,
         )
@@ -114,15 +114,7 @@ const Collection = ({ ...restProps }) => {
           <Details nft={tokenInfo} />
         </>
       ) : (
-        <InstantSearch
-          indexName="nfts"
-          searchClient={searchClient}
-          {...restProps}
-        >
-          <Configure filters={`ownerId:${currentUser.uid}`} />
-
-          <TokenDetailGrid />
-        </InstantSearch>
+        <TokenDetailGrid />
       )}
     </UserSettingsLayout>
   )

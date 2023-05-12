@@ -21,7 +21,7 @@ const NFTMarketplace = () => {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1024px)',
   })
-  const [pageLimit, setPageLimit] = useState(10)
+  const [pageLimit, setPageLimit] = useState(12)
   const { currentUser } = useSelector(userSelector)
   const router = useRouter()
   const dispatch = useDispatch()
@@ -39,14 +39,9 @@ const NFTMarketplace = () => {
     if (filterObj.min !== undefined && filterObj.max !== undefined) {
       filters.push(`amount >= ${filterObj.min} AND amount <= ${filterObj.max}`);
     }
+    if (currentUser?.uid) {
+      filters.push(`NOT minterId:${currentUser?.uid}`);
 
-    if (filterObj.minterId !== undefined && filterObj.minterId !== currentUser?.uid) {
-      if (filterObj.minterId !== currentUser?.uid) {
-
-        filters.push(`minterId:${filterObj.minterId}`);
-      } else {
-        filters.push(`NOT minterId:${currentUser?.uid}`);
-      }
     }
 
     return filters.join(' AND ');
