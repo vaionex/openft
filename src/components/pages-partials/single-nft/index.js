@@ -34,7 +34,6 @@ const SingleNftPageMain = () => {
       <MoreNft
         favouriteNfts={favouriteNfts}
         setFavouriteNfts={setFavouriteNfts}
-        indexName={'nfts'}
       />
       <Cta />
     </SharedLayout>

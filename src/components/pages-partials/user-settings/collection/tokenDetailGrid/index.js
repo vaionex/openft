@@ -1,83 +1,64 @@
 import { TokenCard } from '@/components/ui/cards'
-import { useEffect, useMemo, useState } from 'react'
-import { connectHits } from 'react-instantsearch-dom'
-import { useSelector } from 'react-redux'
-import userSelector from '@/redux/selectors/user'
+import {  useEffect, useMemo, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { firebaseGetCollection } from '@/firebase/utils'
-import InfiniteScroll from "react-infinite-scroller";
 import Loader from '@/components/ui/loader/Loader'
+import NFTMarketplacePagination from '../../../discover/nft-marketplace/pagination'
+import nftSelector from '@/redux/selectors/nft'
+import { setTotalPages } from '@/redux/slices/nft'
 
 const TokenDetailGrid = ({ hits }) => {
   const [collection, setCollection] = useState([])
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
+  const toTopRef = useRef(null)
+  const { currentPage } = useSelector(nftSelector)
+
+  const [pageLimit, setPageLimit] = useState(12)
   const [loading, setLoading] = useState(false)
-  const [startAfter, setStartAfter] = useState()
-  console.log("🚀 ~ file: index.js:15 ~ TokenDetailGrid ~ startAfter:", startAfter)
   const products = useMemo(() => collection, [collection])
-  const { currentUser, isAuthenticated, isUserPending, mnemonicPopup } =
-    useSelector(userSelector)
+  
+  const dispatch = useDispatch()
   useEffect(async () => {
     setLoading(true)
-    const { data, startAFterParams } = await firebaseGetCollection(currentUser?.uid, page, startAfter)
-    console.log("🚀 ~ file: index.js:22 ~ useEffect ~ startAFterParams:", startAFterParams)
-    if (data) {
-      // const uniqueData = _.uniqBy([...data, ...collection], "tokenId");
-
-      setCollection(data)
-      // setCollection(uniqueData)
+    const { nftsData, collectionSize } = await firebaseGetCollection(pageLimit, currentPage === 0 ? 1 : currentPage)
+    if (nftsData && nftsData?.length) {
+      setCollection(nftsData)
+      dispatch(setTotalPages(Math.ceil(collectionSize / pageLimit)))
       setLoading(false)
-      // setStartAfter(startAFterParams)
-
     } else {
-      setHasMore(false)
+      setLoading(false)
     }
-  }, [])
-  // }, [page])
-  const loadMore = () => {
-    if (!loading) {
-      setPage(page + 1)
-    }
-  }
+  }, [currentPage])
+
   return (
-    <section aria-labelledby="products-heading" className="pt-6 pb-24">
+    <section aria-labelledby="products-heading" className="pt-6 pb-24" ref={toTopRef}>
       <h2 id="products-heading" className="sr-only">
         Products
       </h2>
-      {
+      <>
         {
-          true:
-            <div className='h-full w-full flex items-center justify-center' role="status">
-              <Loader />
-            </div >,
-          false:
-            products.length > 0 ?
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12">
-                <InfiniteScroll
-                  element={"div"}
-                  className="grid grid-cols-1 gap-x-[29px] gap-y-12 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3"
-                  key="componentA"
-                  initialLoad={false}
-                  useWindow={true}
-                  dataLength={products.length}
-                  // loadMore={loadMore}
-                  hasMore={hasMore}
-                // threshold={10}
-                >
-
-                  {products?.map((item, idx) => (
-                    <TokenCard key={idx} data={item} />
+          {
+            true:
+              <div className='h-full w-full flex items-center justify-center' role="status">
+                <Loader />
+              </div >,
+            false:
+              products.length > 0 ?
+                <div className="grid grid-cols-1 gap-x-7 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
+                  {products.map((item, index) => (
+                    <TokenCard key={index} data={item} />
                   ))}
-                </InfiniteScroll>
-              </div>
-              : <div className="flex items-center justify-center w-full h-full">
-                No NFTs found
-              </div>,
+                </div>
+                : <div className="flex items-center justify-center w-full h-full">
+                  No NFTs found
+                </div>,
 
-        }[loading]
-      }
-
-    </section>
+          }[loading]
+        }
+        <div className="block mt-14">
+          <NFTMarketplacePagination toTopRef={toTopRef} />
+        </div>
+      </>
+    </section >
   )
 }
 export default TokenDetailGrid

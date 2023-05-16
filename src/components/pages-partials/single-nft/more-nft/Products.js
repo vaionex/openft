@@ -1,15 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { ProductsCarouselCard } from '@/components/ui/cards'
-import { connectHits } from 'react-instantsearch-dom'
 import usePriceConverter from '@/hooks/usePriceConverter'
+import { useRouter } from 'next/router'
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore'
+import { firebaseDb } from '@/firebase/init'
 
-const Products = ({ hits, favouriteNfts, toTopRef, setFavouriteNfts }) => {
+const Products = ({ favouriteNfts, setFavouriteNfts }) => {
   const usdBalance = usePriceConverter()
   const [productsArr, setproductsArr] = useState([])
 
-  useEffect(() => {
-    setproductsArr(hits)
-  }, [hits])
+  const router = useRouter()
+  const { slug } = router?.query
+  useEffect(async () => {
+    const nftRef = collection(firebaseDb, 'nfts')
+
+    const queryParams = query(
+      nftRef,
+      where('tokenId', '!=', slug),
+      orderBy('tokenId', 'desc'),
+      orderBy('likes', 'desc'),
+      limit(3),
+    )
+    const Snapshots = await getDocs(queryParams)
+    setproductsArr(Snapshots?.docs?.map(data => data.data()))
+
+  }, [])
   return (
     <>
       {productsArr.length > 0 ? (
@@ -37,4 +52,4 @@ const Products = ({ hits, favouriteNfts, toTopRef, setFavouriteNfts }) => {
   )
 }
 
-export default connectHits(Products)
+export default Products
