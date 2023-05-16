@@ -27,8 +27,8 @@ export const getwalletBal = async (dispatch) => {
     })
     .then((res) => {
       let balInBsv =
-        res?.data?.data?.balance / 100000000
-          ? res.data.data.balance / 100000000
+        res?.data?.data?.data?.balance / 100000000
+          ? res?.data?.data?.data?.balance / 100000000
           : 0
 
       dispatch(updateBalance(balInBsv))
