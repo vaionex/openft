@@ -18,6 +18,8 @@ import {
   Timestamp,
   collectionGroup,
   getCountFromServer,
+  or,
+  and,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -711,6 +713,27 @@ const firebaseGetNftProductsCount = async () => {
     console.error(error.message)
   }
 }
+const firebaseGetCollectionProductsCount = async () => {
+  try {
+
+    const nftsRef = collection(firebaseDb, 'nfts')
+    const queryRef = query(
+      nftsRef,
+      or(
+        where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ""),
+        where('minterId', '==', store.getState()?.user?.currentUser?.uid || ""),
+      ),
+      // where('status', '==', 'live'),
+      // where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
+      // orderBy('ownerId', 'desc'),
+      // orderBy('timestamp', 'desc'),
+    )
+    const snapshot = await getCountFromServer(queryRef);
+    return snapshot.data().count
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 const firebaseGetNftCount = async () => {
   try {
 
@@ -847,43 +870,49 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
     collectionSize: documentSnapshots.docs.length,
   }
 }
-const firebaseGetCollection = async (id, page, startAFterParams = []) => {
-  console.log("🚀 ~ file: utils.js:851 ~ firebaseGetCollection ~ startAFterParams:", startAFterParams)
+const firebaseGetCollection = async (pageLimit, page) => {
+
+  const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
+
   const nftsRef = collection(firebaseDb, 'nfts')
-  const queryRefownerIdStartAdter = startAFterParams?.[0]
-  const queryRefminterIdStartAdter = startAFterParams?.[1]
-  const queryRefownerId = query(
+  const queryRef = query(
     nftsRef,
-    where('ownerId', '==', id),
+    or(
+      where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ""),
+      where('minterId', '==', store.getState()?.user?.currentUser?.uid || ""),
+    ),
     orderBy('timestamp', 'desc'),
-    // startAfter(queryRefownerIdStartAdter || ""),
-    // limit(10),
+    limit(pageLimit * page),
   )
-  const queryRefminterId = query(
-    nftsRef,
-    where('minterId', '==', id),
+
+  const collectionSize = await firebaseGetCollectionProductsCount()
+  const documentSnapshots = await getDocs(queryRef)
+
+  const lastVisible = documentSnapshots.docs[start]
+  console.log("🚀 ~ file: utils.js:892 ~ firebaseGetCollection ~ lastVisible:", lastVisible)
+  const nextRef = collection(firebaseDb, 'nfts')
+
+  const next = query(
+    nextRef,
+    or(
+      where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ""),
+      where('minterId', '==', store.getState()?.user?.currentUser?.uid || ""),
+    ),
     orderBy('timestamp', 'desc'),
-    // startAfter(queryRefminterIdStartAdter || ""),
-    // limit(10),
-
-
+    startAfter(lastVisible || ''),
+    limit(pageLimit),
   )
-  const [ownerNfts, minterNfts] = await Promise.all([getDocs(queryRefownerId), getDocs(queryRefminterId)])
-  console.log("🚀 ~ file: utils.js:862 ~ firebaseGetCollection ~ ownerNfts, minterNfts:", ownerNfts, minterNfts)
-  const ownerNftsArray = ownerNfts.docs;
-  const minterNftsArray = minterNfts.docs;
 
-  const collectionNfts = ownerNftsArray.concat(minterNftsArray);
-  const uniqueData = _.uniqBy(collectionNfts, "id");
+  const nextSnapshots = await getDocs(next)
 
-  return {
-    data: uniqueData.map(data => data?.data()),
-    startAFterParams: [
-      ownerNfts.docs[ownerNfts.docs?.length - 1],
-      minterNfts.docs[minterNfts.docs?.length - 1]
-    ]
-  };
+  const nfts = nextSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+  console.log("🚀 ~ file: utils.js:914 ~ nfts ~ nfts:", nfts)
 
+  return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
 const firebaseGetNftByUsername = async (slug, type) => {
   let queryRef

@@ -2,7 +2,6 @@ import { LeftIcon, RightIcon } from '@/components/common/icons'
 import nftSelector from '@/redux/selectors/nft'
 import { setCurrentPage } from '@/redux/slices/nft'
 import React from 'react'
-import { connectPagination } from 'react-instantsearch-dom'
 import ReactPaginate from 'react-paginate'
 import { useDispatch, useSelector } from 'react-redux'
 

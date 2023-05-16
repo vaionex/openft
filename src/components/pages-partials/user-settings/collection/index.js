@@ -3,21 +3,15 @@ import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import apiConfig from '@/config/relysiaApi'
 import NextLink from 'next/link'
 import { ArrowLeftIcon } from '@heroicons/react/solid'
-import { Configure, InstantSearch } from 'react-instantsearch-dom'
 import TokenDetailGrid from './tokenDetailGrid'
-import userSelector from '@/redux/selectors/user'
-import { useSelector } from 'react-redux'
-import { searchClientLite as searchClient } from '@/services/algolia'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-const Collection = ({ ...restProps }) => {
-  const { currentUser } = useSelector(userSelector)
+const Collection = () => {
 
   const router = useRouter()
   const [nftId, setNftId] = useState(null)
   const [tokenInfo, setTokenInfo] = useState(null)
-  // const { tokens, canLoadMore, loadMore } = useTokens()
 
   useEffect(() => {
     const {
