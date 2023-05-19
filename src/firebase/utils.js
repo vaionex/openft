@@ -877,10 +877,7 @@ const firebaseGetCollection = async (pageLimit, page) => {
   const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(
     nftsRef,
-    or(
-      where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ""),
-      where('minterId', '==', store.getState()?.user?.currentUser?.uid || ""),
-    ),
+    where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ''),
     orderBy('timestamp', 'desc'),
     limit(pageLimit * page),
   )
@@ -894,10 +891,7 @@ const firebaseGetCollection = async (pageLimit, page) => {
 
   const next = query(
     nextRef,
-    or(
-      where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ""),
-      where('minterId', '==', store.getState()?.user?.currentUser?.uid || ""),
-    ),
+    where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ''),
     orderBy('timestamp', 'desc'),
     startAfter(lastVisible || ''),
     limit(pageLimit),

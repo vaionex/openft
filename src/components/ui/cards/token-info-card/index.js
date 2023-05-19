@@ -28,10 +28,10 @@ const TokenInfoCard = ({
             <NextLink
               href={`/user-settings/collection?current=${data?.tokenId}`}
             >
-              {data?.imageURL ? (
+              {data?.image || data?.imageURL ? (
                 <div>
                   <Image
-                    src={data?.imageURL || ''}
+                    src={data?.image || data?.imageURL || ''}
                     alt={data?.name}
                     layout="fill"
                     className="absolute inset-0 object-cover object-center w-full h-full"
@@ -45,7 +45,7 @@ const TokenInfoCard = ({
               )}
             </NextLink>
           </div>
-          {isLive && (
+          {data?.status == 'live' && (
             <div className="absolute top-4 right-4 z-20 text-gray-200 inline-flex py-1 px-2 font-semibold text-xs backdrop-blur-md bg-black/30 tracking-widest overflow-hidden rounded-md">
               LIVE
             </div>

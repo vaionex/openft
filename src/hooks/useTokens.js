@@ -22,7 +22,7 @@ export default function useTokens() {
       },
     } = (await apiConfig.get('/v2/balance', { headers })).data
 
-    const stasTokens = coins.filter((coin) => coin.protocol === 'STAS')
+    const stasTokens = coins.filter((coin) => coin.protocol !== 'BSV')
 
     setNextPageToken(nextToken)
     setLoading(false)
