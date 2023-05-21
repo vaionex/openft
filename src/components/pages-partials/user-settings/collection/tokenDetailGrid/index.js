@@ -6,7 +6,7 @@ import Loader from '@/components/ui/loader/Loader'
 import NFTMarketplacePagination from '../../../discover/nft-marketplace/pagination'
 import nftSelector from '@/redux/selectors/nft'
 import { setTotalPages } from '@/redux/slices/nft'
-import useNFTs from '@/hooks/useNfts'
+import useNFTs from '@/hooks/useNFTs'
 
 const TokenDetailGrid = ({ hits }) => {
   const [collection, setCollection] = useState([])
