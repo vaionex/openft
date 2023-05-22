@@ -870,8 +870,27 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
     collectionSize: documentSnapshots.docs.length,
   }
 }
-const firebaseGetCollection = async (pageLimit, page) => {
 
+const firebaseGetCollection = async () => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(
+    nftsRef,
+    where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ''),
+    orderBy('timestamp', 'desc'),
+  )
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return { nftsData: JSON.parse(JSON.stringify(nfts)) }
+}
+
+const firebaseGetPaginatedCollection = async (pageLimit, page) => {
   const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
 
   const nftsRef = collection(firebaseDb, 'nfts')
@@ -886,7 +905,10 @@ const firebaseGetCollection = async (pageLimit, page) => {
   const documentSnapshots = await getDocs(queryRef)
 
   const lastVisible = documentSnapshots.docs[start]
-  console.log("🚀 ~ file: utils.js:892 ~ firebaseGetCollection ~ lastVisible:", lastVisible)
+  console.log(
+    '🚀 ~ file: utils.js:892 ~ firebaseGetCollection ~ lastVisible:',
+    lastVisible,
+  )
   const nextRef = collection(firebaseDb, 'nfts')
 
   const next = query(
@@ -904,7 +926,7 @@ const firebaseGetCollection = async (pageLimit, page) => {
     nft.id = doc.id
     return nft
   })
-  console.log("🚀 ~ file: utils.js:914 ~ nfts ~ nfts:", nfts)
+  console.log('🚀 ~ file: utils.js:914 ~ nfts ~ nfts:', nfts)
 
   return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
@@ -928,6 +950,21 @@ const firebaseGetNftByUsername = async (slug, type) => {
     nftsData: JSON.parse(JSON.stringify(nfts)),
     collectionSize: documentSnapshots.docs.length,
   }
+}
+const firebaseGetNftByTokenId = async (tokenId) => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+
+  let queryRef = query(nftsRef, where('tokenId', '==', tokenId))
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })[0]
+
+  return nfts
 }
 
 const firebaseGetUserByPaymail = async (paymail) => {
@@ -1155,12 +1192,15 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 const refreshSignIn = async (password) => {
-  const user = firebaseAuth.currentUser;
-  var oldCredential = EmailAuthProvider.credential(user.email, password);
+  const user = firebaseAuth.currentUser
+  var oldCredential = EmailAuthProvider.credential(user.email, password)
 
-  var errMessage;
+  var errMessage
   try {
-    const { user: userResponse } = await reauthenticateWithCredential(user, oldCredential);
+    const { user: userResponse } = await reauthenticateWithCredential(
+      user,
+      oldCredential,
+    )
     store.dispatch(
       setUserData({
         emailVerified: userResponse.emailVerified,
@@ -1170,10 +1210,10 @@ const refreshSignIn = async (password) => {
       }),
     )
   } catch (err) {
-    errMessage = err;
+    errMessage = err
   }
-  return errMessage;
-};
+  return errMessage
+}
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
@@ -1248,5 +1288,6 @@ export {
   verifyWithSelectedMfa,
   firebaseGetNfts,
   firebaseGetUserInfoFromDbByArray,
-  firebaseGetCollection
+  firebaseGetCollection,
+  firebaseGetNftByTokenId,
 }
