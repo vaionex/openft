@@ -113,21 +113,13 @@ const UploadForm = () => {
         throw new Error('Failed to upload image to server')
       }
 
-      const nftImageForChain = await firebaseGetNftImageUrl(
-        currentUser.uid,
-        fileFromStorage.metadata?.name,
-        'small',
-      )
-
-      const fileToChain = {
-        fileUrl: nftImageForChain,
+      const uploadData = {
+        type: 'media',
+        fileFromStorage,
         fileName: formData.name,
+        notes: 'Empty notes',
       }
-
-      console.log('fileToChain', fileToChain)
-
-      console.log('uploading image to BSV network')
-      const blockchainResponse = await uploadNFTFile(fileToChain)
+      const blockchainResponse = await uploadNFTFile(uploadData)
       if (!blockchainResponse) {
         throw new Error(
           'Failed to upload file to blockchain, please press "Save" again',
@@ -147,7 +139,7 @@ const UploadForm = () => {
         amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
-        url: nftImageForChain,
+        url: fileFromStorage,
       }
       const mintResponse = await mintNFT(dataToMint)
       if (!mintResponse) {

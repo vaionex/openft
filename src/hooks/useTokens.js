@@ -10,32 +10,34 @@ export default function useTokens() {
   const [tokens, setTokens] = useState([])
   const [nextPageToken, setNextPageToken] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [pageTokens, setPageTokens] = useState([])
+
   const canLoadMore = Boolean(nextPageToken)
   async function fetchTokens() {
     setLoading(true)
-    let headers = { authToken: currentUser.accessToken }
-    if (nextPageToken) headers.nextPageToken = nextPageToken
-    const {
-      data: {
-        coins,
-        meta: { nextPageToken: nextToken },
-      },
-    } = (await apiConfig.get('/v2/balance', { headers })).data
+    let headers = {}
+    let url = `/v2/balance`
+    if (walletid) headers.walletID = walletid
+    if (pageTokens[pageTokens.length - 1]) {
+      url = `/v2/balance?nextPageToken=${pageTokens[pageTokens.length - 1]}`
+    }
 
-    const stasTokens = coins.filter((coin) => coin.protocol === 'STAS')
+    const { data: { coins, meta: { nextPageToken: nextToken } } = {} } = (
+      await apiConfig.get(url, { headers })
+    )?.data
 
     setNextPageToken(nextToken)
+    setPageTokens((e) => [...e, nextToken])
     setLoading(false)
-    return stasTokens
+    return coins
   }
 
   async function loadMore() {
-    // loadMore fetch more token & nfts if has next page token
-    // and merged new chunk of tokens with the existing chunk
-    if (canLoadMore) {
-      const moretokens = await fetchTokens()
-      setTokens((prev) => prev.concat(moretokens))
-    }
+    // loadMore fetches more tokens & nfts if there is a next page token
+    // and merges the new chunk of tokens with the existing chunk
+    const moreTokens = await fetchTokens()
+    let stasTokens = moreTokens.filter((coin) => coin.protocol !== 'BSV')
+    setTokens((prevTokens) => [...prevTokens, ...stasTokens])
   }
 
   useEffect(() => {
@@ -43,8 +45,19 @@ export default function useTokens() {
 
     // runs on first load of hook and whenever user or
     // currentwalletId changes
-    fetchTokens().then((res) => setTokens(res))
+    fetchTokens().then((res) => {
+      let stasTokens = res.filter((coin) => coin.protocol !== 'BSV')
+      return setTokens(stasTokens)
+    })
   }, [currentUser, walletid])
 
-  return { tokens, canLoadMore, loadMore, loading }
+  return {
+    tokens,
+    canLoadMore,
+    loadMore,
+    loading,
+    pageTokens,
+    setPageTokens,
+    fetchTokens,
+  }
 }

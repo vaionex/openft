@@ -2,7 +2,6 @@ import { LeftIcon, RightIcon } from '@/components/common/icons'
 import nftSelector from '@/redux/selectors/nft'
 import { setCurrentPage } from '@/redux/slices/nft'
 import React from 'react'
-import { connectPagination } from 'react-instantsearch-dom'
 import ReactPaginate from 'react-paginate'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -17,34 +16,13 @@ const NFTMarketplacePagination = ({
   const {  totalPage } = useSelector(nftSelector)
 
   return (
-    <div className="pagination-wrapper">
-      <ReactPaginate
-        previousLabel={
-          <span className="flex gap-1 text-mist">
-            <LeftIcon
-              className="w-5 h-5 hover:text-gray-500"
-              aria-hidden="true"
-            />
-            <span className="hidden sm:block">Previous</span>
-          </span>
-        }
-        nextLabel={
-          <span className="flex gap-1 text-mist">
-            <span className="hidden sm:block">Next</span>
-            <RightIcon
-              className="w-5 h-5 hover:text-gray-500"
-              aria-hidden="true"
-            />
-          </span>
-        }
-        pageCount={totalPage}
-        onPageChange={handlePageClick}
-        breakLabel={'...'}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={0}
-        containerClassName={'pagination'}
-        activeClassName={'active'}
-      />
+    <div className="flex items-center justify-center">
+      <button
+        type="button"
+        className="bg-azul rounded-lg border border-azul text-azul py-2.5 px-2 flex w-40 justify-center items-center font-semibold"
+      >
+        <span className="text-white">Load More</span>
+      </button>
     </div>
   )
 }

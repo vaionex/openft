@@ -93,9 +93,9 @@ export default function Form() {
     }, 5000)
   }
   return (
-    <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6">
-      <div className="lg:grid-cols-2 lg:grid lg:gap-16 xl:gap-[112px] min-h-[calc(100vh-(6rem+8rem))]">
-        <div className="relative hidden mt-12 sm:max-w-lg xl:max-w-[576px] min-h-[816px] sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block">
+    <div className="min-h-full px-4 mx-auto max-w-7xl sm:px-6  2xl:mt-14">
+      <div className="lg:grid-cols-2 lg:grid lg:gap-x-16 xl:gap-x-[112px]">
+        <div className="relative hidden mt-12 sm:max-w-lg xl:max-w-[576px] min-h-[816px] sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:block 2xl:flex 2xl:items-center ">
           <div className="relative w-full h-full mx-auto">
             <Image
               className="relative object-cover block w-full h-full overflow-hidden bg-white rounded-3xl"
@@ -106,13 +106,13 @@ export default function Form() {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left">
+        <div className="flex flex-col justify-center px-0 sm:text-center lg:text-left ">
           <div className="">
             <div className="max-w-md mx-auto sm:max-w-lg xl:max-w-[480px] lg:mx-0">
               <h2 className={`${height > 900 && "mb-7"} text-3xl text-mirage font-semibold tracking-tight sm:text-4xl `}>
                 Contact us
               </h2>
-              <p className="mt-4 text-lg text-mist sm:mt-3">
+              <p className="mt-4 text-lg text-mist sm:mt-3 2xl:my-4">
                 Ask everything about how Nftana can work for you.
               </p>
               <form
@@ -133,10 +133,10 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="first-name"
-                            className="sm:col-span-2"
+                            className="sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="First name"
-                            onChange={() => {}}
+                            onChange={() => { }}
                             error={errors['first-name']?.message}
                             {...field}
                           />
@@ -159,10 +159,10 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="last-name"
-                            className="sm:col-span-2"
+                            className="sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="Last name"
-                            onChange={() => {}}
+                            onChange={() => { }}
                             error={errors['last-name']?.message}
                             {...field}
                           />
@@ -171,7 +171,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className={`${height > 900 && "mb-6"} sm:col-span-2`}> 
+                <div className={`${height > 900 && "mb-6"} sm:col-span-2`}>
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
                     <InputMain.Label label="Email" htmlFor="email" required />
                     <Controller
@@ -181,10 +181,10 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="email"
-                            className="w-full sm:col-span-2"
+                            className="w-full sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="you@company.com"
-                            onChange={() => {}}
+                            onChange={() => { }}
                             error={errors['email']?.message}
                             {...field}
                           />
@@ -207,10 +207,10 @@ export default function Form() {
                         return (
                           <InputMain.Input
                             id="company"
-                            className="w-full sm:col-span-2"
+                            className="w-full sm:col-span-2 2xl:my-1"
                             inputClassName="md:h-11"
                             placeholder="Your company"
-                            onChange={() => {}}
+                            onChange={() => { }}
                             error={errors['company']?.message}
                             {...field}
                           />
@@ -233,10 +233,10 @@ export default function Form() {
                         return (
                           <InputMain.Textarea
                             id="message"
-                            className="w-full"
+                            className="w-full 2xl:my-1"
                             placeholder="Type here..."
                             rows={6}
-                            onChange={() => {}}
+                            onChange={() => { }}
                             error={errors['message']?.message}
                             {...field}
                             ref={textAreaRef}
@@ -246,7 +246,7 @@ export default function Form() {
                     />
                   </InputMain>
                 </div>
-                <div className="relative flex  my-2 sm:col-span-2">
+                <div className="relative flex  my-2 sm:col-span-2 2xl:my-2">
                   <div className="flex items-center h-4 sm:h-5 ">
                     <Controller
                       name={'privacy'}
@@ -258,7 +258,7 @@ export default function Form() {
                             type="checkbox"
                             checked={checked}
                             inputContainer={'sm:w-5 w-4'}
-                            inputClassName="cursor-pointer w-4 sm:w-5 w-4 sm:h-5 text-blue-600 rounded-md border-gray-300 focus:ring-blue-500"
+                            inputClassName="cursor-pointer w-4 sm:w-5 w-4 sm:h-5 text-blue-600 rounded-md border-gray-300 focus:ring-blue-500 2xl:my-1"
                             onClick={() => setChecked(!checked)}
                             error={errors['privacy']?.message}
                             {...field}
@@ -268,9 +268,8 @@ export default function Form() {
                     />
                   </div>
                   <div
-                    className={`ml-8 ${
-                      errors['privacy']?.message ? '-mt-2.5' : ''
-                    } inset-0 absolute text-sm text-left`}
+                    className={`ml-8 ${errors['privacy']?.message ? '-mt-2.5' : ''
+                      } inset-0 absolute text-sm text-left`}
                   >
                     <label htmlFor="privacy" className="font-medium text-mist">
                       You agree to our friendly{' '}
@@ -294,16 +293,15 @@ export default function Form() {
                 ) : (
                   ''
                 )}
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 2xl:my-2">
                   <ButtonWLoading type="submit" fullWidth text="Send message" />
                 </div>
                 {message && (
                   <p
-                    className={`text-sm w-full py-2 sm:col-span-2 text-start ${
-                      message.type === 'success'
+                    className={`text-sm w-full py-2 sm:col-span-2 text-start ${message.type === 'success'
                         ? 'text-green-400'
                         : 'text-red-500'
-                    }`}
+                      }`}
                   >
                     {message.msg}
                   </p>

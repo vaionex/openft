@@ -1,12 +1,7 @@
 import React from 'react'
 import NFTMarketplaceAmountFilter from './amounts'
 import NftMarketplaceArtistFilter from './artists'
-import {
-  connectConfigure,
-  connectCurrentRefinements,
-  connectStateResults,
-  connectToggleRefinement,
-} from 'react-instantsearch-dom'
+
 import CustomClearRefinements from './clear'
 
 const NFTMarketplaceFilters = () => {

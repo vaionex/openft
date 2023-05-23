@@ -456,7 +456,7 @@ const UserSettingsMfaSection = () => {
                                 className="absolute cursor-pointer right-3 mr-2"
                                 onClick={() => setPasswordVisible(!passwordVisible)}
                               >
-                                {passwordVisible ? (
+                                {!passwordVisible ? (
                                   <EyeOffIcon className="w-6 h-6 text-gray-400" />
                                 ) : (
                                   <EyeIcon className="w-6 h-6 text-gray-400" />

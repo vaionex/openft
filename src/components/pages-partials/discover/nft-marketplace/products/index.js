@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { ProductsCarouselCard } from '@/components/ui/cards'
-import { connectHits } from 'react-instantsearch-dom'
 import NFTMarketplacePagination from '../pagination'
 import usePriceConverter from '@/hooks/usePriceConverter'
 import { useSelector } from 'react-redux'

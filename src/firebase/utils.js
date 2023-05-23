@@ -18,6 +18,8 @@ import {
   Timestamp,
   collectionGroup,
   getCountFromServer,
+  or,
+  and,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -559,13 +561,13 @@ const firebaseResetPassword = async (email) => {
 
 const firebaseUploadNftImage = async ({ file, userId }) => {
   try {
-    const imagePath = `nfts/${userId}/${uuidv4()}`
+    const imagePath = `nftTemp/${userId}/${uuidv4()}_400x400`
     const fileRef = ref(firebaseStorage, imagePath)
     const metadata = {
       contentType: file.type,
     }
-    const fileFromStorage = await uploadBytes(fileRef, file, metadata)
-    // const url = await getDownloadURL(fileRef)
+    const snapshot = await uploadBytes(fileRef, file, metadata)
+    const fileFromStorage = await getDownloadURL(snapshot.ref)
     return { fileFromStorage }
   } catch (error) {
     console.log('firebaseUploadNftImage error', error)
@@ -711,6 +713,27 @@ const firebaseGetNftProductsCount = async () => {
     console.error(error.message)
   }
 }
+const firebaseGetCollectionProductsCount = async () => {
+  try {
+
+    const nftsRef = collection(firebaseDb, 'nfts')
+    const queryRef = query(
+      nftsRef,
+      or(
+        where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ""),
+        where('minterId', '==', store.getState()?.user?.currentUser?.uid || ""),
+      ),
+      // where('status', '==', 'live'),
+      // where('ownerId', '!=', store.getState()?.user?.currentUser?.uid || ""),
+      // orderBy('ownerId', 'desc'),
+      // orderBy('timestamp', 'desc'),
+    )
+    const snapshot = await getCountFromServer(queryRef);
+    return snapshot.data().count
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 const firebaseGetNftCount = async () => {
   try {
 
@@ -847,43 +870,65 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
     collectionSize: documentSnapshots.docs.length,
   }
 }
-const firebaseGetCollection = async (id, page, startAFterParams = []) => {
-  console.log("🚀 ~ file: utils.js:851 ~ firebaseGetCollection ~ startAFterParams:", startAFterParams)
+
+const firebaseGetCollection = async () => {
   const nftsRef = collection(firebaseDb, 'nfts')
-  const queryRefownerIdStartAdter = startAFterParams?.[0]
-  const queryRefminterIdStartAdter = startAFterParams?.[1]
-  const queryRefownerId = query(
+  const queryRef = query(
     nftsRef,
-    where('ownerId', '==', id),
+    where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ''),
     orderBy('timestamp', 'desc'),
-    // startAfter(queryRefownerIdStartAdter || ""),
-    // limit(10),
   )
-  const queryRefminterId = query(
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return { nftsData: JSON.parse(JSON.stringify(nfts)) }
+}
+
+const firebaseGetPaginatedCollection = async (pageLimit, page) => {
+  const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
+
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(
     nftsRef,
-    where('minterId', '==', id),
+    where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ''),
     orderBy('timestamp', 'desc'),
-    // startAfter(queryRefminterIdStartAdter || ""),
-    // limit(10),
-
-
+    limit(pageLimit * page),
   )
-  const [ownerNfts, minterNfts] = await Promise.all([getDocs(queryRefownerId), getDocs(queryRefminterId)])
-  console.log("🚀 ~ file: utils.js:862 ~ firebaseGetCollection ~ ownerNfts, minterNfts:", ownerNfts, minterNfts)
-  const ownerNftsArray = ownerNfts.docs;
-  const minterNftsArray = minterNfts.docs;
 
-  const collectionNfts = ownerNftsArray.concat(minterNftsArray);
-  const uniqueData = _.uniqBy(collectionNfts, "id");
+  const collectionSize = await firebaseGetCollectionProductsCount()
+  const documentSnapshots = await getDocs(queryRef)
 
-  return {
-    data: uniqueData.map(data => data?.data()),
-    startAFterParams: [
-      ownerNfts.docs[ownerNfts.docs?.length - 1],
-      minterNfts.docs[minterNfts.docs?.length - 1]
-    ]
-  };
+  const lastVisible = documentSnapshots.docs[start]
+  console.log(
+    '🚀 ~ file: utils.js:892 ~ firebaseGetCollection ~ lastVisible:',
+    lastVisible,
+  )
+  const nextRef = collection(firebaseDb, 'nfts')
 
+  const next = query(
+    nextRef,
+    where('ownerId', '==', store.getState()?.user?.currentUser?.uid || ''),
+    orderBy('timestamp', 'desc'),
+    startAfter(lastVisible || ''),
+    limit(pageLimit),
+  )
+
+  const nextSnapshots = await getDocs(next)
+
+  const nfts = nextSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+  console.log('🚀 ~ file: utils.js:914 ~ nfts ~ nfts:', nfts)
+
+  return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
 }
 const firebaseGetNftByUsername = async (slug, type) => {
   let queryRef
@@ -905,6 +950,21 @@ const firebaseGetNftByUsername = async (slug, type) => {
     nftsData: JSON.parse(JSON.stringify(nfts)),
     collectionSize: documentSnapshots.docs.length,
   }
+}
+const firebaseGetNftByTokenId = async (tokenId) => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+
+  let queryRef = query(nftsRef, where('tokenId', '==', tokenId))
+
+  const documentSnapshots = await getDocs(queryRef)
+
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })[0]
+
+  return nfts
 }
 
 const firebaseGetUserByPaymail = async (paymail) => {
@@ -1132,12 +1192,15 @@ const firebaseOnIdTokenChange = async () => {
   })
 }
 const refreshSignIn = async (password) => {
-  const user = firebaseAuth.currentUser;
-  var oldCredential = EmailAuthProvider.credential(user.email, password);
+  const user = firebaseAuth.currentUser
+  var oldCredential = EmailAuthProvider.credential(user.email, password)
 
-  var errMessage;
+  var errMessage
   try {
-    const { user: userResponse } = await reauthenticateWithCredential(user, oldCredential);
+    const { user: userResponse } = await reauthenticateWithCredential(
+      user,
+      oldCredential,
+    )
     store.dispatch(
       setUserData({
         emailVerified: userResponse.emailVerified,
@@ -1147,10 +1210,10 @@ const refreshSignIn = async (password) => {
       }),
     )
   } catch (err) {
-    errMessage = err;
+    errMessage = err
   }
-  return errMessage;
-};
+  return errMessage
+}
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
@@ -1225,5 +1288,6 @@ export {
   verifyWithSelectedMfa,
   firebaseGetNfts,
   firebaseGetUserInfoFromDbByArray,
-  firebaseGetCollection
+  firebaseGetCollection,
+  firebaseGetNftByTokenId,
 }

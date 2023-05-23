@@ -11,8 +11,13 @@ import userSelector from '@/redux/selectors/user'
 import { useSelector } from 'react-redux'
 import { firebaseDb } from '@/firebase/init'
 import { toast } from 'react-toastify'
+import {
+  firebaseGetSingleDoc,
+  firebaseSetDoc,
+  firebaseUpdateDoc,
+} from '@/firebase/utils'
 
-const NFTSellForm = ({ onClose, data, setIslive }) => {
+const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
   const resolver = useYupValidationResolver(validationSchema)
   const [bsvPrice, setBsvPrice] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -45,7 +50,6 @@ const NFTSellForm = ({ onClose, data, setIslive }) => {
       setIsLoading(true)
       let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
       //creating atomic swap offer
-      console.log('creating offer hex')
 
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId: data?.tokenId,
@@ -64,10 +68,7 @@ const NFTSellForm = ({ onClose, data, setIslive }) => {
         throw new Error('Failed to create Offer')
       }
 
-      console.log('atomicSwapOffer', atomicSwapOffer)
-
       //updating database
-      console.log('updating database')
 
       const batch = writeBatch(firebaseDb)
       const tokenRef = doc(firebaseDb, 'nfts', data?.tokenId)
@@ -82,6 +83,31 @@ const NFTSellForm = ({ onClose, data, setIslive }) => {
             ? atomicSwapOffer.contents[0]
             : null,
       }
+      let nftDataToFirebase = {}
+
+      if (!data.status) {
+        {
+          nftDataToFirebase = {
+            ...formData,
+            amountInBSV: amountInBSV,
+            imageURL: data?.image || data?.imageURL,
+            ownerId: currentUser.uid,
+            minterId: currentUser.uid,
+            likes: 0,
+            status: 'live',
+            tokenId: data?.tokenId,
+            name: data?.name,
+            username: currentUser?.displayName || '',
+          }
+          tokenObj = { ...tokenObj, ...nftDataToFirebase }
+        }
+      }
+      const item = await firebaseGetSingleDoc('nfts', data?.tokenId)
+      if (item) {
+        await firebaseUpdateDoc('nfts', data?.tokenId, { status: 'live' })
+      } else {
+        await firebaseSetDoc('nfts', data?.tokenId, nftDataToFirebase)
+      }
 
       batch.update(tokenRef, tokenObj)
       await batch.commit()
@@ -89,6 +115,7 @@ const NFTSellForm = ({ onClose, data, setIslive }) => {
       setIsLoading(false)
       setIslive(true)
       onClose()
+      setRefresh(!refresh)
 
       toast.success('NFT Updated Successfully!', {
         position: 'top-right',
@@ -101,7 +128,7 @@ const NFTSellForm = ({ onClose, data, setIslive }) => {
         theme: 'light',
       })
     } catch (err) {
-      console.log('err', err)
+      console.log('err: ', err)
     }
   }
   return (

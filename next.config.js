@@ -19,6 +19,7 @@ module.exports = {
       'www.relysia.com',
       'upload.wikimedia.org',
       'localhost',
+      'images.pexels.com',
     ],
   },
   experimental: {
