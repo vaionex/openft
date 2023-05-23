@@ -293,7 +293,7 @@ export const mintNFT = async (nftDetails) => {
   }
 
   try {
-    const response = await apiConfig.post('/v1/issue', parameters)
+    const response = await apiConfig.post('/v2/issue', parameters)
 
     return response.data.data
   } catch (error) {
