@@ -561,13 +561,13 @@ const firebaseResetPassword = async (email) => {
 
 const firebaseUploadNftImage = async ({ file, userId }) => {
   try {
-    const imagePath = `nfts/${userId}/${uuidv4()}`
+    const imagePath = `nftTemp/${userId}/${uuidv4()}_400x400`
     const fileRef = ref(firebaseStorage, imagePath)
     const metadata = {
       contentType: file.type,
     }
-    const fileFromStorage = await uploadBytes(fileRef, file, metadata)
-    // const url = await getDownloadURL(fileRef)
+    const snapshot = await uploadBytes(fileRef, file, metadata)
+    const fileFromStorage = await getDownloadURL(snapshot.ref)
     return { fileFromStorage }
   } catch (error) {
     console.log('firebaseUploadNftImage error', error)
