@@ -12,6 +12,7 @@ import {
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/firebase/init'
 import store from '@/redux/store'
+import generateSymbol from '@/utils/generateSymbol'
 
 const axiosRetry = require('axios-retry')
 
@@ -68,7 +69,7 @@ export const getwalletHistory = async (dispatch) => {
 export const metricsApiWithoutBody = async () => {
   await apiConfig
     .get('/v1/metrics')
-    .then((res) => { })
+    .then((res) => {})
     .catch((err) => {
       console.log('without body', err)
     })
@@ -101,7 +102,6 @@ export const getWallets = async () => {
 
           getwalletDetails(store.dispatch)
         }
-
       }
     })
     .catch((err, data) => {
@@ -248,12 +248,11 @@ export const uploadNFTFile = async (formData, walletId) => {
 export const mintNFT = async (nftDetails) => {
   const { url, description, name, supply, amount, txid } = nftDetails
 
-  const nanoid = require('nanoid').nanoid
-  let nanoidPreSymbol = nanoid(6)
+  let nanoidPreSymbol = generateSymbol()
 
   const parameters = {
     name,
-    protocolId: 'STAS',
+    protocolId: 'STAS-789',
     symbol: nanoidPreSymbol,
     description,
     image: url,
