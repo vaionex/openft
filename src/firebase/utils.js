@@ -212,6 +212,7 @@ const firebaseLogin = async ({
           user: {
             ...user,
             ...userCredential.user.reloadUserInfo,
+            uid: userCredential.user.uid,
             accessToken: userCredential.user.accessToken,
           },
           userNotifications: {
@@ -593,14 +594,14 @@ const firebaseResetPassword = async (email) => {
 
 const firebaseUploadNftImage = async ({ file, userId }) => {
   try {
-    const imagePath = `nftTemp/${userId}/${uuidv4()}_400x400`
+    const imagePath = `nfts/${userId}/${uuidv4()}`
     const fileRef = ref(firebaseStorage, imagePath)
     const metadata = {
       contentType: file.type,
     }
-    const snapshot = await uploadBytes(fileRef, file, metadata)
-    const fileFromStorage = await getDownloadURL(snapshot.ref)
-    return { fileFromStorage }
+    const fileFromStorage = await uploadBytes(fileRef, file, metadata)
+    const url = await getDownloadURL(fileRef)
+    return { fileFromStorage, url }
   } catch (error) {
     console.log('firebaseUploadNftImage error', error)
     return { error: error.message }
@@ -1261,8 +1262,10 @@ const refreshSignIn = async (password) => {
   return errMessage
 }
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
+  console.log("🚀 ~ file: utils.js:1264 ~ firebaseGetNftImageUrl ~ userId, fileName:", userId, fileName)
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
+  console.log("🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:", path)
   return new Promise((resolve, reject) => {
     switch (size) {
       case 'small':

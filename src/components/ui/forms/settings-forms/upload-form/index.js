@@ -105,7 +105,7 @@ const UploadForm = () => {
       //uploading image to firebase storage
       console.log('uploading image to Firebase storage')
 
-      const { fileFromStorage } = await firebaseUploadNftImage({
+      const { fileFromStorage,url } = await firebaseUploadNftImage({
         file: croppedImageBlob,
         userId: currentUser.uid,
       })
@@ -139,7 +139,7 @@ const UploadForm = () => {
         amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
-        url: fileFromStorage,
+        url: url,
       }
       const mintResponse = await mintNFT(dataToMint)
       if (!mintResponse) {
