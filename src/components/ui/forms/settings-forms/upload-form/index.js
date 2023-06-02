@@ -26,6 +26,7 @@ import { firebaseDb } from '@/firebase/init'
 import { SendNotification } from '@/services/novu-notifications'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { envMODE } from '@/config/envMode'
 
 const imageInputAttributes = {
   id: 'nftImage',
@@ -105,7 +106,7 @@ const UploadForm = () => {
       //uploading image to firebase storage
       console.log('uploading image to Firebase storage')
 
-      const { fileFromStorage,url } = await firebaseUploadNftImage({
+      const { fileFromStorage, url } = await firebaseUploadNftImage({
         file: croppedImageBlob,
         userId: currentUser.uid,
       })
@@ -151,6 +152,7 @@ const UploadForm = () => {
         fileFromStorage.metadata?.name,
         'normal',
       )
+      console.log("🚀 ~ file: index.js:155 ~ onSubmit ~ nftImageForDisplay:", nftImageForDisplay)
 
       console.log('mintResponse', mintResponse)
 
@@ -179,7 +181,7 @@ const UploadForm = () => {
       const nftDataToFirebase = {
         ...formData,
         amountInBSV: amountInBSV,
-        imageURL: nftImageForDisplay,
+        imageURL: envMODE === 'DEV' ? nftImageForDisplay : url,
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
         likes: 0,
@@ -192,7 +194,7 @@ const UploadForm = () => {
           ? atomicSwapOffer.contents[0]
           : null,
       }
-      console.log('tokenId', tokenId)
+      console.log('tokenIdnftDataToFirebase', nftDataToFirebase)
 
       const nftDataFromFirebase = await firebaseSetDoc(
         'nfts',

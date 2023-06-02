@@ -113,6 +113,7 @@ const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
           ...userFromDb,
           ...user.reloadUserInfo,
           accessToken: user.accessToken,
+          uid: user.uid,
         },
         userNotifications: {
           'app-notification':
@@ -144,6 +145,7 @@ const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
           ...userFromDb,
           ...user.reloadUserInfo,
           accessToken: user.accessToken,
+          uid: user.uid,
         },
         userNotifications: {
           'app-notification':
