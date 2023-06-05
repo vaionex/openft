@@ -481,7 +481,7 @@ const firebaseLoginWithGoogle = async ({ setVerifyID }) => {
           'notifications',
           user.uid,
         )
-        store.dispatch(setAuthenticated(!!user))
+        // store.dispatch(setAuthenticated(!!user))
         store.dispatch(
           setNotifications({
             'app-notification':

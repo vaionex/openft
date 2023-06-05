@@ -49,6 +49,10 @@ const RegistrationFormMain = () => {
       document.body.style.pointerEvents = 'none'
       document.body.style.touchAction = 'none'
     }
+    return () => {
+      document.body.style.pointerEvents = 'auto'
+      document.body.style.touchAction = 'auto'
+    }
   }, [isPending])
 
   const registerUser = async () => {
