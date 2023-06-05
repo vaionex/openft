@@ -77,7 +77,7 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
     }
 
     const usr = await fetchSignInMethodsForEmail(firebaseAuth, data.email)
-    if (usr.length) {
+    if (usr.length && !isGoogleUser) {
       setError('email', { message: 'Email already registered' })
       return
     }

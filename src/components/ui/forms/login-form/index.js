@@ -15,7 +15,7 @@ import MfaSelection from '../../otp/MfaSelection'
 function LoginForm({ setVerifyID, verifyID }) {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { isPending } = useSelector(userSelector)
+  const { isPending, isGoogle } = useSelector(userSelector)
   const [isOpen, setIsOpen] = useState(false)
   const [isTotp, setIsTotp] = useState(false)
   const [allowedCharacters, setAllowedCharacters] = useState('numeric')
@@ -177,7 +177,7 @@ function LoginForm({ setVerifyID, verifyID }) {
         <div>
           <ButtonWLoading
             isError={error}
-            isPending={isPending}
+            isPending={isPending && !isGoogle}
             text="Sign In"
             type="submit"
             fullWidth

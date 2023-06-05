@@ -33,6 +33,7 @@ const initialState = {
   isSuccess: false,
   mnemonicPopup: false,
   dilist: false,
+  isGoogle:false
 }
 
 export const login = createAsyncThunk(
@@ -195,6 +196,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.pending, (state, action) => {
         state.isPending = true
+        state.isGoogle = true
         state.errorMessage = null
         state.isError = false
         state.isSuccess = false
@@ -202,29 +204,34 @@ const userSlice = createSlice({
       .addCase(updateUser.rejected, (state, action) => {
         state.isPending = false
         state.isUserPending = false
+        state.isGoogle = false
         state.errorMessage = action.payload
         state.isError = true
         state.isSuccess = false
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isPending = false
+        state.isGoogle = false
         state.isUserPending = false
         state.currentUser = { ...state.currentUser, ...action.payload }
         state.isSuccess = true
       })
       .addCase(loginWithGoogle.pending, (state, action) => {
         state.isPending = true
+        state.isGoogle = true
         state.errorMessage = null
         state.isError = false
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.isPending = false
+        state.isGoogle = false
         state.isUserPending = false
         state.errorMessage = action.payload
         state.isError = true
       })
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.isPending = false
+        state.isGoogle = false
         state.isUserPending = false
         state.currentUser = action.payload
       })
