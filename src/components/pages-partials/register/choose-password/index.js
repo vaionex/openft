@@ -94,7 +94,7 @@ function RegistrationChoosePassword({ goToStep }) {
                       id={inputAttribute.name}
                       placeholder={inputAttribute.placeholder}
                       className="mb-0"
-                      // type={inputAttribute.type}
+                      checktype={inputAttribute.type}
                       {...field}
                     />
                   )}

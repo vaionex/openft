@@ -86,7 +86,7 @@ InputMain.Input = function InputMainInput(
     tooltip,
     error,
     inputIcon,
-
+    checktype,
     ...props
   },
   ref,
@@ -192,16 +192,20 @@ InputMain.Input = function InputMainInput(
               ref={ref}
               {...props}
             />
-            <span
-              className="absolute cursor-pointer right-3 top-2"
-              onClick={() => handlepassword()}
-            >
-              {passwordVisible === 'password' ? (
-                <EyeOffIcon className="w-6 h-6 text-gray-400" />
-              ) : (
-                <EyeIcon className="w-6 h-6 text-gray-400" />
-              )}
-            </span>
+
+            {checktype === 'password' && (
+              <span
+                className="absolute cursor-pointer right-3 top-2"
+                onClick={() => handlepassword()}
+              >
+                {passwordVisible === 'password' ? (
+                  <EyeOffIcon className="w-6 h-6 text-gray-400" />
+                ) : (
+                  <EyeIcon className="w-6 h-6 text-gray-400" />
+                )}
+              </span>
+            )}
+
             {!!tooltip && (
               <div
                 data-tip
