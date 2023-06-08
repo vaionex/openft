@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge'
 import PropTypes from 'prop-types'
 import { forwardRef, useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
 
 const InputMain = ({ className, children }) => {
   return (
@@ -85,12 +86,19 @@ InputMain.Input = function InputMainInput(
     tooltip,
     error,
     inputIcon,
+    checktype,
     ...props
   },
   ref,
 ) {
   const [message, setMessage] = useState(false)
+  const [passwordVisible, setPasswordVisible] = useState('password')
 
+  const handlepassword = () => {
+    setPasswordVisible((prevState) =>
+      prevState === 'password' ? 'text' : 'password',
+    )
+  }
   return (
     <div className={className}>
       {variant === 'add-on' && !!addon && (
@@ -166,15 +174,16 @@ InputMain.Input = function InputMainInput(
         <>
           <div
             className={twMerge(
-              'flex mt-1 rounded-md shadow-sm sm:mt-0 relative',
+              'flex items-center mt-1 rounded-md shadow-sm sm:mt-0 relative',
               inputContainer,
             )}
           >
             <input
               id={id}
-              type={inputType}
+              {...props}
+              type={checktype === 'password' ? passwordVisible : checktype}
               className={twMerge(
-                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-bright-gray  rounded-md',
+                'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-bright-gray rounded-md ',
                 inputClassName,
                 inputIcon && 'pl-7',
                 props.disabled && 'bg-vista-white',
@@ -183,6 +192,20 @@ InputMain.Input = function InputMainInput(
               ref={ref}
               {...props}
             />
+
+            {checktype === 'password' && (
+              <span
+                className="absolute cursor-pointer right-3 top-2"
+                onClick={() => handlepassword()}
+              >
+                {passwordVisible === 'password' ? (
+                  <EyeOffIcon className="w-6 h-6 text-gray-400" />
+                ) : (
+                  <EyeIcon className="w-6 h-6 text-gray-400" />
+                )}
+              </span>
+            )}
+
             {!!tooltip && (
               <div
                 data-tip
