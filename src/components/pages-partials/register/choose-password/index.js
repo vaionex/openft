@@ -44,6 +44,7 @@ const validationSchema = yup.object({
 function RegistrationChoosePassword({ goToStep }) {
   const dispatch = useDispatch()
   const { passwordValues } = useSelector(registrationFormSelector)
+  // const [passwordVisible, setPasswordVisible] = useState(false)
 
   const resolver = useYupValidationResolver(validationSchema)
   const { control, handleSubmit, formState } = useForm({
@@ -72,7 +73,7 @@ function RegistrationChoosePassword({ goToStep }) {
       </div>
 
       <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10">
+        <div className="px-4 py-2 bg-white sm:rounded-lg sm:px-10 ">
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {inputAttributes.map((inputAttribute) => (
               <InputMain
@@ -93,7 +94,7 @@ function RegistrationChoosePassword({ goToStep }) {
                       id={inputAttribute.name}
                       placeholder={inputAttribute.placeholder}
                       className="mb-0"
-                      type={inputAttribute.type}
+                      // type={inputAttribute.type}
                       {...field}
                     />
                   )}

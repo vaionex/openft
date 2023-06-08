@@ -2,7 +2,12 @@ import RegistrationLayout from '@/components/layout/registration-layout'
 import { firebaseUploadUserImage } from '@/firebase/utils'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import userSelector from '@/redux/selectors/user'
-import { register, setMnemonicPopup, setPending, updateUser } from '@/redux/slices/user'
+import {
+  register,
+  setMnemonicPopup,
+  setPending,
+  updateUser,
+} from '@/redux/slices/user'
 import { createwallet } from '@/services/relysia-queries'
 import getCroppedImg from '@/utils/cropImageUtils'
 import { useRouter } from 'next/router'
@@ -26,14 +31,20 @@ const RegistrationFormMain = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { mnemonic, paymail } = useSelector(walletSelector)
-  const { currentUser, isPending, isError, errorMessage, mnemonicPopup: mnemonicStatus } = useSelector(userSelector)
+  const {
+    currentUser,
+    isPending,
+    isError,
+    errorMessage,
+    mnemonicPopup: mnemonicStatus,
+  } = useSelector(userSelector)
   const {
     detailsValues,
     // socialsValues,
     passwordValues,
     photoValues,
     readyToGo,
-    step
+    step,
   } = useSelector(registrationFormSelector)
 
   const isGoogleUser = currentUser?.isGoogleUser || currentUser?.isSocialUser
@@ -73,25 +84,23 @@ const RegistrationFormMain = () => {
 
     const updatedValues = {
       username: detailsValues.username,
-      name: detailsValues.name
+      name: detailsValues.name,
     }
     try {
-      dispatch(isGoogleUser
-        ? (
-          updateUser({
-            uid: currentUser.uid,
-            values: updatedValues,
-            coverImageForUpload,
-            profileImageForUpload,
-            isGoogleUser
-          })
-        ) : (
-          register({
-            dataForServer,
-            coverImageForUpload,
-            profileImageForUpload,
-          })
-        )
+      dispatch(
+        isGoogleUser
+          ? updateUser({
+              uid: currentUser.uid,
+              values: updatedValues,
+              coverImageForUpload,
+              profileImageForUpload,
+              isGoogleUser,
+            })
+          : register({
+              dataForServer,
+              coverImageForUpload,
+              profileImageForUpload,
+            }),
       )
 
       if (isError) {
@@ -125,27 +134,28 @@ const RegistrationFormMain = () => {
     dispatch(setStep(step))
   }
 
-
-
-  
   return (
     <RegistrationLayout goToStep={goToStep}>
       {
         {
-          1: <RegistrationDetails
-            currentUser={currentUser}
-            isGoogleUser={isGoogleUser}
-            goToStep={goToStep}
-          />,
+          1: (
+            <RegistrationDetails
+              currentUser={currentUser}
+              isGoogleUser={isGoogleUser}
+              goToStep={goToStep}
+            />
+          ),
           2: <RegistrationChoosePassword goToStep={goToStep} />,
-          3: <RegistrationUploadPhoto
-            goToStep={goToStep}
-            mnemonicStatus={mnemonicStatus}
-            mnemonic={mnemonic}
-            paymail={paymail}
-            currentUser={currentUser}
-            isGoogleUser={isGoogleUser}
-          />
+          3: (
+            <RegistrationUploadPhoto
+              goToStep={goToStep}
+              mnemonicStatus={mnemonicStatus}
+              mnemonic={mnemonic}
+              paymail={paymail}
+              currentUser={currentUser}
+              isGoogleUser={isGoogleUser}
+            />
+          ),
         }[step]
       }
     </RegistrationLayout>
