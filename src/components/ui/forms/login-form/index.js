@@ -47,7 +47,7 @@ function LoginForm({ setVerifyID, verifyID }) {
         login({
           verificationId: verifyID,
           verificationCode: otpNumber,
-          uid
+          uid,
         }),
       ).unwrap()
       if (user && !user?.error) {
@@ -78,7 +78,6 @@ function LoginForm({ setVerifyID, verifyID }) {
         setError,
         setUid,
         setFactors,
-
       })
     } catch (e) {
       console.log('login error', e)
@@ -121,7 +120,7 @@ function LoginForm({ setVerifyID, verifyID }) {
               type="email"
               autoComplete="email"
               required
-              className="block w-full p-3 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+              className="  block w-full p-3 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
               onChange={handleChange}
               placeholder="Enter email address"
             />
