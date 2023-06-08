@@ -90,10 +90,10 @@ const ImageUploadDragAndDrop = ({
                 <div className="flex items-center justify-center w-10 h-10 mx-auto rounded-full bg-gray-50">
                   <UploadIcon width={20} height={20} />
                 </div>
-                <div className="flex justify-center text-sm text-gray-600">
+                <div className="flex justify-center text-sm text-gray-600 ">
                   <label
                     htmlFor={id}
-                    className="relative font-medium text-blue-600 bg-white rounded-md hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                    className="relative font-medium text-blue-600 bg-white rounded-md hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 cursor-pointer"
                   >
                     <span>{text}</span>
                     <input accept={acceptableFileTypes} {...getInputProps()} />
