@@ -68,16 +68,15 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
       // Set validation error messages for empty fields
       emptyFields.forEach((fieldName) => {
         setError(fieldName, {
-          message: `${
-            fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
-          } is required`,
+          message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+            } is required`,
         })
       })
       return
     }
 
     const usr = await fetchSignInMethodsForEmail(firebaseAuth, data.email)
-    if (usr.length) {
+    if (usr.length && !isGoogleUser) {
       setError('email', { message: 'Email already registered' })
       return
     }
@@ -96,7 +95,7 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
     }
     try {
       const user = await dispatch(loginWithGoogle({ setVerifyID })).unwrap()
-      if (user && !user?.error && user?.username) {
+      if (user && !user?.error) {
         router.replace('/')
       } else {
         router.replace('/register')

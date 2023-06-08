@@ -43,7 +43,7 @@ const Login = () => {
   const handleUserAuthWithGoogle = async () => {
     try {
       const user = await dispatch(loginWithGoogle({ setVerifyID })).unwrap()
-      if (user && !user?.error && user?.username) {
+      if (user && !user?.error) {
         router.replace('/')
       } else {
         router.replace('/register')
@@ -68,9 +68,9 @@ const Login = () => {
   }
 
   return (
-    <LoginLayout title="Login">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-      <div className="flex min-h-[calc(100vh-56px)] px-8 max-w-screen-2xl sm:mx-w-full mx-auto">                                                                                                                                                                                                                                                                                                                            
-        <div className="flex-[3] flex flex-col">                                                                                                                                                                                                                                                                                                         
+    <LoginLayout title="Login">
+      <div className="flex min-h-[calc(100vh-56px)] px-8 max-w-screen-2xl sm:mx-w-full mx-auto">
+        <div className="flex-[3] flex flex-col">
           <div className="flex items-center justify-center h-full">
             <div className="w-full max-w-full py-4 pr-0 mx-auto lg:pr-8 xl:max-w-sm lg:max-w-full md:max-w-sm ">
               <div>
@@ -83,8 +83,8 @@ const Login = () => {
                 <div className="mb-6">
                   <LoginForm setVerifyID={setVerifyID} verifyID={verifyID} />
                 </div>
-                <div id="2fa-captcha"></div>                                                                                                   
-                <div>                                                                     
+                <div id="2fa-captcha"></div>
+                <div>
                   <button
                     className="w-full text-base font-medium text-gray-700 bg-white border border-gray-300 btn-primary hover:bg-gray-100"
                     onClick={handleUserAuthWithGoogle}
