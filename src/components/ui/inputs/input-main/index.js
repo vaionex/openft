@@ -181,7 +181,7 @@ InputMain.Input = function InputMainInput(
             <input
               id={id}
               {...props}
-              type={passwordVisible}
+              type={checktype === 'password' ? passwordVisible : checktype}
               className={twMerge(
                 'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-bright-gray rounded-md ',
                 inputClassName,
