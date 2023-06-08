@@ -222,19 +222,15 @@ export default function Details({ nft }) {
               className="lg:col-span-1 lg:col-start-3"
             >
               <div className="relative w-full overflow-hidden bg-gray-200 rounded-t-xl aspect-w-square aspect-h-square group-hover:opacity-75">
-                <NextLink href={`/`}>
-                  <a className="cursor-pointer">
-                    <>
-                      <Image
-                        src={nft.image || ''}
-                        alt={nft?.name}
-                        layout="fill"
-                        className="absolute inset-0 object-cover object-center w-full h-full"
-                      />
-                      <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
-                    </>
-                  </a>
-                </NextLink>
+                <>
+                  <Image
+                    src={nft.image || ''}
+                    alt={nft?.name}
+                    layout="fill"
+                    className="absolute inset-0 object-cover object-center w-full h-full"
+                  />
+                  <div className="absolute inset-0 h-full bg-gradient-to-tr opacity-10 from-slate-900 to-slate-600 mix-blend-multiply" />
+                </>
               </div>
               <div className="bg-gray-50 px-4 py-5 shadow sm:rounded-lg sm:px-6">
                 <h2
