@@ -23,16 +23,16 @@ const ProtectedRoute = ({ children }) => {
       router.push('/login')
     }
 
-    if (isGoogleUser && !mnemonicPopup && !currentUser?.username) {
-      router.push("/register")
-    }
+    // if (isGoogleUser && !mnemonicPopup && !currentUser?.username) {
+    //   router.push("/register")
+    // }
 
-    if (authRoute && isAuthenticated && !isUserPending && !mnemonicPopup && (isGoogleUser ? currentUser?.username : true)) {
+    if (authRoute && isAuthenticated && !isUserPending && !mnemonicPopup) {
       router.push('/')
     }
   }, [isUserPending, router.pathname, isAuthenticated, mnemonicPopup])
 
-  if (isGoogleUser && !currentUser?.username && router.pathname === '/register') return <>{children}</>
+  // if (isGoogleUser && !currentUser?.username && router.pathname === '/register') return <>{children}</>
 
   if (
     isUserPending ||
