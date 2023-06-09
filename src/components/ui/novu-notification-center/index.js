@@ -19,6 +19,7 @@ const NovuNotificationCenter = () => {
       subscriberId={currentUser?.uid}
       applicationIdentifier={process.env.NEXT_PUBLIC_NOVU_APP_ID}
     >
+      {/* <NotificationBell unseenCount={[]} /> */}
       <PopoverNotificationCenter colorScheme={'light'} theme={theme}>
         {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
       </PopoverNotificationCenter>
