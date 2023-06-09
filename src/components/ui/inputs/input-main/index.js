@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { forwardRef, useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
+import { useEffect } from 'react'
 
 const InputMain = ({ className, children }) => {
   return (
@@ -86,7 +87,7 @@ InputMain.Input = function InputMainInput(
     tooltip,
     error,
     inputIcon,
-    checktype,
+    checktype = 'text',
     ...props
   },
   ref,
@@ -99,6 +100,7 @@ InputMain.Input = function InputMainInput(
       prevState === 'password' ? 'text' : 'password',
     )
   }
+
   return (
     <div className={className}>
       {variant === 'add-on' && !!addon && (
@@ -181,7 +183,7 @@ InputMain.Input = function InputMainInput(
             <input
               id={id}
               {...props}
-              type={checktype === 'password' ? passwordVisible : checktype}
+              type={checktype === 'text' ? checktype : passwordVisible}
               className={twMerge(
                 'focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-bright-gray rounded-md ',
                 inputClassName,
@@ -192,19 +194,25 @@ InputMain.Input = function InputMainInput(
               ref={ref}
               {...props}
             />
-
-            {checktype === 'password' && (
-              <span
-                className="absolute cursor-pointer right-3 top-2"
-                onClick={() => handlepassword()}
-              >
-                {passwordVisible === 'password' ? (
-                  <EyeOffIcon className="w-6 h-6 text-gray-400" />
-                ) : (
-                  <EyeIcon className="w-6 h-6 text-gray-400" />
-                )}
-              </span>
-            )}
+            <span className="absolute cursor-pointer right-3 top-2">
+              {checktype === 'password' ? (
+                <>
+                  {passwordVisible === 'password' ? (
+                    <EyeOffIcon
+                      className="w-6 h-6 text-gray-400"
+                      onClick={() => handlepassword()}
+                    />
+                  ) : (
+                    <EyeIcon
+                      className="w-6 h-6 text-gray-400"
+                      onClick={() => handlepassword()}
+                    />
+                  )}
+                </>
+              ) : (
+                <div className="w-6 h-6 text-gray-400"></div>
+              )}
+            </span>
 
             {!!tooltip && (
               <div

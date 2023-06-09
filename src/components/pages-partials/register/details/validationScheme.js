@@ -10,7 +10,6 @@ const nameRegex = /^[a-zA-Z\s]*$/
 const usernameRegex = /^[a-z0-9]+$/
 
 export default function validationSchema(isGoogleUser) {
-
   const validationsSchema = yup.object().shape({
     name: yup
       .string()

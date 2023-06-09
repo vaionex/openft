@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
+import React, { useEffect, useState } from 'react'
 import registrationFormSelector from '@/redux/selectors/registration-form'
 import { setDetailsValues } from '@/redux/slices/registration-form'
-import useYupValidationResolver from '@/hooks/useYupValidationResolver'
 import { InputMain } from '@/components/ui/inputs'
 import { UserCircleIcon } from '@/components/common/icons'
 import { GoogleIcon } from '@/components/common/icons'
@@ -11,6 +10,7 @@ import { loginWithGoogle, logout } from '@/redux/slices/user'
 import { fetchSignInMethodsForEmail } from 'firebase/auth'
 import validationSchema from './validationScheme'
 import { firebaseAuth } from '@/firebase/init'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const inputAttributes = [
   {
@@ -48,15 +48,19 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
   const { detailsValues } = useSelector(registrationFormSelector)
   const [verifyID, setVerifyID] = useState(null)
 
-  const resolver = useYupValidationResolver(validationSchema(isGoogleUser))
-  const { control, handleSubmit, formState, reset, setError } = useForm({
+  const resolver = yupResolver(validationSchema(isGoogleUser))
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setError,
+  } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: detailsValues,
     resolver,
   })
-
-  const { errors } = formState
 
   const onSubmit = async (data) => {
     // Check if any required fields are empty
@@ -68,8 +72,9 @@ function RegistrationDetails({ goToStep, isGoogleUser, currentUser }) {
       // Set validation error messages for empty fields
       emptyFields.forEach((fieldName) => {
         setError(fieldName, {
-          message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
-            } is required`,
+          message: `${
+            fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+          } is required`,
         })
       })
       return
