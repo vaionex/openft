@@ -1272,17 +1272,8 @@ const refreshSignIn = async (password) => {
   return errMessage
 }
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
-  console.log(
-    '🚀 ~ file: utils.js:1264 ~ firebaseGetNftImageUrl ~ userId, fileName:',
-    userId,
-    fileName,
-  )
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
-
-  console.log('🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:', path)
   return new Promise((resolve, reject) => {
-    resolve(`${storageBucketUrl}${path}?alt=media`)
-
     switch (size) {
       case 'small':
         resolve(`${storageBucketUrl}${path}_400x400?alt=media`)
