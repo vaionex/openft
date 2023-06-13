@@ -152,7 +152,10 @@ const UploadForm = () => {
         fileFromStorage.metadata?.name,
         'normal',
       )
-      console.log("🚀 ~ file: index.js:155 ~ onSubmit ~ nftImageForDisplay:", nftImageForDisplay)
+      console.log(
+        '🚀 ~ file: index.js:155 ~ onSubmit ~ nftImageForDisplay:',
+        nftImageForDisplay,
+      )
 
       console.log('mintResponse', mintResponse)
 
@@ -181,7 +184,7 @@ const UploadForm = () => {
       const nftDataToFirebase = {
         ...formData,
         amountInBSV: amountInBSV,
-        imageURL: envMODE === 'DEV' ? nftImageForDisplay : url,
+        imageURL: nftImageForDisplay,
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
         likes: 0,
@@ -295,7 +298,7 @@ const UploadForm = () => {
                     id="name"
                     className="sm:col-span-2"
                     placeholder="e.g. My artwork"
-                    onChange={() => { }}
+                    onChange={() => {}}
                     inputContainer="md:h-11"
                     error={errors['name']?.message}
                     disabled={isPending}
@@ -325,7 +328,7 @@ const UploadForm = () => {
                   name="description"
                   rows={3}
                   placeholder="Write a short description of your artwork."
-                  onChange={() => { }}
+                  onChange={() => {}}
                   error={errors['description']?.message}
                   maxLength={DESC_MAX_LENGTH}
                   disabled={isPending}
