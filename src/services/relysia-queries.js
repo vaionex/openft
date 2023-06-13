@@ -43,10 +43,13 @@ export const getwalletBal = async (dispatch) => {
       }
     })
 }
+import { envMODE } from '@/config/envMode'
 
 export const getwalletHistory = async (dispatch) => {
   //wallet history
   console.log('calling history api')
+  console.log({ envMODE })
+
   await apiConfig
     .get('/v1/history', {
       headers: {

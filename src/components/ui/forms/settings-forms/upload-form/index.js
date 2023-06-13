@@ -28,6 +28,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { envMODE } from '@/config/envMode'
 
+console.log({ envMODE })
+
 const imageInputAttributes = {
   id: 'nftImage',
   name: 'nftImage',
