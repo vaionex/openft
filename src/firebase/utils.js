@@ -74,7 +74,10 @@ import {
 } from '@/services/novu-notifications'
 import { connectToRelysiaSocket } from '@/services/relysia-socket'
 import getRandomNum from '@/utils/getRanNum'
-import resolverModifier, { resolverVerifier, returnResolver } from '@/utils/resolverModifier'
+import resolverModifier, {
+  resolverVerifier,
+  returnResolver,
+} from '@/utils/resolverModifier'
 import { setLastDoc } from '@/redux/slices/nft'
 import { uniqBy } from 'lodash'
 
@@ -96,7 +99,6 @@ const notificationObj = {
 let rsl
 const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
   if (verificationId && !uid) {
-
     const cred = PhoneAuthProvider.credential(verificationId, verificationCode)
     const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred)
     // Complete sign-in.
@@ -128,9 +130,15 @@ const firebaseLoginMfa = async ({ verificationId, verificationCode, uid }) => {
       }
     }
   } else if (!verificationId && uid) {
-    const totpResolver = returnResolver(rsl?.hints, TotpMultiFactorGenerator.FACTOR_ID)
+    const totpResolver = returnResolver(
+      rsl?.hints,
+      TotpMultiFactorGenerator.FACTOR_ID,
+    )
 
-    const multiFactorAssertion = TotpMultiFactorGenerator.assertionForSignIn(totpResolver.uid, verificationCode);
+    const multiFactorAssertion = TotpMultiFactorGenerator.assertionForSignIn(
+      totpResolver.uid,
+      verificationCode,
+    )
     // Finalize the sign-in.
     const { user } = await rsl.resolveSignIn(multiFactorAssertion)
     if (user) {
@@ -596,7 +604,7 @@ const firebaseResetPassword = async (email) => {
 
 const firebaseUploadNftImage = async ({ file, userId }) => {
   try {
-    const imagePath = `nfts/${userId}/${uuidv4()}`
+    const imagePath = `nfts/${userId}/${uuidv4()}_400x400`
     const fileRef = ref(firebaseStorage, imagePath)
     const metadata = {
       contentType: file.type,
@@ -1264,10 +1272,14 @@ const refreshSignIn = async (password) => {
   return errMessage
 }
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
-  console.log("🚀 ~ file: utils.js:1264 ~ firebaseGetNftImageUrl ~ userId, fileName:", userId, fileName)
+  console.log(
+    '🚀 ~ file: utils.js:1264 ~ firebaseGetNftImageUrl ~ userId, fileName:',
+    userId,
+    fileName,
+  )
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
-  console.log("🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:", path)
+  console.log('🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:', path)
   return new Promise((resolve, reject) => {
     switch (size) {
       case 'small':
