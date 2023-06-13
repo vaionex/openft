@@ -12,6 +12,21 @@ import { setTotalPages } from '@/redux/slices/nft'
 import useNFTs from '@/hooks/useNFTs'
 import userSelector from '@/redux/selectors/user'
 
+const mergeData = (data1, data2) => {
+  const merged = [...data1]
+
+  data2.forEach((item) => {
+    const existingIndex = merged.findIndex((i) => i.tokenId === item.tokenId)
+    if (existingIndex > -1) {
+      merged[existingIndex] = { ...merged[existingIndex], ...item }
+    } else {
+      merged.push(item)
+    }
+  })
+
+  return merged
+}
+
 const TokenDetailGrid = () => {
   const [collection, setCollection] = useState([])
   const [refresh, setRefresh] = useState(false)
@@ -47,21 +62,6 @@ const TokenDetailGrid = () => {
       )
 
     return null
-  }
-
-  const mergeData = (data1, data2) => {
-    const merged = [...data1]
-
-    data2.forEach((item) => {
-      const existingIndex = merged.findIndex((i) => i.tokenId === item.tokenId)
-      if (existingIndex > -1) {
-        merged[existingIndex] = { ...merged[existingIndex], ...item }
-      } else {
-        merged.push(item)
-      }
-    })
-
-    return merged
   }
 
   return (

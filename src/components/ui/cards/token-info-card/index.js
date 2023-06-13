@@ -14,7 +14,6 @@ const TokenInfoCard = ({
   isLive,
 }) => {
   const { currentUser } = useSelector(userSelector)
-
   return (
     <>
       <div
@@ -28,10 +27,10 @@ const TokenInfoCard = ({
             <NextLink
               href={`/user-settings/collection?current=${data?.tokenId}`}
             >
-              {data?.image || data?.imageURL ? (
+              {data?.imageURL || data?.image ? (
                 <div>
                   <Image
-                    src={data?.image || data?.imageURL || ''}
+                    src={data?.imageURL || ''}
                     alt={data?.name}
                     layout="fill"
                     className="absolute inset-0 object-cover object-center w-full h-full"
