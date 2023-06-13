@@ -141,7 +141,7 @@ const UploadForm = () => {
         amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
-        url: url,
+        url: envMODE === 'DEV' ? nftImageForDisplay : url,
       }
       const mintResponse = await mintNFT(dataToMint)
       if (!mintResponse) {
@@ -181,7 +181,6 @@ const UploadForm = () => {
       }
 
       //saving data to database
-      console.log('@@@@@@@@@saving data to database', envMODE)
       const nftDataToFirebase = {
         ...formData,
         amountInBSV: amountInBSV,
@@ -206,7 +205,7 @@ const UploadForm = () => {
         nftDataToFirebase,
       )
 
-      if (nftDataFromFirebase) {
+      if (!nftDataFromFirebase) {
         throw new Error('Failed occured while uploading the NFT')
       }
 
