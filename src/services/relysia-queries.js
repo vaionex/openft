@@ -289,6 +289,7 @@ export const mintNFT = async (nftDetails) => {
       },
     },
     splitable: false,
+    data: {},
   }
 
   try {
