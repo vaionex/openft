@@ -184,7 +184,7 @@ const UploadForm = () => {
       const nftDataToFirebase = {
         ...formData,
         amountInBSV: amountInBSV,
-        imageURL: url,
+        imageURL: envMODE === 'DEV' ? nftImageForDisplay : url,
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
         likes: 0,
