@@ -1281,14 +1281,7 @@ const firebaseGetNftImageUrl = async (userId, fileName, size) => {
 
   console.log('🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:', path)
   return new Promise((resolve, reject) => {
-    switch (size) {
-      case 'small':
-        resolve(`${storageBucketUrl}${path}_400x400?alt=media`)
-      case 'normal':
-        resolve(`${storageBucketUrl}${path}_600x600?alt=media`)
-      default:
-        reject('Invalid size')
-    }
+    resolve(`${storageBucketUrl}${path}?alt=media`)
   })
 }
 
