@@ -27,8 +27,7 @@ import { SendNotification } from '@/services/novu-notifications'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { envMODE } from '@/config/envMode'
-
-console.log({ envMODE })
+// const envMODE = 'DEV'
 
 const imageInputAttributes = {
   id: 'nftImage',
@@ -182,11 +181,11 @@ const UploadForm = () => {
       }
 
       //saving data to database
-      console.log('saving data to database')
+      console.log('@@@@@@@@@saving data to database', envMODE)
       const nftDataToFirebase = {
         ...formData,
         amountInBSV: amountInBSV,
-        imageURL: url,
+        imageURL: envMODE === 'DEV' ? nftImageForDisplay : url,
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
         likes: 0,
@@ -207,7 +206,7 @@ const UploadForm = () => {
         nftDataToFirebase,
       )
 
-      if (!nftDataFromFirebase) {
+      if (nftDataFromFirebase) {
         throw new Error('Failed occured while uploading the NFT')
       }
 
