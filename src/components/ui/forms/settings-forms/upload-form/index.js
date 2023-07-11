@@ -231,7 +231,7 @@ const UploadForm = () => {
       SendNotification(currentUser.uid, 'Your NFT has been created!')
 
       resetAllData()
-      router.push('/discover').then(() => router.reload())
+      router.push('/user-settings/collection').then(() => router.reload())
     } catch (error) {
       if (error?.message) {
         setIsError(true)
