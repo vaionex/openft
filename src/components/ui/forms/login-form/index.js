@@ -162,7 +162,7 @@ function LoginForm({ setVerifyID, verifyID }) {
           <Checkbox
             id="remember-me"
             text="Remember for 30 days"
-            checked={true}
+            checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
 

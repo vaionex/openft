@@ -13,6 +13,7 @@
   "dependencies": {
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "1.0.5",
+    "@hookform/resolvers": "^3.1.0",
     "@novu/node": "^0.10.2",
     "@novu/notification-center": "^0.10.3",
     "@ramonak/react-progress-bar": "^5.0.2",

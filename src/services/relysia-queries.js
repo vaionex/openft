@@ -44,6 +44,8 @@ export const getwalletBal = async (dispatch) => {
     })
 }
 
+import { envMODE } from '@/config/envMode'
+
 export const getwalletHistory = async (dispatch) => {
   //wallet history
   console.log('calling history api')
@@ -54,7 +56,7 @@ export const getwalletHistory = async (dispatch) => {
       },
     })
     .then((res) => {
-      console.log('his res', res)
+      console.log('his res', envMODE)
       if (res.data.data.histories) {
         dispatch(updateWalletHistory([...res.data.data.histories]))
       } else {
@@ -289,6 +291,7 @@ export const mintNFT = async (nftDetails) => {
       },
     },
     splitable: false,
+    data: {},
   }
 
   try {

@@ -95,16 +95,11 @@ const UploadForm = () => {
   }
 
   const onSubmit = async (formData) => {
-    console.log('submit call ')
     setIsPending(true)
-
     try {
       if (!photoValues?.nftImage) {
         throw new Error('Please upload an image')
       }
-
-      //uploading image to firebase storage
-      console.log('uploading image to Firebase storage')
 
       const { fileFromStorage, url } = await firebaseUploadNftImage({
         file: croppedImageBlob,
@@ -118,6 +113,7 @@ const UploadForm = () => {
         type: 'media',
         fileFromStorage,
         fileName: formData.name,
+        fileUrl: url,
         notes: 'Empty notes',
       }
       const blockchainResponse = await uploadNFTFile(uploadData)
@@ -127,37 +123,31 @@ const UploadForm = () => {
         )
       }
 
-      console.log('blockchainResponse', blockchainResponse)
       const {
         uploadObj: { txid, url: blockchainUrl },
       } = blockchainResponse
 
       //minting nft
-      console.log('minting NFT')
+      const nftImageForDisplay = await firebaseGetNftImageUrl(
+        currentUser.uid,
+        fileFromStorage.metadata?.name,
+        'normal',
+      )
       const dataToMint = {
         name: formData.name,
         description: formData.description,
         amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
-        url: url,
+        url: envMODE === 'DEV' ? nftImageForDisplay : url,
+        // image: url,
       }
       const mintResponse = await mintNFT(dataToMint)
       if (!mintResponse) {
         throw new Error('Failed to mint NFT')
       }
       const { tokenId, tokenObj } = mintResponse
-      const nftImageForDisplay = await firebaseGetNftImageUrl(
-        currentUser.uid,
-        fileFromStorage.metadata?.name,
-        'normal',
-      )
-      console.log("🚀 ~ file: index.js:155 ~ onSubmit ~ nftImageForDisplay:", nftImageForDisplay)
 
-      console.log('mintResponse', mintResponse)
-
-      //creating atomic swap offer
-      console.log('creating offer hex')
       let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId,
@@ -228,7 +218,7 @@ const UploadForm = () => {
       SendNotification(currentUser.uid, 'Your NFT has been created!')
 
       resetAllData()
-      router.push('/discover').then(() => router.reload())
+      router.push('/user-settings/collection').then(() => router.reload())
     } catch (error) {
       if (error?.message) {
         setIsError(true)
@@ -295,7 +285,7 @@ const UploadForm = () => {
                     id="name"
                     className="sm:col-span-2"
                     placeholder="e.g. My artwork"
-                    onChange={() => { }}
+                    onChange={() => {}}
                     inputContainer="md:h-11"
                     error={errors['name']?.message}
                     disabled={isPending}
@@ -325,7 +315,7 @@ const UploadForm = () => {
                   name="description"
                   rows={3}
                   placeholder="Write a short description of your artwork."
-                  onChange={() => { }}
+                  onChange={() => {}}
                   error={errors['description']?.message}
                   maxLength={DESC_MAX_LENGTH}
                   disabled={isPending}
