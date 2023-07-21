@@ -15,7 +15,9 @@ import MfaSelection from '../../otp/MfaSelection'
 function LoginForm({ setVerifyID, verifyID }) {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { isPending, isGoogle } = useSelector(userSelector)
+  const { isGoogle } = useSelector(userSelector)
+  const [isPending, setIsPending] = useState(false)
+
   const [isOpen, setIsOpen] = useState(false)
   const [isTotp, setIsTotp] = useState(false)
   const [allowedCharacters, setAllowedCharacters] = useState('numeric')
@@ -71,6 +73,7 @@ function LoginForm({ setVerifyID, verifyID }) {
   const handleSubmit = async (e, option) => {
     e.preventDefault()
     try {
+      setIsPending(true)
       await firebaseLogin({
         ...formData,
         rememberMe,
@@ -80,8 +83,11 @@ function LoginForm({ setVerifyID, verifyID }) {
         setFactors,
       })
     } catch (e) {
+      setIsPending(false)
       console.log('login error', e)
       //setError(e)
+    } finally {
+      setIsPending(false)
     }
   }
 
