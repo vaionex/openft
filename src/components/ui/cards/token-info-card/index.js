@@ -30,7 +30,13 @@ const TokenInfoCard = ({
               {data?.imageURL || data?.image ? (
                 <div>
                   <Image
-                    src={data?.imageURL || ''}
+                    src={
+                      data?.imageURL
+                        ? data?.imageURL
+                        : data?.image
+                        ? data?.image
+                        : ''
+                    }
                     alt={data?.name}
                     layout="fill"
                     className="absolute inset-0 object-cover object-center w-full h-full"

@@ -72,7 +72,7 @@ PrevArrow.propTypes = {
   slideCount: PropTypes.number,
 }
 
-const ProductsCarousel = ({ data }) => {
+const ProductsCarousel = ({ data, setproductsArr }) => {
   const { currentUser } = useSelector(userSelector)
   const usdBalance = usePriceConverter()
 
@@ -139,6 +139,7 @@ const ProductsCarousel = ({ data }) => {
               setFavouriteNfts={setFavouriteNfts}
               type="carousel"
               usdBalance={usdBalance}
+              setDataArr={setproductsArr}
               view="product"
             />
           ))}

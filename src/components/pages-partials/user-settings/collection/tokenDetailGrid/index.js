@@ -37,15 +37,17 @@ const TokenDetailGrid = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { nftsData } = await firebaseGetCollection()
-      let data = await firebaseGetNftByTokenId(
-        '6242456abb9b5b8c11b253df39a843f34b6e17c1-ku4cBt',
-      )
       const merged = mergeData(nftsData, nfts)
       setCollection(merged)
     }
 
     fetchData()
   }, [nfts, refresh])
+
+
+  useEffect(() => {
+    console.log('collection: ', collection)
+  }, [collection])
 
   function LoadMoreSection() {
     if (canLoadMore)

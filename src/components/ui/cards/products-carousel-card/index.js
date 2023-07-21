@@ -248,6 +248,7 @@ const ProductsCarouselCard = ({
 
       SendNotification(data?.ownerId, `Your ${data?.name} has been sold`)
       SendNotification(currentUser?.uid, `You have purchased ${data?.name}`)
+      router.reload()
     } catch (err) {
       console.log('buy func error', err)
       setloadingPurchaseBtn(false)
