@@ -276,14 +276,12 @@ export default function Form() {
                       errors['privacy']?.message ? '-mt-2.5' : ''
                     } inset-0 absolute text-sm text-left`}
                   >
-                    <NextLink href="/privacy">
-                      <label
-                        htmlFor="privacy"
-                        className="font-medium text-mist cursor-pointer"
-                      >
-                        You agree to our friendly{' '}
-                      </label>
-                    </NextLink>
+                    <label
+                      htmlFor="privacy"
+                      className="font-medium text-mist cursor-pointer"
+                    >
+                      You agree to our friendly{' '}
+                    </label>
                     <NextLink href="/privacy">
                       <a
                         id="privacy-policy"
