@@ -5,11 +5,12 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 
 export default function HomePage({ nftsData }) {
+  let d = nftsData.filter((d) => d.ownerId != 'uFD4xqR07ZUPmxtpJGSfWAhvRHQ2')
+  d = d.slice(0, 10)
   const [productsArr, setproductsArr] = useState([])
 
   useEffect(() => {
-    console.log('did you came here?')
-    setproductsArr(nftsData)
+    setproductsArr(d)
   }, [productsArr])
 
   return (

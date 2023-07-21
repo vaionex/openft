@@ -797,22 +797,17 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
 
   const documentSnapshots = await getDocs(queryRef)
 
-  const nfts = documentSnapshots.docs
-    .map((doc) => {
-      const nft = doc.data()
-      nft.id = doc.id
-      return nft
-    })
-    .filter((nft) => nft.ownerId !== 'uFD4xqR07ZUPmxtpJGSfWAhvRHQ2') // Filter out the NFTs owned by the user.
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
 
   // Sort the NFTs by likes in descending order.
   nfts.sort((a, b) => b.likes - a.likes)
 
-  // If you only need 10 items, slice the array to get the top 10.
-  const topNfts = nfts.slice(0, 10)
-
   return {
-    nftsData: JSON.parse(JSON.stringify(topNfts)),
+    nftsData: JSON.parse(JSON.stringify(nfts)),
     collectionSize: documentSnapshots.size,
   }
 }
