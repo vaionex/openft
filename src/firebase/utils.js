@@ -785,7 +785,7 @@ const firebaseGetNftCount = async () => {
   }
 }
 const firebaseGetNftProducts = async (pageLimit, page) => {
-  const start = page > 1 && pageLimit * parseInt(page) - pageLimit - 1
+  const start = page > 1 ? pageLimit * parseInt(page) - pageLimit - 1 : 0
 
   const nftsRef = collection(firebaseDb, 'nfts')
   const queryRef = query(
@@ -795,30 +795,28 @@ const firebaseGetNftProducts = async (pageLimit, page) => {
     limit(pageLimit),
   )
 
-  const collectionSize = await firebaseGetNftProductsCount()
   const documentSnapshots = await getDocs(queryRef)
 
-  const lastVisible = documentSnapshots.docs[start]
-  const nextRef = collection(firebaseDb, 'nfts')
+  const nfts = documentSnapshots.docs
+    .map((doc) => {
+      const nft = doc.data()
+      nft.id = doc.id
+      return nft
+    })
+    .filter((nft) => nft.ownerId !== 'uFD4xqR07ZUPmxtpJGSfWAhvRHQ2') // Filter out the NFTs owned by the user.
 
-  const next = query(
-    nextRef,
-    where('status', '==', 'live'),
-    orderBy('timestamp', 'desc'),
-    startAfter(lastVisible || ''),
-    limit(pageLimit),
-  )
+  // Sort the NFTs by likes in descending order.
+  nfts.sort((a, b) => b.likes - a.likes)
 
-  const nextSnapshots = await getDocs(next)
+  // If you only need 10 items, slice the array to get the top 10.
+  const topNfts = nfts.slice(0, 10)
 
-  const nfts = nextSnapshots.docs.map((doc) => {
-    const nft = doc.data()
-    nft.id = doc.id
-    return nft
-  })
-
-  return { nftsData: JSON.parse(JSON.stringify(nfts)), collectionSize }
+  return {
+    nftsData: JSON.parse(JSON.stringify(topNfts)),
+    collectionSize: documentSnapshots.size,
+  }
 }
+
 const firebaseGetNfts = async (pageLimit, page) => {
   const start = page > 1 && pageLimit * parseInt(page) - (pageLimit - 1)
 

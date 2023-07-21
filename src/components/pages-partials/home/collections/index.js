@@ -3,7 +3,7 @@ import userSelector from '@/redux/selectors/user'
 import NextLink from 'next/link'
 import { useSelector } from 'react-redux'
 
-const CollectionsSection = ({ nftsData }) => {
+const CollectionsSection = ({ nftsData, setproductsArr }) => {
   const { isAuthenticated } = useSelector(userSelector)
   return (
     <div className="relative px-4 mx-auto pb-14 md:pb-20 max-w-7xl lg:mt-24 sm:px-6 lg:px-6">
@@ -35,7 +35,7 @@ const CollectionsSection = ({ nftsData }) => {
       </div>
       {/* 3xlg:min-w-[1364px] */}
       <div className="w-full py-12 mx-auto max-w-7xl 2xl:min-w-full">
-        <ProductsCarousel data={nftsData} />
+        <ProductsCarousel data={nftsData} setproductsArr={setproductsArr} />
       </div>
     </div>
   )
