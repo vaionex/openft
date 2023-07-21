@@ -3,9 +3,13 @@ import { firebaseGetFirstNfts, firebaseGetNftProducts } from '@/firebase/utils';
 import RootLayout from '../components/layout/RootLayout'; // Import RootLayout component
 import { useState } from 'react'
 import { useEffect } from 'react'
+import userSelector from '@/redux/selectors/user'
+import { useSelector } from 'react-redux'
 
 export default function HomePage({ nftsData }) {
-  let d = nftsData.filter((d) => d.ownerId != 'uFD4xqR07ZUPmxtpJGSfWAhvRHQ2')
+  const { currentUser } = useSelector(userSelector)
+  currentUser?.uid
+  let d = nftsData.filter((d) => d.ownerId != currentUser?.uid)
   d = d.slice(0, 10)
   const [productsArr, setproductsArr] = useState([])
 
