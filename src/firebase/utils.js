@@ -877,8 +877,8 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
     nextRef,
     limit(pageLimit),
     orderBy('amount', 'desc'),
-    where('amount', '>=', minPrice),
-    where('amount', '<=', maxPrice),
+    where('amount', '>=', +minPrice),
+    where('amount', '<=', +maxPrice),
     startAfter(lastVisible || ''),
   )
 

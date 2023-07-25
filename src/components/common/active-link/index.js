@@ -3,6 +3,8 @@ import React, { Children } from 'react'
 import PropTypes from 'prop-types'
 import { twMerge } from 'tailwind-merge'
 import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { removeQuery } from '@/redux/slices/nft'
 
 const ActiveLink = ({
   children,
@@ -12,6 +14,13 @@ const ActiveLink = ({
 }) => {
   const router = useRouter()
   const { asPath, pathname } = router
+  const dispatch = useDispatch()
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    dispatch(removeQuery({}))
+    router.push(props?.href)
+  }
 
   const child = Children.only(children)
 
@@ -27,7 +36,10 @@ const ActiveLink = ({
 
   return (
     <Link {...props}>
-      {React.cloneElement(child, { className: className || null })}
+      {React.cloneElement(child, {
+        className: className || null,
+        onClick: handleClick,
+      })}
     </Link>
   )
 }

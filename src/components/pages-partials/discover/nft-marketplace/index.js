@@ -3,13 +3,22 @@ import NFTMarketplaceSearch from './search'
 import NFTMarketplaceMobileFilters from './mobile-filters'
 import NFTMarketplaceFilters from './filters'
 import NFTMarketplaceProducts from './products'
-import { firebaseGetNfts, firebaseGetSingleDoc } from '@/firebase/utils'
+import {
+  firebaseGetFilteredNftProducts,
+  firebaseGetNfts,
+  firebaseGetSingleDoc,
+} from '@/firebase/utils'
 import { useMediaQuery } from 'react-responsive'
 import userSelector from '@/redux/selectors/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import nftSelector from '@/redux/selectors/nft'
-import { setCurrentPage, setLastDoc, setNfts, setTotalPages } from '@/redux/slices/nft'
+import {
+  setCurrentPage,
+  setLastDoc,
+  setNfts,
+  setTotalPages,
+} from '@/redux/slices/nft'
 import queryGenerator from '@/utils/queryGenerator'
 import { algoliaIndex } from '@/services/algolia'
 import cleanObject from '@/utils/cleanObject'
@@ -25,7 +34,7 @@ const NFTMarketplace = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { currentPage, query } = useSelector(nftSelector)
-  const isEmpty = obj => Object.keys(obj).length === 0;
+  const isEmpty = (obj) => Object.keys(obj).length === 0
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (!isEmpty(query)) {
@@ -33,46 +42,50 @@ const NFTMarketplace = () => {
     }
   }, [query])
   function createAlgoliaFilter(filterObj) {
-    let filters = ['status:live'];
+    let filters = ['status:live']
 
     if (filterObj.min !== undefined && filterObj.max !== undefined) {
-      filters.push(`amount >= ${filterObj.min} AND amount <= ${filterObj.max}`);
+      filters.push(`amount >= ${filterObj.min} AND amount <= ${filterObj.max}`)
     }
     if (currentUser?.uid) {
-      filters.push(`NOT minterId:${currentUser?.uid}`);
-
+      filters.push(`NOT minterId:${currentUser?.uid}`)
     }
 
-    return filters.join(' AND ');
+    return filters.join(' AND ')
   }
-  const fetchDataFromAlgolia = async () => {
+  const updatePagination = async () => {
     setLoading(true)
+    // Create price range object based on router.query values
+    const priceRange = {
+      minPrice: router.query.min || 0,
+      maxPrice: router.query.max || Number.MAX_SAFE_INTEGER, // if max is not specified, use max safe integer
+    }
 
-    const params = cleanObject(router?.query)
-    delete params?.search
-    const dataMain = await algoliaIndex.search(router?.query?.search, {
-      filters: createAlgoliaFilter(params),
-      hitsPerPage: pageLimit,
-      page: currentPage
-    })
-    dispatch(setNfts(dataMain?.hits))
-    dispatch(setTotalPages(dataMain?.nbPages))
+    const { nftsData, collectionSize } = await firebaseGetFilteredNftProducts(
+      pageLimit,
+      currentPage === 0 ? 1 : currentPage,
+      priceRange,
+    )
+
+    dispatch(setNfts(nftsData))
+    dispatch(setTotalPages(Math.ceil(collectionSize / pageLimit)))
     setLoading(false)
-
   }
   useEffect(async () => {
     if (isEmpty(router?.query)) {
       setLoading(true)
-      const { nftsData, collectionSize } = await firebaseGetNfts(pageLimit, currentPage === 0 ? 1 : currentPage);
+      const { nftsData, collectionSize } = await firebaseGetNfts(
+        pageLimit,
+        currentPage === 0 ? 1 : currentPage,
+      )
       dispatch(setNfts(nftsData))
       dispatch(setTotalPages(Math.ceil(collectionSize / pageLimit)))
       setLoading(false)
-
     } else {
-
-      fetchDataFromAlgolia()
+      updatePagination()
     }
   }, [currentPage, router?.query])
+
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-6" ref={toTopRef}>
       <div className="relative z-10 flex gap-4 pt-0 pb-6">
