@@ -27,9 +27,8 @@ const NFTMarketplaceAmountFilter = (props) => {
     }
   }, [router?.query])
   useEffect(() => {
-    console.log(values)
     onAmountFilter.current = () => {
-      if (values.min > values.max) {
+      if (Number(values.min) > Number(values.max)) {
         setErrorMessage('Min value should be less than max value')
         setValues({
           min: '',
@@ -43,6 +42,7 @@ const NFTMarketplaceAmountFilter = (props) => {
       }
     }
   }, [values])
+
 
 
   const onInput = (e) => {
