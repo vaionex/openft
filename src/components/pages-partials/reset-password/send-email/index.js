@@ -37,11 +37,16 @@ const ResetSendEmail = () => {
 
   const onSubmit = (data) => {
     setIsPending(true)
+
+    // Validate data before attempting to reset password
+    if (!data.email || data.email.trim() === '') {
+      setIsPending(false)
+      setErrorFromServer('Please enter email value')
+      return
+    }
+
     firebaseResetPassword(data.email)
       .then((data) => {
-        if (!data.email || data.email.trim() === '') {
-          throw new Error('Please enter email value')
-        }
         if (data.error) {
           throw new Error('This email is not registered')
         }
@@ -53,6 +58,7 @@ const ResetSendEmail = () => {
         setErrorFromServer(error.message)
       })
   }
+  
 
   return (
     <>
