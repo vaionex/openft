@@ -309,3 +309,7 @@
   position: relative !important;
   z-index: 9999999999 !important;
 }
+
+.nc-header {
+  width: 100vw;
+}

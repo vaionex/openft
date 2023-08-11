@@ -60,8 +60,8 @@ const Header = () => {
                       className="h-5 pb-0.5 flex-none"
                       src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                       alt="Relysia"
-                      height='20px'
-                      width='17px'
+                      height="20px"
+                      width="17px"
                     />
                   </div>
                   <p className="pl-2 text-xl font-semibold text-blue-900">
@@ -71,9 +71,9 @@ const Header = () => {
               </NextLink>
               <div className="flex items-center -mr-2 md:hidden">
                 {isAuthenticated && (
-                  <div className="inline-flex items-center justify-center p-3">
-                    {size < 768 && <NovuNotificationCenter />}
-                  </div>
+                  <>{size < 768 && <NovuNotificationCenter />}</>
+                  // <div className="inline-flex items-center justify-center p-3">
+                  // </div>
                 )}
                 <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-blue-50">
                   <span className="sr-only">Open main menu</span>
