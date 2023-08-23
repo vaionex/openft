@@ -66,8 +66,7 @@ const TokenInfoCard = ({
                 {data?.name}
               </span>
             </div>
-
-            <span>${data?.amount}</span>
+            <span>{data?.amountInBSV ? `${data?.amountInBSV} BSV` : ''}</span>
           </div>
 
           <div className="flex gap-1.5 mt-4">
