@@ -40,13 +40,21 @@ const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
   const bsvAmount = watch('amountInBSV')
 
   useEffect(() => {
-    if (bsvAmount) {
-      let amt = (bsvAmount * bsvBalance).toFixed(8)
-      setDollarPrice(`${parseFloat(amt).toFixed(2)} USD`)
+    if (bsvAmount && /^[0-9]*(\.[0-9]{1,8})?$/.test(bsvAmount)) {
+      const usdEquivalent = (bsvAmount * usdBalance).toFixed(8)
+      const parsedUsdEquivalent = parseFloat(usdEquivalent)
+
+      // Check if the parsedUsdEquivalent is a whole number
+      if (Number.isInteger(parsedUsdEquivalent)) {
+        setDollarPrice(`${parsedUsdEquivalent} USD`) // Whole number
+      } else {
+        setDollarPrice(`${parsedUsdEquivalent.toFixed(8)} USD`) // Decimal with 8 digits
+      }
     } else {
       setDollarPrice('0 USD')
     }
-  }, [bsvBalance, bsvAmount])
+  }, [bsvAmount, usdBalance])
+  
 
   const onSubmit = async (formData) => {
     formData = { ...data, ...formData }
@@ -169,7 +177,11 @@ const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
                   className="relative"
                   inputClassName="md:h-11"
                   placeholder="e.g. 1 BSV"
-                  pattern="^(0|[1-9]\d{0,8})(\.\d{1,8})?$" // Updated pattern
+                  pattern="^(0|[1-9]\d{0,8})(\.\d{1,8})?$"
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity('BSV amount must be a number')
+                  }
+                  onInput={(e) => e.target.setCustomValidity('')} // Clear custom validity on input
                   error={errors['amountInBSV']?.message}
                   maxLength={10}
                   {...field}

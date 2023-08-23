@@ -391,9 +391,9 @@ const ProductsCarouselCard = ({
               {totalLikes}
             </p>
           )} */}
-          <p className="py-2 text-xl font-medium text-mirage">
+          {/* <p className="py-2 text-xl font-medium text-mirage">
             <span className="mr-2">${data?.amount}</span>
-          </p>
+          </p> */}
           <p className="py-2 text-xl font-medium text-mirage">
             <span>
               {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
@@ -606,9 +606,9 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
                 {totalLikes}
               </p>
             )} */}
-            <p className="py-2 text-xl font-medium text-mirage">
+            {/* <p className="py-2 text-xl font-medium text-mirage">
               <span className="mr-2">${data?.amount}</span>
-            </p>
+            </p> */}
             <p className="py-2 text-xl font-medium text-mirage">
               BSV
               <span>
