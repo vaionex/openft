@@ -56,12 +56,23 @@ const UploadForm = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const resolver = useYupValidationResolver(validationSchema)
-  const { control, handleSubmit, formState, reset, watch } = useForm({
+  const { control, handleSubmit, formState, reset, watch, setValue } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     resolver,
   })
   const router = useRouter()
+  const bsvAmount = watch('bsvAmount') // Get the value of BSV amount input
+
+  useEffect(() => {
+    if (bsvAmount && !isNaN(bsvAmount)) {
+      const usdEquivalent = (bsvAmount * usdBalance).toFixed(8)
+      setValue('amount', usdEquivalent, { shouldValidate: true }) // Set the USD equivalent in the 'amount' input
+    } else {
+      setValue('amount', '', { shouldValidate: true }) // Clear the 'amount' input if BSV amount is empty
+    }
+  }, [bsvAmount, usdBalance, setValue])
+
   const { errors } = formState
 
   const usdPrice = watch('amount')
@@ -136,7 +147,6 @@ const UploadForm = () => {
       const dataToMint = {
         name: formData.name,
         description: formData.description,
-        amount: +formData.amount,
         supply: +formData.supply || 1,
         txid,
         url: envMODE === 'DEV' ? nftImageForDisplay : url,
@@ -148,11 +158,23 @@ const UploadForm = () => {
       }
       const { tokenId, tokenObj } = mintResponse
 
-      let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
+      let formattedAmountInBSV = parseFloat(+formData.bsvAmount)
+        .toFixed(8)
+        .toString()
+
+      if (
+        formattedAmountInBSV.includes('.') &&
+        parseFloat(formattedAmountInBSV) ===
+          Math.floor(parseFloat(formattedAmountInBSV))
+      ) {
+        formattedAmountInBSV = parseFloat(formattedAmountInBSV).toFixed(0)
+      }
+      formData.amountInBSV = formattedAmountInBSV
+
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId,
         amount: 1,
-        wantedAmount: amountInBSV,
+        wantedAmount: formattedAmountInBSV,
         sn: 1,
       })
 
@@ -170,7 +192,7 @@ const UploadForm = () => {
       console.log('saving data to database')
       const nftDataToFirebase = {
         ...formData,
-        amountInBSV: amountInBSV,
+        amountInBSV: formattedAmountInBSV,
         imageURL: envMODE === 'DEV' ? nftImageForDisplay : url,
         ownerId: currentUser.uid,
         minterId: currentUser.uid,
@@ -205,8 +227,8 @@ const UploadForm = () => {
         type: 'MINT',
         sn: 1,
         timestamp: Timestamp.now(),
-        amount: formData.amount,
-        amountInBSV: amountInBSV,
+        // amount: formData.amount,
+        amountInBSV: formattedAmountInBSV,
         minterId: currentUser.uid,
         txid: tokenObj.issueTxid,
       }
@@ -334,45 +356,61 @@ const UploadForm = () => {
 
         <InputMain className="sm:flex sm:justify-between sm:gap-8">
           <InputMain.Label
-            label="Starting price"
+            label="Starting price (BSV)"
             sublabel="The price shown on your artwork."
-            htmlFor="amount"
+            htmlFor="bsvAmount"
             className="sm:w-[280px]"
           />
           <div className="flex flex-col sm:flex-row mt-1 sm:mt-0 gap-4 w-full sm:max-w-[666px]">
             <Controller
+              name="bsvAmount"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <InputMain.Input
+                  name="bsvAmount"
+                  type="text"
+                  id="bsvAmount"
+                  className="relative w-full sm:w-1/2"
+                  inputContainer="md:h-11"
+                  autoComplete="given-name"
+                  placeholder="e.g. 1 BSV"
+                  pattern="^(0|[1-9]\d{0,8})(\.\d{1,8})?$"
+                  tooltip={{
+                    text: 'Enter the amount in BSV.',
+                  }}
+                  error={errors['bsvAmount']?.message}
+                  disabled={isPending}
+                  maxLength={10}
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity('BSV amount must be a number')
+                  }
+                  onInput={(e) => e.target.setCustomValidity('')} // Clear custom validity on input
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
               name="amount"
               control={control}
               defaultValue=""
-              render={({ field }) => {
-                return (
-                  <InputMain.Input
-                    name="amount"
-                    type="number"
-                    id="amount"
-                    className="relative w-full sm:w-1/2"
-                    inputContainer="md:h-11"
-                    autoComplete="given-name"
-                    placeholder="e.g. $0.00"
-                    error={errors['amount']?.message}
-                    disabled={isPending}
-                    inputIcon="$"
-                    {...field}
-                  />
-                )
-              }}
-            />
-            <InputMain.Input
-              name="bsv"
-              id="bsv"
-              disabled
-              value={bsvPrice}
-              className="relative w-full mt-2 text-gray-500 sm:mt-0 sm:w-1/2"
-              inputContainer="md:h-11"
-              placeholder="1 BSV"
-              tooltip={{
-                text: 'This conversion is based on coinmarketcap.',
-              }}
+              render={({ field }) => (
+                <InputMain.Input
+                  name="amount"
+                  type="text"
+                  id="amount"
+                  className="relative w-full mt-2 text-gray-500 sm:mt-0 sm:w-1/2"
+                  inputContainer="md:h-11"
+                  placeholder="0.00 USD"
+                  tooltip={{
+                    text: 'This is the equivalent amount in USD.',
+                  }}
+                  error={errors['amount']?.message}
+                  disabled
+                  {...field}
+                />
+              )}
             />
           </div>
         </InputMain>

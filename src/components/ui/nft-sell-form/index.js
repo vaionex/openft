@@ -24,6 +24,8 @@ const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
   const textAreaRef = useRef(null)
   const usdBalance = usePriceConverter()
   const { currentUser } = useSelector(userSelector)
+  const [dollarPrice, setDollarPrice] = useState('0 USD')
+  const bsvBalance = usePriceConverter()
   const {
     control,
     handleSubmit,
@@ -35,26 +37,40 @@ const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
     reValidateMode: 'onBlur',
     resolver,
   })
-  const usdPrice = watch('amount')
+  const bsvAmount = watch('amountInBSV')
 
   useEffect(() => {
-    if (usdPrice) {
-      setBsvPrice(`${(usdPrice / usdBalance).toFixed(4)} BSV`)
+    if (bsvAmount) {
+      let amt = (bsvAmount * bsvBalance).toFixed(8)
+      setDollarPrice(`${parseFloat(amt).toFixed(2)} USD`)
     } else {
-      setBsvPrice('0 BSV')
+      setDollarPrice('0 USD')
     }
-  }, [usdBalance, usdPrice])
+  }, [bsvBalance, bsvAmount])
 
   const onSubmit = async (formData) => {
+    formData = { ...data, ...formData }
+    let formattedAmountInBSV = parseFloat(+formData.amountInBSV)
+      .toFixed(8)
+      .toString()
+
+    if (
+      formattedAmountInBSV.includes('.') &&
+      parseFloat(formattedAmountInBSV) ===
+        Math.floor(parseFloat(formattedAmountInBSV))
+    ) {
+      formattedAmountInBSV = parseFloat(formattedAmountInBSV).toFixed(0)
+    }
+    formData.amountInBSV = formattedAmountInBSV
+
     try {
       setIsLoading(true)
-      let amountInBSV = Number((formData.amount / usdBalance).toFixed(8))
-      //creating atomic swap offer
 
+      let amountInBSV = formData?.amountInBSV
       const atomicSwapOffer = await createAtomicSwapOffer({
         tokenId: data?.tokenId,
-        amount: 1,
-        wantedAmount: amountInBSV, //data?.amountInBSV,
+        amount: formData?.amount,
+        wantedAmount: amountInBSV,
         sn: 1,
       })
 
@@ -68,40 +84,44 @@ const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
         throw new Error('Failed to create Offer')
       }
 
-      //updating database
+      // updating database
 
       const batch = writeBatch(firebaseDb)
       const tokenRef = doc(firebaseDb, 'nfts', data?.tokenId)
 
+      // Format amountInBSV for display
+
       let tokenObj = {
         amount: formData.amount,
-        amountInBSV: amountInBSV,
+        amountInBSV: formattedAmountInBSV,
         description: formData.description,
         status: 'live',
         offerHex:
-          atomicSwapOffer && atomicSwapOffer?.contents[0]
+          atomicSwapOffer &&
+          atomicSwapOffer.contents &&
+          atomicSwapOffer.contents[0]
             ? atomicSwapOffer.contents[0]
             : null,
       }
+
       let nftDataToFirebase = {}
 
       if (!data.status) {
-        {
-          nftDataToFirebase = {
-            ...formData,
-            amountInBSV: amountInBSV,
-            imageURL: data?.image || data?.imageURL,
-            ownerId: currentUser.uid,
-            minterId: currentUser.uid,
-            likes: 0,
-            status: 'live',
-            tokenId: data?.tokenId,
-            name: data?.name,
-            username: currentUser?.displayName || '',
-          }
-          tokenObj = { ...tokenObj, ...nftDataToFirebase }
+        nftDataToFirebase = {
+          ...formData,
+          amountInBSV: formattedAmountInBSV,
+          imageURL: data?.image || data?.imageURL,
+          ownerId: currentUser.uid,
+          minterId: currentUser.uid,
+          likes: 0,
+          status: 'live',
+          tokenId: data?.tokenId,
+          name: data?.name,
+          username: currentUser?.displayName || '',
         }
+        tokenObj = { ...tokenObj, ...nftDataToFirebase }
       }
+
       const item = await firebaseGetSingleDoc('nfts', data?.tokenId)
       if (item) {
         await firebaseUpdateDoc('nfts', data?.tokenId, { status: 'live' })
@@ -131,33 +151,34 @@ const NFTSellForm = ({ onClose, data, setIslive, setRefresh, refresh }) => {
       console.log('err: ', err)
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="w-full mb-4">
         <InputMain className="relative pb-2 border-none sm:gap-1">
-          <InputMain.Label label="Sale Price" htmlFor="Sale Price" required />
+          <InputMain.Label label="Sale Price" htmlFor="bsvAmount" required />
           <Controller
-            name="amount"
+            name="amountInBSV"
             control={control}
-            defaultValue={data?.amount}
+            defaultValue={data?.amountInBSV}
             render={({ field }) => {
               return (
                 <InputMain.Input
-                  id="amount"
-                  type="number"
+                  id="amountInBSV"
+                  type="text"
                   className="relative"
                   inputClassName="md:h-11"
-                  inputIcon="$"
-                  value={90}
-                  onChange={() => {}}
-                  error={errors['amount']?.message}
+                  placeholder="e.g. 1 BSV"
+                  pattern="^(0|[1-9]\d{0,8})(\.\d{1,8})?$" // Updated pattern
+                  error={errors['amountInBSV']?.message}
+                  maxLength={10}
                   {...field}
                 />
               )
             }}
           />
         </InputMain>
-        <div className="text-right mr-2">{bsvPrice}</div>
+        <div className="text-right mr-2">{dollarPrice}</div>
       </div>
 
       <div className="w-full">
