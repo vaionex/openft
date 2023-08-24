@@ -31,8 +31,8 @@ const validationSchema = yup.object().shape({
     .min(2, 'Company must be at least 2 characters long'),
   privacy: yup
     .boolean()
-    .required('Pls confirm privacy policy.')
-    .oneOf([true], 'Pls confirm privacy policy.'),
+    .required('Please confirm privacy policy.')
+    .oneOf([true], 'Please confirm privacy policy.'),
 })
 
 export default validationSchema
