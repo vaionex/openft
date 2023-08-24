@@ -75,6 +75,13 @@ const ProductsCarouselCard = ({
   const [successTx, setsuccessTx] = useState(null)
   const [totalLikes, setTotalLikes] = useState(data?.likes)
   const { token } = useToken(router.query?.slug, isUserDetails)
+  const bsvAmount = data?.amountInBSV
+    ? `${parseFloat(data?.amountInBSV)?.toFixed(4)} BSV`
+    : ''
+
+  let usdAmount =
+    data?.amountInBSV && Number((data?.amountInBSV * usdBalance).toFixed(4))
+  usdAmount = !isNaN(usdAmount) ? `${usdAmount}` : ''
 
   const { redeemToken } = useRedeemToken()
 
@@ -391,14 +398,11 @@ const ProductsCarouselCard = ({
               {totalLikes}
             </p>
           )} */}
-          {/* <p className="py-2 text-xl font-medium text-mirage">
-            <span className="mr-2">${data?.amount}</span>
-          </p> */}
           <p className="py-2 text-xl font-medium text-mirage">
-            <span>
-              {data?.amount && Number((data?.amount / usdBalance).toFixed(4))}
-            </span>{' '}
-            BSV
+            <span className="mr-2">{usdAmount}</span>
+          </p>
+          <p className="py-2 text-xl font-medium text-mirage">
+            <span>{bsvAmount}</span>
           </p>
         </div>
         {!singleNFT && (
@@ -574,6 +578,14 @@ ProductsCarouselCard.propTypes = {
 export default ProductsCarouselCard
 
 const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
+  const bsvAmount = data?.amountInBSV
+    ? `${parseFloat(data?.amountInBSV)?.toFixed(4)} BSV`
+    : ''
+
+  let usdAmount =
+    data?.amountInBSV && Number((data?.amountInBSV * usdBalance).toFixed(4))
+  usdAmount = !isNaN(usdAmount) ? `${usdAmount}` : ''
+
   return (
     <div>
       <div
@@ -606,14 +618,11 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
                 {totalLikes}
               </p>
             )} */}
-            {/* <p className="py-2 text-xl font-medium text-mirage">
-              <span className="mr-2">${data?.amount}</span>
-            </p> */}
             <p className="py-2 text-xl font-medium text-mirage">
-              BSV
-              <span>
-                {data?.amount && Number((data.amount / usdBalance).toFixed(4))}
-              </span>
+              <span className="mr-2">{usdAmount}</span>
+            </p>
+            <p className="py-2 text-xl font-medium text-mirage">
+              <span>{bsvAmount}</span>
             </p>
           </div>
           <div className="flex-1 mt-6">
