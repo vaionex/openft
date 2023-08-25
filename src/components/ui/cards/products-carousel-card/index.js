@@ -81,7 +81,7 @@ const ProductsCarouselCard = ({
 
   let usdAmount =
     data?.amountInBSV && Number((data?.amountInBSV * usdBalance).toFixed(4))
-  usdAmount = !isNaN(usdAmount) ? `${usdAmount}` : ''
+  usdAmount = !isNaN(usdAmount) ? `$${usdAmount}` : ''
 
   const { redeemToken } = useRedeemToken()
 
@@ -584,7 +584,7 @@ const Card = ({ data, artistData, usdBalance, dialogErrorMsg, totalLikes }) => {
 
   let usdAmount =
     data?.amountInBSV && Number((data?.amountInBSV * usdBalance).toFixed(4))
-  usdAmount = !isNaN(usdAmount) ? `${usdAmount}` : ''
+  usdAmount = !isNaN(usdAmount) ? `$${usdAmount}` : ''
 
   return (
     <div>

@@ -1,3 +1,4 @@
+import usePriceConverter from '@/hooks/usePriceConverter'
 import userSelector from '@/redux/selectors/user'
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -14,6 +15,11 @@ const TokenInfoCard = ({
   isLive,
 }) => {
   const { currentUser } = useSelector(userSelector)
+  const usdBalance = usePriceConverter()
+
+  let usdAmount =
+    data?.amountInBSV && Number((data?.amountInBSV * usdBalance).toFixed(4))
+  usdAmount = !isNaN(usdAmount) ? `$${usdAmount}` : ''
   return (
     <>
       <div
@@ -57,16 +63,21 @@ const TokenInfoCard = ({
           )}
         </div>
         <div className="px-4 py-5">
-          <div className="flex justify-between items-center">
-            <div className="flex flex-col">
-              <span className="text-azul font-semibold text-sm">
-                {currentUser?.name}
-              </span>
-              <span className="text-mirage text-lg font-medium">
-                {data?.name}
-              </span>
+          {data?.amountInBSV && usdAmount ? (
+            <div className="flex justify-between items-center">
+              <p className="py-2 text-xl font-medium text-mirage">
+                <span className="mr-2">{usdAmount}</span>
+              </p>
+              <span>{data?.amountInBSV ? `${data?.amountInBSV} BSV` : ''}</span>
             </div>
-            <span>{data?.amountInBSV ? `${data?.amountInBSV} BSV` : ''}</span>
+          ) : null}
+          <div className="flex justify-between items-center">
+            <span className="text-azul font-semibold text-sm">
+              {currentUser?.name}
+            </span>
+            <span className="text-mirage text-lg font-medium">
+              {data?.name}
+            </span>
           </div>
 
           <div className="flex gap-1.5 mt-4">
