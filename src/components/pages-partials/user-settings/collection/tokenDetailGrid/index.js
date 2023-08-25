@@ -11,24 +11,14 @@ import nftSelector from '@/redux/selectors/nft'
 import { setTotalPages } from '@/redux/slices/nft'
 import useNFTs from '@/hooks/useNFTs'
 import userSelector from '@/redux/selectors/user'
+import { mergeData } from '@/firebase/helpers'
 
-const mergeData = (data1, data2) => {
-  const merged = [...data1]
-
-  data2.forEach((item) => {
-    const existingIndex = merged.findIndex((i) => i.tokenId === item.tokenId)
-    if (existingIndex > -1) {
-      merged[existingIndex] = { ...merged[existingIndex], ...item }
-    } else {
-      merged.push(item)
-    }
-  })
-
-  return merged
-}
-
-const TokenDetailGrid = () => {
-  const [collection, setCollection] = useState([])
+const TokenDetailGrid = ({
+  setCollection,
+  filteredCollection,
+  setfilteredCollection,
+  usdBalance,
+}) => {
   const [refresh, setRefresh] = useState(false)
   const toTopRef = useRef(null)
   const { nfts, canLoadMore, loadMore, loading } = useNFTs()
@@ -39,15 +29,11 @@ const TokenDetailGrid = () => {
       const { nftsData } = await firebaseGetCollection()
       const merged = mergeData(nftsData, nfts)
       setCollection(merged)
+      setfilteredCollection(merged)
     }
 
     fetchData()
   }, [nfts, refresh])
-
-
-  useEffect(() => {
-    console.log('collection: ', collection)
-  }, [collection])
 
   function LoadMoreSection() {
     if (canLoadMore)
@@ -82,14 +68,15 @@ const TokenDetailGrid = () => {
         >
           <Loader />
         </div>
-      ) : collection.length > 0 ? (
+      ) : filteredCollection.length > 0 ? (
         <div className="grid grid-cols-1 gap-x-7 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
-          {collection.map((item, index) => (
+          {filteredCollection.map((item, index) => (
             <TokenCard
               key={index}
               data={item}
               setRefresh={setRefresh}
               refresh={refresh}
+              usdBalance={usdBalance}
             />
           ))}
         </div>
@@ -98,7 +85,7 @@ const TokenDetailGrid = () => {
           No NFTs found
         </div>
       )}
-      {!loading ? (
+      {!loading && !document.getElementById('search').value ? (
         <div className="block mt-14">
           <LoadMoreSection />
         </div>

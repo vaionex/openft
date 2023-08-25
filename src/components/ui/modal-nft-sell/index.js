@@ -11,6 +11,7 @@ const ModalNFTSell = ({
   data,
   setRefresh,
   refresh,
+  usdBalance,
 }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -49,6 +50,7 @@ const ModalNFTSell = ({
                         type="list"
                         view="product"
                         isInFirstThree={true}
+                        usdBalance={usdBalance}
                       />
                     </div>
                   </div>

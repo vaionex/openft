@@ -13,9 +13,9 @@ const TokenInfoCard = ({
   handleModal,
   handleDelistModal,
   isLive,
+  usdBalance,
 }) => {
   const { currentUser } = useSelector(userSelector)
-  const usdBalance = usePriceConverter()
 
   let usdAmount =
     data?.amountInBSV && Number((data?.amountInBSV * usdBalance).toFixed(4))

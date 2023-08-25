@@ -1,17 +1,19 @@
 import Details from './nft-details'
-import UserSettingsLayout from '@/components/layout/user-settings-layout'
 import apiConfig from '@/config/relysiaApi'
 import NextLink from 'next/link'
 import { ArrowLeftIcon } from '@heroicons/react/solid'
 import TokenDetailGrid from './tokenDetailGrid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import CollectionLayout from '@/components/layout/collection-layout'
+import usePriceConverter from '@/hooks/usePriceConverter'
 
 const Collection = () => {
-
   const router = useRouter()
   const [nftId, setNftId] = useState(null)
   const [tokenInfo, setTokenInfo] = useState(null)
+  const [collection, setCollection] = useState([])
+  const [filteredCollection, setfilteredCollection] = useState([])
 
   useEffect(() => {
     const {
@@ -26,7 +28,7 @@ const Collection = () => {
 
   useEffect(() => {
     if (nftId) {
-      ; (async () => {
+      ;(async () => {
         const { data } = await apiConfig.get(
           `https://api.relysia.com/v1/token/${nftId}`,
         )
@@ -36,9 +38,13 @@ const Collection = () => {
       setTokenInfo(null)
     }
   }, [nftId])
+  const usdBalance = usePriceConverter()
 
   return (
-    <UserSettingsLayout>
+    <CollectionLayout
+      collection={collection}
+      setfilteredCollection={setfilteredCollection}
+    >
       {tokenInfo ? (
         <>
           <header>
@@ -108,9 +114,14 @@ const Collection = () => {
           <Details nft={tokenInfo} />
         </>
       ) : (
-        <TokenDetailGrid />
+        <TokenDetailGrid
+          setCollection={setCollection}
+          filteredCollection={filteredCollection}
+          setfilteredCollection={setfilteredCollection}
+          usdBalance={usdBalance}
+        />
       )}
-    </UserSettingsLayout>
+    </CollectionLayout>
   )
 }
 
