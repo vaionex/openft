@@ -2,19 +2,30 @@ import { SearchInput } from '@/components/ui/inputs'
 import { InputMain } from '@/components/ui/inputs'
 import { MagnifyGlassIcon } from '@/components/common/icons'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
-const UserSettingsHeader = () => {
-  const router = useRouter()
+const CollectionHeader = ({ collection, setfilteredCollection }) => {
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const keyDownHandler = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      router.push(`/discover?search=${event.target.value}`)
+  const handleChange = (event) => {
+    const newSearchQuery = event.target.value
+    setSearchQuery(newSearchQuery)
+
+    // Perform the search within the current collection
+
+    if (newSearchQuery.trim() === '') {
+      setfilteredCollection(collection)
+    } else {
+      const filtered = collection.filter((item) =>
+        item.name.toLowerCase().includes(newSearchQuery.toLowerCase()),
+      )
+      setfilteredCollection(filtered)
     }
   }
+
   return (
     <div className="relative pt-12 pb-6">
-      {/* <div className="flex flex-col justify-between px-4 mx-auto xs:flex-row max-w-7xl sm:px-0">
+      <div className="flex flex-col justify-between px-4 mx-auto xs:flex-row max-w-7xl sm:px-0">
         <div className="flex items-center justify-between gap-4 mb-3 xs:mb-0">
           <h1 className="text-3xl font-medium text-mirage">Settings</h1>
         </div>
@@ -35,14 +46,15 @@ const UserSettingsHeader = () => {
                 id="search"
                 placeholder="Search"
                 inputClassName="pl-10 min-h-[44px]"
-                onKeyDown={(e) => keyDownHandler(e)}
+                onChange={handleChange}
+                value={searchQuery}
               />
             </InputMain>
           </form>
         </div>
-      </div> */}
+      </div>
     </div>
   )
 }
 
-export default UserSettingsHeader
+export default CollectionHeader

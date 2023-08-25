@@ -311,6 +311,7 @@ const UploadForm = () => {
                     inputContainer="md:h-11"
                     error={errors['name']?.message}
                     disabled={isPending}
+                    required
                     {...field}
                   />
                 )
@@ -341,6 +342,7 @@ const UploadForm = () => {
                   error={errors['description']?.message}
                   maxLength={DESC_MAX_LENGTH}
                   disabled={isPending}
+                  required
                   {...field}
                 />
               )}
@@ -385,6 +387,7 @@ const UploadForm = () => {
                   onInvalid={(e) =>
                     e.target.setCustomValidity('BSV amount must be a number')
                   }
+                  required
                   onInput={(e) => e.target.setCustomValidity('')} // Clear custom validity on input
                   {...field}
                 />
@@ -408,6 +411,7 @@ const UploadForm = () => {
                   }}
                   error={errors['amount']?.message}
                   disabled
+                  required
                   {...field}
                 />
               )}

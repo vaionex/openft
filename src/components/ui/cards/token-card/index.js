@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { setDelist } from '@/redux/slices/user'
 
-const TokenCard = ({ data, idx, setRefresh, refresh }) => {
+const TokenCard = ({ data, idx, setRefresh, refresh, usdBalance }) => {
   const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenDelist, setIsOpenDelist] = useState(false)
@@ -65,6 +65,7 @@ const TokenCard = ({ data, idx, setRefresh, refresh }) => {
         handleModal={() => setIsOpen(true)}
         handleDelistModal={() => setIsOpenDelist(true)}
         isLive={isLive}
+        usdBalance={usdBalance}
       />
       <ModalNFTSell
         data={data}
@@ -73,6 +74,7 @@ const TokenCard = ({ data, idx, setRefresh, refresh }) => {
         onClose={() => setIsOpen(false)}
         setRefresh={setRefresh}
         refresh={refresh}
+        usdBalance={usdBalance}
       />
       <ModalConfirm
         isOpen={isOpenDelist}
@@ -81,7 +83,12 @@ const TokenCard = ({ data, idx, setRefresh, refresh }) => {
         title={'Are you sure you want'}
         secondTitle={'to Delist this NFT?'}
         content={
-          <TokenInfoCard data={data} type="list" isInFirstThree={true} />
+          <TokenInfoCard
+            data={data}
+            type="list"
+            isInFirstThree={true}
+            usdBalance={usdBalance}
+          />
         }
         onClose={() => setIsOpenDelist(false)}
         onConfirm={handleToggleIsLive}
