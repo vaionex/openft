@@ -16,7 +16,7 @@ const MyProfileForm = ({
   const BIO_MAX_LENGTH = 400
 
   const validateUsername = (username) => {
-    const usernameRegex = /^[a-z0-9]+$/i
+    const usernameRegex = /^[a-z0-9]+$/
 
     if (username.length === 0) {
       setIsError(true)

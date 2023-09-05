@@ -90,7 +90,7 @@ const DropdownUser = ({ user }) => {
   const checkMFAStatus = async (href) => {
     const options = multiFactor(firebaseAuth.currentUser).enrolledFactors.length
     if (options === 0) {
-      toast.error('please enable MFA For this operation', {
+      toast.error('Please enable MFA For this operation', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,

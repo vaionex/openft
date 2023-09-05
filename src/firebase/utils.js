@@ -916,61 +916,44 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
 }
 
 const fetchFilteredNFTs = async (artistName, minPrice, maxPrice) => {
-  const nftsRef = collection(firebaseDb, 'nfts')
-  let queryRef = query(nftsRef, where('status', '==', 'live'))
+  try {
+    const nftsRef = collection(firebaseDb, 'nfts')
+    let queryRef = query(nftsRef, where('status', '==', 'live'))
 
-  if (artistName) {
-    const artistData = await useArtistDataByUsername(artistName)
-    if (artistData && artistData.username) {
+    if (artistName) {
       queryRef = query(
         queryRef,
-        where('username', '==', artistData.username), // Compare with lowercase
+        where('username', '==', artistName), // Compare with lowercase
       )
-    } else {
-      return []
     }
-  }
 
-  queryRef = query(queryRef, orderBy('username', 'desc'))
+    queryRef = query(queryRef, orderBy('username', 'desc'))
 
-  const documentSnapshots = await getDocs(queryRef)
-  const nfts = documentSnapshots.docs.map((doc) => {
-    const nft = doc.data()
-    nft.id = doc.id
-    return nft
-  })
+    const documentSnapshots = await getDocs(queryRef)
+    const nfts = documentSnapshots.docs.map((doc) => {
+      const nft = doc.data()
+      nft.id = doc.id
+      return nft
+    })
 
-  // Filter by minPrice and maxPrice if provided
-  const filteredNFTs = nfts.filter((nft) => {
-    if (minPrice && maxPrice) {
-      return nft.amountInBSV >= minPrice && nft.amountInBSV <= maxPrice
-    } else if (minPrice) {
-      return nft.amountInBSV >= minPrice
-    } else if (maxPrice) {
-      return nft.amountInBSV <= maxPrice
-    } else {
-      return true // No price filter, include all
+    // Filter by minPrice and maxPrice if provided
+    console.log('nfts: ', nfts)
+    const filteredNFTs = nfts.filter((nft) => {
+      if (minPrice && maxPrice) {
+        return nft.amountInBSV >= minPrice && nft.amountInBSV <= maxPrice
+      } else if (minPrice) {
+        return nft.amountInBSV >= minPrice
+      } else if (maxPrice) {
+        return nft.amountInBSV <= maxPrice
+      } else {
+        return true // No price filter, include all
+      }
+    })
+    return {
+      filteredNFTs: filteredNFTs,
     }
-  })
-  return {
-    filteredNFTs: filteredNFTs,
-    collectionSize: documentSnapshots.docs.length,
-  }
-}
-
-const useArtistDataByUsername = async (username) => {
-  const usersRef = collection(firebaseDb, 'users')
-  const queryRef = query(
-    usersRef,
-    where('username', '==', username), // Compare with lowercase
-  )
-  const documentSnapshots = await getDocs(queryRef)
-
-  if (documentSnapshots.docs.length) {
-    const userData = documentSnapshots.docs[0].data()
-    return userData
-  } else {
-    return null // Handle the case where artist data is not found
+  } catch (error) {
+    console.log('error fetchFilteredNFTs: ', error)
   }
 }
 
@@ -1356,7 +1339,6 @@ const firebaseGetNftImageUrl = async (userId, fileName, size) => {
 }
 
 const firebaseVerifyMail = async () => {
-  console.log('www', window.location.origin)
   const actionCodeSettings = {
     url: `${window.location.origin}/user-settings/mfa`,
   }

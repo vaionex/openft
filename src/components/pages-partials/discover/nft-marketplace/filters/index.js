@@ -33,11 +33,19 @@ const NFTMarketplaceFilters = ({ setUpdate, update }) => {
       dispatch(setNfts(filteredNFTs))
       dispatch(setTotalPages(1))
     } catch (error) {
-      console.log('error: ', error)
+      console.log('error>>> ', error)
       setIsPending(false)
     } finally {
       setIsPending(false)
     }
+  }
+
+  const handleClear = () => {
+    setArtistName('')
+    setMinPrice('')
+    setMaxPrice('')
+    setUpdate(!update)
+    return
   }
 
   return (
@@ -67,7 +75,12 @@ const NFTMarketplaceFilters = ({ setUpdate, update }) => {
           />
         </li>
         <li className="flex gap-4 leading-[12px] pt-6">
-          <CustomClearRefinements />
+          <CustomClearRefinements
+            handleClear={handleClear}
+            artistName={artistName}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+          />
 
           <ButtonWLoading
             className="py-[9px] px-4 text-base font-medium lg:w-full text-white bg-azul hover:bg-ultramarine rounded-lg border border-azul"

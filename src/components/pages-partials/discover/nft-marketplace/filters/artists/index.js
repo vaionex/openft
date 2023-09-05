@@ -24,7 +24,7 @@ const NftMarketplaceArtistFilter = (props) => {
           placeholder="Artists"
           value={artistName}
           onChange={handleChange}
-          inputClassName="pl-7"
+          // inputClassName="pl-7"
         />
       </InputMain>
     </div>

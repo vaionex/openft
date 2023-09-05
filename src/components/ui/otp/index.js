@@ -66,7 +66,7 @@ export default function OtpModal({
                   <div className="mt-2">
                     <form
                       onSubmit={handleSubmit}
-                      class="flex flex-col justify-center items-center text-center sm:px-2 mt-5"
+                      className="flex flex-col justify-center items-center text-center sm:px-2 mt-5"
                     >
                       {qrcode && <QRCode value={qrcode} />}
                       <AuthCode

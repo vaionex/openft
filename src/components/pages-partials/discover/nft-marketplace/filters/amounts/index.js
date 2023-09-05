@@ -29,9 +29,9 @@ const NFTMarketplaceAmountFilter = (props) => {
             label="Max Price"
             className="sr-only"
           />
-          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+          {/* <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
             <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
+          </div> */}
           <InputMain.Input
             type="number"
             name="min"
@@ -39,7 +39,7 @@ const NFTMarketplaceAmountFilter = (props) => {
             placeholder="Min Price"
             value={minPrice}
             onChange={handleMinChange}
-            inputClassName="pl-7"
+            // inputClassName="pl-7"
             min={0}
           />
         </InputMain>
@@ -49,15 +49,15 @@ const NFTMarketplaceAmountFilter = (props) => {
             label="Min Price"
             className="sr-only"
           />
-          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+          {/* <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
             <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
+          </div> */}
           <InputMain.Input
             type="number"
             name="max"
             id="maxPrice"
             placeholder="Max Price"
-            inputClassName="pl-7"
+            // inputClassName="pl-7"
             value={maxPrice}
             onChange={handleMaxChange}
             min={0}
