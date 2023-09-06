@@ -5,53 +5,18 @@ import { setQuery } from '@/redux/slices/nft'
 import { useRouter } from 'next/router'
 
 const NFTMarketplaceAmountFilter = (props) => {
-  const { onAmountFilter } = props
+  const { minPrice, setMinPrice, maxPrice, setMaxPrice } = props
   const router = useRouter()
   const [errorMessage, setErrorMessage] = useState(null)
-  const dispatch = useDispatch()
-  const [values, setValues] = useState({
-    min: "",
-    max: "",
-  })
-  useEffect(() => {
-    if (router?.query?.min || router?.query?.max) {
-      setValues({
-        min: router?.query?.min || "",
-        max: router?.query?.max || "",
-      })
-    } else {
-      setValues({
-        min: "",
-        max: "",
-      })
-    }
-  }, [router?.query])
-  useEffect(() => {
-    onAmountFilter.current = () => {
-      if (Number(values.min) > Number(values.max)) {
-        setErrorMessage('Min value should be less than max value')
-        setValues({
-          min: '',
-          max: '',
-        })
-      } else {
-        setErrorMessage('')
-        dispatch(setQuery({ min: values.min, max: values.max }))
 
-        // refine({ min: values.min, max: values.max })
-      }
-    }
-  }, [values])
-
-
-
-  const onInput = (e) => {
-    e.target.validity.valid || (e.target.value = '')
+  const handleMinChange = (e) => {
+    const { name, value } = e.target
+    setMinPrice(value)
   }
 
-  const handleChange = (e) => {
+  const handleMaxChange = (e) => {
     const { name, value } = e.target
-    setValues((prev) => ({ ...prev, [name]: value }))
+    setMaxPrice(value)
   }
 
   return (
@@ -64,19 +29,18 @@ const NFTMarketplaceAmountFilter = (props) => {
             label="Max Price"
             className="sr-only"
           />
-          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+          {/* <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
             <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
+          </div> */}
           <InputMain.Input
             type="number"
             name="min"
             id="minPrice"
             placeholder="Min Price"
-            value={values.min}
-            onChange={handleChange}
-            inputClassName="pl-7"
+            value={minPrice}
+            onChange={handleMinChange}
+            // inputClassName="pl-7"
             min={0}
-            onInput={onInput}
           />
         </InputMain>
         <InputMain className="relative pb-0 border-none">
@@ -85,18 +49,17 @@ const NFTMarketplaceAmountFilter = (props) => {
             label="Min Price"
             className="sr-only"
           />
-          <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+          {/* <div className="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
             <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
+          </div> */}
           <InputMain.Input
             type="number"
             name="max"
             id="maxPrice"
             placeholder="Max Price"
-            inputClassName="pl-7"
-            value={values.max}
-            onChange={handleChange}
-            onInput={onInput}
+            // inputClassName="pl-7"
+            value={maxPrice}
+            onChange={handleMaxChange}
             min={0}
           />
         </InputMain>

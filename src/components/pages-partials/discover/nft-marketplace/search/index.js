@@ -29,8 +29,6 @@ const NFTMarketplaceSearch = React.forwardRef((props, myRef) => {
   const handleSubmit = async (e, val) => {
     e.preventDefault()
     dispatch(setQuery({ search: val }))
-
-
   }
 
   const handleClear = () => {

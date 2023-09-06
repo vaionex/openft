@@ -49,6 +49,7 @@ const UserSettingsMain = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault()
     try {
+      if (isError) return
       const { username } = formValues
       if (currentUser.username !== username) {
         const isExist = await firebaseIsUsernameExist(username)

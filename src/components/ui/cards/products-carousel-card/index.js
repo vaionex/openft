@@ -410,7 +410,7 @@ const ProductsCarouselCard = ({
             <NextLink href={`/discover/${data?.tokenId}`}>
               <a className="cursor-pointer">
                 <h3 className="text-sm text-azul min-h-[20px]">
-                  {artistData?.name}
+                  {data?.username}
                 </h3>
                 <p className="h-10 mt-1 text-lg text-mirage">{data?.name}</p>
               </a>

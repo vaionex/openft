@@ -1,17 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NFTMarketplaceAmountFilter from './amounts'
 import NftMarketplaceArtistFilter from './artists'
 
 import CustomClearRefinements from './clear'
+import { fetchFilteredNFTs, firebaseGetNfts } from '@/firebase/utils'
+import { useDispatch } from 'react-redux'
+import { setNfts, setTotalPages } from '@/redux/slices/nft'
+import { useEffect } from 'react'
+import ButtonWLoading from '@/components/ui/button-w-loading'
 
-const NFTMarketplaceFilters = () => {
-  const onArtistFilter = React.useRef()
-  const onAmountFilter = React.useRef()
+const NFTMarketplaceFilters = ({ setUpdate, update }) => {
+  const dispatch = useDispatch()
+  const [isPending, setIsPending] = useState(false)
+  const [artistName, setArtistName] = useState('')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
-  const handleSubmit = () => {
-    onArtistFilter.current()
-    onAmountFilter.current()
+  const handleSubmit = async () => {
+    try {
+      if (!minPrice && !maxPrice && !artistName) {
+        setUpdate(!update)
+        return
+      }
+      setIsPending(true)
+      // Perform filtering based on artistName, minPrice, and maxPrice
+      const { filteredNFTs } = await fetchFilteredNFTs(
+        artistName,
+        minPrice,
+        maxPrice,
+      )
+      // Update your Redux state with the filtered NFTs
+      dispatch(setNfts(filteredNFTs))
+      dispatch(setTotalPages(1))
+    } catch (error) {
+      console.log('error>>> ', error)
+      setIsPending(false)
+    } finally {
+      setIsPending(false)
+    }
+  }
 
+  const handleClear = () => {
+    setArtistName('')
+    setMinPrice('')
+    setMaxPrice('')
+    setUpdate(!update)
+    return
   }
 
   return (
@@ -28,24 +62,33 @@ const NFTMarketplaceFilters = () => {
       <ul role="list" className="space-y-6 divide-y divide-gray-200">
         <li>
           <NftMarketplaceArtistFilter
-            attribute="ownerId"
-            onArtistFilter={onArtistFilter}
+            artistName={artistName}
+            setArtistName={setArtistName}
           />
         </li>
         <li className="pt-6">
           <NFTMarketplaceAmountFilter
-            attribute="amount"
-            onAmountFilter={onAmountFilter}
+            minPrice={minPrice}
+            setMinPrice={setMinPrice}
+            maxPrice={maxPrice}
+            setMaxPrice={setMaxPrice}
           />
         </li>
         <li className="flex gap-4 leading-[12px] pt-6">
-          <CustomClearRefinements />
-          <button
+          <CustomClearRefinements
+            handleClear={handleClear}
+            artistName={artistName}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+          />
+
+          <ButtonWLoading
             className="py-[9px] px-4 text-base font-medium lg:w-full text-white bg-azul hover:bg-ultramarine rounded-lg border border-azul"
+            isPending={isPending}
             onClick={handleSubmit}
-          >
-            Apply Filters
-          </button>
+            text="Apply Filters"
+            fullWidth
+          />
         </li>
       </ul>
     </div>

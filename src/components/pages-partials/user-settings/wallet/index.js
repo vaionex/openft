@@ -433,6 +433,8 @@ const UserSettingsWalletSection = () => {
                                         className="mb-8 sm:mb-4"
                                         type={inputAttribute.type}
                                         step="any"
+                                        required
+                                        min={0}
                                         {...field}
                                       />
                                     )

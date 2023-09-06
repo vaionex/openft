@@ -20,6 +20,8 @@ module.exports = {
       'upload.wikimedia.org',
       'localhost',
       'images.pexels.com',
+      'bico.media',
+      'www.satolearn.com',
     ],
   },
   experimental: {

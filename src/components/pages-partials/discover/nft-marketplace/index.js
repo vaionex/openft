@@ -6,6 +6,7 @@ import NFTMarketplaceProducts from './products'
 import {
   firebaseGetFilteredNftProducts,
   firebaseGetNfts,
+  firebaseGetNftsByName,
   firebaseGetSingleDoc,
 } from '@/firebase/utils'
 import { useMediaQuery } from 'react-responsive'
@@ -36,6 +37,8 @@ const NFTMarketplace = () => {
   const { currentPage, query } = useSelector(nftSelector)
   const isEmpty = (obj) => Object.keys(obj).length === 0
   const [loading, setLoading] = useState(false)
+  const [update, setUpdate] = useState(false)
+
   useEffect(() => {
     if (!isEmpty(query)) {
       router.replace(`/discover${queryGenerator(cleanObject(query))}`)
@@ -72,6 +75,7 @@ const NFTMarketplace = () => {
     setLoading(false)
   }
   useEffect(async () => {
+    console.log('useEffect trigg: ')
     if (isEmpty(router?.query)) {
       setLoading(true)
       const { nftsData, collectionSize } = await firebaseGetNfts(
@@ -82,9 +86,13 @@ const NFTMarketplace = () => {
       dispatch(setTotalPages(Math.ceil(collectionSize / pageLimit)))
       setLoading(false)
     } else {
-      updatePagination()
+      setLoading(true)
+      const searchName = router.query.search || '' // Fetch search query value
+      const nftsData = await firebaseGetNftsByName(searchName)
+      dispatch(setNfts(nftsData))
+      setLoading(false)
     }
-  }, [currentPage, router?.query])
+  }, [currentPage, router?.query, update])
 
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-6" ref={toTopRef}>
@@ -106,7 +114,7 @@ const NFTMarketplace = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10 cursor">
           {isDesktopOrLaptop && (
             <div className="hidden lg:block">
-              <NFTMarketplaceFilters />
+              <NFTMarketplaceFilters update={update} setUpdate={setUpdate} />
             </div>
           )}
 

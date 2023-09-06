@@ -210,24 +210,28 @@ const UserSettingsMfaSection = () => {
         .getSession()
         .then(async function (multiFactorSession) {
           totpSecret = await TotpMultiFactorGenerator.generateSecret(
-            multiFactorSession
-          );
-          const url = totpSecret.generateQrCodeUrl(firebaseAuth.currentUser.email, "openft");
+            multiFactorSession,
+          )
+          const url = totpSecret.generateQrCodeUrl(
+            firebaseAuth.currentUser.email,
+            'openft',
+          )
           setIsOpen(true)
 
           setQrcode(url)
         })
         .catch((error) => {
+          console.log('error: ', error)
           handleError(error)
         })
     } catch (err) {
+      console.log('err: ', err)
       handleError(err)
     } finally {
       setTotpLoading(false)
     }
   }
   const updatePhoneNumberMFA = async (data) => {
-
     setType('phone')
     // setVerifyLoading(true)
     await refreshSignIn(data.password)
@@ -256,28 +260,27 @@ const UserSettingsMfaSection = () => {
         handleError(err)
       })
   }
+
   const verifyTotpCode = () => {
+    console.log('otpNumber: ', otpNumber)
+    console.log('totpSecret: ', totpSecret)
+    if (totpSecret) {
+      const multiFactorAssertion =
+        TotpMultiFactorGenerator.assertionForEnrollment(totpSecret, otpNumber)
 
-
-    const multiFactorAssertion = TotpMultiFactorGenerator.assertionForEnrollment(
-      totpSecret,
-      otpNumber
-    );
-
-    // router.reload()
-    multiFactor(firebaseAuth.currentUser)
-      .enroll(multiFactorAssertion, "Totp device")
-      .then(() => {
-        toast.success('TOTP enabled')
-        setEnrol()
-        setIsOpen(false)
-        setQrcode()
-      })
-      .catch((error) => {
-        handleError(error)
-      })
-
-
+      // router.reload()
+      multiFactor(firebaseAuth.currentUser)
+        .enroll(multiFactorAssertion, 'Totp device')
+        .then(() => {
+          toast.success('TOTP enabled')
+          setEnrol()
+          setIsOpen(false)
+          setQrcode()
+        })
+        .catch((error) => {
+          handleError(error)
+        })
+    }
   }
   const verifymfacode = () => {
     const phoneCredential = PhoneAuthProvider.credential(verifyID, otpNumber)
@@ -300,7 +303,7 @@ const UserSettingsMfaSection = () => {
     updatePhoneNumber(firebaseAuth?.currentUser, phoneCredential)
       .then(() => {
         toast.success('Phone number added successfully!')
-        dispatch(setUserData({ phoneNumber: getValues("phone_number") }))
+        dispatch(setUserData({ phoneNumber: getValues('phone_number') }))
         setIsOpen(false)
 
         // router.reload()

@@ -856,6 +856,25 @@ const firebaseGetNfts = async (pageLimit, page) => {
 
   return { nftsData: nfts, collectionSize }
 }
+
+const firebaseGetNftsByName = async (searchName) => {
+  const nftsRef = collection(firebaseDb, 'nfts')
+  const queryRef = query(
+    nftsRef,
+    where('status', '==', 'live'),
+    where('name', '==', searchName),
+    orderBy('ownerId', 'desc'),
+  )
+
+  const documentSnapshots = await getDocs(queryRef)
+  const nfts = documentSnapshots.docs.map((doc) => {
+    const nft = doc.data()
+    nft.id = doc.id
+    return nft
+  })
+
+  return nfts
+}
 const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   const { minPrice, maxPrice } = priceRange
   const start = page > 1 && pageLimit * +page - pageLimit - 1
@@ -893,6 +912,48 @@ const firebaseGetFilteredNftProducts = async (pageLimit, page, priceRange) => {
   return {
     nftsData: JSON.parse(JSON.stringify(nfts)),
     collectionSize: documentSnapshots.docs.length,
+  }
+}
+
+const fetchFilteredNFTs = async (artistName, minPrice, maxPrice) => {
+  try {
+    const nftsRef = collection(firebaseDb, 'nfts')
+    let queryRef = query(nftsRef, where('status', '==', 'live'))
+
+    if (artistName) {
+      queryRef = query(
+        queryRef,
+        where('username', '==', artistName), // Compare with lowercase
+      )
+    }
+
+    queryRef = query(queryRef, orderBy('username', 'desc'))
+
+    const documentSnapshots = await getDocs(queryRef)
+    const nfts = documentSnapshots.docs.map((doc) => {
+      const nft = doc.data()
+      nft.id = doc.id
+      return nft
+    })
+
+    // Filter by minPrice and maxPrice if provided
+    console.log('nfts: ', nfts)
+    const filteredNFTs = nfts.filter((nft) => {
+      if (minPrice && maxPrice) {
+        return nft.amountInBSV >= minPrice && nft.amountInBSV <= maxPrice
+      } else if (minPrice) {
+        return nft.amountInBSV >= minPrice
+      } else if (maxPrice) {
+        return nft.amountInBSV <= maxPrice
+      } else {
+        return true // No price filter, include all
+      }
+    })
+    return {
+      filteredNFTs: filteredNFTs,
+    }
+  } catch (error) {
+    console.log('error fetchFilteredNFTs: ', error)
   }
 }
 
@@ -1257,10 +1318,14 @@ const refreshSignIn = async (password) => {
   return errMessage
 }
 const firebaseGetNftImageUrl = async (userId, fileName, size) => {
-  console.log("🚀 ~ file: utils.js:1264 ~ firebaseGetNftImageUrl ~ userId, fileName:", userId, fileName)
+  console.log(
+    '🚀 ~ file: utils.js:1264 ~ firebaseGetNftImageUrl ~ userId, fileName:',
+    userId,
+    fileName,
+  )
   const path = encodeURIComponent(`nfts/${userId}/${fileName}`)
 
-  console.log("🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:", path)
+  console.log('🚀 ~ file: utils.js:1266 ~ firebaseGetNftImageUrl ~ path:', path)
   return new Promise((resolve, reject) => {
     switch (size) {
       case 'small':
@@ -1274,7 +1339,6 @@ const firebaseGetNftImageUrl = async (userId, fileName, size) => {
 }
 
 const firebaseVerifyMail = async () => {
-  console.log('www', window.location.origin)
   const actionCodeSettings = {
     url: `${window.location.origin}/user-settings/mfa`,
   }
@@ -1335,4 +1399,6 @@ export {
   firebaseGetCollection,
   firebaseGetNftByTokenId,
   firebaseGetUserDetailByUid,
+  firebaseGetNftsByName,
+  fetchFilteredNFTs,
 }
