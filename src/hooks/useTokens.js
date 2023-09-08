@@ -11,6 +11,7 @@ export default function useTokens() {
   const [nextPageToken, setNextPageToken] = useState(null)
   const [loading, setLoading] = useState(true)
   const [pageTokens, setPageTokens] = useState([])
+  let token = apiConfig.defaults.headers.common['authToken']
 
   const canLoadMore = Boolean(nextPageToken)
   async function fetchTokens() {
@@ -41,7 +42,7 @@ export default function useTokens() {
   }
 
   useEffect(() => {
-    if (!currentUser) return
+    if (!currentUser || !token) return
 
     // runs on first load of hook and whenever user or
     // currentwalletId changes

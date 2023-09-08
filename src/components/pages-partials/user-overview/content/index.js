@@ -36,6 +36,9 @@ export default function Content({
   const [favouriteNfts, setFavouriteNfts] = useState()
   const [searchState, setsearchState] = useState('')
   const [filteredNfts, setFilteredNfts] = useState([])
+  const [favFilteredNfts, setFavFilteredNfts] = useState(
+    userFavList?.nftsData || [],
+  )
   const [itemOffset, setItemOffset] = useState(0)
   const [tabs, setTabs] = useState([
     {
@@ -60,16 +63,35 @@ export default function Content({
     const endOffset = itemOffset + itemsPerPage
     const currentItems = nftInfo?.nftsData?.slice(itemOffset, endOffset)
     setFilteredNfts(currentItems)
+    setFavFilteredNfts(userFavList?.nftsData)
   }, [itemOffset, nftInfo?.nftsData, searchState])
+
+  const removeAllSpaces = (str) => str?.replace(/\s+/g, '')
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    let searchQuery = removeAllSpaces(searchState)?.toLowerCase()
     if (searchState) {
       const filtered = _.filter(filteredNfts, (ele) => {
-        return _.includes(ele.name.toLowerCase(), searchState.toLowerCase())
+        return _.includes(
+          removeAllSpaces(ele?.name)?.toLowerCase(),
+          searchQuery,
+        )
       })
+      const favFiltered = _.filter(userFavList.nftsData, (ele) => {
+        return (
+          _.includes(removeAllSpaces(ele?.name)?.toLowerCase(), searchQuery) ||
+          (ele.username &&
+            _.includes(
+              removeAllSpaces(ele?.username)?.toLowerCase(),
+              searchQuery,
+            ))
+        )
+      })
+      setFavFilteredNfts(favFiltered)
       setFilteredNfts(filtered)
     } else {
+      setFavFilteredNfts(userFavList.nftsData)
       setFilteredNfts(nftInfo.nftsData)
     }
   }
@@ -205,8 +227,8 @@ export default function Content({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12 cursor">
           <div className="grid grid-cols-1 gap-x-[29px] gap-y-12 md:grid-cols-2 xl:grid-cols-3 lg:col-span-3">
             {router.query.current === 'liked-artworks' &&
-              userFavList &&
-              userFavList.nftsData.map((hit, index) => (
+              favFilteredNfts &&
+              favFilteredNfts.map((hit, index) => (
                 <ProductsCarouselCard
                   isUserDetails
                   favouriteNfts={favouriteNfts}
@@ -269,11 +291,12 @@ export default function Content({
               activeClassName={'active'}
             />
           </div>
-        ) : (
+        ) : null}
+        {filteredNfts?.length == 0 || favFilteredNfts?.length == 0 ? (
           <div className="flex items-center justify-center w-full h-full">
             No NFTs found
           </div>
-        )}
+        ) : null}
       </section>
     </div>
   )
