@@ -194,7 +194,7 @@ InputMain.Input = function InputMainInput(
               ref={ref}
               {...props}
             />
-            <span className="absolute cursor-pointer right-3 top-2">
+            <span className="absolute cursor-pointer">
               {checktype === 'password' ? (
                 <>
                   {passwordVisible === 'password' ? (
