@@ -91,6 +91,7 @@ function RegistrationChoosePassword({ goToStep }) {
                   control={control}
                   render={({ field }) => (
                     <InputMain.Input
+                      required
                       id={inputAttribute.name}
                       placeholder={inputAttribute.placeholder}
                       className="mb-0"
