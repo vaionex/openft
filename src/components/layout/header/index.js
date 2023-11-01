@@ -20,6 +20,7 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Discover', href: '/discover' },
   { name: 'Contact', href: '/contact' },
+  { name: 'User', href: '/user' },
 ]
 
 const mintDrop = [
@@ -60,8 +61,8 @@ const Header = () => {
                       className="h-5 pb-0.5 flex-none"
                       src="https://www.relysia.com/_next/static/media/RelysiaLogo_1.4aba7d51.svg"
                       alt="Relysia"
-                      height='20px'
-                      width='17px'
+                      height="20px"
+                      width="17px"
                     />
                   </div>
                   <p className="pl-2 text-xl font-semibold text-blue-900">

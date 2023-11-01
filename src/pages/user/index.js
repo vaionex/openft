@@ -29,7 +29,7 @@ const UserOverviewPage = ({ nftInfo, userDetail }) => {
       })()
     } else {
       router.replace('/')
-    } 
+    }
   }, [])
 
   return (
