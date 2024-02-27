@@ -27,7 +27,6 @@ const validationSchema = yup.object().shape({
     .string()
     .trim()
     .matches(nameRegex, 'Please enter only letters')
-    .required('Company is required')
     .min(2, 'Company must be at least 2 characters long'),
   privacy: yup
     .boolean()

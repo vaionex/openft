@@ -199,11 +199,7 @@ export default function Form() {
                 </div>
                 <div className={`${height > 900 && 'mb-6'} sm:col-span-2`}>
                   <InputMain className="relative border-none justify-items-start sm:pb-2 sm:gap-1">
-                    <InputMain.Label
-                      label="Company"
-                      htmlFor="company"
-                      required
-                    />
+                    <InputMain.Label label="Company" htmlFor="company" />
                     <Controller
                       name={'company'}
                       control={control}
